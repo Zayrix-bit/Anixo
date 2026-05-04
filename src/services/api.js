@@ -12,9 +12,9 @@ export const JIKAN_BASE_URL = "https://api.jikan.moe/v4";
 
 // --- CACHE MANAGER ---
 const CACHE_TTL = {
-  GENRES: 1000 * 60 * 60 * 24, // 24 hours
-  RECENT_DUBS: 1000 * 60 * 60, // 1 hour
-  BROWSE: 1000 * 60 * 30,      // 30 minutes
+  GENRES: 1000 * 60 * 60 * 24 * 7, // 7 days
+  RECENT_DUBS: 1000 * 60 * 60,     // 1 hour
+  BROWSE: 1000 * 60 * 30,          // 30 minutes
 };
 
 const cache = {
