@@ -14,6 +14,7 @@ export const JIKAN_BASE_URL = "https://api.jikan.moe/v4";
 const CACHE_TTL = {
   GENRES: 1000 * 60 * 60 * 24, // 24 hours
   RECENT_DUBS: 1000 * 60 * 60, // 1 hour
+  BROWSE: 1000 * 60 * 30,      // 30 minutes
 };
 
 const cache = {
@@ -298,11 +299,23 @@ export const BROWSE_QUERY = `
 `;
 
 export async function getBrowseAnime(variables) {
+  // Create a unique cache key based on variables
+  const varKey = JSON.stringify(variables);
+  const cachedData = cache.get(`browse_${varKey}`);
+  if (cachedData) return cachedData;
+
   const anilistRes = await fetchFromAniList(BROWSE_QUERY, variables);
-  if (anilistRes?.media?.length > 0) return anilistRes;
+  if (anilistRes?.media?.length > 0) {
+    cache.set(`browse_${varKey}`, anilistRes, CACHE_TTL.BROWSE);
+    return anilistRes;
+  }
 
   console.warn("[Failover] AniList Browse failed, switching to Jikan...");
-  return getBrowseAnimeMAL(variables);
+  const jikanRes = await getBrowseAnimeMAL(variables);
+  if (jikanRes?.media?.length > 0) {
+    cache.set(`browse_${varKey}`, jikanRes, CACHE_TTL.BROWSE);
+  }
+  return jikanRes;
 }
 
 export const ANIME_QUERY = `
