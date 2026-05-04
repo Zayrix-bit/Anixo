@@ -27,13 +27,13 @@ const cache = {
         return null;
       }
       return value;
-    } catch (e) { return null; }
+    } catch { return null; }
   },
   set: (key, value, ttl) => {
     try {
       const expiry = new Date().getTime() + ttl;
       localStorage.setItem(`anixo_cache_${key}`, JSON.stringify({ value, expiry }));
-    } catch (e) { /* Storage full or private mode */ }
+    } catch { /* Storage full or private mode */ }
   }
 };
 
