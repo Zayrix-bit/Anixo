@@ -1,0 +1,17 @@
+{
+  "name": "anixo-server",
+  "version": "1.0.0",
+  "description": "Backend API for AniXO - Consumet powered sub/dub availability checker",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "@consumet/extensions": "^1.7.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
+    "express": "^4.21.0"
+  }
+}

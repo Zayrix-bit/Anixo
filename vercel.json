@@ -1,0 +1,68 @@
+{
+  "version": 2,
+  "framework": "vite",
+  "crons": [
+    {
+      "path": "/api/cron-cleanup",
+      "schedule": "0 0 * * *"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/cron-cleanup",
+      "destination": "/api/cron-cleanup.js"
+    },
+    {
+      "source": "/auth",
+      "destination": "/api/user.mjs"
+    },
+    {
+      "source": "/auth/(.*)",
+      "destination": "/api/user.mjs"
+    },
+    {
+      "source": "/watchlist",
+      "destination": "/api/user.mjs"
+    },
+    {
+      "source": "/watchlist/(.*)",
+      "destination": "/api/user.mjs"
+    },
+    {
+      "source": "/progress",
+      "destination": "/api/user.mjs"
+    },
+    {
+      "source": "/progress/(.*)",
+      "destination": "/api/user.mjs"
+    },
+    {
+      "source": "/settings",
+      "destination": "/api/user.mjs"
+    },
+    {
+      "source": "/settings/(.*)",
+      "destination": "/api/user.mjs"
+    },
+    {
+      "source": "/notifications",
+      "destination": "/api/user.mjs"
+    },
+    {
+      "source": "/notifications/(.*)",
+      "destination": "/api/user.mjs"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
