@@ -59,7 +59,7 @@ export default function Watch() {
     });
   }, [activeEpisode, id]);
 
-  const [episodeLayout, setEpisodeLayout] = useState("list"); // "grid" | "list" | "detailed"
+  const [episodeLayout, setEpisodeLayout] = useState("list"); // "grid" | "list"
   const [playerLang, setPlayerLang] = useState("sub");
   const [activeServer, setActiveServer] = useState(2);
   const [availableServers, setAvailableServers] = useState([]);

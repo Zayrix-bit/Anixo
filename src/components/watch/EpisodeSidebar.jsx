@@ -1,6 +1,5 @@
-import {
-  ChevronLeft, ChevronRight, LayoutGrid, List, Image,
-  Search, X, MessageSquare, Mic, Star, Calendar, PlayCircle
+  ChevronLeft, ChevronRight, LayoutGrid, List,
+  Search, X, MessageSquare, Mic, PlayCircle
 } from "lucide-react";
 
 export default function EpisodeSidebar({
@@ -27,23 +26,7 @@ export default function EpisodeSidebar({
       || `Episode ${ep}`;
   };
 
-  // Helper: detect if AniList thumbnail is placeholder
-  const isPlaceholder = (url) => {
-    if (!url) return true;
-    return url === anime?.bannerImage || url === anime?.coverImage?.large;
-  };
 
-  // Helper: resolve episode thumbnail
-  const getEpThumbnail = (ep) => {
-    const epData = malEpisodes?.find(e => e.mal_id === ep);
-    const aniListEp = anime?.streamingEpisodes?.find(
-      se => se.title && /Episode\s+(\d+)/i.test(se.title) && parseInt(se.title.match(/Episode\s+(\d+)/i)[1]) === ep
-    ) || anime?.streamingEpisodes?.[ep - 1];
-    return epData?.images?.jpg?.image_url
-      || (!isPlaceholder(aniListEp?.thumbnail) && aniListEp?.thumbnail)
-      || anime?.bannerImage
-      || anime?.coverImage?.large;
-  };
 
   return (
     <aside className="lg:col-span-1 space-y-4 pt-4 lg:pt-0 animate-in fade-in slide-in-from-right duration-500 flex flex-col">
@@ -85,14 +68,12 @@ export default function EpisodeSidebar({
                 <button
                   onClick={() => {
                     if (episodeLayout === "grid") setEpisodeLayout("list");
-                    else if (episodeLayout === "list") setEpisodeLayout("detailed");
                     else setEpisodeLayout("grid");
                   }}
                   className="hover:text-white transition-colors cursor-pointer flex items-center"
                 >
                   {episodeLayout === "grid" && <LayoutGrid size={17} />}
                   {episodeLayout === "list" && <List size={17} />}
-                  {episodeLayout === "detailed" && <Image size={17} />}
                 </button>
               </div>
             </>
@@ -146,66 +127,7 @@ export default function EpisodeSidebar({
             </div>
           )}
 
-          {episodeLayout === "detailed" && (
-            <div className="flex flex-col gap-3">
-              {currentSlice.map(ep => {
-                const epData = malEpisodes?.find(e => e.mal_id === ep);
-                const title = getEpTitle(ep);
-                const thumbnail = getEpThumbnail(ep);
 
-                return (
-                  <button
-                    key={ep}
-                    onClick={() => setActiveEpisode(ep)}
-                    className={`group w-full text-left flex items-start gap-3 p-3 transition-all rounded-[4px] border ${activeEpisode === ep
-                        ? "bg-[#111] border-red-600 shadow-lg"
-                        : watchedEpisodes.includes(ep)
-                          ? "bg-black/40 opacity-40 hover:opacity-100 border-white/5"
-                          : "bg-[#161616] border-white/5 hover:bg-[#202020] hover:border-white/20"
-                      }`}
-                  >
-                    <div className="w-24 h-16 shrink-0 bg-[#222] rounded-[2px] overflow-hidden relative">
-                      {thumbnail ? (
-                        <img src={thumbnail} alt={title} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity" loading="lazy" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#1a1a1a] to-[#111]">
-                          <span className="text-[18px] font-black text-white/10">{String(ep).padStart(2, '0')}</span>
-                        </div>
-                      )}
-                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <PlayCircle size={20} className="text-white" />
-                      </div>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[10px] uppercase font-bold tracking-[0.2em] text-red-500 mb-1">Episode {ep}</div>
-                      <h4 className="text-[13px] font-bold text-white mb-1 line-clamp-1">{title}</h4>
-                      <div className="flex items-center flex-wrap gap-3 text-[11px] text-white/40 mt-1">
-                        {epData?.score && (
-                          <span className="flex items-center gap-1">
-                            <Star size={10} className="text-yellow-500" fill="currentColor" />
-                            <span>{epData.score}</span>
-                          </span>
-                        )}
-                        {epData?.aired && (
-                          <span className="flex items-center gap-1">
-                            <Calendar size={10} className="opacity-50" />
-                            <span>{new Date(epData.aired).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                          </span>
-                        )}
-                        {(epData?.filler || epData?.recap) && (
-                          <div className="flex items-center gap-1.5 ml-auto">
-                            {epData.filler && <span className="px-1.5 py-0.5 bg-white/10 text-white/80 text-[8px] font-bold uppercase tracking-widest rounded-[2px]">Filler</span>}
-                            {epData.recap && <span className="px-1.5 py-0.5 bg-white/10 text-white/80 text-[8px] font-bold uppercase tracking-widest rounded-[2px]">Recap</span>}
-                          </div>
-                        )}
-                      </div>
-
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          )}
 
           {episodeLayout === "grid" && (
             <div className="grid grid-cols-5 sm:grid-cols-6 lg:grid-cols-4 xl:grid-cols-5 gap-2">
