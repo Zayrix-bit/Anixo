@@ -4,7 +4,7 @@ export const PYTHON_API = import.meta.env.VITE_PYTHON_API || (import.meta.env.PR
 
 export const PYTHON_API_BACKUP = import.meta.env.VITE_PYTHON_API_BACKUP || "";
 
-export const ALLANIME_API = import.meta.env.VITE_ALLANIME_API || (import.meta.env.PROD ? "https://anixo-allanime-api.onrender.com" : "http://localhost:5678");
+export const ALLANIME_API = import.meta.env.VITE_ALLANIME_API || "https://allanime-api.rk18109ry.workers.dev";
 
 export const ANILIST_URL = `${PYTHON_API}/api/anilist/proxy`;
 export const ANIXO_SERVER = PYTHON_API;
