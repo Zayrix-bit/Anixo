@@ -10,6 +10,34 @@ export const ANILIST_URL = `${PYTHON_API}/api/anilist/proxy`;
 export const ANIXO_SERVER = PYTHON_API;
 export const JIKAN_BASE_URL = "https://api.jikan.moe/v4";
 
+// --- CACHE MANAGER ---
+const CACHE_TTL = {
+  GENRES: 1000 * 60 * 60 * 24, // 24 hours
+  RECENT_DUBS: 1000 * 60 * 60, // 1 hour
+};
+
+const cache = {
+  get: (key) => {
+    try {
+      const item = localStorage.getItem(`anixo_cache_${key}`);
+      if (!item) return null;
+      const { value, expiry } = JSON.parse(item);
+      if (new Date().getTime() > expiry) {
+        localStorage.removeItem(`anixo_cache_${key}`);
+        return null;
+      }
+      return value;
+    } catch (e) { return null; }
+  },
+  set: (key, value, ttl) => {
+    try {
+      const expiry = new Date().getTime() + ttl;
+      localStorage.setItem(`anixo_cache_${key}`, JSON.stringify({ value, expiry }));
+    } catch (e) { /* Storage full or private mode */ }
+  }
+};
+
+
 // Mapper to convert Jikan data to AniList-like structure used by the UI
 function mapJikanToAnilist(j) {
   if (!j) return null;
@@ -368,10 +396,20 @@ export async function getPopularThisSeason(page = 1) {
 }
 
 export async function getRecentDubs(page = 1) {
+  // Only cache page 1 for performance
+  if (page === 1) {
+    const cachedData = cache.get("recent_dubs_p1");
+    if (cachedData) return cachedData;
+  }
+
   try {
     const { data } = await smartRequest("get", "/api/python/recent-dub", {
       params: { page }
     });
+    
+    if (page === 1 && data?.media?.length > 0) {
+      cache.set("recent_dubs_p1", data, CACHE_TTL.RECENT_DUBS);
+    }
     return data;
   } catch (err) {
     console.error("Recent Dubs fetch failed:", err);
@@ -422,9 +460,16 @@ export async function getAnikaiDetails(slug) {
 }
 
 export async function getAnikaiGenres() {
+  const cachedGenres = cache.get("anikai_genres");
+  if (cachedGenres) return cachedGenres;
+
   try {
     const { data } = await smartRequest("get", "/api/anikai/genres");
-    return data?.genres || [];
+    const genres = data?.genres || [];
+    if (genres.length > 0) {
+      cache.set("anikai_genres", genres, CACHE_TTL.GENRES);
+    }
+    return genres;
   } catch (err) {
     console.error("Failed to fetch genres from backend:", err.message);
     return [];
