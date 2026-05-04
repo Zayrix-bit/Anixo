@@ -1070,96 +1070,7 @@ class GogoanimeScraper:
             log.error(f"Gogoanime resolution failed: {e}")
             return None
 
-class KitsuScraper:
-    """Kitsu.io API for high-quality episode thumbnails and metadata."""
-    API = "https://kitsu.io/api/edge"
 
-    @cached("static:kitsu:episodes", ttl=TTL_STATIC)
-    def get_episode_meta(self, title=None, alt_title=None, kitsu_id=None):
-        try:
-            target_id = kitsu_id
-            
-            # 1. If no ID provided, search for anime with better matching
-            if not target_id:
-                titles_to_try = [t for t in [title, alt_title] if t]
-                for t in titles_to_try:
-                    # Search with subtype=TV to avoid movies/OVAs if searching by title
-                    search_data = http.get_json(f"{self.API}/anime", params={
-                        "filter[text]": t,
-                        "page[limit]": 5
-                    })
-                    
-                    if search_data.get("data"):
-                        # Strict title matching
-                        best_match = None
-                        for item in search_data["data"]:
-                            attr = item["attributes"]
-                            k_titles = [str(v).lower() for v in attr.get("titles", {}).values() if v]
-                            canonical = attr.get("canonicalTitle", "").lower()
-                            if canonical: k_titles.append(canonical)
-                            
-                            # Check for exact or very close match
-                            if any(t.lower() == kt or t.lower() in kt for kt in k_titles):
-                                best_match = item
-                                break
-                        
-                        # Fallback to first result if no "perfect" match found
-                        best_match = best_match or search_data["data"][0]
-                        target_id = best_match["id"]
-                        log.info(f"Kitsu: Mapped '{t}' to ID {target_id} ({best_match['attributes'].get('canonicalTitle')})")
-                        break
-            
-            if not target_id:
-                return {}
-            
-            # 2. Fetch episodes (Increased range for long-running shows like One Piece)
-            ep_meta = {}
-            # Increase range to 2000 episodes (One Piece is ~1100+)
-            for offset in range(0, 2000, 20):
-                try:
-                    ep_data = http.get_json(f"{self.API}/episodes", params={
-                        "filter[mediaId]": target_id,
-                        "page[limit]": 20,
-                        "page[offset]": offset,
-                        "sort": "number"
-                    })
-                except Exception as e:
-                    log.warning(f"Kitsu: Error fetching episodes at offset {offset}: {e}")
-                    break
-                
-                if not ep_data or not ep_data.get("data"):
-                    break
-                
-                for ep in ep_data["data"]:
-                    attr = ep["attributes"]
-                    num = attr.get("number")
-                    if num is None: continue
-                    
-                    num_key = str(num)
-                    
-                    # Get high-res original thumbnail
-                    img = None
-                    if attr.get("thumbnail"):
-                        thumb = attr["thumbnail"]
-                        # Prefer original/large over tiny/medium
-                        img = thumb.get("original") or thumb.get("large") or thumb.get("medium")
-                    
-                    # Store metadata
-                    ep_meta[num_key] = {
-                        "title": attr.get("canonicalTitle") or attr.get("titles", {}).get("en_us"),
-                        "description": attr.get("synopsis") or attr.get("description"),
-                        "image": img,
-                        "airdate": attr.get("airdate")
-                    }
-                
-                if len(ep_data["data"]) < 20:
-                    break
-                    
-            log.info(f"Kitsu: Successfully fetched metadata for {len(ep_meta)} episodes (ID: {target_id})")
-            return ep_meta
-        except Exception as e:
-            log.error(f"Kitsu Metadata Error: {e}")
-            return {}
 
 # ═══════════════════════════════════════════════════════════════════════════════
 #  INSTANTIATE SCRAPERS
@@ -1167,7 +1078,6 @@ class KitsuScraper:
 
 anikai = AnikaiScraper()
 gogoanime = GogoanimeScraper()
-kitsu = KitsuScraper()
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -1309,7 +1219,7 @@ def index():
         "api": "AniXO Unified API",
         "status": "online",
         "version": "3.1.0",
-        "engines": ["anikai", "gogoanime", "jikan", "kitsu"],
+        "engines": ["anikai", "gogoanime", "jikan"],
         "endpoints": {
             "core": {
                 "/api/python/resolve/<slug>": "Resolve slug to AniList ID",
@@ -1326,7 +1236,7 @@ def index():
             },
             "metadata": {
                 "/api/malsync/<mal_id>": "MALSync lookup",
-                "/api/meta/episodes?title=": "Fallback metadata (Kitsu)",
+
                 "/api/jikan/proxy?path=": "Direct Jikan REST proxy",
                 "/api/check-dub/<id>": "Quick check for dub availability"
             },
@@ -1341,17 +1251,7 @@ def index():
 
 
 
-@app.route("/api/meta/episodes", methods=["GET"])
-@api_response
-def api_meta_episodes():
-    title = request.args.get("title", "").strip()
-    alt_title = request.args.get("alt_title", "").strip()
-    kitsu_id = request.args.get("kitsu_id", "").strip()
-    
-    if not title and not kitsu_id:
-        return {"error": "Title or kitsu_id required"}, 400
-        
-    return kitsu.get_episode_meta(title=title, alt_title=alt_title, kitsu_id=kitsu_id)
+
 
 
 # ═══════════════════════════════════════════════════════════════════════════════

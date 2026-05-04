@@ -9,7 +9,7 @@ export default function EpisodeSidebar({
   activeEpisode, setActiveEpisode, watchedEpisodes,
   isEpisodeSearchOpen, setIsEpisodeSearchOpen,
   episodeSearchQuery, setEpisodeSearchQuery,
-  malEpisodes, kitsuEpisodes, anime
+  malEpisodes, anime
 }) {
   const totalPages = Math.ceil(filteredEpisodes.length / EPISODES_PER_PAGE);
   const pageStart = episodePage * EPISODES_PER_PAGE + 1;
@@ -24,8 +24,6 @@ export default function EpisodeSidebar({
     ) || anime?.streamingEpisodes?.[ep - 1];
     return epData?.title
       || aniListEp?.title?.replace(/^Episode \d+\s*-\s*/i, '')
-      || kitsuEpisodes?.[ep]?.title
-      || kitsuEpisodes?.[String(ep)]?.title
       || `Episode ${ep}`;
   };
 
@@ -41,9 +39,7 @@ export default function EpisodeSidebar({
     const aniListEp = anime?.streamingEpisodes?.find(
       se => se.title && /Episode\s+(\d+)/i.test(se.title) && parseInt(se.title.match(/Episode\s+(\d+)/i)[1]) === ep
     ) || anime?.streamingEpisodes?.[ep - 1];
-    return kitsuEpisodes?.[ep]?.image
-      || kitsuEpisodes?.[String(ep)]?.image
-      || epData?.images?.jpg?.image_url
+    return epData?.images?.jpg?.image_url
       || (!isPlaceholder(aniListEp?.thumbnail) && aniListEp?.thumbnail)
       || anime?.bannerImage
       || anime?.coverImage?.large;
@@ -203,11 +199,7 @@ export default function EpisodeSidebar({
                           </div>
                         )}
                       </div>
-                      {(kitsuEpisodes?.[ep]?.description || kitsuEpisodes?.[String(ep)]?.description) && (
-                        <p className="text-[11px] text-white/30 line-clamp-2 leading-relaxed mt-2 group-hover:text-white/60 transition-colors">
-                          {kitsuEpisodes?.[ep]?.description || kitsuEpisodes?.[String(ep)]?.description}
-                        </p>
-                      )}
+
                     </div>
                   </button>
                 );

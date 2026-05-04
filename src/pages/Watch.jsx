@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { useParams, Link, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { getAnimeDetails, getEpisodeTitles, getJikanAnimeDetails, getSecondaryEpisodeMeta, getMalSyncMapping, getAnikaiServers, PYTHON_API, ALLANIME_API } from "../services/api";
+import { getAnimeDetails, getEpisodeTitles, getJikanAnimeDetails, getMalSyncMapping, getAnikaiServers, PYTHON_API, ALLANIME_API } from "../services/api";
 import { resolveAnikaiMatch, scoreMetadata } from "../services/anikaiMapping";
 import { useLanguage } from "../context/LanguageContext";
 import { useLoading } from "../context/LoadingContext";
@@ -214,6 +214,7 @@ export default function Watch() {
   const [iframeLoaded, setIframeLoaded] = useState(false);
 
   const [anikaiEpisodes, setAnikaiEpisodes] = useState([]);
+  const [anikaiDetails, setAnikaiDetails] = useState(null);
   const [fetchError, setFetchError] = useState(null);
 
   // Sync global page loader with iframe loading
@@ -330,6 +331,22 @@ export default function Watch() {
 
     fetchAniSkip();
   }, [id, activeEpisode, skipTimes, anime, isMal]);
+
+  // MAL Episode Titles (lightweight — only for episode names)
+  const { data: malEpisodes } = useQuery({
+    queryKey: ["malEpisodes", anime?.idMal],
+    queryFn: () => getEpisodeTitles(anime?.idMal),
+    enabled: !!anime?.idMal,
+    staleTime: 1000 * 60 * 60 * 24,
+  });
+
+  // MALSync Mapping for precise external IDs (Kitsu, etc)
+  const { data: malsyncMapping } = useQuery({
+    queryKey: ["malsyncMapping", anime?.idMal],
+    queryFn: () => getMalSyncMapping(anime?.idMal),
+    enabled: !!anime?.idMal,
+    staleTime: 1000 * 60 * 60 * 24,
+  });
 
   // Search for Allanime ID + Instant SUB/DUB Detection
   const [allanimeSubCount, setAllanimeSubCount] = useState(0);
@@ -562,35 +579,11 @@ export default function Watch() {
     else if (playerLang === "sub" && !subAvailable && dubAvailable) setPlayerLang("dub");
   }, [activeEpisode, allanimeSubCount, allanimeDubCount, playerLang]);
 
-  // MAL Episode Titles (lightweight — only for episode names)
-  const { data: malEpisodes } = useQuery({
-    queryKey: ["malEpisodes", anime?.idMal],
-    queryFn: () => getEpisodeTitles(anime?.idMal),
-    enabled: !!anime?.idMal,
-    staleTime: 1000 * 60 * 60 * 24,
-  });
 
-  // MALSync Mapping for precise external IDs (Kitsu, etc)
-  const { data: malsyncMapping } = useQuery({
-    queryKey: ["malsyncMapping", anime?.idMal],
-    queryFn: () => getMalSyncMapping(anime?.idMal),
-    enabled: !!anime?.idMal,
-    staleTime: 1000 * 60 * 60 * 24,
-  });
 
-  const kitsuIdFromMapping = malsyncMapping?.Sites?.Kitsu ? Object.keys(malsyncMapping.Sites.Kitsu)[0] : null;
 
-  const kitsuTitle = anime?.title?.english;
-  const kitsuAltTitle = anime?.title?.romaji;
-  const { data: kitsuEpisodes } = useQuery({
-    queryKey: ["kitsuEpisodes", kitsuTitle, kitsuAltTitle, kitsuIdFromMapping],
-    queryFn: () => getSecondaryEpisodeMeta(kitsuTitle, kitsuAltTitle, kitsuIdFromMapping),
-    enabled: !!kitsuTitle || !!kitsuAltTitle || !!kitsuIdFromMapping,
-    staleTime: 1000 * 60 * 60 * 24,
-  });
 
-  // 🚀 Multi-level detail fetching (Jikan > Anilist — Anikai info is fetched by the episode pipeline below) 🚀
-  const searchTitle = anime?.title?.english || anime?.title?.romaji || anime?.title?.native;
+
 
   const { data: jikanDetails } = useQuery({
     queryKey: ["jikanDetails", anime?.idMal],
@@ -650,22 +643,20 @@ export default function Watch() {
     ) || anime?.streamingEpisodes?.[activeEpisode - 1];
 
     // Priority:
-    // 1. Kitsu (Best for unique screenshots)
-    // 2. AniList Thumbnail (If not placeholder)
-    // 3. Jikan / MAL
-    // 4. Fallback to Anime Banner
-    return (kitsuEpisodes?.[activeEpisode]?.image || kitsuEpisodes?.[String(activeEpisode)]?.image) ||
-      aniListEp?.thumbnail ||
+    // 1. AniList Thumbnail (If not placeholder)
+    // 2. Jikan / MAL
+    // 3. Fallback to Anime Banner
+    return aniListEp?.thumbnail ||
       epData?.images?.jpg?.image_url ||
       anime?.bannerImage ||
       anime?.coverImage?.extraLarge ||
       anime?.coverImage?.large;
-  }, [anime, malEpisodes, activeEpisode, kitsuEpisodes]);
+  }, [anime, malEpisodes, activeEpisode]);
 
 
   useEffect(() => {
     const searchTitle = anime?.title?.english || anime?.title?.romaji || anime?.title?.native;
-    if (!searchTitle) { setAnikaiEpisodes([]); return; }
+    if (!searchTitle) { setAnikaiEpisodes([]); setAnikaiDetails(null); return; }
     let cancelled = false;
     (async () => {
       try {
@@ -722,8 +713,11 @@ export default function Watch() {
 
         if (!best.info?.success || !aniId) {
           setAnikaiEpisodes([]);
+          setAnikaiDetails(null);
           return;
         }
+        // Save Anikai details for seasons logic
+        setAnikaiDetails(best.info);
         const epsResp = await axios.get(`${PYTHON_API}/api/anikai/episodes/${aniId}`);
         if (cancelled) return;
         if (epsResp.data?.success && Array.isArray(epsResp.data.episodes)) {
@@ -734,7 +728,7 @@ export default function Watch() {
         }
       } catch (err) {
         console.error("Anikai deep resolve error:", err);
-        if (!cancelled) setAnikaiEpisodes([]);
+        if (!cancelled) { setAnikaiEpisodes([]); setAnikaiDetails(null); }
       }
     })();
     return () => { cancelled = true; };
@@ -771,13 +765,12 @@ export default function Watch() {
     const query = episodeSearchQuery.toLowerCase().trim();
     return episodesList.filter(ep => {
       const epStr = String(ep);
-      const kitsuData = kitsuEpisodes?.[ep] || kitsuEpisodes?.[epStr];
       const jikanData = malEpisodes?.find(e => e.mal_id === ep);
 
-      const title = (jikanData?.title || kitsuData?.title || "").toLowerCase();
+      const title = (jikanData?.title || "").toLowerCase();
       return epStr.includes(query) || title.includes(query);
     });
-  }, [episodesList, episodeSearchQuery, kitsuEpisodes, malEpisodes]);
+  }, [episodesList, episodeSearchQuery, malEpisodes]);
 
   // Clamp episodePage when filteredEpisodes changes (e.g. searching)
   useEffect(() => {
@@ -1530,7 +1523,7 @@ export default function Watch() {
               watchedEpisodes={watchedEpisodes}
               isEpisodeSearchOpen={isEpisodeSearchOpen} setIsEpisodeSearchOpen={setIsEpisodeSearchOpen}
               episodeSearchQuery={episodeSearchQuery} setEpisodeSearchQuery={setEpisodeSearchQuery}
-              malEpisodes={malEpisodes} kitsuEpisodes={kitsuEpisodes} anime={anime}
+              malEpisodes={malEpisodes} anime={anime}
             />
           )}
         </div>
