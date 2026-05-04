@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { getBrowseAnime, checkDubAvailability, getRecentDubs, getAnikaiGenres } from "../services/api";
+import { getBrowseAnime, getRecentDubs, getAnikaiGenres } from "../services/api";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import AnimeCard from "../components/common/AnimeCard";
@@ -178,31 +178,20 @@ export default function Browse() {
 
       let res = await getBrowseAnime(vars);
 
-      // SMART-DECORATE WITH DUB INFO
-      // 1. Title Heuristic (Instant) + 2. Backend Verification (Accurate)
-      const mediaWithDub = await Promise.all(
-        (res.media || []).map(async (anime) => {
-          try {
-            // If Anikai already supplied the dub status directly from the HTML scraper, trust it instantly!
-            if (anime.isAnikai && anime.dub !== undefined) return anime;
+      // SMART-DECORATE WITH DUB INFO (Title Heuristic Only — No API calls)
+      const mediaWithDub = (res.media || []).map((anime) => {
+        // If Anikai already supplied the dub status directly from the HTML scraper, trust it instantly!
+        if (anime.isAnikai && anime.dub !== undefined) return anime;
 
-            // Heuristic Check (First Pass)
-            const searchTitle = (anime.title?.english || "").toLowerCase();
-            const synonyms = (anime.synonyms || []).map(s => s.toLowerCase());
-            const hasDubKeyword = searchTitle.includes("(dub)") ||
-              searchTitle.includes("dubbed") ||
-              synonyms.some(s => s.includes("dub"));
+        // Heuristic Check (Zero-cost, no backend call)
+        const searchTitle = (anime.title?.english || "").toLowerCase();
+        const synonyms = (anime.synonyms || []).map(s => s.toLowerCase());
+        const hasDubKeyword = searchTitle.includes("(dub)") ||
+          searchTitle.includes("dubbed") ||
+          synonyms.some(s => s.includes("dub"));
 
-            // If heuristic fails, check backend
-            if (hasDubKeyword) return { ...anime, dub: true };
-
-            const dubInfo = await checkDubAvailability(anime.id);
-            return { ...anime, dub: dubInfo.hasDub };
-          } catch {
-            return { ...anime, dub: false };
-          }
-        })
-      );
+        return { ...anime, dub: hasDubKeyword };
+      });
 
       return { ...res, media: mediaWithDub };
     },

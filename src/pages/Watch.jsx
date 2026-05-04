@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { useParams, Link, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { getAnimeDetails, getEpisodeTitles, getJikanAnimeDetails, getAnikaiDetails, getSecondaryEpisodeMeta, getMalSyncMapping, getAnikaiServers, PYTHON_API, ALLANIME_API } from "../services/api";
+import { getAnimeDetails, getEpisodeTitles, getJikanAnimeDetails, getSecondaryEpisodeMeta, getMalSyncMapping, getAnikaiServers, PYTHON_API, ALLANIME_API } from "../services/api";
 import { resolveAnikaiMatch, scoreMetadata } from "../services/anikaiMapping";
 import { useLanguage } from "../context/LanguageContext";
 import { useLoading } from "../context/LoadingContext";
@@ -336,29 +336,20 @@ export default function Watch() {
   const [allanimeDubCount, setAllanimeDubCount] = useState(0);
 
   useEffect(() => {
-    if (!anime) return;
+    if (!anime || !malsyncMapping) return;
     
     const fetchAllanimeId = async () => {
       const searchTitle = anime.title?.english || anime.title?.romaji || anime.title?.native;
-      const malId = anime.idMal || (isMal ? id : null);
 
-      // --- STEP 1: Try Exact Mapping via MalSync (Industry Standard) ---
-      if (malId) {
-        try {
-          const mapping = await getMalSyncMapping(malId);
-          if (mapping && mapping.Sites && mapping.Sites.AllAnime) {
-            const allAnimeKey = Object.keys(mapping.Sites.AllAnime)[0];
-            const allAnimeData = mapping.Sites.AllAnime[allAnimeKey];
-            if (allAnimeData && allAnimeData.identifier) {
-              console.log(`[Allanime] Found exact MalSync mapping: ${allAnimeData.identifier}`);
-              setAllanimeId(allAnimeData.identifier);
-              // Also update counts if available
-              setAllanimeSubCount(anime.episodes || 0); 
-              return; // Success!
-            }
-          }
-        } catch (err) {
-          console.warn("[Allanime] MalSync mapping failed, falling back to search...", err);
+      // --- STEP 1: Try Exact Mapping via MalSync (reuse React Query data, no extra API call) ---
+      if (malsyncMapping && malsyncMapping.Sites && malsyncMapping.Sites.AllAnime) {
+        const allAnimeKey = Object.keys(malsyncMapping.Sites.AllAnime)[0];
+        const allAnimeData = malsyncMapping.Sites.AllAnime[allAnimeKey];
+        if (allAnimeData && allAnimeData.identifier) {
+          console.log(`[Allanime] Found exact MalSync mapping: ${allAnimeData.identifier}`);
+          setAllanimeId(allAnimeData.identifier);
+          setAllanimeSubCount(anime.episodes || 0); 
+          return; // Success!
         }
       }
 
@@ -419,7 +410,7 @@ export default function Watch() {
     };
 
     fetchAllanimeId();
-  }, [anime, ALLANIME_API, id, isMal]);
+  }, [anime, malsyncMapping, ALLANIME_API, id, isMal]);
 
   // Fetch available qualities for Server 2 (AllAnime)
   const qualitiesCache = useRef({});
@@ -598,30 +589,19 @@ export default function Watch() {
     staleTime: 1000 * 60 * 60 * 24,
   });
 
-  // 🚀 Multi-level detail fetching (Anikai > Jikan > Anilist) 🚀
+  // 🚀 Multi-level detail fetching (Jikan > Anilist — Anikai info is fetched by the episode pipeline below) 🚀
   const searchTitle = anime?.title?.english || anime?.title?.romaji || anime?.title?.native;
-
-  const { data: anikaiDetails } = useQuery({
-    queryKey: ["anikaiDetails", searchTitle],
-    queryFn: () => getAnikaiDetails(searchTitle),
-    enabled: !!searchTitle,
-    staleTime: 1000 * 60 * 60 * 24,
-  });
 
   const { data: jikanDetails } = useQuery({
     queryKey: ["jikanDetails", anime?.idMal],
     queryFn: () => getJikanAnimeDetails(anime?.idMal),
-    enabled: !!anime?.idMal && !anikaiDetails,
+    enabled: !!anime?.idMal,
     staleTime: 1000 * 60 * 60 * 24,
   });
 
-  // Unified priority resolver: Anikai > Jikan > Anilist
+  // Unified priority resolver: Jikan > Anilist
   const resolvedInfo = useMemo(() => {
     const get = (field, ...fallbacks) => {
-      const sources = [anikaiDetails];
-      for (const src of sources) {
-        if (src?.[field]) return src[field];
-      }
       // Jikan uses different keys, handle mapping
       const jikanMap = {
         description: jikanDetails?.synopsis,
@@ -659,7 +639,7 @@ export default function Watch() {
       genres: get("genres", anime.genres),
       rating: get("rating"),
     };
-  }, [anime, anikaiDetails, jikanDetails]);
+  }, [anime, jikanDetails]);
 
   // Resolve current episode image for player background/loading placeholder
   const currentEpisodeImage = useMemo(() => {

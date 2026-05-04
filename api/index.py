@@ -1340,21 +1340,6 @@ def index():
     })
 
 
-@app.route("/api/python/resolve/<slug>", methods=["GET"])
-@api_response
-def api_python_resolve(slug):
-    # Try Anikai resolution first
-    result = anikai.resolve_to_anilist(slug)
-    if result:
-        return result
-        
-    # Fallback to Gogoanime resolution
-    result = gogoanime.resolve_to_anilist(slug)
-    if result:
-        return result
-        
-    return {"error": "Failed to resolve slug to AniList ID"}, 404
-
 
 @app.route("/api/meta/episodes", methods=["GET"])
 @api_response
