@@ -363,15 +363,27 @@ export default function Watch() {
             // Exact match bonus
             if (resultTitle === targetTitle || resultEnglish === targetTitle) score += 50;
 
-            // Strict Season Matching
-            const targetSeason = targetTitle.match(/season\s+(\d+)/);
-            const resultSeason = resultTitle.match(/season\s+(\d+)/) || resultEnglish.match(/season\s+(\d+)/);
+            // Robust Season Detection
+            const getSeason = (str) => {
+              const s1 = str.match(/season\s+(\d+)/);
+              if (s1) return s1[1];
+              const s2 = str.match(/(\d+)(st|nd|rd|th)\s+season/);
+              if (s2) return s2[1];
+              const s3 = str.match(/\s+(\d+)$/); 
+              if (s3) return s3[1];
+              return null;
+            };
+
+            const targetSeason = getSeason(targetTitle);
+            const resultSeason = getSeason(resultTitle) || getSeason(resultEnglish);
 
             if (targetSeason && resultSeason) {
-              if (targetSeason[1] === resultSeason[1]) score += 30;
-              else score -= 50; // Wrong season!
-            } else if (!targetSeason && resultSeason) {
-              score -= 30; // Result is a season, but target isn't
+              if (targetSeason === resultSeason) score += 40;
+              else score -= 100; // Strong penalty for wrong season
+            } else if (!targetSeason && resultSeason && resultSeason !== "1") {
+              score -= 40; // Penalty if target has no season but result does (and it's not S1)
+            } else if (targetSeason && !resultSeason) {
+              score -= 40;
             }
 
             // Length Penalty (prevents partial matches from winning)
