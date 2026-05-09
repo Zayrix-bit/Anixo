@@ -1,7 +1,7 @@
 import { useRef, useEffect } from "react";
 import {
   Moon, FastForward, PlayCircle, SkipForward, SkipBack,
-  Heart, Users, Flag, MessageSquare, Mic
+  Heart, Flag, MessageSquare, Mic
 } from "lucide-react";
 
 export default function PlayerToolbar({
@@ -35,9 +35,9 @@ export default function PlayerToolbar({
     <>
       {/* Action Toolbar */}
       <section
-        className="relative w-full bg-[#121418] border-x border-b border-white/5 px-2 sm:px-4 lg:px-6 py-2 sm:py-3 flex items-center justify-between gap-1 sm:gap-4 select-none"
+        className="relative w-full bg-[#121418] border-x border-b border-white/5 px-4 sm:px-6 lg:px-10 py-3 sm:py-4 flex items-center justify-between gap-4 sm:gap-8 select-none"
       >
-        <div className="flex items-center gap-2 sm:gap-4 lg:gap-6">
+        <div className="flex items-center gap-4 sm:gap-6 lg:gap-10">
           <button
             onClick={() => setIsFocusMode(!isFocusMode)}
             className={`flex items-center gap-1 sm:gap-2 transition-all ${isFocusMode ? 'text-red-500' : 'text-white/60 hover:text-white'}`}
@@ -63,7 +63,7 @@ export default function PlayerToolbar({
           </button>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-4 lg:gap-6">
+        <div className="flex items-center gap-4 sm:gap-6 lg:gap-10">
           <button
             onClick={goPrevEpisode}
             className={`flex items-center gap-1 sm:gap-1.5 transition-all ${activeEpisode <= 1 ? 'opacity-20 pointer-events-none' : 'text-white/60 hover:text-white'}`}
@@ -134,17 +134,12 @@ export default function PlayerToolbar({
                 )}
               </div>
 
-              <button className="flex items-center gap-1 sm:gap-2 text-white/60 hover:text-white transition-all">
-                <Users size={13} className="sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline text-[12px] font-medium">W2G</span>
-              </button>
-
               <button
                 onClick={handleReport}
-                className={`flex items-center gap-1 sm:gap-2 transition-all ${reportSuccess ? 'text-green-500' : 'text-white/60 hover:text-white'}`}
+                className={`flex items-center gap-2 sm:gap-3 transition-all ${reportSuccess ? 'text-green-500' : 'text-white/60 hover:text-white'}`}
               >
-                <Flag size={13} className="sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline text-[12px] font-medium">Report</span>
+                <Flag size={14} className="sm:w-5 sm:h-5" />
+                <span className="hidden sm:inline text-[12px] font-medium uppercase tracking-wider">Report</span>
               </button>
             </>
           )}
@@ -162,10 +157,10 @@ export default function PlayerToolbar({
               Switch servers if the current link is unstable.
             </p>
             <div className="mt-2 space-y-1 flex flex-col items-center md:items-start">
-              <p className="text-[9px] lg:text-[10px] text-yellow-500/60 font-medium max-w-[280px] sm:max-w-[300px] leading-relaxed italic text-center md:text-left">
+              <p className="text-[9px] lg:text-[10px] text-yellow-500/90 font-medium max-w-[280px] sm:max-w-[300px] leading-relaxed italic text-center md:text-left">
                 Note: If a wrong episode is playing, switch to another server. 100% Fix guaranteed.
               </p>
-              <p className="text-[9px] lg:text-[10px] text-red-500/40 font-bold uppercase tracking-wider text-center md:text-left">
+              <p className="text-[9px] lg:text-[10px] text-red-500/80 font-bold uppercase tracking-wider text-center md:text-left">
                 Server 2: 1080p only (Lower qualities not available).
               </p>
             </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import Artplayer from 'artplayer';
 import Hls from 'hls.js';
 
-const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, onReady, initialTime = 0, className, autoSkip, skipTimes, videoQuality = 'best', onQualityChange, availableQualities = [] }) => {
+const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, onReady, initialTime = 0, className, autoSkip = true, skipTimes, videoQuality = 'best', onQualityChange, availableQualities = [] }) => {
     const artRef = useRef(null);
     const artInstance = useRef(null);
 
@@ -112,6 +112,26 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
             },
         });
 
+        // Auto Skip Toggle
+        customSettings.push({
+            name: 'autoSkip',
+            width: 200,
+            html: 'Auto Skip OP/ED',
+            tooltip: autoSkip ? 'On' : 'Off',
+            selector: [
+                { html: 'On', value: true, default: autoSkip === true },
+                { html: 'Off', value: false, default: autoSkip === false },
+            ],
+            onSelect: function (item) {
+                const player = artInstance.current;
+                if (player) {
+                    player.setting.update({ name: 'autoSkip', tooltip: item.html });
+                    // Store preference or just update local state if needed
+                }
+                return item.html;
+            },
+        });
+
         const art = new Artplayer({
             container: artRef.current,
             url: src,
@@ -163,6 +183,37 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                         if (artInstance.current) {
                             artInstance.current.muted = false;
                             if (artInstance.current.volume === 0) artInstance.current.volume = 1;
+                        }
+                    }
+                },
+                {
+                    name: 'skipButton',
+                    html: `
+                        <div class="flex items-center gap-3 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-sm transition-all shadow-[0_0_20px_rgba(220,38,38,0.4)] border border-red-500/20 group">
+                            <span class="text-[12px] font-black uppercase tracking-[0.2em]">Skip Intro</span>
+                            <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                            </svg>
+                        </div>
+                    `,
+                    style: {
+                        position: 'absolute',
+                        bottom: '80px',
+                        right: '30px',
+                        display: 'none',
+                        zIndex: 99,
+                        cursor: 'pointer',
+                        pointerEvents: 'auto',
+                    },
+                    click: function () {
+                        const art = artInstance.current;
+                        if (art && skipTimes) {
+                            const currentTime = art.currentTime;
+                            if (skipTimes.op && currentTime >= skipTimes.op[0] && currentTime < skipTimes.op[1]) {
+                                art.currentTime = skipTimes.op[1];
+                            } else if (skipTimes.ed && currentTime >= skipTimes.ed[0] && currentTime < skipTimes.ed[1]) {
+                                art.currentTime = skipTimes.ed[1];
+                            }
                         }
                     }
                 },
@@ -271,17 +322,33 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
             const currentTime = art.video.currentTime;
             const duration = art.video.duration;
 
-            // --- Auto Skip Logic (OP/ED) ---
-            if (autoSkip && skipTimes) {
-                // Check OP
-                if (skipTimes.op && currentTime >= skipTimes.op[0] && currentTime < skipTimes.op[1]) {
-                    console.info(`[ArtPlayer] Auto-skipping OP: ${skipTimes.op[0]}s -> ${skipTimes.op[1]}s`);
-                    art.currentTime = skipTimes.op[1];
+            // --- Auto Skip & UI Button Logic (OP/ED) ---
+            if (skipTimes) {
+                const isOP = skipTimes.op && currentTime >= skipTimes.op[0] && currentTime < skipTimes.op[1];
+                const isED = skipTimes.ed && currentTime >= skipTimes.ed[0] && currentTime < skipTimes.ed[1];
+                
+                // Show/Hide Manual Skip Button
+                if (art.layers.skipButton) {
+                    art.layers.skipButton.style.display = (isOP || isED) ? 'block' : 'none';
                 }
-                // Check ED
-                if (skipTimes.ed && currentTime >= skipTimes.ed[0] && currentTime < skipTimes.ed[1]) {
-                    console.info(`[ArtPlayer] Auto-skipping ED: ${skipTimes.ed[0]}s -> ${skipTimes.ed[1]}s`);
-                    art.currentTime = skipTimes.ed[1];
+
+                // Automatic Skip (if enabled in settings)
+                const isAutoSkipEnabled = art.setting.get('autoSkip') !== 'Off';
+                if (isAutoSkipEnabled) {
+                    if (isOP) {
+                        console.info(`[ArtPlayer] ⚡ Auto-skipping OP: ${skipTimes.op[0]}s -> ${skipTimes.op[1]}s`);
+                        art.currentTime = skipTimes.op[1];
+                    }
+                    if (isED) {
+                        console.info(`[ArtPlayer] ⚡ Auto-skipping ED: ${skipTimes.ed[0]}s -> ${skipTimes.ed[1]}s`);
+                        art.currentTime = skipTimes.ed[1];
+                    }
+                }
+            } else {
+                // Periodically check if skipTimes arrived later
+                if (art.video.currentTime < 5) {
+                    // Only log at start to avoid spam
+                    // console.debug("[ArtPlayer] No skipTimes prop received for this episode.");
                 }
             }
 
