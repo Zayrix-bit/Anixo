@@ -1345,49 +1345,6 @@ export default function Watch() {
           }
         }
 
-        // --- SERVER 7: ANIGO MEGAUP.NL ---
-        else if (activeServer === 7) {
-          const anigoData = await getAnigoStream(anime, activeEpisode, "MegaUp.nl");
-          if (cancelled) return;
-
-          if (anigoData?.provider) {
-            // Use the Hugging Face Proxy to bypass X-Frame-Options
-            const proxyUrl = `${ANIGO_HF_API}/proxy?url=${encodeURIComponent(anigoData.provider)}`;
-            url = proxyUrl;
-            setStreamData({
-              server_name: "SERVER 7 (MegaUp.nl)",
-              lang: playerLang,
-              iframe_url: url
-            });
-          } else {
-            setFetchError("MegaUp.nl: Stream not found for this episode.");
-            setStreamLoading(false);
-            setPageLoading(false);
-            return;
-          }
-        }
-
-        // --- SERVER 8: ANIGO MEGAUP.LIVE ---
-        else if (activeServer === 8) {
-          const anigoData = await getAnigoStream(anime, activeEpisode, "MegaUp.live");
-          if (cancelled) return;
-
-          if (anigoData?.provider) {
-            // Use the Hugging Face Proxy to bypass X-Frame-Options
-            const proxyUrl = `${ANIGO_HF_API}/proxy?url=${encodeURIComponent(anigoData.provider)}`;
-            url = proxyUrl;
-            setStreamData({
-              server_name: "SERVER 8 (MegaUp.live)",
-              lang: playerLang,
-              iframe_url: url
-            });
-          } else {
-            setFetchError("MegaUp.live: Stream not found for this episode.");
-            setStreamLoading(false);
-            setPageLoading(false);
-            return;
-          }
-        }
 
 
 

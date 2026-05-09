@@ -1090,7 +1090,10 @@ def api_anikai_servers(ep_token):
     servers = anikai.get_links(ep_token)
     if not servers:
         return {"error": "No servers found"}, 404
-    return {"servers": servers}
+        
+    # Remove unwanted servers
+    filtered = [s for s in servers if "server 7" not in s.get("name", "").lower() and "server 8" not in s.get("name", "").lower()]
+    return {"servers": filtered}
 
 
 @app.route("/api/anikai/stream/<ep_token>", methods=["GET"])
@@ -1104,6 +1107,12 @@ def api_anikai_stream(ep_token):
     servers = anikai.get_links(ep_token)
     if not servers:
         return {"error": "No servers found for this episode"}, 404
+
+    # Remove unwanted servers
+    servers = [s for s in servers if "server 7" not in s.get("name", "").lower() and "server 8" not in s.get("name", "").lower()]
+    
+    if not servers:
+         return {"error": "All available servers (including 7 & 8) were filtered out"}, 404
 
     # If a specific server is requested, find it
     if server_id:
