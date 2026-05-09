@@ -133,7 +133,7 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
             aspectRatio: true,
             fullscreen: true,
             fullscreenWeb: true,
-            subtitleOffset: true,
+            subtitleOffset: false,
             mutex: true,
             backdrop: true,
             playsInline: true,
