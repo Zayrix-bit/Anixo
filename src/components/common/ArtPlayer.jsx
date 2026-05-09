@@ -78,53 +78,6 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
             }
         };
 
-        // Always show Subtitle Toggle (Handles both external and embedded HLS subtitles)
-        customSettings.push({
-            name: 'subtitleToggle',
-            width: 150,
-            html: 'Subtitles',
-            tooltip: 'On',
-            selector: [
-                { html: 'On', value: 'on', default: true },
-                { html: 'Off', value: 'off' },
-            ],
-            onSelect: function (item) {
-                const player = artInstance.current;
-                if (!player) return item.html;
-                
-                const show = item.value === 'on';
-                
-                // 1. Toggle Artplayer's custom subtitle plugin
-                if (player.subtitle) {
-                    player.subtitle.show = show;
-                }
-                
-                // 2. Force disable/enable native HTML5 text tracks
-                if (player.video && player.video.textTracks) {
-                    for (let i = 0; i < player.video.textTracks.length; i++) {
-                        // 'disabled' strictly prevents rendering, 'hidden' might still render in some browsers/hls setups
-                        player.video.textTracks[i].mode = show ? 'showing' : 'disabled';
-                    }
-                }
-
-                // 3. Force disable HLS.js specific subtitle tracks
-                if (player.hls) {
-                    if (!show) {
-                        player.hls.subtitleTrack = -1; // -1 means disable
-                        player.hls.subtitleDisplay = false;
-                    } else {
-                        player.hls.subtitleDisplay = true;
-                        // Try to re-enable the first available subtitle track
-                        if (player.hls.subtitleTracks && player.hls.subtitleTracks.length > 0) {
-                            player.hls.subtitleTrack = 0;
-                        }
-                    }
-                }
-                
-                player.setting.update({ name: 'subtitleToggle', tooltip: item.html });
-                return item.html;
-            },
-        });
 
         customSettings.push({
             name: 'audioBoost',
