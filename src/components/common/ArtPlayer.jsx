@@ -71,8 +71,8 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                 sourceNode.connect(gainNode);
                 gainNode.connect(audioCtx.destination);
                 
-                // Default to Ultra (4.0)
-                gainNode.gain.value = 4.0;
+                // Default to Boost (1.5)
+                gainNode.gain.value = 1.5;
             } catch (err) {
                 console.error("Audio Boost not supported or failed:", err);
             }
@@ -130,13 +130,13 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
             name: 'audioBoost',
             width: 200,
             html: 'Audio Boost',
-            tooltip: 'Ultra (400%)',
+            tooltip: 'Boost (150%)',
             selector: [
                 { html: 'Normal (100%)', value: 1.0 },
-                { html: 'Boost (150%)', value: 1.5 },
+                { html: 'Boost (150%)', value: 1.5, default: true },
                 { html: 'Loud (200%)', value: 2.0 },
                 { html: 'Max (300%)', value: 3.0 },
-                { html: 'Ultra (400%)', value: 4.0, default: true },
+                { html: 'Ultra (400%)', value: 4.0 },
             ],
             onSelect: function (item) {
                 const player = artInstance.current;
@@ -299,7 +299,7 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
         art.on('ready', updateMutedIndicator);
         art.on('video:volumechange', updateMutedIndicator);
 
-        // Automatically apply Ultra Boost when video plays
+        // Automatically apply Default Boost when video plays
         art.on('play', () => {
             if (!audioCtx) {
                 setupAudioBoost(art.video);
