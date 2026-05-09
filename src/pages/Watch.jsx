@@ -420,12 +420,16 @@ export default function Watch() {
 
             // Robust Season Detection
             const getSeason = (str) => {
+              if (!str) return null;
               const s1 = str.match(/season\s+(\d+)/);
               if (s1) return s1[1];
               const s2 = str.match(/(\d+)(st|nd|rd|th)\s+season/);
               if (s2) return s2[1];
               const s3 = str.match(/\s+(\d+)$/); 
               if (s3) return s3[1];
+              // Catch numbers attached to the end of a word (e.g., "rotten2") or "Part 2"
+              const s4 = str.match(/(?:part\s|cour\s|[a-z])(\d+)$/i);
+              if (s4) return s4[1];
               return null;
             };
 
