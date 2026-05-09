@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "../../context/LanguageContext";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function AnimeCard({ anime }) {
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef(null);
   const [imgError, setImgError] = useState(false);
   const { getTitle } = useLanguage();
-  const navigate = useNavigate();
+
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -56,15 +56,15 @@ export default function AnimeCard({ anime }) {
   const showTotal = totalEpisodes !== "?";
   const format = anime.format || "TV";
 
+  const cardUrl = `/watch/${anime.id}${anime.isMAL ? "?mal=true" : "?"}${anime.isProgress ? `&ep=${anime.episode}&t=${anime.currentTime}` : ""}`;
+
   return (
-    <div
+    <Link
+      to={cardUrl}
       ref={cardRef}
-      className={`w-full cursor-pointer group flex flex-col transition-[opacity,transform] duration-500 ease-out will-change-[opacity,transform] ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-      style={{ transform: 'translateZ(0)', backfaceVisibility: 'hidden' }}
-      onClick={() => {
-        const resumeParams = anime.isProgress ? `&ep=${anime.episode}&t=${anime.currentTime}` : "";
-        navigate(`/watch/${anime.id}${anime.isMAL ? "?mal=true" : "?"}${resumeParams}`);
-      }}
+      className={`w-full cursor-pointer group flex flex-col transition-[opacity,transform] duration-500 ease-out will-change-[opacity,transform] ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} no-underline`}
+      style={{ transform: 'translateZ(0)', backfaceVisibility: 'hidden', color: 'inherit', textDecoration: 'none' }}
+      draggable={false}
     >
       {/* Poster image area with wrapping for jutting tags */}
       <div className="relative">
@@ -172,6 +172,6 @@ export default function AnimeCard({ anime }) {
           </div>
         </>
       )}
-    </div>
+    </Link>
   );
 }

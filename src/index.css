@@ -35,15 +35,9 @@
 
 
 html {
-  scroll-behavior: smooth;
   overflow-x: hidden;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  user-select: none;
-}
-
-html::-webkit-scrollbar {
-  display: none;
+  scrollbar-color: #dc2626 #0b0e14;
+  scrollbar-width: thin;
 }
 
 body {
@@ -55,9 +49,6 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  user-select: none;
 }
 
 body::before {
@@ -69,8 +60,10 @@ body::before {
     radial-gradient(circle at 50% -10%, rgba(220, 38, 38, 0.3) 0%, transparent 60%),
     radial-gradient(circle at 0% 0%, rgba(220, 38, 38, 0.05) 0%, transparent 40%),
     radial-gradient(circle at 100% 100%, rgba(220, 38, 38, 0.05) 0%, transparent 40%);
-  /* Reduced blur and added will-change for GPU acceleration */
+  /* Hardware acceleration for heavy blur */
   filter: blur(60px);
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
   will-change: transform;
   pointer-events: none;
 }
@@ -89,23 +82,28 @@ body::after {
   pointer-events: none;
 }
 
-body::-webkit-scrollbar {
-  display: none;
-}
-
 * {
   box-sizing: border-box;
-  -ms-overflow-style: none;
-  /* IE and Edge */
-  scrollbar-width: none;
-  /* Firefox */
 }
 
-*::-webkit-scrollbar {
-  display: none;
-  /* Chrome, Safari and Opera */
-  width: 0px;
-  height: 0px;
+/* Custom Themed Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0b0e14;
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #dc2626;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ef4444;
 }
 
 /* Hide scrollbar on horizontal scroll containers */

@@ -89,7 +89,6 @@ export default function Navbar() {
     { name: "TYPES", path: "/browse", dropdown: "types" },
     { name: "GENRES", path: "/browse", dropdown: "genres" },
     { name: "NEW RELEASES", path: "/browse?sort=START_DATE_DESC" },
-    { name: "UPDATES", path: "/browse?sort=UPDATED_AT_DESC" },
 
     { name: "SCHEDULE", action: "sidebar" },
 
