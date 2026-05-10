@@ -369,8 +369,19 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
 
         art.on('ready', () => {
             if (onReady) onReady();
-            if (initialTime > 0) {
-                art.currentTime = initialTime;
+
+            // Safe seek: wait for metadata to load to prevent infinite stalling
+            const safeSeek = () => {
+                if (initialTime > 0 && !art.hasSetInitialTime) {
+                    art.currentTime = initialTime;
+                    art.hasSetInitialTime = true;
+                }
+            };
+
+            if (art.video.readyState >= 1) {
+                safeSeek();
+            } else {
+                art.once('video:loadedmetadata', safeSeek);
             }
 
             // Smart Autoplay: Try to play with sound, fallback to muted if blocked
