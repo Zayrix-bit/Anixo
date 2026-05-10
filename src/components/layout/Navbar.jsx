@@ -50,6 +50,17 @@ export default function Navbar() {
   };
 
   useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("login") === "true" && !showLoginModal) {
+      // Using setTimeout to avoid synchronous setState warning
+      const timer = setTimeout(() => {
+        setShowLoginModal(true);
+      }, 0);
+      return () => clearTimeout(timer);
+    }
+  }, [location.search, showLoginModal]);
+
+  useEffect(() => {
     const handleClickOutside = (event) => {
       const isInsideDesktop = searchContainerRef.current && searchContainerRef.current.contains(event.target);
       const isInsideMobile = mobileSearchRef.current && mobileSearchRef.current.contains(event.target);
