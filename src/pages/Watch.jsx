@@ -254,7 +254,7 @@ export default function Watch() {
 
     const key = `${id}-${activeEpisode}`;
     if (instantSaveRef.current[key]) return; // Already saved this episode
-    
+
     // Wait for the actual anime data
     if (!anime.title) return;
 
@@ -262,7 +262,7 @@ export default function Watch() {
 
     // Find if we already have progress for this anime
     const existing = globalProgress.find(p => p.animeId === String(id));
-    
+
     // If the episode is the same as the one we are resuming, preserve currentTime
     const isSameEpisode = existing && existing.episode === activeEpisode;
     const currTime = isSameEpisode ? existing.currentTime : 0;
@@ -291,7 +291,7 @@ export default function Watch() {
     const title = getTitle(anime.title) || "Watch Anime";
     const coverImage = anime.bannerImage || anime.coverImage?.extraLarge || anime.coverImage?.large;
     const descText = anime.description ? anime.description.replace(/<[^>]+>/g, '').substring(0, 160) : "Watch this anime online for free in high quality.";
-    
+
     const epTitle = `Episode ${activeEpisode}`;
     const pageTitle = `Watch ${title} ${epTitle} English Sub/Dub`;
     const pageKeywords = `${title}, ${title} ${epTitle}, watch ${title} online, ${title} english sub, ${title} english dub, anixo, free anime streaming`;
@@ -396,6 +396,24 @@ export default function Watch() {
       // --- STEP 2: Fallback to Keyword Search (with improved scoring) ---
       if (!searchTitle) return;
 
+      const cacheKey = `allanime_search_${searchTitle}`;
+      const cachedId = localStorage.getItem(cacheKey);
+
+      if (cachedId) {
+        try {
+          const parsedCache = JSON.parse(cachedId);
+          if (new Date().getTime() < parsedCache.expiry) {
+            console.log(`[Allanime] Using cached ID: ${parsedCache.id}`);
+            setAllanimeId(parsedCache.id);
+            setAllanimeSubCount(parsedCache.sub || 0);
+            setAllanimeDubCount(parsedCache.dub || 0);
+            return;
+          }
+        } catch {
+          localStorage.removeItem(cacheKey);
+        }
+      }
+
       try {
         const res = await axios.get(`${ALLANIME_API}/search`, { params: { query: searchTitle } });
         if (Array.isArray(res.data) && res.data.length > 0) {
@@ -425,7 +443,7 @@ export default function Watch() {
               if (s1) return s1[1];
               const s2 = str.match(/(\d+)(st|nd|rd|th)\s+season/);
               if (s2) return s2[1];
-              const s3 = str.match(/\s+(\d+)$/); 
+              const s3 = str.match(/\s+(\d+)$/);
               if (s3) return s3[1];
               // Catch numbers attached to the end of a word (e.g., "rotten2") or "Part 2"
               const s4 = str.match(/(?:part\s|cour\s|[a-z])(\d+)$/i);
@@ -459,6 +477,14 @@ export default function Watch() {
           setAllanimeSubCount(parseInt(bestMatch.episodes_sub) || 0);
           setAllanimeDubCount(parseInt(bestMatch.episodes_dub) || 0);
           console.log(`[Allanime] Best Search Match: ${bestMatch.title} (ID: ${bestMatch.id}) | Score: ${highestScore}`);
+
+          // Save to Cache for 24 Hours
+          localStorage.setItem(cacheKey, JSON.stringify({
+            id: bestMatch.id,
+            sub: parseInt(bestMatch.episodes_sub) || 0,
+            dub: parseInt(bestMatch.episodes_dub) || 0,
+            expiry: new Date().getTime() + (24 * 60 * 60 * 1000)
+          }));
         }
       } catch (err) {
         console.warn("Allanime search failed:", err);

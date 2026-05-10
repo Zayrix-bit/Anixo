@@ -95,6 +95,9 @@ app.get('/play', async (c) => {
         const respHeaders = new Headers();
         respHeaders.set('Content-Type', 'video/mp4');
         respHeaders.set('Content-Disposition', 'inline');
+        // Add caching headers to prevent re-fetching the stream if the user closes and opens the player quickly
+        respHeaders.set('Cache-Control', 'public, max-age=86400, immutable');
+        
         if (videoResp.headers.get('content-length')) {
             respHeaders.set('Content-Length', videoResp.headers.get('content-length'));
         }
