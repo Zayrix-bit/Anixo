@@ -108,24 +108,26 @@ export default function AnimeCard({ anime }) {
 
           {/* Smart Timeline Bar for Continue Watching */}
           {anime.isProgress && (
-            <div className="absolute bottom-0 left-0 w-full z-50">
-               {/* Tiny Timestamp (Top-Left to avoid merging with EP badge) */}
+            <>
+               {/* Tiny Timestamp (Fixed positioning) */}
                <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-md px-1.5 py-0.5 rounded-md border border-white/5 z-50">
                  <span className="text-[8.5px] font-bold text-white/90 whitespace-nowrap tracking-tighter">
                    {Math.floor(anime.currentTime / 60)}:{String(Math.floor(anime.currentTime % 60)).padStart(2, '0')} / {anime.duration ? Math.floor(anime.duration / 60) : '24'}:00
                  </span>
                </div>
 
-               {/* Glowing Timeline Bar */}
-               <div className="w-full h-1 bg-white/10 relative overflow-hidden">
-                 <div 
-                   className="h-full bg-red-600 shadow-[0_0_12px_rgba(220,38,38,1)] transition-all duration-500 ease-out" 
-                   style={{ 
-                     width: `${anime.duration ? Math.min(100, (anime.currentTime / anime.duration) * 100) : Math.min(100, (anime.currentTime / 1440) * 100)}%` 
-                   }}
-                 />
+               <div className="absolute bottom-0 left-0 w-full z-50">
+                 {/* Glowing Timeline Bar */}
+                 <div className="w-full h-1 bg-white/10 relative overflow-hidden">
+                   <div 
+                     className="h-full bg-red-600 shadow-[0_0_12px_rgba(220,38,38,1)] transition-all duration-500 ease-out" 
+                     style={{ 
+                       width: `${anime.duration ? Math.min(100, (anime.currentTime / anime.duration) * 100) : Math.min(100, (anime.currentTime / 1440) * 100)}%` 
+                     }}
+                   />
+                 </div>
                </div>
-            </div>
+            </>
           )}
 
           {/* Hover Play Icon Overlay */}

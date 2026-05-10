@@ -158,18 +158,18 @@ export default function Watchlist() {
                       {/* Remove Button */}
                       <button
                         onClick={(e) => handleRemove(item.animeId, e)}
-                        className="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-white/40 hover:text-red-500 hover:bg-black p-2 rounded-xl shadow-xl z-20 transition-all opacity-0 group-hover:opacity-100"
+                        className="absolute top-2 right-2 bg-black/80 backdrop-blur-md text-white hover:text-red-500 hover:bg-black p-2.5 rounded-2xl shadow-2xl z-20 transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100 border border-white/5 active:scale-90"
                         title="Remove from Watchlist"
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
                         </svg>
                       </button>
 
                       {/* Overlay on hover */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     </div>
-                    <h3 className="text-[13px] font-medium text-white/80 group-hover:text-white transition-colors line-clamp-2 leading-snug px-1">
+                    <h3 className="text-[13px] font-medium text-white/80 group-hover:text-white transition-colors line-clamp-2 leading-snug px-1 text-center w-full">
                       {item.title}
                     </h3>
                   </Link>

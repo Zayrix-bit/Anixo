@@ -69,7 +69,7 @@ export default function AnimeRow({ title, data, isLoading, limit = 6, tabs = [],
                     e.stopPropagation();
                     onRemove(anime.id);
                   }}
-                  className="absolute top-2 right-2 z-50 bg-black/70 backdrop-blur-md text-white/90 hover:text-red-500 hover:bg-black p-2 rounded-full shadow-xl transition-all duration-300 opacity-100 md:opacity-0 md:group-hover/card:opacity-100 border border-white/10"
+                  className="absolute top-2 right-2 z-50 bg-black/80 backdrop-blur-md text-white hover:text-red-500 hover:bg-black p-2.5 rounded-full shadow-2xl transition-all duration-300 opacity-100 md:opacity-0 md:group-hover/card:opacity-100 border border-white/10 active:scale-90"
                   title="Remove from history"
                 >
                   <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
