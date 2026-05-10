@@ -66,9 +66,9 @@ export default function AnimeCard({ anime }) {
       style={{ transform: 'translateZ(0)', backfaceVisibility: 'hidden', color: 'inherit', textDecoration: 'none' }}
       draggable={false}
     >
-      {/* Poster image area with wrapping for jutting tags */}
+      {/* Poster image area */}
       <div className="relative">
-        {/* Stacked Tags (Aligned to Left Corner) */}
+        {/* format Tag (e.g. TV, MOVIE) */}
         {!anime.isProgress && (
           <div className="absolute -top-1 left-0 flex flex-col items-start z-40 gap-1">
             <div className="bg-red-600 text-white text-[9px] font-black px-1.5 py-[3px] flex items-center justify-center min-w-[28px]">
@@ -77,14 +77,14 @@ export default function AnimeCard({ anime }) {
           </div>
         )}
 
-        {/* 18+ Badge (Top Right Corner - Professional Red) */}
+        {/* 18+ Badge */}
         {(anime.isAdult || anime.ageRating === "R" || anime.rating?.includes("18")) && (
           <div className="absolute top-1.5 right-1.5 z-40 bg-red-600/90 text-white text-[10px] font-black px-1.5 py-[2px] rounded-[4px] shadow-lg flex items-center justify-center border border-white/10 tracking-widest">
             18+
           </div>
         )}
 
-        {/* Poster image container */}
+        {/* Poster Container */}
         <div className="relative w-full aspect-[2/3] overflow-hidden rounded-2xl bg-[#181818] border border-white/5 shadow-lg group-hover:shadow-2xl transition-[transform,shadow] duration-500 group-hover:-translate-y-1" style={{ transform: 'translateZ(0)' }}>
           {isVisible && !imgError ? (
             <img
@@ -106,42 +106,30 @@ export default function AnimeCard({ anime }) {
             </div>
           )}
 
-          {/* Gradient Overlay removed as requested */}
-
-          {/* Continue Watching Overlay - Sleek Premium Design */}
+          {/* Smart Timeline Bar for Continue Watching */}
           {anime.isProgress && (
-            <>
-              {/* Bottom Gradient for text readability */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none z-30" />
-              
-              <div className="absolute inset-x-0 bottom-0 p-3 pb-4 z-40 flex flex-col gap-1 pointer-events-none">
-                <h3 className="text-[13px] font-bold text-white line-clamp-1 tracking-tight">
-                  {getTitle(anime.title)}
-                </h3>
-                <div className="flex items-center justify-between mt-0.5">
-                  <span className="text-[10px] text-white/80 font-bold uppercase tracking-widest">
-                    Episode {anime.episode}
-                  </span>
-                  <span className="text-[10px] text-white/60 font-semibold">
-                    {Math.floor(anime.currentTime / 60)}m left
-                  </span>
-                </div>
-              </div>
+            <div className="absolute bottom-0 left-0 w-full z-50">
+               {/* Tiny Timestamp (Top-Left to avoid merging with EP badge) */}
+               <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-md px-1.5 py-0.5 rounded-md border border-white/5 z-50">
+                 <span className="text-[8.5px] font-bold text-white/90 whitespace-nowrap tracking-tighter">
+                   {Math.floor(anime.currentTime / 60)}:{String(Math.floor(anime.currentTime % 60)).padStart(2, '0')} / {anime.duration ? Math.floor(anime.duration / 60) : '24'}:00
+                 </span>
+               </div>
 
-              {/* Real-time Progress Bar at Absolute Bottom */}
-              <div className="absolute bottom-0 left-0 w-full h-1 bg-white/20 z-50">
+               {/* Glowing Timeline Bar */}
+               <div className="w-full h-1 bg-white/10 relative overflow-hidden">
                  <div 
-                   className="h-full bg-red-600 rounded-r-full" 
+                   className="h-full bg-red-600 shadow-[0_0_12px_rgba(220,38,38,1)] transition-all duration-500 ease-out" 
                    style={{ 
                      width: `${anime.duration ? Math.min(100, (anime.currentTime / anime.duration) * 100) : Math.min(100, (anime.currentTime / 1440) * 100)}%` 
                    }}
                  />
-              </div>
-            </>
+               </div>
+            </div>
           )}
 
-          {/* Hover overlay with Play Icon */}
-          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none z-50">
+          {/* Hover Play Icon Overlay */}
+          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-40 pointer-events-none">
             <div className="bg-white text-black p-3 rounded-2xl scale-75 group-hover:scale-100 transition-transform duration-500 shadow-2xl">
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z" />
@@ -149,29 +137,29 @@ export default function AnimeCard({ anime }) {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Info Section (For non-progress items) */}
-      {!anime.isProgress && (
-        <>
-          <div className="flex justify-center -mt-[14px] relative z-40">
-            <div className="flex items-stretch bg-[#0a0a0a] rounded-[4px] border border-white/10 overflow-hidden shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
-              <span className="text-[9px] font-black bg-red-600 text-white px-2 uppercase tracking-tighter flex items-center justify-center">EP</span>
-              <div className="px-2 py-1 flex items-center gap-1.5">
-                <span className="text-[11px] font-medium text-white">{releasedEpisodes || "0"}</span>
-                {showTotal && (
-                  <span className="text-[10px] font-bold text-white/30">/ {totalEpisodes}</span>
-                )}
-              </div>
+        {/* EP Badge (Universal style for both types) */}
+        <div className="flex justify-center -mt-[14px] relative z-40">
+          <div className="flex items-stretch bg-[#0a0a0a] rounded-[4px] border border-white/10 overflow-hidden shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
+            <span className="text-[9px] font-black bg-red-600 text-white px-2 uppercase tracking-tighter flex items-center justify-center">EP</span>
+            <div className="px-2 py-1 flex items-center gap-1.5">
+              <span className="text-[11px] font-medium text-white">
+                {anime.isProgress ? anime.episode : (releasedEpisodes || "0")}
+              </span>
+              {!anime.isProgress && showTotal && (
+                <span className="text-[10px] font-bold text-white/30">/ {totalEpisodes}</span>
+              )}
             </div>
           </div>
-          <div className="w-full mt-3 text-center px-1">
-            <h3 className="text-[13px] font-medium text-white/80 group-hover:text-white transition-colors line-clamp-2 leading-tight uppercase tracking-tight">
-              {getTitle(anime.title)}
-            </h3>
-          </div>
-        </>
-      )}
+        </div>
+      </div>
+
+      {/* Info Section - Identical for all cards */}
+      <div className="w-full mt-3 text-center px-1">
+        <h3 className="text-[13px] font-medium text-white/80 group-hover:text-white transition-colors line-clamp-2 leading-tight uppercase tracking-tight">
+          {getTitle(anime.title)}
+        </h3>
+      </div>
     </Link>
   );
 }
