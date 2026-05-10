@@ -235,12 +235,21 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
             ],
             moreVideoAttr: {
                 crossOrigin: 'anonymous',
+                preload: 'auto', // Hints the browser to start downloading immediately
             },
             customType: {
                 m3u8: function (video, url, art) {
                     if (Hls.isSupported()) {
                         if (art.hls) art.hls.destroy();
-                        const hls = new Hls();
+                        
+                        // Smart Preload & Buffer Optimization
+                        const hls = new Hls({
+                            maxBufferLength: 60, // Aim to keep 60 seconds buffered
+                            maxMaxBufferLength: 600, // Hard limit of 10 minutes (to avoid memory bloat)
+                            maxBufferSize: 60 * 1024 * 1024, // Up to 60MB of RAM for buffer
+                            enableWorker: true, // Use background thread for parsing (no lag)
+                            lowLatencyMode: false,
+                        });
                         hls.loadSource(url);
                         hls.attachMedia(video);
                         art.hls = hls;
