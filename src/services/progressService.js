@@ -10,10 +10,11 @@ export async function getProgress() {
   }
 }
 
-export async function updateProgress(animeId, episode, currentTime, duration, title, coverImage) {
+export async function updateProgress(animeId, episode, currentTime, duration, title, coverImage, anilistId) {
   try {
     const res = await backendApi.post('/progress/save', {
       animeId,
+      anilistId,
       episode,
       currentTime,
       duration,

@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename)
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    react(), 
+    react(),
     tailwindcss()
   ],
   server: {
@@ -18,12 +18,7 @@ export default defineConfig({
       ignored: ['**/api/**']
     },
     proxy: {
-      '/api': { target: 'http://localhost:5000', changeOrigin: true, secure: false },
-      '/auth': { target: 'http://localhost:5001', changeOrigin: true, secure: false },
-      '/watchlist': { target: 'http://localhost:5001', changeOrigin: true, secure: false },
-      '/progress': { target: 'http://localhost:5001', changeOrigin: true, secure: false },
-      '/settings': { target: 'http://localhost:5001', changeOrigin: true, secure: false },
-      '/notifications': { target: 'http://localhost:5001', changeOrigin: true, secure: false }
+      '/api': { target: 'http://localhost:7860', changeOrigin: true, secure: false }
     }
   }
 })

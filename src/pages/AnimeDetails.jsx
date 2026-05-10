@@ -7,6 +7,7 @@ import Navbar from "../components/layout/Navbar";
 import { useAuth } from "../hooks/useAuth";
 import { addToWatchlist, removeFromWatchlist, getWatchlist } from "../services/watchlistService";
 import { useEffect } from "react";
+import { updateMetaTags, updateStructuredData, clearStructuredData } from "../utils/seo";
 
 export default function AnimeDetails() {
   const { id } = useParams();
@@ -68,6 +69,44 @@ export default function AnimeDetails() {
     queryFn: () => getAnimeDetails(Number(id)),
     enabled: !!id,
   });
+
+  // --- DYNAMIC SEO & MALSYNC ---
+  useEffect(() => {
+    if (!anime) return;
+
+    const title = getTitle(anime.title) || "Anime Details";
+    const coverImage = anime.bannerImage || anime.coverImage?.extraLarge || anime.coverImage?.large;
+    const descText = anime.description ? anime.description.replace(/<[^>]+>/g, '').substring(0, 160) : "View details for this anime on AniXo.";
+
+    updateMetaTags({
+      title: title,
+      description: descText,
+      image: coverImage,
+      url: `/anime/${id}`,
+      anilistId: id,
+      malId: anime.idMal,
+    });
+
+    // Added structured data to fix the lint error and improve SEO
+    updateStructuredData({
+      "@context": "https://schema.org",
+      "@type": anime.format === 'MOVIE' ? 'Movie' : 'TVSeries',
+      "name": title,
+      "description": descText,
+      "image": coverImage,
+      "genre": anime.genres,
+      "numberOfEpisodes": anime.episodes
+    });
+
+    return () => {
+      clearStructuredData();
+      updateMetaTags({
+        title: "AniXo - Stream Anime Online",
+        description: "The next-gen anime experience.",
+        url: "/"
+      });
+    };
+  }, [anime, id, getTitle]);
 
 
 

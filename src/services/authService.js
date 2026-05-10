@@ -29,3 +29,16 @@ export const resetPassword = async (token, password) => {
   const { data } = await backendApi.post(`/auth/reset-password/${token}`, { password });
   return data;
 };
+
+export const getAnilistAuthUrl = () => {
+  const token = localStorage.getItem('token');
+  const baseUrl = backendApi.defaults.baseURL || "";
+  // In production, baseURL might be empty if using relative paths
+  const absoluteBaseUrl = baseUrl || window.location.origin + '/api';
+  return `${absoluteBaseUrl}/auth/anilist?token=${token}`;
+};
+
+export const disconnectAnilist = async () => {
+  const { data } = await backendApi.post("/auth/anilist/disconnect");
+  return data;
+};

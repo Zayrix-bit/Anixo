@@ -1,9 +1,56 @@
 import Progress from '../models/Progress.js';
+import axios from 'axios';
+import User from '../models/User.js';
+
+// Helper to sync progress to AniList
+const syncToAnilist = async (user, animeId, anilistId, episode) => {
+  if (!user.anilist || !user.anilist.accessToken) return;
+
+  // Use explicit anilistId if provided, otherwise try to parse animeId
+  const mediaId = anilistId ? parseInt(anilistId) : parseInt(animeId);
+  
+  if (isNaN(mediaId)) {
+    console.warn(`[AniList] Cannot sync: Invalid numeric ID for anime ${animeId}`);
+    return;
+  }
+
+  try {
+    const query = `
+      mutation ($mediaId: Int, $progress: Int, $status: MediaListStatus) {
+        SaveMediaListEntry (mediaId: $mediaId, progress: $progress, status: $status) {
+          id
+          progress
+          status
+        }
+      }
+    `;
+
+    const variables = {
+      mediaId,
+      progress: parseInt(episode),
+      status: "CURRENT"
+    };
+
+    await axios.post('https://graphql.anilist.co', {
+      query,
+      variables
+    }, {
+      headers: {
+        Authorization: `Bearer ${user.anilist.accessToken}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    });
+    console.log(`[AniList] Progress synced for ${user.username}: Media ${mediaId}, Ep ${episode}`);
+  } catch (error) {
+    console.error("[AniList] Sync Error:", error.response?.data || error.message);
+  }
+};
 
 // @desc    Save or update anime progress
 export const saveProgress = async (req, res) => {
   try {
-    const { animeId, episode, currentTime, duration, title, coverImage } = req.body;
+    const { animeId, anilistId, episode, currentTime, duration, title, coverImage } = req.body;
 
     if (!animeId || episode === undefined || currentTime === undefined) {
       return res.status(400).json({ success: false, message: 'Missing required fields' });
@@ -21,6 +68,11 @@ export const saveProgress = async (req, res) => {
       },
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
+
+    // Sync to AniList in background if linked
+    if (req.user.anilist?.accessToken) {
+      syncToAnilist(req.user, animeId, anilistId, episode);
+    }
 
     res.status(200).json({
       success: true,

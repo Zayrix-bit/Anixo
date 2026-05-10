@@ -271,7 +271,7 @@ export default function Watch() {
     const coverImg = anime?.coverImage?.large || anime?.coverImage?.extraLarge;
 
     // Trigger instant save in the background
-    updateProgress(String(id), activeEpisode, currTime, duration, getTitle(anime.title), coverImg)
+    updateProgress(String(id), activeEpisode, currTime, duration, getTitle(anime.title), coverImg, anime?.id)
       .then(res => {
         if (res.success && res.progress) {
           setGlobalProgress(prev => {
@@ -303,7 +303,10 @@ export default function Watch() {
       image: coverImage,
       keywords: pageKeywords,
       type: "video.episode",
-      url: `/watch/${id}?ep=${activeEpisode}${isMal ? '&mal=true' : ''}`
+      url: `/watch/${id}?ep=${activeEpisode}${isMal ? '&mal=true' : ''}`,
+      anilistId: isMal ? null : id,
+      malId: anime?.idMal || (isMal ? id : null),
+      episode: activeEpisode
     });
 
     // Generate Schema.org structured data for this Episode + VideoObject
@@ -578,6 +581,7 @@ export default function Watch() {
       // The backend-core is usually on port 5001 or proxied via /api
       const payload = JSON.stringify({
         animeId: String(id),
+        anilistId: anime?.id,
         episode: activeEpisode,
         currentTime: lastCapturedTime.current,
         duration: lastCapturedDuration.current,
@@ -604,6 +608,30 @@ export default function Watch() {
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [user, anime, id, activeEpisode]);
+
+  // ── PROGRESS: Periodic save every 30 seconds ──
+  useEffect(() => {
+    if (!user || !anime || !id) return;
+
+    const interval = setInterval(() => {
+      if (lastCapturedTime.current <= 5) return; // Don't save if no progress
+
+      const coverImg = anime?.coverImage?.large || anime?.coverImage?.extraLarge;
+      const titleStr = getTitle(anime.title);
+      
+      updateProgress(
+        String(id), 
+        activeEpisode, 
+        lastCapturedTime.current, 
+        lastCapturedDuration.current, 
+        titleStr, 
+        coverImg,
+        anime?.id
+      ).catch(err => console.error("[Progress] Periodic save failed:", err));
+    }, 30000); // Every 30 seconds
+
+    return () => clearInterval(interval);
+  }, [user, anime, id, activeEpisode, getTitle]);
 
 
 

@@ -6,6 +6,9 @@ export const updateMetaTags = ({
   keywords,
   type = "website",
   noindex = false,
+  anilistId = null,
+  malId = null,
+  episode = null,
 }) => {
   // Update Title
   if (title) {
@@ -59,6 +62,41 @@ export const updateMetaTags = ({
     }
     canonical.setAttribute("href", fullUrl);
   }
+
+  // --- MALSYNC COMPATIBILITY ---
+  // Helper to update or create meta tags by name AND property
+  const setMetaTags = (name, content) => {
+    if (!content) {
+      document.querySelector(`meta[name="${name}"]`)?.remove();
+      document.querySelector(`meta[property="${name}"]`)?.remove();
+      return;
+    }
+    
+    // Set by name
+    let nameTag = document.querySelector(`meta[name="${name}"]`);
+    if (!nameTag) {
+      nameTag = document.createElement('meta');
+      nameTag.setAttribute('name', name);
+      document.head.appendChild(nameTag);
+    }
+    nameTag.setAttribute("content", content);
+
+    // Set by property (some extensions prefer this)
+    let propTag = document.querySelector(`meta[property="${name}"]`);
+    if (!propTag) {
+      propTag = document.createElement('meta');
+      propTag.setAttribute('property', name);
+      document.head.appendChild(propTag);
+    }
+    propTag.setAttribute("content", content);
+  };
+
+  // Support for specific tracking IDs (anilist-id, mal-id)
+  setMetaTags("anilist-id", anilistId);
+  setMetaTags("mal-id", malId);
+  setMetaTags("anime-id", anilistId || malId); // Common fallback
+  setMetaTags("episode", episode);
+  setMetaTags("episode-number", episode); // Variation
 
   // Handle NoIndex for Private Pages
   let robotsTag = document.querySelector('meta[name="robots"]');

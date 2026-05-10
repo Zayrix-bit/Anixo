@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../components/layout/Navbar";
 import { useAuth } from "../hooks/useAuth";
 import { updateSettings } from "../services/settingsService";
+import { getAnilistAuthUrl, disconnectAnilist } from "../services/authService";
 import { User, Clock, Heart, Bell, Download, Settings as SettingsIcon, Shield, CheckCircle2 } from "lucide-react";
 
 const getDefaults = (settings) => ({
@@ -42,6 +43,15 @@ export default function Settings() {
       setTimeout(() => setSaveSuccess(false), 3000);
     }
     setIsSaving(false);
+  };
+
+  const handleDisconnect = async () => {
+    if (window.confirm("Are you sure you want to disconnect your AniList account?")) {
+      const res = await disconnectAnilist();
+      if (res.success) {
+        window.location.reload(); // Refresh to update user state
+      }
+    }
   };
 
   const navItems = [
@@ -90,7 +100,64 @@ export default function Settings() {
             
             <div className="p-8 space-y-10">
               
-              {/* 1. Title Language */}
+              {/* 1. External Sync (AniList) - CLEAN MINIMALIST DESIGN */}
+              <div className="bg-[#181818] rounded-2xl border border-white/5 overflow-hidden">
+                <div className="px-6 py-4 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Shield size={14} className="text-red-600" />
+                    <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-white/40">Account Synchronization</h3>
+                  </div>
+                  {user?.anilist?.username && (
+                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20">
+                      <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                      <span className="text-[9px] font-black uppercase tracking-widest text-green-500">Live</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-8 text-center md:text-left">
+                  <div className="flex flex-col md:flex-row items-center gap-5 md:gap-6">
+                    <div className={`w-16 h-16 md:w-14 md:h-14 rounded-2xl flex items-center justify-center border transition-colors duration-300 ${user?.anilist?.username ? 'bg-[#02A9FF]/10 border-[#02A9FF]/30' : 'bg-white/5 border-white/10'}`}>
+                      <img 
+                        src="https://anilist.co/img/icons/icon.svg" 
+                        alt="AniList" 
+                        className={`w-9 h-9 md:w-8 md:h-8 ${user?.anilist?.username ? 'brightness-110' : 'opacity-20 grayscale'}`} 
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <h4 className="text-[18px] md:text-[16px] font-bold text-white tracking-tight">
+                        {user?.anilist?.username ? `Synced as ${user.anilist.username}` : 'AniList Connection'}
+                      </h4>
+                      <p className="text-[12px] md:text-[11px] font-medium text-white/30 leading-relaxed max-w-[320px] mx-auto md:mx-0">
+                        {user?.anilist?.username 
+                          ? `Your account is linked. All watch progress will be mirrored to your AniList profile.`
+                          : 'Connect your AniList account to track progress, scores, and status automatically.'
+                        }
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {user?.anilist?.username ? (
+                    <button 
+                      type="button"
+                      onClick={handleDisconnect}
+                      className="w-full md:w-auto px-8 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white text-[11px] font-black uppercase tracking-[0.2em] hover:bg-red-600 hover:border-red-600 transition-all active:scale-95 shrink-0"
+                    >
+                      Disconnect Account
+                    </button>
+                  ) : (
+                    <button 
+                      type="button"
+                      onClick={() => window.location.href = getAnilistAuthUrl()}
+                      className="w-full md:w-auto px-10 py-4 rounded-xl bg-[#02A9FF] text-white text-[11px] font-black uppercase tracking-[0.2em] hover:bg-[#0288d1] transition-all active:scale-95 shrink-0 shadow-none"
+                    >
+                      Connect Now
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* 2. Title Language */}
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-1">
                 <div className="space-y-1">
                   <h3 className="text-[14px] font-black uppercase tracking-tight text-white">Title language</h3>
@@ -117,7 +184,7 @@ export default function Settings() {
                 </div>
               </div>
 
-              {/* 2. Video Language */}
+              {/* 3. Video Language */}
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-1">
                 <div className="space-y-1">
                   <h3 className="text-[14px] font-black uppercase tracking-tight text-white">Video language</h3>
@@ -142,7 +209,7 @@ export default function Settings() {
                 </div>
               </div>
 
-              {/* 3. Skip & Bookmarks */}
+              {/* 4. Skip & Bookmarks */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="bg-white/[0.02] p-5 rounded-2xl border border-white/5 space-y-4">
                   <div className="space-y-1">
@@ -171,7 +238,7 @@ export default function Settings() {
                 </div>
               </div>
 
-              {/* 4. Player Options */}
+              {/* 5. Player Options */}
               <div className="bg-white/[0.01] p-6 rounded-2xl border border-white/5 space-y-4">
                 <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-white/20">Playback Engine</h3>
                 <div className="flex flex-col gap-4">

@@ -420,3 +420,106 @@ export const resetPassword = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// @desc    Connect AniList Account (Redirect)
+export const connectAnilist = async (req, res) => {
+  try {
+    const { token } = req.query;
+    if (!token) return res.status(401).send('Unauthorized: No token provided');
+
+    // Verify AniXo Token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.id;
+
+    const clientId = process.env.ANILIST_CLIENT_ID;
+    const redirectUri = process.env.ANILIST_REDIRECT_URI;
+
+    if (!clientId || !redirectUri) {
+      return res.status(500).send('Server Error: AniList configuration missing in environment variables');
+    }
+
+    // Redirect to AniList with userId as 'state'
+    const authUrl = `https://anilist.co/api/v2/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&state=${userId}`;
+    
+    res.redirect(authUrl);
+  } catch (error) {
+    console.error("CONNECT ANILIST ERROR:", error);
+    res.status(500).send('Authentication failed');
+  }
+};
+
+// @desc    AniList Callback (Receive Code)
+export const anilistCallback = async (req, res) => {
+  const { code, state: userId } = req.query;
+  const clientId = process.env.ANILIST_CLIENT_ID;
+  const clientSecret = process.env.ANILIST_CLIENT_SECRET;
+  const redirectUri = process.env.ANILIST_REDIRECT_URI;
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+
+  if (!code || !userId) {
+    return res.redirect(`${frontendUrl}/settings?error=anilist_auth_failed`);
+  }
+
+  try {
+    // 1. Exchange code for token
+    const tokenResponse = await axios.post('https://anilist.co/api/v2/oauth/token', {
+      grant_type: 'authorization_code',
+      client_id: clientId,
+      client_secret: clientSecret,
+      redirect_uri: redirectUri,
+      code: code,
+    });
+
+    const { access_token } = tokenResponse.data;
+
+    // 2. Get AniList user info
+    const userResponse = await axios.post('https://graphql.anilist.co', {
+      query: `
+        query {
+          Viewer {
+            id
+            name
+          }
+        }
+      `
+    }, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }
+    });
+
+    const anilistUser = userResponse.data.data.Viewer;
+
+    // 3. Update User in MongoDB
+    await User.findByIdAndUpdate(userId, {
+      anilist: {
+        id: anilistUser.id,
+        username: anilistUser.name,
+        accessToken: access_token
+      }
+    });
+
+    // 4. Redirect back to frontend
+    res.redirect(`${frontendUrl}/settings?success=anilist_connected`);
+  } catch (error) {
+    console.error("ANILIST CALLBACK ERROR:", error.response?.data || error.message);
+    res.redirect(`${frontendUrl}/settings?error=anilist_exchange_failed`);
+  }
+};
+
+// @desc    Disconnect AniList Account
+export const disconnectAnilist = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+    
+    user.anilist = undefined;
+    await user.save();
+    
+    res.json({ success: true, message: 'AniList disconnected successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
