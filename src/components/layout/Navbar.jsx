@@ -4,7 +4,7 @@ import { ALL_GENRES } from "../../constants/genres";
 import NavSidebar from "./NavSidebar";
 import { useLanguage } from "../../context/LanguageContext";
 import { searchAnime } from "../../services/api";
-import { MessageSquare, Mic, Clock, CheckCircle, SlidersHorizontal } from "lucide-react";
+import { MessageSquare, Mic, Clock, CheckCircle, CheckCircle2, SlidersHorizontal } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import LoginModal from "../auth/LoginModal";
 import AvatarDropdown from "../user/AvatarDropdown";
@@ -597,30 +597,21 @@ export default function Navbar() {
         initialTab={sidebarTab}
       />
 
-      {/* Global Toast (Dynamic Positioning & Styling) */}
+      {/* Global Toast (Premium Minimalist Design) */}
       {authToast && (
-        <div className={`fixed z-[10000] animate-in duration-500 flex items-center pointer-events-none px-4 ${authToast.toLowerCase().includes("successfully")
-          ? "top-24 right-8 slide-in-from-right-10"
-          : "top-20 left-1/2 -translate-x-1/2 slide-in-from-top-5"
-          }`}>
-          {authToast.toLowerCase().includes("successfully") ? (
-            /* Light Green Minimalist Success Toast (Right Corner) */
-            <div className="bg-[#f0fdf4] border border-green-200 px-6 py-3 rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.15)] pointer-events-auto min-w-[240px]">
-              <p className="text-[#166534] text-[14px] font-medium tracking-tight">
-                {authToast}
-              </p>
+        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[10000] animate-in slide-in-from-bottom-5 fade-in duration-500 pointer-events-none px-4">
+          <div className="bg-[#111]/90 backdrop-blur-xl border border-white/10 px-5 py-3 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex items-center gap-3 pointer-events-auto">
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+              authToast.toLowerCase().includes("welcome") || authToast.toLowerCase().includes("success")
+                ? "bg-green-500/10 text-green-500" 
+                : "bg-red-500/10 text-red-500"
+            }`}>
+              <CheckCircle2 size={16} strokeWidth={2.5} />
             </div>
-          ) : (
-            /* Clean Top Alert Toast */
-            <div className="bg-[#161616] border border-white/10 px-6 py-3 rounded-lg shadow-2xl flex items-center gap-3 pointer-events-auto">
-              <div className={`w-1 h-4 rounded-full ${authToast.toLowerCase().includes("log in") || authToast.toLowerCase().includes("sign in")
-                ? "bg-red-500" : "bg-green-500"
-                }`} />
-              <p className="text-white text-[14px] font-medium tracking-tight">
-                {authToast}
-              </p>
-            </div>
-          )}
+            <p className="text-white text-[13px] font-bold tracking-tight">
+              {authToast}
+            </p>
+          </div>
         </div>
       )}
     </>
