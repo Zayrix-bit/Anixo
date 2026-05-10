@@ -173,7 +173,7 @@ async function smartRequest(method, path, options = {}) {
 export const backendApi = axios.create({
   baseURL: (typeof window !== "undefined" && window.location.hostname === "localhost")
     ? (import.meta.env.VITE_BACKEND_API || "http://localhost:5001")
-    : (import.meta.env.VITE_BACKEND_API || ""), // Vercel rewrites handle this on production
+    : (import.meta.env.VITE_BACKEND_API || "/api/v1"), // Using /api/v1 to avoid conflict with frontend routes
 });
 
 backendApi.interceptors.request.use((config) => {
