@@ -4,10 +4,6 @@
  */
 
 export const initSecurity = () => {
-    // Disabled temporarily for testing on Vercel/live domain
-    return;
-    
-    // eslint-disable-next-line no-unreachable
     if (import.meta.env.DEV) return;
 
     // 1. Immutable Console Ghosting (Cannot be re-enabled)
