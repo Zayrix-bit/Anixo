@@ -36,6 +36,7 @@ export const initSecurity = () => {
         // eslint-disable-next-line no-debugger
         (function () { return true; })["constructor"]("debugger")();
 
+
         // Performance detection - Increased to 2000ms to avoid false positives in Firefox/Brave
         // These browsers have "Timer Fuzzing" which makes this check very unreliable.
         const limit = (isFirefox || isBrave) ? 3000 : 1000;
