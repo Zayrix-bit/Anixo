@@ -199,10 +199,10 @@ export default function ChatRoom() {
                           <span className="text-[10px] text-white/30 font-medium tracking-wide">{formatTime(msg.createdAt)}</span>
                         </div>
                         
-                        <div className={`px-4 md:px-5 py-2.5 md:py-3 rounded-2xl text-[14px] md:text-[15px] leading-relaxed whitespace-pre-wrap break-words relative shadow-md ${
+                        <div className={`px-4 md:px-4 py-2 md:py-2.5 rounded-[18px] text-[14px] md:text-[14px] leading-relaxed whitespace-pre-wrap break-words shadow-sm ${
                           isMe 
-                          ? 'bg-[#1a0b0e] border border-red-500/30 text-white/90 rounded-br-sm backdrop-blur-sm' 
-                          : 'bg-[#1e1e1e] border border-white/5 text-white/90 rounded-bl-sm backdrop-blur-sm'
+                          ? 'bg-[#2a1618] text-white/95 rounded-br-[4px]' 
+                          : 'bg-[#222222] text-white/90 rounded-bl-[4px]'
                         }`}>
                         {msg.replyTo && (
                           <div 
