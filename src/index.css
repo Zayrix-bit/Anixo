@@ -75,6 +75,23 @@ body {
   background: #ef4444;
 }
 
+/* Mini Scrollbar for specific containers */
+.mini-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.mini-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border: none;
+}
+.mini-scrollbar::-webkit-scrollbar-thumb {
+  background: #dc2626;
+  border-radius: 4px;
+}
+.mini-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #ef4444;
+}
+
 /* Hide scrollbar on horizontal scroll containers */
 .scrollbar-hide {
   -ms-overflow-style: none;

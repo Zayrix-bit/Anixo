@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Search, PlayCircle, Filter } from "lucide-react";
 import Footer from "../components/layout/Footer";
 import AlphabetNav from "../components/home/AlphabetNav";
+import PortalSEO from "../components/home/PortalSEO";
 
 export default function Portal() {
   const { t } = useTranslation();
@@ -125,50 +126,12 @@ export default function Portal() {
             </div>
 
             {/* Section: Content */}
-            <div className="flex-1 p-5 md:p-10 md:pr-16 bg-[#141414] relative overflow-hidden">
+            <div className="flex-1 p-5 md:p-10 md:pr-10 bg-[#141414] relative overflow-y-auto overflow-x-hidden mini-scrollbar max-h-[500px] lg:max-h-[600px]">
               {/* Subtle bottom cut indicator */}
               <div className="absolute bottom-0 left-0 right-[20px] md:right-[40px] h-[2px] bg-gradient-to-l from-red-600/30 to-transparent" />
 
-              <div className="relative z-10 space-y-4 md:space-y-6 h-full flex flex-col">
-                <div className="space-y-2 md:space-y-3">
-                  <h2 className="text-[14px] md:text-[18px] font-black uppercase tracking-[0.15em] md:tracking-[0.2em] text-white/80 border-l-4 border-red-600 pl-3 md:pl-4 py-1">
-                    {t('portal.bestFreeStreaming')}
-                  </h2>
-                  <p className="text-[11px] md:text-[13px] leading-[1.6] text-white/50 font-medium">
-                    {t('portal.transcendsDesc')}
-                  </p>
-                  <p className="text-[11px] md:text-[13px] leading-[1.6] text-white/50 font-medium">
-                    {t('portal.notAllPlatforms')}
-                    <Link to="/home" className="text-red-500 hover:text-red-400 transition-colors">{t('portal.domain')}</Link>{t('portal.shinesBeacon')}
-                  </p>
-                </div>
-
-                <div className="space-y-2 md:space-y-3">
-                  <h3 className="text-[14px] md:text-[16px] font-bold text-white/90">
-                    {t('portal.whatIsAnixo')}
-                  </h3>
-                  <p className="text-[11px] md:text-[12px] leading-[1.6] text-white/40">
-                    {t('portal.premiumPlatform')}
-                  </p>
-                </div>
-
-                <div className="mt-auto pt-4 md:pt-6 border-t border-white/15 flex items-center justify-between">
-                  <div className="flex items-center gap-3 md:gap-4">
-                    <div className="text-center">
-                      <span className="block text-[14px] md:text-[16px] font-black text-white">80k+</span>
-                      <span className="text-[8px] md:text-[9px] uppercase tracking-widest text-white/30">{t('portal.episodes')}</span>
-                    </div>
-                    <div className="w-px h-5 md:h-6 bg-white/5" />
-                    <div className="text-center">
-                      <span className="block text-[14px] md:text-[16px] font-black text-white">{t('portal.adFree')}</span>
-                      <span className="text-[8px] md:text-[9px] uppercase tracking-widest text-white/30">{t('portal.streaming')}</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 md:gap-4 text-white/30">
-                    <span className="text-[10px] md:text-[11px] font-bold hover:text-white cursor-pointer transition-colors uppercase tracking-widest">{t('portal.about')}</span>
-                    <span className="text-[10px] md:text-[11px] font-bold hover:text-white cursor-pointer transition-colors uppercase tracking-widest">{t('portal.connect')}</span>
-                  </div>
-                </div>
+              <div className="relative z-10">
+                <PortalSEO />
               </div>
 
               {/* Subtle background decoration */}
