@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 /**
  * useStreamFetch
  * Fetches the stream iframe URL based on active episode, language, and server.
- * Supports 3 servers: Megaplay (MAL), Megaplay (AniList), Vidnest.
+ * Supports 6 servers: Megaplay (MAL), Megaplay (AniList), Tryembed, Vidnest, Reanime, Anineko.
  * Manages streamUrl, streamData, loading, error, and iframe loaded states.
  */
 export function useStreamFetch({
@@ -177,9 +177,69 @@ export function useStreamFetch({
           }
         }
 
+        // --- SERVER 5: REANIME (Anivexa API HF Deployment) ---
+        else if (activeServer === 5) {
+          const langParam = playerLang.toLowerCase() === "dub" ? "dub" : "sub";
+          const anilistId = anime?.id || (!isMal ? id : null);
+
+          if (anilistId) {
+            try {
+              const res = await fetch(`https://anivexaapi-api.hf.space/watch/reanime/${anilistId}/${langParam}/reanime-${activeEpisode}`);
+              if (!res.ok) throw new Error("Failed to fetch Server 5");
+              const data = await res.json();
+              const validStreams = data.streams?.filter(s => s.url && !s.url.includes(".json")) || [];
+              if (validStreams.length > 0) {
+                const iframeSource = validStreams.find(s => s.embed || s.type === "iframe" || s.type === "embed" || s.url.includes("embed"));
+                const source = iframeSource || validStreams.find(s => s.quality === "1080p" || s.quality === "auto" || s.quality === "default") || validStreams[0];
+                url = source.embed || (source.type === "embed" ? source.url : source.url);
+                setStreamData({
+                  server_name: "SERVER 5 (Reanime)",
+                  lang: langParam,
+                });
+              } else {
+                setFetchError("No valid video source found on Server 5.");
+              }
+            } catch {
+              setFetchError("Error fetching from Server 5.");
+            }
+          } else {
+            setFetchError("AniList ID is required for Server 5. Try another server.");
+          }
+        }
+
+        // --- SERVER 6: ANINEKO (Anivexa API HF Deployment) ---
+        else if (activeServer === 6) {
+          const langParam = playerLang.toLowerCase() === "dub" ? "dub" : "sub";
+          const anilistId = anime?.id || (!isMal ? id : null);
+
+          if (anilistId) {
+            try {
+              const res = await fetch(`https://anivexaapi-api.hf.space/watch/anineko/${anilistId}/${langParam}/anineko-${activeEpisode}`);
+              if (!res.ok) throw new Error("Failed to fetch Server 6");
+              const data = await res.json();
+              const validStreams = data.streams?.filter(s => s.url && !s.url.includes(".json")) || [];
+              if (validStreams.length > 0) {
+                const iframeSource = validStreams.find(s => s.embed || s.type === "iframe" || s.type === "embed" || s.url.includes("embed"));
+                const source = iframeSource || validStreams.find(s => s.quality === "1080p" || s.quality === "auto" || s.quality === "default") || validStreams[0];
+                url = source.embed || (source.type === "embed" ? source.url : source.url);
+                setStreamData({
+                  server_name: "SERVER 6 (Anineko)",
+                  lang: langParam,
+                });
+              } else {
+                setFetchError("No valid video source found on Server 6.");
+              }
+            } catch {
+              setFetchError("Error fetching from Server 6.");
+            }
+          } else {
+            setFetchError("AniList ID is required for Server 6. Try another server.");
+          }
+        }
+
         if (url) {
-          if (activeServer === 3 || activeServer === 4) {
-            // Keep Vidnest and Tryembed URLs clean without Megaplay-specific parameters
+          if (activeServer >= 3) {
+            // Keep Vidnest, Tryembed, Reanime, Anineko URLs clean without Megaplay-specific parameters
             setStreamUrl(url);
           } else {
             // Inject Autoplay and premium params for Megaplay
