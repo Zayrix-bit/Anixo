@@ -162,6 +162,7 @@ export default function Home() {
     <div className="min-h-screen text-white overflow-x-hidden relative bg-transparent">
       <div className="relative z-10">
         <Navbar />
+        <h1 className="sr-only">Watch Free Anime Online with Sub & Dub in HD - AniXo</h1>
       <Hero data={trendingData?.media} isLoading={loadingTrending} />
 
       <ShareBanner />
