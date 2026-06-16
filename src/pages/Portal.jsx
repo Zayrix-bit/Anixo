@@ -69,13 +69,13 @@ export default function Portal() {
               {/* Search Bar */}
               <form onSubmit={handleSearch} className="relative w-full max-w-[480px] mb-4 md:mb-5 mx-auto lg:mx-0">
                 <div className="flex items-center bg-[#1a1a1a] border border-white/10 rounded-[4px] p-1 md:p-1 focus-within:border-red-600/5 transition-all shadow-inner">
-                  <Search className="w-4 h-4 md:w-5 md:h-5 ml-2 md:ml-3 text-white/20" />
+                  <Search className="w-4 h-4 md:w-5 md:h-5 ml-2 md:ml-3 text-white/50" />
                   <input
                     type="text"
                     placeholder={t('portal.searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="flex-1 bg-transparent border-none outline-none px-2 md:px-3 py-2 text-[14px] md:text-[15px] placeholder:text-white/10"
+                    className="flex-1 bg-transparent border-none outline-none px-2 md:px-3 py-2 text-[14px] md:text-[15px] placeholder:text-white/40"
                   />
                   <button
                     type="button"
@@ -95,7 +95,7 @@ export default function Portal() {
                     <Link
                       key={s}
                       to={`/browse?search=${s}`}
-                      className="text-[9px] md:text-[11px] font-medium text-white/40 hover:text-red-500 whitespace-nowrap bg-white/5 border border-white/15 px-2 md:px-2.5 py-0.5 md:py-1 rounded-[4px] transition-colors"
+                      className="text-[9px] md:text-[11px] font-medium text-white/70 hover:text-red-500 whitespace-nowrap bg-white/5 border border-white/15 px-2 md:px-2.5 py-0.5 md:py-1 rounded-[4px] transition-colors"
                     >
                       {s}
                     </Link>

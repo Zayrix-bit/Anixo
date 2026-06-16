@@ -68,36 +68,39 @@ const ErrorFallback = ({ error }) => {
 // Inner component so useLocation works inside Router
 function AppRoutes() {
   const location = useLocation();
+  const isPortalPage = location.pathname === "/";
 
   return (
-    <ErrorBoundary FallbackComponent={ErrorFallback} resetKeys={[location.pathname]}>
-      <Suspense fallback={<SuspenseLoader />}>
-        <Routes>
-          <Route path="/" element={<Portal />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/browse" element={<Browse />} />
-          <Route path="/watch/:id" element={<Watch />} />
-          <Route path="/character/:id" element={<Character />} />
-          <Route path="/staff/:id" element={<Staff />} />
-          <Route path="/schedule" element={<Schedule />} />
-          <Route path="/dmca" element={<DMCA />} />
-          <Route path="/terms" element={<TermsOfService />} />
-          <Route path="/watchlist" element={<Watchlist />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/user/:profileId" element={<PublicProfile />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/watching" element={<ContinueWatching />} />
-          <Route path="/notifications" element={<Notifications />} />
-          <Route path="/import" element={<ImportExport />} />
-          <Route path="/stats" element={<Stats />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password/:token" element={<ResetPassword />} />
-          <Route path="/chat" element={<ChatRoom />} />
-          <Route path="*" element={<NotFound />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Suspense>
-    </ErrorBoundary>
+    <>
+      {!isPortalPage && <AiChat />}
+      <ErrorBoundary FallbackComponent={ErrorFallback} resetKeys={[location.pathname]}>
+        <Suspense fallback={<SuspenseLoader />}>
+          <Routes>
+            <Route path="/" element={<Portal />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/browse" element={<Browse />} />
+            <Route path="/watch/:id" element={<Watch />} />
+            <Route path="/character/:id" element={<Character />} />
+            <Route path="/staff/:id" element={<Staff />} />
+            <Route path="/schedule" element={<Schedule />} />
+            <Route path="/dmca" element={<DMCA />} />
+            <Route path="/terms" element={<TermsOfService />} />
+            <Route path="/watchlist" element={<Watchlist />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/user/:profileId" element={<PublicProfile />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/watching" element={<ContinueWatching />} />
+            <Route path="/notifications" element={<Notifications />} />
+            <Route path="/import" element={<ImportExport />} />
+            <Route path="/stats" element={<Stats />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
+            <Route path="/chat" element={<ChatRoom />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </ErrorBoundary>
+    </>
   );
 }
 
@@ -106,7 +109,6 @@ export default function App() {
     <Router>
       <ScrollToTop />
       <PageLoader />
-      <AiChat />
       <AppRoutes />
     </Router>
   );

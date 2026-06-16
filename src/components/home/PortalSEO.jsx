@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function PortalSEO() {
   return (
-    <div className="text-white/70 text-[12px] md:text-[13px] leading-[1.8] font-medium space-y-8 pr-4 pb-10">
+    <div className="text-white/90 text-[12px] md:text-[13px] leading-[1.8] font-medium space-y-8 pr-4 pb-10">
       
       {/* Intro Section */}
       <section className="space-y-4">
