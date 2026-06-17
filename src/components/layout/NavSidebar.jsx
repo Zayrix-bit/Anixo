@@ -189,6 +189,7 @@ export default function NavSidebar({ open, onClose, initialTab = "menu" }) {
                 <div className="flex flex-col gap-2.5">
                   {[
                     { label: "Home", path: "/home" },
+                    { label: "HENTAI (18+)", path: "/nsfw" },
                     { label: "Live Chat", path: "/chat" },
                     { label: "Recent Releases", path: "/browse?sort=START_DATE_DESC" },
                     { label: "Popular", path: "/browse?sort=POPULARITY_DESC" },

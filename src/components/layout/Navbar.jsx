@@ -104,6 +104,7 @@ export default function Navbar() {
     { name: "NEW RELEASES", path: "/browse?sort=START_DATE_DESC" },
     { name: "LIVE CHAT", path: "/chat" },
     { name: "SCHEDULE", action: "sidebar" },
+    { name: "HENTAI", path: "/nsfw" },
   ];
 
   return (
@@ -153,11 +154,14 @@ export default function Navbar() {
                         setShowSidebar(true);
                       }
                     }}
-                    className={`text-[11px] font-bold tracking-[1px] transition-all duration-200 px-3 py-1 rounded-[4px] flex items-center uppercase ${activeDropdown === link.dropdown && link.dropdown
-                      ? "text-red-500"
-                      : showSidebar && link.action === "sidebar"
-                        ? "text-red-500"
-                        : "text-white/40 hover:text-white"
+                    className={`text-[11px] font-bold tracking-[1px] transition-all duration-200 px-3 py-1 rounded-[4px] flex items-center uppercase ${
+                      link.name === "HENTAI"
+                        ? "bg-gradient-to-r from-[#ff2a5f] to-[#ff7e40] bg-clip-text text-transparent hover:scale-110"
+                        : activeDropdown === link.dropdown && link.dropdown
+                          ? "text-red-500"
+                          : showSidebar && link.action === "sidebar"
+                            ? "text-red-500"
+                            : "text-white/40 hover:text-white"
                       }`}
                   >
                     {link.name}

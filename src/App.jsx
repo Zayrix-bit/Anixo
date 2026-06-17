@@ -17,6 +17,7 @@ const Character = lazy(() => import("./pages/Character"));
 const Staff = lazy(() => import("./pages/Staff"));
 const Schedule = lazy(() => import("./pages/Schedule"));
 const DMCA = lazy(() => import("./pages/DMCA"));
+const NSFW = lazy(() => import("./pages/NSFW"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const Watchlist = lazy(() => import("./pages/Watchlist"));
 const Profile = lazy(() => import("./pages/Profile"));
@@ -69,16 +70,18 @@ const ErrorFallback = ({ error }) => {
 function AppRoutes() {
   const location = useLocation();
   const isPortalPage = location.pathname === "/";
+  const isNsfwPage = location.pathname.startsWith("/nsfw");
 
   return (
     <>
-      {!isPortalPage && <AiChat />}
+      {!isPortalPage && !isNsfwPage && <AiChat />}
       <ErrorBoundary FallbackComponent={ErrorFallback} resetKeys={[location.pathname]}>
         <Suspense fallback={<SuspenseLoader />}>
           <Routes>
             <Route path="/" element={<Portal />} />
             <Route path="/home" element={<Home />} />
             <Route path="/browse" element={<Browse />} />
+            <Route path="/nsfw/*" element={<NSFW />} />
             <Route path="/watch/:id" element={<Watch />} />
             <Route path="/character/:id" element={<Character />} />
             <Route path="/staff/:id" element={<Staff />} />

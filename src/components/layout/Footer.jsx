@@ -165,6 +165,7 @@ export default function Footer() {
             <div className="w-1 h-1 bg-white/10 rounded-full" />
             <span className="flex items-center gap-1">
               Made with <Heart size={10} className="text-red-600" fill="currentColor" /> by the community
+              <Link to="/nsfw" className="ml-2 text-white/10 hover:text-red-600 transition-colors">18+</Link>
             </span>
           </div>
 
