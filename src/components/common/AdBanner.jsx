@@ -8,24 +8,36 @@ export function AdBanner728x90() {
     if (loadedRef.current || !containerRef.current) return;
     loadedRef.current = true;
 
-    const script1 = document.createElement('script');
-    script1.type = 'text/javascript';
-    script1.text = `
-      atOptions = {
-        'key' : '41feeb0d0418514f2c25b35780bc88ed',
-        'format' : 'iframe',
-        'height' : 90,
-        'width' : 728,
-        'params' : {}
-      };
-    `;
+    const container = containerRef.current;
+    container.innerHTML = '';
 
-    const script2 = document.createElement('script');
-    script2.type = 'text/javascript';
-    script2.src = 'https://www.highperformanceformat.com/41feeb0d0418514f2c25b35780bc88ed/invoke.js';
+    const iframe = document.createElement('iframe');
+    iframe.style.width = '728px';
+    iframe.style.height = '90px';
+    iframe.style.border = 'none';
+    iframe.style.overflow = 'hidden';
+    iframe.scrolling = 'no';
+    container.appendChild(iframe);
 
-    containerRef.current.appendChild(script1);
-    containerRef.current.appendChild(script2);
+    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+    iframeDoc.open();
+    iframeDoc.write(`
+      <!DOCTYPE html>
+      <html><head><style>body{margin:0;padding:0;overflow:hidden;}</style></head>
+      <body>
+        <script>
+          atOptions = {
+            'key' : '41feeb0d0418514f2c25b35780bc88ed',
+            'format' : 'iframe',
+            'height' : 90,
+            'width' : 728,
+            'params' : {}
+          };
+        </script>
+        <script src="https://www.highperformanceformat.com/41feeb0d0418514f2c25b35780bc88ed/invoke.js"></script>
+      </body></html>
+    `);
+    iframeDoc.close();
 
     return () => {
       loadedRef.current = false;
@@ -34,7 +46,7 @@ export function AdBanner728x90() {
 
   return (
     <div className="w-full flex justify-center py-3 overflow-hidden">
-      <div ref={containerRef} className="max-w-[728px]" />
+      <div ref={containerRef} />
     </div>
   );
 }
@@ -47,24 +59,36 @@ export function AdBanner300x250() {
     if (loadedRef.current || !containerRef.current) return;
     loadedRef.current = true;
 
-    const script1 = document.createElement('script');
-    script1.type = 'text/javascript';
-    script1.text = `
-      atOptions = {
-        'key' : '2e3d69816973ce46100c1352a0a696f7',
-        'format' : 'iframe',
-        'height' : 250,
-        'width' : 300,
-        'params' : {}
-      };
-    `;
+    const container = containerRef.current;
+    container.innerHTML = '';
 
-    const script2 = document.createElement('script');
-    script2.type = 'text/javascript';
-    script2.src = 'https://www.highperformanceformat.com/2e3d69816973ce46100c1352a0a696f7/invoke.js';
+    const iframe = document.createElement('iframe');
+    iframe.style.width = '300px';
+    iframe.style.height = '250px';
+    iframe.style.border = 'none';
+    iframe.style.overflow = 'hidden';
+    iframe.scrolling = 'no';
+    container.appendChild(iframe);
 
-    containerRef.current.appendChild(script1);
-    containerRef.current.appendChild(script2);
+    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+    iframeDoc.open();
+    iframeDoc.write(`
+      <!DOCTYPE html>
+      <html><head><style>body{margin:0;padding:0;overflow:hidden;}</style></head>
+      <body>
+        <script>
+          atOptions = {
+            'key' : '2e3d69816973ce46100c1352a0a696f7',
+            'format' : 'iframe',
+            'height' : 250,
+            'width' : 300,
+            'params' : {}
+          };
+        </script>
+        <script src="https://www.highperformanceformat.com/2e3d69816973ce46100c1352a0a696f7/invoke.js"></script>
+      </body></html>
+    `);
+    iframeDoc.close();
 
     return () => {
       loadedRef.current = false;
@@ -73,7 +97,7 @@ export function AdBanner300x250() {
 
   return (
     <div className="w-full flex justify-center py-3 overflow-hidden">
-      <div ref={containerRef} className="max-w-[300px]" />
+      <div ref={containerRef} />
     </div>
   );
 }
