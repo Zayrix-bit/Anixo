@@ -17,6 +17,7 @@ import Hero from "../components/home/Hero";
 import AnimeRow from "../components/home/AnimeRow";
 import { useAuth } from "../hooks/useAuth";
 import ShareBanner from "../components/common/ShareBanner";
+import { AdNativeBanner } from "../components/common/AdBanner";
 import Pagination from "../components/common/Pagination";
 import ThreeColumnSection from "../components/home/ThreeColumnSection";
 import AlphabetNav from "../components/home/AlphabetNav";
@@ -166,6 +167,8 @@ export default function Home() {
       <Hero data={trendingData?.media} isLoading={loadingTrending} />
 
       <ShareBanner />
+
+      <AdNativeBanner />
 
       {/* Continue Watching */}
       {user && globalProgress && globalProgress.length > 0 && (

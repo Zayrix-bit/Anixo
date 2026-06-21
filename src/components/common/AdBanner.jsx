@@ -101,3 +101,40 @@ export function AdBanner300x250() {
     </div>
   );
 }
+
+export function AdNativeBanner() {
+  const containerRef = useRef(null);
+  const loadedRef = useRef(false);
+
+  useEffect(() => {
+    if (loadedRef.current || !containerRef.current) return;
+    loadedRef.current = true;
+
+    const containerId = "container-640fe83b0b8dad53cd77f5258e0536a1";
+
+    // Prevent double injection
+    if (document.getElementById(containerId)) return;
+
+    // Create container div
+    const div = document.createElement('div');
+    div.id = containerId;
+    containerRef.current.appendChild(div);
+
+    // Create script
+    const script = document.createElement('script');
+    script.async = true;
+    script.dataset.cfasync = "false";
+    script.src = "//pl29825672.effectivecpmnetwork.com/640fe83b0b8dad53cd77f5258e0536a1/invoke.js";
+    containerRef.current.appendChild(script);
+
+    return () => {
+      loadedRef.current = false;
+    };
+  }, []);
+
+  return (
+    <div className="w-full flex justify-center py-4 my-2 px-2 overflow-hidden bg-[#0d0d0d]/30 border-y border-white/5">
+      <div ref={containerRef} className="w-full max-w-[1400px] overflow-x-auto" />
+    </div>
+  );
+}
