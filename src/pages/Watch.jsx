@@ -31,6 +31,7 @@ import Pagination from "../components/common/Pagination";
 import ShareBanner from "../components/common/ShareBanner";
 import ReportModal from "../components/watch/ReportModal";
 import VideoPlayerSection from "../components/watch/VideoPlayerSection";
+import { AdBanner300x250 } from "../components/common/AdBanner";
 
 
 export default function Watch() {
@@ -605,6 +606,11 @@ export default function Watch() {
             
             {/* Share Banner */}
             <ShareBanner />
+
+            {/* Ad Banner */}
+            <div className="flex justify-center py-4">
+              <AdBanner300x250 />
+            </div>
             
             {/* Recommendations Section */}
             {recommendations && recommendations.length > 0 && (
