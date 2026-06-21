@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Play, Search, Tags, ArrowLeft, Star, Eye, ThumbsUp, X, Loader2, ChevronLeft, ChevronRight, Download, History, Bookmark, BookmarkCheck, ShieldAlert, ShieldCheck, Menu, ArrowDownAz, ChevronDown, Check, Home } from 'lucide-react';
+import { AdBanner728x90, AdBanner300x250, AdNativeBanner } from '../components/common/AdBanner';
 
 const API_URL = 'https://allanime-hent.hf.space/api';
 
@@ -572,7 +573,10 @@ function NSFW() {
  </button>
  ))}
  </div>
- </div>
+  <div className="mt-8 mb-4 w-full flex justify-center scale-90 origin-top">
+    <AdBanner300x250 />
+  </div>
+  </div>
  </aside>
 
  {/* Main Content */}
@@ -680,6 +684,10 @@ function NSFW() {
  </form>
  </div>
 
+  <div className="hidden md:flex justify-center w-full my-2">
+    <AdBanner728x90 />
+  </div>
+
  {!selectedVideo ? (
  <>
  {/* Horizontal Scrollable Categories (YouTube Style) */}
@@ -741,6 +749,9 @@ function NSFW() {
  skeletonCount={10}
  onViewAll={() => fetchBrowse(1)}
  />
+  <div className="w-full my-2">
+    <AdNativeBanner />
+  </div>
  <VideoSection
  title="Trending Now"
  icon=""
@@ -836,6 +847,9 @@ function NSFW() {
  </div>
  
  <div className="p-4 md:p-6 flex flex-col gap-6">
+  <div className="hidden md:flex justify-center w-full">
+    <AdBanner728x90 />
+  </div>
  {/* TOP: Video Player */}
  <div className="w-full aspect-video bg-black overflow-hidden border border-[#2a2a35] shrink-0">
  <iframe 
@@ -919,6 +933,10 @@ function NSFW() {
  </div>
  </div>
  
+  <div className="w-full flex justify-center py-4 border-t border-[#2a2a35]/50 mt-4">
+    <AdBanner300x250 />
+  </div>
+
  {/* Up Next & Related Section */}
  {videoDetails && videoDetails.related_videos && videoDetails.related_videos.length > 0 && (
  <div className="mt-8 border-t border-[#2a2a35] pt-6 flex flex-col gap-8">
