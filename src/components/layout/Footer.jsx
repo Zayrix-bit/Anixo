@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { MessageSquare, Heart, Info, Tv } from "lucide-react";
 import ContactModal from "../common/ContactModal";
-import { AdBanner728x90 } from "../common/AdBanner";
+import { AdBanner728x90, AdBanner300x250 } from "../common/AdBanner";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -39,9 +39,14 @@ export default function Footer() {
 
   return (
     <>
-    {/* Ad Banner above Footer */}
-    <div className="w-full bg-[#0b0d12] border-t border-white/5 hidden md:block">
-      <AdBanner728x90 />
+    {/* Responsive Ad Banner above Footer */}
+    <div className="w-full bg-[#0b0d12] border-t border-white/5 pt-2 pb-4">
+      <div className="hidden md:flex justify-center w-full">
+        <AdBanner728x90 />
+      </div>
+      <div className="flex md:hidden justify-center w-full scale-90 origin-top">
+        <AdBanner300x250 />
+      </div>
     </div>
     <footer className="relative bg-[#0b0d12] pt-10 md:pt-20 pb-8 md:pb-10 overflow-hidden border-t border-white/15">
       {/* Top Gradient Line - Truly Full Width */}
