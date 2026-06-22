@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from "react";
-import { useParams, Link, useLocation } from "react-router-dom";
+import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
@@ -38,6 +38,7 @@ export default function Watch() {
   const { id } = useParams();
   const { t } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const isMal = queryParams.get("mal") === "true";
   const initialEp = parseInt(queryParams.get("ep")) || 1;
@@ -70,6 +71,19 @@ export default function Watch() {
       });
     }, 0);
   }, [activeEpisode, id]);
+
+  // Update URL when episode changes
+  useEffect(() => {
+    const newParams = new URLSearchParams(location.search);
+    newParams.set("ep", activeEpisode.toString());
+    // Remove time parameter when changing episodes
+    newParams.delete("t");
+    navigate({
+      pathname: location.pathname,
+      search: newParams.toString(),
+      replace: true, // Use replace so back button behavior
+    });
+  }, [activeEpisode, navigate, location.pathname, location.search]);
 
   const [episodeLayout, setEpisodeLayout] = useState("grid"); // "grid" | "list"
   const [playerLang, setPlayerLang] = useState("sub");
