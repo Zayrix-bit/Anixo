@@ -7,11 +7,10 @@ import { LanguageProvider } from './context/LanguageContext.jsx'
 import { UserListProvider } from './context/UserListContext.jsx'
 import { LoadingProvider } from './context/LoadingContext.jsx'
 import { AuthProvider } from './store/authStore.jsx'
-import { initSecurity } from './utils/security.js'
+
 import './i18n'
 
-// Initialize Security (Production Only)
-initSecurity();
+
 
 const queryClient = new QueryClient({
   defaultOptions: {
