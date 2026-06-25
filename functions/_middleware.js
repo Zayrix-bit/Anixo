@@ -62,7 +62,7 @@ export async function onRequest(context) {
       statusText: response.statusText,
       headers: responseHeaders,
     });
-  } catch (err) {
+  } catch {
     return new Response(JSON.stringify({ success: false, message: 'Backend unavailable' }), {
       status: 502,
       headers: { 'Content-Type': 'application/json' },
