@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import { updateProgress } from "../services/progressService";
 
 /**
@@ -23,9 +23,27 @@ export function useWatchProgress({
   const lastIntervalSave = useRef(0);
   const instantSaveRef = useRef({});
 
+  // Helper to save progress to global state and localStorage (for guests)
+  const saveProgressToState = useCallback((progressData) => {
+    // Update global state
+    setGlobalProgress((prev) => {
+      const filtered = prev.filter((p) => p.animeId !== progressData.animeId);
+      const newProgress = [progressData, ...filtered].slice(0, 100);
+      // Save to localStorage for guests
+      if (!user) {
+        try {
+          localStorage.setItem("guest_progress", JSON.stringify(newProgress));
+        } catch (e) {
+          console.warn("Failed to save guest progress to localStorage:", e);
+        }
+      }
+      return newProgress;
+    });
+  }, [user, setGlobalProgress]);
+
   // --- INSTANT SAVE TO CONTINUE WATCHING ---
   useEffect(() => {
-    if (!user || !anime || !activeEpisode || !id) return;
+    if (!anime || !activeEpisode || !id) return;
 
     const key = `${id}-${activeEpisode}`;
     if (instantSaveRef.current[key]) return; // Already saved this episode
@@ -50,25 +68,41 @@ export function useWatchProgress({
     const urlEp = parseInt(urlParams.get("ep"));
     if (urlEp && activeEpisode !== urlEp) return;
 
-    updateProgress(
-      String(id),
-      activeEpisode,
-      currTime,
-      duration,
-      getTitle(anime.title),
-      coverImg,
-      anime?.id
-    )
-      .then((res) => {
-        if (res.success && res.progress) {
-          setGlobalProgress((prev) => {
-            const filtered = prev.filter((p) => p.animeId !== String(id));
-            return [res.progress, ...filtered].slice(0, 100);
-          });
-        }
-      })
-      .catch((err) => console.error("Failed to init instant progress:", err));
-  }, [user, anime, activeEpisode, id, globalProgress, getTitle, setGlobalProgress]);
+    const progressData = {
+      animeId: String(id),
+      episode: activeEpisode,
+      currentTime: currTime,
+      duration: duration,
+      title: getTitle(anime.title),
+      coverImage: coverImg,
+      anilistId: anime?.id,
+      updatedAt: Date.now(),
+    };
+
+    if (user) {
+      updateProgress(
+        String(id),
+        activeEpisode,
+        currTime,
+        duration,
+        getTitle(anime.title),
+        coverImg,
+        anime?.id
+      )
+        .then((res) => {
+          if (res.success && res.progress) {
+            setGlobalProgress((prev) => {
+              const filtered = prev.filter((p) => p.animeId !== String(id));
+              return [res.progress, ...filtered].slice(0, 100);
+            });
+          }
+        })
+        .catch((err) => console.error("Failed to init instant progress:", err));
+    } else {
+      // Save for guest
+      saveProgressToState(progressData);
+    }
+  }, [user, anime, activeEpisode, id, globalProgress, getTitle, setGlobalProgress, saveProgressToState]);
 
   // ── Capture playback time from iframe postMessage events ──
   useEffect(() => {
@@ -131,7 +165,7 @@ export function useWatchProgress({
         duration: lastCapturedDuration.current,
         title,
         coverImage: coverImg,
-        updatedAt: new Date().toISOString(),
+        updatedAt: Date.now(),
       };
 
       if (user) {
@@ -161,7 +195,7 @@ export function useWatchProgress({
           guestProg.unshift(progressData);
           localStorage.setItem(
             "guest_progress",
-            JSON.stringify(guestProg.slice(0, 50))
+            JSON.stringify(guestProg.slice(0, 100))
           );
         } catch {
           /* Silently fail */
@@ -195,7 +229,7 @@ export function useWatchProgress({
         title: titleStr,
         coverImage: coverImg,
         anilistId: anime?.id,
-        updatedAt: new Date().toISOString(),
+        updatedAt: Date.now(),
       };
 
       if (user) {
@@ -208,28 +242,24 @@ export function useWatchProgress({
           progressData.title,
           progressData.coverImage,
           progressData.anilistId
-        ).catch((err) =>
+        )
+        .then((res) => {
+          if (res.success && res.progress) {
+            setGlobalProgress((prev) => {
+              const filtered = prev.filter((p) => p.animeId !== String(id));
+              return [res.progress, ...filtered].slice(0, 100);
+            });
+          }
+        })
+        .catch((err) =>
           console.error("[Progress] Periodic save failed:", err)
         );
       } else {
-        // Guest: save to localStorage
-        try {
-          const localStr = localStorage.getItem("guest_progress");
-          let guestProg = localStr ? JSON.parse(localStr) : [];
-          guestProg = guestProg.filter(
-            (p) => p.animeId !== progressData.animeId
-          );
-          guestProg.unshift(progressData);
-          localStorage.setItem(
-            "guest_progress",
-            JSON.stringify(guestProg.slice(0, 50))
-          );
-        } catch (e) {
-          console.warn("Could not save guest progress", e);
-        }
+        // Guest: use our helper
+        saveProgressToState(progressData);
       }
     }, 180000); // Every 3 minutes
 
     return () => clearInterval(interval);
-  }, [user, anime, id, activeEpisode, getTitle]);
+  }, [user, anime, id, activeEpisode, getTitle, setGlobalProgress, saveProgressToState]);
 }

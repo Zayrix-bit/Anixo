@@ -4,7 +4,7 @@ import AnimeCard from "../common/AnimeCard";
 import SkeletonCard from "../common/SkeletonCard";
 import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 
-export default function AnimeRow({ title, data, isLoading, limit = 6, tabs = [], activeTab = "", onTabChange, onRemove, isScrollable = false, viewAllLink = "" }) {
+export default function AnimeRow({ title, data, isLoading, limit = 6, tabs = [], activeTab = "", onTabChange, onRemove, isScrollable = false, viewAllLink = "", CardComponent = AnimeCard }) {
   const hasData = data && data.length > 0;
   const scrollRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -158,7 +158,7 @@ export default function AnimeRow({ title, data, isLoading, limit = 6, tabs = [],
                 ? 'w-[160px] md:w-[200px]' 
                 : (i >= 20 ? 'hidden sm:block' : 'block')
               }`}>
-                <AnimeCard anime={anime} />
+                <CardComponent anime={anime} />
                 {onRemove && (
                   <button
                     onClick={(e) => {
@@ -170,7 +170,7 @@ export default function AnimeRow({ title, data, isLoading, limit = 6, tabs = [],
                     title="Remove from history"
                   >
                     <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6" />
+                      <path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v6M10 11v6M14 11v6" />
                     </svg>
                   </button>
                 )}

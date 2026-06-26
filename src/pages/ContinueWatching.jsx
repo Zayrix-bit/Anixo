@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import AnimeCard from "../components/common/AnimeCard";
+import ProgressAnimeCard from "../components/common/ProgressAnimeCard";
 import Pagination from "../components/common/Pagination";
 import { useAuth } from "../hooks/useAuth";
 import { removeProgress, getProgress } from "../services/progressService";
@@ -41,8 +42,6 @@ export default function ContinueWatching() {
   }, [syncCooldown]);
 
   useEffect(() => {
-    if (!user) navigate("/");
-    
     // FETCH LATEST PROGRESS ON MOUNT (REAL SYNC)
     const syncProgress = async () => {
       try {
@@ -56,12 +55,27 @@ export default function ContinueWatching() {
     };
 
     if (user) syncProgress();
-  }, [user, navigate, setGlobalProgress]);
+  }, [user, setGlobalProgress]);
 
   const handleRemove = async (animeId) => {
-    const res = await removeProgress(animeId);
-    if (res.success) {
+    if (user) {
+      const res = await removeProgress(animeId);
+      if (res.success) {
+        setGlobalProgress(prev => prev.filter(p => p.animeId !== animeId));
+      }
+    } else {
+      // For guests: just remove from localStorage and state
       setGlobalProgress(prev => prev.filter(p => p.animeId !== animeId));
+      try {
+        const localStr = localStorage.getItem("guest_progress");
+        if (localStr) {
+          let guestProg = JSON.parse(localStr);
+          guestProg = guestProg.filter(p => p.animeId !== animeId);
+          localStorage.setItem("guest_progress", JSON.stringify(guestProg));
+        }
+      } catch (e) {
+        console.warn("Failed to remove guest progress:", e);
+      }
     }
   };
 
@@ -97,6 +111,8 @@ export default function ContinueWatching() {
 
   const progressCards = (globalProgress || []).map(p => ({
     id: p.animeId,
+    animeId: p.animeId,
+    anilistId: p.anilistId,
     title: { english: p.title },
     coverImage: { large: p.coverImage },
     episode: p.episode,
@@ -143,7 +159,7 @@ export default function ContinueWatching() {
             <span className="text-[10px] md:text-[11px] font-black bg-white/5 border border-white/15 px-2.5 py-0.5 rounded-full text-white/40">{progressCards.length}</span>
           </div>
           
-          {user?.anilist?.username && (
+          {user && user?.anilist?.username && (
             <button 
               onClick={handleSync}
               disabled={isSyncing || syncCooldown > 0}
@@ -170,7 +186,7 @@ export default function ContinueWatching() {
                 .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
                 .map((anime, i) => (
                 <div key={`${anime.id}-${i}`} className="group relative">
-                  <AnimeCard anime={anime} />
+                  <ProgressAnimeCard anime={anime} />
                   
                   {/* Remove Button - Positioned absolutely relative to the group */}
                   <button

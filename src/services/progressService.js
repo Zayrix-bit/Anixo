@@ -1,3 +1,4 @@
+
 import { backendApi } from './api';
 
 export async function getProgress() {

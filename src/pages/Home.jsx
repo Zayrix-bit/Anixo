@@ -23,6 +23,7 @@ import ThreeColumnSection from "../components/home/ThreeColumnSection";
 import AlphabetNav from "../components/home/AlphabetNav";
 import EstimatedSchedule from "../components/home/EstimatedSchedule";
 import { removeProgress } from "../services/progressService";
+import ProgressAnimeCard from "../components/common/ProgressAnimeCard";
 
 export default function Home() {
   const { t } = useTranslation();
@@ -169,12 +170,14 @@ export default function Home() {
       <ShareBanner />
 
       {/* Continue Watching */}
-      {user && globalProgress && globalProgress.length > 0 && (
+      {globalProgress && globalProgress.length > 0 && (
         <div id="continue-watching" className="pt-8 md:pt-6">
           <AnimeRow
             title={t('continueWatching.title').toUpperCase()}
             data={globalProgress.map(p => ({
               id: p.animeId,
+              animeId: p.animeId,
+              anilistId: p.anilistId,
               title: { english: p.title },
               coverImage: { large: p.coverImage },
               episode: p.episode,
@@ -184,8 +187,9 @@ export default function Home() {
             }))}
             isLoading={false}
             isScrollable={true}
-            onRemove={handleRemoveProgress}
+            onRemove={user ? handleRemoveProgress : undefined}
             viewAllLink="/watching"
+            CardComponent={ProgressAnimeCard}
           />
         </div>
       )}

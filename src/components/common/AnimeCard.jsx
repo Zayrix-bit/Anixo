@@ -76,13 +76,11 @@ export default function AnimeCard({ anime }) {
       {/* Poster image area */}
       <div className="relative">
         {/* format Tag (e.g. TV, MOVIE) */}
-        {!anime.isProgress && (
-          <div className="absolute -top-1 left-0 flex flex-col items-start z-40 gap-1">
-            <div className="bg-red-600 text-white text-[9px] font-black px-1.5 py-[3px] flex items-center justify-center min-w-[28px]">
-              {format}
-            </div>
+        <div className="absolute -top-1 left-0 flex flex-col items-start z-40 gap-1">
+          <div className="bg-red-600 text-white text-[9px] font-black px-1.5 py-[3px] flex items-center justify-center min-w-[28px]">
+            {format}
           </div>
-        )}
+        </div>
 
         {/* 18+ Badge */}
         {(anime.isAdult || anime.ageRating === "R" || anime.rating?.includes("18")) && (
@@ -115,26 +113,17 @@ export default function AnimeCard({ anime }) {
 
           {/* Smart Timeline Bar for Continue Watching */}
           {anime.isProgress && (
-            <>
-               {/* Tiny Timestamp (Fixed positioning) */}
-               <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-md px-1.5 py-0.5 rounded-md border border-white/15 z-50">
-                 <span className="text-[8.5px] font-bold text-white/90 whitespace-nowrap tracking-tighter">
-                   {Math.floor(anime.currentTime / 60)}:{String(Math.floor(anime.currentTime % 60)).padStart(2, '0')} / {anime.duration ? Math.floor(anime.duration / 60) : '24'}:00
-                 </span>
-               </div>
-
-               <div className="absolute bottom-0 left-0 w-full z-50">
-                 {/* Glowing Timeline Bar */}
-                 <div className="w-full h-1 bg-white/10 relative overflow-hidden">
-                   <div 
-                     className="h-full bg-red-600 shadow-[0_0_12px_rgba(220,38,38,1)] transition-all duration-500 ease-out" 
-                     style={{ 
-                       width: `${anime.duration ? Math.min(100, (anime.currentTime / anime.duration) * 100) : Math.min(100, (anime.currentTime / 1440) * 100)}%` 
-                     }}
-                   />
-                 </div>
-               </div>
-            </>
+            <div className="absolute bottom-0 left-0 w-full z-50">
+              {/* Glowing Timeline Bar */}
+              <div className="w-full h-1 bg-white/10 relative overflow-hidden">
+                <div 
+                  className="h-full bg-red-600 shadow-[0_0_12px_rgba(220,38,38,1)] transition-all duration-500 ease-out" 
+                  style={{ 
+                    width: `${anime.duration ? Math.min(100, (anime.currentTime / anime.duration) * 100) : Math.min(100, (anime.currentTime / 1440) * 100)}%` 
+                  }}
+                />
+              </div>
+            </div>
           )}
 
           {/* Hover Play Icon Overlay */}
@@ -161,7 +150,7 @@ export default function AnimeCard({ anime }) {
                   <span className="text-[11px] font-medium text-white">
                     {anime.isProgress ? anime.episode : (releasedEpisodes || "0")}
                   </span>
-                  {!anime.isProgress && showTotal && (
+                  {showTotal && (
                     <span className="text-[10px] font-bold text-white/30">/ {totalEpisodes}</span>
                   )}
                 </div>
