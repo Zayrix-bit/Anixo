@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { User, Users } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
@@ -7,15 +7,19 @@ const OnlineUsers = () => {
   const [onlineStats, setOnlineStats] = useState({ total: 0, registered: 0, guests: 0 });
   const [isConnected, setIsConnected] = useState(false);
   const { user } = useAuth();
+  const socketRef = useRef(null);
 
   useEffect(() => {
     // Connect to online server
     const socket = io(import.meta.env.VITE_ONLINE_SERVER_URL || 'http://localhost:7861');
+    socketRef.current = socket;
 
     socket.on('connect', () => {
       setIsConnected(true);
       // Identify user type on connect
-      socket.emit('identify-user', !!user);
+      const isRegistered = !!user;
+      const isAdmin = !!user && (user.role === 'admin');
+      socket.emit('identify-user', { isRegistered, isAdmin });
     });
 
     socket.on('disconnect', () => {
@@ -26,15 +30,20 @@ const OnlineUsers = () => {
       setOnlineStats(stats);
     });
 
-    // Update user type when auth status changes
-    if (socket.connected) {
-      socket.emit('identify-user', !!user);
-    }
-
     // Cleanup
     return () => {
       socket.disconnect();
+      socketRef.current = null;
     };
+  }, []);
+
+  // Update user type when auth status changes
+  useEffect(() => {
+    if (socketRef.current && socketRef.current.connected) {
+      const isRegistered = !!user;
+      const isAdmin = !!user && (user.role === 'admin');
+      socketRef.current.emit('identify-user', { isRegistered, isAdmin });
+    }
   }, [user]);
 
   return (
@@ -51,7 +60,7 @@ const OnlineUsers = () => {
         </div>
         <span className="text-white/30">|</span>
         <div className="flex items-center gap-1">
-          <User size={10} className="text-white/40" />
+          <User size={10} className="text-white/50" />
           <span className="text-white/50">{onlineStats.guests}</span>
         </div>
       </div>
