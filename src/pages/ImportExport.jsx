@@ -4,18 +4,7 @@ import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import { useAuth } from "../hooks/useAuth";
 import { backendApi, ANILIST_URL } from "../services/api";
-import { User, Clock, Heart, Bell, Download, Settings as SettingsIcon, FileText, Upload, CheckCircle2, AlertTriangle, Loader2, BarChart2 } from "lucide-react";
-
-// Radio button component (declared outside to avoid re-creation on render)
-const Radio = ({ checked, onChange, label }) => (
-  <label className="flex items-center gap-2.5 cursor-pointer group" onClick={onChange}>
-    <div className="relative flex items-center justify-center">
-      <div className={`w-[16px] h-[16px] rounded-full border ${checked ? 'border-red-600' : 'border-white/20'} transition-all`} />
-      {checked && <div className="absolute w-[8px] h-[8px] rounded-full bg-red-600" />}
-    </div>
-    <span className={`text-sm font-medium ${checked ? 'text-white' : 'text-white/50'}`}>{label}</span>
-  </label>
-);
+import { User, Clock, Heart, Bell, Download, Settings as SettingsIcon, BarChart2, Upload, Loader2, CheckCircle2, AlertTriangle } from "lucide-react";
 
 // ─── AniList GraphQL Query ───
 const ANILIST_QUERY = `
@@ -372,12 +361,12 @@ export default function ImportExport() {
   ];
 
   return (
-    <div className="min-h-screen text-white flex flex-col font-sans selection:bg-red-500/30">
+    <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col">
       <Navbar />
 
-      <div className="w-full pt-[80px] px-4 md:px-8 pb-12 max-w-[1200px] mx-auto flex-1">
+      <div className="w-full pt-[80px] px-4 md:px-8 pb-12 max-w-[700px] mx-auto flex-1">
         
-        {/* Compact Navigation Tabs */}
+        {/* Navigation Tabs */}
         <div className="flex flex-wrap sm:flex-nowrap justify-center gap-1.5 sm:gap-2 md:gap-3 mb-10 w-full max-w-4xl mx-auto px-1 sm:px-0">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path || (item.id === "import" && location.pathname === "/import");
@@ -402,180 +391,186 @@ export default function ImportExport() {
           })}
         </div>
 
-        {/* Import/Export Card */}
-        <div className="max-w-[700px] mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700">
-          <div className="bg-[#111] border border-white/15 rounded-2xl overflow-hidden shadow-2xl">
+        {/* Import/Export Container */}
+        <div className="bg-[#111] border border-[#2a2a2a] rounded-2xl overflow-hidden">
 
-            {/* Import / Export Tabs - Mobile Optimized */}
-            <div className="flex p-1.5 bg-white/5 m-4 md:m-6 mb-0 rounded-2xl border border-white/15">
+          {/* Import / Export Tabs */}
+          <div className="flex p-1 bg-[#181818] m-4 md:m-6 mb-0 rounded-xl border border-[#2a2a2a]">
+            <button
+              onClick={() => { setActiveTab("import"); setImportResult(null); }}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-medium transition-all rounded-lg ${
+                activeTab === "import" ? "bg-red-600 text-white" : "text-[#888] hover:text-white"
+              }`}
+            >
+              <Upload size={16} />
+              Import
+            </button>
+            <button
+              onClick={() => { setActiveTab("export"); setImportResult(null); }}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-medium transition-all rounded-lg ${
+                activeTab === "export" ? "bg-red-600 text-white" : "text-[#888] hover:text-white"
+              }`}
+            >
+              <Download size={16} />
+              Export
+            </button>
+          </div>
+
+          {/* ═══ IMPORT TAB ═══ */}
+          {activeTab === "import" && (
+            <form onSubmit={handleImport} className="p-5 md:p-10 space-y-8">
+              {/* Notice */}
+              <div className="p-4 rounded-xl bg-[#181818] border border-[#2a2a2a]">
+                <ul className="text-xs text-[#888] space-y-1">
+                  <li>• Your lists must be public</li>
+                  <li>• Only matching titles will sync</li>
+                  <li>• May take up to a minute</li>
+                </ul>
+              </div>
+
+              {/* Source Platform */}
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="text-left">
+                  <h3 className="text-sm font-medium text-white mb-1">Source Platform</h3>
+                  <p className="text-xs text-[#666]">Import source preference.</p>
+                </div>
+                <div className="flex bg-[#181818] p-1 rounded-lg border border-[#2a2a2a] w-full md:w-auto">
+                  {['MAL', 'File'].map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => setImportFrom(p)}
+                      className={`flex-1 md:flex-none px-6 py-2 rounded-md text-xs font-medium transition-all ${
+                        importFrom === p ? 'bg-red-600 text-white' : 'text-[#888] hover:text-white'
+                      }`}
+                    >
+                      {p === 'MAL' ? 'MyAnimeList' : 'JSON/File'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Username Input */}
+              {importFrom === "AL" && (
+                <div className="space-y-3">
+                  <h3 className="text-sm font-medium text-white">Username</h3>
+                  <input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="AniList Username"
+                    className="w-full bg-[#181818] border border-[#2a2a2a] rounded-lg px-4 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-red-600 transition-all"
+                  />
+                </div>
+              )}
+
+              {/* File Upload */}
+              {importFrom !== "AL" && (
+                <div className="space-y-3">
+                  <h3 className="text-sm font-medium text-white">Select File</h3>
+                  <label className="flex items-center cursor-pointer group">
+                    <div className="flex-1 bg-[#181818] border border-[#2a2a2a] rounded-lg px-4 py-3 flex items-center justify-between group-hover:bg-[#1a1a1a] transition-all">
+                      <span className={`text-sm ${importFile ? 'text-white' : 'text-[#666]'}`}>
+                        {importFile ? importFile.name : "Choose file..."}
+                      </span>
+                      <Upload size={16} className="text-[#666]" />
+                    </div>
+                    <input
+                      type="file"
+                      onChange={(e) => setImportFile(e.target.files?.[0] || null)}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+              )}
+
+              {/* Mode Selector */}
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-sm font-medium text-white mb-1">Import Mode</h3>
+                  <p className="text-xs text-[#666]">How to handle existing items.</p>
+                </div>
+                <div className="flex bg-[#181818] p-1 rounded-lg border border-[#2a2a2a]">
+                  {['Merge', 'Replace'].map((m) => (
+                    <button
+                      key={m}
+                      type="button"
+                      onClick={() => setImportMode(m)}
+                      className={`px-5 py-2 rounded-md text-xs font-medium transition-all ${
+                        importMode === m ? 'bg-red-600 text-white' : 'text-[#888] hover:text-white'
+                      }`}
+                    >
+                      {m === 'Merge' ? 'Merge' : 'Replace All'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Progress & Result */}
+              {importProgress && (
+                <div className="p-4 bg-red-600/10 border border-red-600/20 rounded-lg text-xs text-red-400 text-center">
+                  {importProgress}
+                </div>
+              )}
+
+              {importResult && (
+                <div className={`p-4 rounded-lg text-xs text-center ${
+                  importResult.success 
+                    ? 'bg-green-500/10 text-green-400 border border-green-500/20' 
+                    : 'bg-red-500/10 text-red-400 border border-red-500/20'
+                }`}>
+                  {importResult.message}
+                </div>
+              )}
+
               <button
-                onClick={() => { setActiveTab("import"); setImportResult(null); }}
-                className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[10px] md:text-[11px] font-bold uppercase tracking-wider transition-all rounded-xl ${
-                  activeTab === "import" ? "bg-red-600 text-white shadow-lg" : "text-white/30 hover:text-white"
-                }`}
+                type="submit"
+                disabled={isImporting}
+                className="w-full bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-medium py-3.5 text-sm transition-all rounded-lg"
               >
-                <Upload size={14} />
-                Import
+                {isImporting ? <Loader2 size={18} className="animate-spin mx-auto" /> : "Start Import"}
               </button>
+            </form>
+          )}
+
+          {/* ═══ EXPORT TAB ═══ */}
+          {activeTab === "export" && (
+            <div className="p-6 md:p-10 space-y-10">
+              <div className="text-center space-y-2">
+                <h3 className="text-base font-medium text-white">Backup Collection</h3>
+                <p className="text-xs text-[#666] max-w-xs mx-auto">
+                  Download your entire watchlist as a file to keep it safe or move to other services.
+                </p>
+              </div>
+
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <h3 className="text-sm font-medium text-white">Format</h3>
+                <div className="flex bg-[#181818] p-1 rounded-lg border border-[#2a2a2a]">
+                  {['TEXT', 'JSON', 'MAL XML'].map((f) => (
+                    <button
+                      key={f}
+                      type="button"
+                      onClick={() => setExportFormat(f)}
+                      className={`px-5 py-2 rounded-md text-xs font-medium transition-all ${
+                        exportFormat === f ? 'bg-red-600 text-white' : 'text-[#888] hover:text-white'
+                      }`}
+                    >
+                      {f}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <button
-                onClick={() => { setActiveTab("export"); setImportResult(null); }}
-                className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[10px] md:text-[11px] font-bold uppercase tracking-wider transition-all rounded-xl ${
-                  activeTab === "export" ? "bg-red-600 text-white shadow-lg" : "text-white/30 hover:text-white"
-                }`}
+                onClick={handleExport}
+                disabled={isExporting}
+                className="w-full bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-medium py-3.5 text-sm transition-all rounded-lg"
               >
-                <Download size={14} />
-                Export
+                {isExporting ? <Loader2 size={18} className="animate-spin mx-auto" /> : "Download Backup"}
               </button>
             </div>
+          )}
 
-            {/* ═══ IMPORT TAB ═══ */}
-            {activeTab === "import" && (
-              <form onSubmit={handleImport} className="p-5 md:p-10 space-y-8 md:space-y-10">
-                {/* Notice - Compact */}
-                <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/15">
-                  <div className="space-y-0.5 text-[10px] font-medium text-white/20 uppercase tracking-widest text-center md:text-left">
-                    <p>• Your lists must be public</p>
-                    <p>• Only matching titles will sync</p>
-                    <p>• May take up to a minute</p>
-                  </div>
-                </div>
-
-                {/* Source Platform */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <div className="text-left">
-                    <h3 className="text-[14px] font-bold text-white">Source Platform</h3>
-                    <p className="text-[11px] text-white/30">Import source preference.</p>
-                  </div>
-                  <div className="flex bg-white/5 p-1 rounded-xl border border-white/15 w-full md:w-auto">
-                    {['MAL', 'File'].map((p) => (
-                      <button
-                        key={p}
-                        type="button"
-                        onClick={() => setImportFrom(p)}
-                        className={`flex-1 md:flex-none px-6 py-2 rounded-lg text-[10px] font-bold transition-all ${importFrom === p ? 'bg-red-600 text-white shadow-lg' : 'text-white/30 hover:text-white'}`}
-                      >
-                        {p === 'MAL' ? 'MyAnimeList' : 'JSON/File'}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Username Input */}
-                {importFrom === "AL" && (
-                  <div className="space-y-3">
-                    <h3 className="text-[14px] font-bold text-white">Username</h3>
-                    <input
-                      type="text"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      placeholder="AniList Username"
-                      className="w-full bg-white/5 border border-white/15 rounded-xl px-5 py-3.5 text-[13px] text-white placeholder-white/10 outline-none focus:border-red-600/30 transition-all"
-                    />
-                  </div>
-                )}
-
-                {/* File Upload */}
-                {importFrom !== "AL" && (
-                  <div className="space-y-3">
-                    <h3 className="text-[14px] font-bold text-white">Select File</h3>
-                    <label className="flex items-center cursor-pointer group">
-                      <div className="flex-1 bg-white/5 border border-white/15 rounded-xl px-5 py-3.5 flex items-center justify-between group-hover:bg-white/[0.08] transition-all">
-                        <span className={`text-[13px] ${importFile ? 'text-white' : 'text-white/20'}`}>
-                          {importFile ? importFile.name : "Choose file..."}
-                        </span>
-                        <Upload size={14} className="text-white/20" />
-                      </div>
-                      <input
-                        type="file"
-                        onChange={(e) => setImportFile(e.target.files?.[0] || null)}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-                )}
-
-                {/* Mode Selector */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <div>
-                    <h3 className="text-[14px] font-bold text-white">Import Mode</h3>
-                    <p className="text-[11px] text-white/30">How to handle existing items.</p>
-                  </div>
-                  <div className="flex bg-white/5 p-1 rounded-xl border border-white/15">
-                    {['Merge', 'Replace'].map((m) => (
-                      <button
-                        key={m}
-                        type="button"
-                        onClick={() => setImportMode(m)}
-                        className={`px-5 py-2 rounded-lg text-[10px] font-bold transition-all ${importMode === m ? 'bg-red-600 text-white shadow-lg' : 'text-white/30 hover:text-white'}`}
-                      >
-                        {m === 'Merge' ? 'Merge' : 'Replace All'}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Progress & Result */}
-                {importProgress && (
-                  <div className="p-4 bg-red-600/5 border border-red-600/10 rounded-xl text-[11px] font-bold text-red-500 animate-pulse text-center">
-                    {importProgress}
-                  </div>
-                )}
-
-                {importResult && (
-                  <div className={`p-4 rounded-xl text-[12px] font-bold text-center ${
-                    importResult.success ? 'bg-green-500/5 text-green-500 border border-green-500/10' : 'bg-red-500/5 text-red-500 border border-red-500/10'
-                  }`}>
-                    {importResult.message}
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={isImporting}
-                  className="w-full bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-bold py-4 text-[12px] uppercase tracking-widest transition-all rounded-xl active:scale-[0.98]"
-                >
-                  {isImporting ? <Loader2 size={18} className="animate-spin mx-auto" /> : "Start Import"}
-                </button>
-              </form>
-            )}
-
-            {/* ═══ EXPORT TAB ═══ */}
-            {activeTab === "export" && (
-              <div className="p-6 md:p-10 space-y-10">
-                <div className="text-center space-y-2">
-                  <h3 className="text-[16px] font-bold text-white">Backup Collection</h3>
-                  <p className="text-[11px] text-white/30 leading-relaxed max-w-[300px] mx-auto">
-                    Download your entire watchlist as a file to keep it safe or move to other services.
-                  </p>
-                </div>
-
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <h3 className="text-[14px] font-bold text-white">Format</h3>
-                  <div className="flex bg-white/5 p-1 rounded-xl border border-white/15">
-                    {['TEXT', 'JSON', 'MAL XML'].map((f) => (
-                      <button
-                        key={f}
-                        type="button"
-                        onClick={() => setExportFormat(f)}
-                        className={`px-5 py-2 rounded-lg text-[10px] font-bold transition-all ${exportFormat === f ? 'bg-red-600 text-white shadow-lg' : 'text-white/30 hover:text-white'}`}
-                      >
-                        {f}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <button
-                  onClick={handleExport}
-                  disabled={isExporting}
-                  className="w-full bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-bold py-4 text-[12px] uppercase tracking-widest transition-all rounded-xl active:scale-[0.98]"
-                >
-                  {isExporting ? <Loader2 size={18} className="animate-spin mx-auto" /> : "Download Backup"}
-                </button>
-              </div>
-            )}
-
-          </div>
         </div>
       </div>
       <Footer />
