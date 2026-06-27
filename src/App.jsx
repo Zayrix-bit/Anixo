@@ -31,6 +31,7 @@ const ContinueWatching = lazy(() => import("./pages/ContinueWatching"));
 const Notifications = lazy(() => import("./pages/Notifications"));
 const ImportExport = lazy(() => import("./pages/ImportExport"));
 const Stats = lazy(() => import("./pages/Stats"));
+const Admin = lazy(() => import("./pages/Admin"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const ChatRoom = lazy(() => import("./pages/ChatRoom"));
@@ -102,6 +103,7 @@ function AppRoutes() {
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/import" element={<ImportExport />} />
             <Route path="/stats" element={<Stats />} />
+            <Route path="/admin" element={<Admin />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route path="/chat" element={<ChatRoom />} />

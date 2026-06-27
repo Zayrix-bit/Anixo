@@ -106,6 +106,7 @@ export default function ContinueWatching() {
     { id: "notifications", label: t('nav.notifications'), icon: Bell, path: "/notifications" },
     { id: "stats", label: t('nav.stats'), icon: BarChart2, path: "/stats" },
     { id: "import", label: t('nav.importExport'), icon: Download, path: "/import" },
+    ...(user?.role === 'admin' ? [{ id: "admin", label: "Admin", icon: BarChart2, path: "/admin" }] : []),
     { id: "settings", label: t('nav.settings'), icon: SettingsIcon, path: "/settings" }
   ];
 

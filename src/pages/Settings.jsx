@@ -61,6 +61,7 @@ export default function Settings() {
     { id: "notifications", label: "Notifications", icon: Bell, path: "/notifications" },
     { id: "stats", label: "Stats", icon: BarChart2, path: "/stats" },
     { id: "import", label: "Import/Export", icon: Download, path: "/import" },
+    ...(user?.role === 'admin' ? [{ id: "admin", label: "Admin", icon: BarChart2, path: "/admin" }] : []),
     { id: "settings", label: "Settings", icon: SettingsIcon, path: "/settings" }
   ];
 

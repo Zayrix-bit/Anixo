@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
-import { User, Users } from 'lucide-react';
+import { User, Users, Crown } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 
 const OnlineUsers = () => {
-  const [onlineStats, setOnlineStats] = useState({ total: 0, registered: 0, guests: 0 });
+  const [onlineStats, setOnlineStats] = useState({ total: 0, registered: 0, guests: 0, users: [] });
   const [isConnected, setIsConnected] = useState(false);
   const { user } = useAuth();
   const socketRef = useRef(null);
@@ -19,7 +19,13 @@ const OnlineUsers = () => {
       // Identify user type on connect
       const isRegistered = !!user;
       const isAdmin = !!user && (user.role === 'admin');
-      socket.emit('identify-user', { isRegistered, isAdmin });
+      socket.emit('identify-user', {
+        isRegistered,
+        isAdmin,
+        username: user?.username || '',
+        displayName: user?.displayName || user?.username || '',
+        avatar: user?.avatar || ''
+      });
     });
 
     socket.on('disconnect', () => {
@@ -42,7 +48,13 @@ const OnlineUsers = () => {
     if (socketRef.current && socketRef.current.connected) {
       const isRegistered = !!user;
       const isAdmin = !!user && (user.role === 'admin');
-      socketRef.current.emit('identify-user', { isRegistered, isAdmin });
+      socketRef.current.emit('identify-user', {
+        isRegistered,
+        isAdmin,
+        username: user?.username || '',
+        displayName: user?.displayName || user?.username || '',
+        avatar: user?.avatar || ''
+      });
     }
   }, [user]);
 
