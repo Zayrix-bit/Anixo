@@ -67,10 +67,10 @@ export default function Admin() {
     <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col">
       <Navbar />
 
-      <div className="w-full pt-[80px] px-4 md:px-8 pb-12 max-w-[700px] mx-auto flex-1">
+      <div className="w-full pt-[80px] px-3 md:px-8 pb-12 max-w-[700px] mx-auto flex-1">
         
         {/* Navigation Tabs */}
-        <div className="flex flex-wrap sm:flex-nowrap justify-center gap-1.5 sm:gap-2 md:gap-3 mb-10 w-full max-w-4xl mx-auto px-1 sm:px-0">
+        <div className="flex overflow-x-auto sm:overflow-visible justify-center gap-1.5 sm:gap-2 md:gap-3 mb-8 w-full max-w-4xl mx-auto px-1 sm:px-0 pb-2 sm:pb-0">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
             const Icon = item.icon;
@@ -95,20 +95,20 @@ export default function Admin() {
         </div>
 
         {/* Admin Panel */}
-        <div className="bg-[#111] border border-[#2a2a2a] rounded-2xl p-6 md:p-8">
-          <h1 className="text-2xl font-bold mb-6 flex items-center gap-2">
-            <Users size={24} className="text-red-500" />
+        <div className="bg-[#111] border border-[#2a2a2a] rounded-2xl p-4 md:p-8">
+          <h1 className="text-xl md:text-2xl font-bold mb-6 flex items-center gap-2">
+            <Users size={22} className="text-red-500" />
             Admin Panel
           </h1>
 
           {/* Online Users Section */}
-          <div className="space-y-6">
-            <h2 className="text-lg font-medium text-white flex items-center gap-2">
+          <div className="space-y-4 md:space-y-6">
+            <h2 className="text-base md:text-lg font-medium text-white flex items-center gap-2">
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
               Online Users ({onlineStats.total})
             </h2>
 
-            <div className="flex gap-4 text-sm">
+            <div className="flex flex-wrap gap-3 md:gap-4 text-sm">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-red-500" />
                 <span className="text-white/60">Registered: {onlineStats.registered}</span>
@@ -124,9 +124,9 @@ export default function Admin() {
                 {onlineStats.users.map((user, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-4 p-4 rounded-lg bg-[#0a0a0a] border border-[#2a2a2a]"
+                    className="flex items-center gap-3 md:gap-4 p-3 md:p-4 rounded-lg bg-[#0a0a0a] border border-[#2a2a2a]"
                   >
-                    <div className="w-12 h-12 rounded-full overflow-hidden bg-[#2a2a2a] flex-shrink-0">
+                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden bg-[#2a2a2a] flex-shrink-0">
                       {user.avatar ? (
                         <img
                           src={user.avatar}
@@ -134,21 +134,21 @@ export default function Admin() {
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-white/60 font-bold text-lg">
+                        <div className="w-full h-full flex items-center justify-center text-white/60 font-bold text-base md:text-lg">
                           {(user.displayName || user.username)[0].toUpperCase()}
                         </div>
                       )}
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <h3 className="text-sm font-medium text-white truncate">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="text-sm md:text-base font-medium text-white truncate">
                           {user.displayName || user.username}
                         </h3>
                         {user.isAdmin && (
                           <div className="flex items-center gap-1 text-purple-500">
-                            <Crown size={12} />
-                            <span className="text-[10px] uppercase font-bold">Admin</span>
+                            <Crown size={10} className="md:w-3 md:h-3" />
+                            <span className="text-[9px] md:text-[10px] uppercase font-bold">Admin</span>
                           </div>
                         )}
                       </div>
@@ -159,7 +159,7 @@ export default function Admin() {
 
                     <div className="flex items-center gap-1">
                       <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                      <span className="text-xs text-white/40">Online</span>
+                      <span className="text-[10px] md:text-xs text-white/40 hidden sm:inline">Online</span>
                     </div>
                   </div>
                 ))}
