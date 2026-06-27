@@ -4,6 +4,7 @@ import { MessageSquare, Heart, Info, Tv } from "lucide-react";
 import ContactModal from "../common/ContactModal";
 import { AdBanner728x90, AdBanner300x250 } from "../common/AdBanner";
 import OnlineUsers from "../common/OnlineUsers";
+import { PopunderControlButton } from "../common/PopunderControlButton";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -190,18 +191,23 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-6 md:pt-8 border-t border-white/15 flex flex-col md:flex-row items-center justify-between gap-3 md:gap-6">
+        <div className="pt-6 md:pt-8 border-t border-white/15 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
           <div className="flex items-center gap-2 md:gap-4 text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-white/40">
             <span>&copy; {currentYear} AniXo</span>
-            <div className="w-1 h-1 bg-white/10 rounded-full" />
-            <span className="flex items-center gap-1">
+            <div className="w-1 h-1 bg-white/10 rounded-full hidden sm:block" />
+            <span className="flex items-center gap-1 hidden sm:flex">
               Made with <Heart size={10} className="text-red-600" fill="currentColor" /> by the community
-              <Link to="/nsfw" className="ml-2 text-white/10 hover:text-red-600 transition-colors">18+</Link>
             </span>
+            <Link to="/nsfw" className="ml-2 text-white/10 hover:text-red-600 transition-colors">18+</Link>
           </div>
           
-          {/* Online Users */}
-          {location.pathname !== "/" && <OnlineUsers />}
+          {/* Online Users & Popunder Control */}
+          {location.pathname !== "/" && (
+            <div className="flex items-center gap-2 md:gap-3 flex-wrap justify-center">
+              <PopunderControlButton />
+              <OnlineUsers />
+            </div>
+          )}
           
           <p className="text-[10px] md:text-[12px] text-white/40 text-center md:text-right max-w-lg italic select-none animate-[breath_4s_ease-in-out_infinite]">
             Disclaimer: AniXo does not store any files on its server. All contents are provided by non-affiliated third parties.

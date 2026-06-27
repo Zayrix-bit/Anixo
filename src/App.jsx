@@ -6,6 +6,8 @@ import ScrollToTop from "./components/common/ScrollToTop";
 import PageLoader from "./components/common/PageLoader";
 import AiChat from "./components/chat/AiChat";
 import AdLoader from "./components/common/AdLoader";
+import { PopunderProvider } from "./context/PopunderContext";
+import { ToastProvider } from "./context/ToastContext";
 
 // Eagerly loaded pages (critical path — must render instantly)
 import Portal from "./pages/Portal";
@@ -113,9 +115,13 @@ function AppRoutes() {
 export default function App() {
   return (
     <Router>
-      <ScrollToTop />
-      <PageLoader />
-      <AppRoutes />
+      <PopunderProvider>
+        <ToastProvider>
+          <ScrollToTop />
+          <PageLoader />
+          <AppRoutes />
+        </ToastProvider>
+      </PopunderProvider>
     </Router>
   );
 }
