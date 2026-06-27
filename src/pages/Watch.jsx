@@ -77,7 +77,10 @@ export default function Watch() {
 
   // Update URL when episode changes
   useEffect(() => {
-    const newParams = new URLSearchParams(location.search);
+    const currentEpParam = queryParams.get("ep");
+    if (currentEpParam === activeEpisode.toString()) return; // No change needed
+
+    const newParams = new URLSearchParams(queryParams.toString());
     newParams.set("ep", activeEpisode.toString());
     // Remove time parameter when changing episodes
     newParams.delete("t");
@@ -93,7 +96,7 @@ export default function Watch() {
       // You can uncomment the line below to enable
       // openSmartLink();
     }
-  }, [activeEpisode, navigate, location.pathname, location.search, openSmartLink]);
+  }, [activeEpisode, navigate, location.pathname, openSmartLink]);
 
   const [episodeLayout, setEpisodeLayout] = useState("grid"); // "grid" | "list"
   const [playerLang, setPlayerLang] = useState("sub");

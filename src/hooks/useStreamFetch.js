@@ -261,7 +261,6 @@ export function useStreamFetch({
     playerLang,
     activeServer,
     autoPlay,
-    episodesLength,
     setPageLoading,
     isMal,
     initialTime,
