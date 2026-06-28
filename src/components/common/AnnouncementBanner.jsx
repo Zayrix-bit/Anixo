@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { X, ArrowRight } from 'lucide-react';
+import { X, ArrowRight, Crown } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 
 const AnnouncementBanner = () => {
@@ -21,14 +21,34 @@ const AnnouncementBanner = () => {
       <style>{`
         @keyframes banner-shake {
           0%, 88%, 100% { transform: rotate(0deg) scale(1); }
-          90%, 94%, 98% { transform: rotate(-0.5deg) scale(1.01); }
-          92%, 96% { transform: rotate(0.5deg) scale(1.01); }
+          90%, 94%, 98% { transform: rotate(-0.5deg) scale(1.005); }
+          92%, 96% { transform: rotate(0.5deg) scale(1.005); }
         }
-        .animate-banner-shake {
-          animation: banner-shake 6s ease-in-out infinite;
+        @keyframes border-glow {
+          0%, 100% { border-color: #27272a; box-shadow: 0 0 0px rgba(220, 38, 38, 0); }
+          50% { border-color: rgba(220, 38, 38, 0.4); box-shadow: 0 0 15px rgba(220, 38, 38, 0.08); }
+        }
+        @keyframes btn-shimmer {
+          0% { left: -150%; }
+          50% { left: 150%; }
+          100% { left: 150%; }
+        }
+        .animate-banner-shake-glow {
+          animation: banner-shake 6s ease-in-out infinite, border-glow 4s ease-in-out infinite;
+        }
+        .shimmer-btn::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -150%;
+          width: 60px;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+          transform: skewX(-20deg);
+          animation: btn-shimmer 3.5s ease-in-out infinite;
         }
       `}</style>
-      <div className="relative overflow-hidden bg-[#121212] border border-zinc-800 rounded-xl p-5 flex flex-col lg:flex-row items-center justify-between gap-6 transition-all duration-300 animate-banner-shake">
+      <div className="relative overflow-hidden bg-[#121212] border border-zinc-800 rounded-xl p-5 flex flex-col lg:flex-row items-center justify-between gap-6 transition-all duration-300 animate-banner-shake-glow hover:border-red-500/20">
         
         {/* Left Accent Bar */}
         <div className="absolute left-0 top-0 bottom-0 w-[4px] bg-red-600"></div>
@@ -38,34 +58,39 @@ const AnnouncementBanner = () => {
           
           {/* Avatar Cards Row */}
           <div className="flex items-center justify-center gap-2 shrink-0 select-none">
-            <div className="w-12 h-12 rounded-lg border border-zinc-800 overflow-hidden bg-zinc-900 shadow-md">
+            <div className="w-12 h-12 rounded-lg border border-zinc-800 overflow-hidden bg-zinc-900 shadow-md transition-all duration-300 hover:scale-110 hover:-rotate-3 hover:border-red-500 cursor-pointer">
               <img src="/avatars/csm/img_1.jpg" alt="Chainsaw Man" className="w-full h-full object-cover" />
             </div>
-            <div className="w-12 h-12 rounded-lg border border-zinc-800 overflow-hidden bg-zinc-900 shadow-md">
+            <div className="w-12 h-12 rounded-lg border border-zinc-800 overflow-hidden bg-zinc-900 shadow-md transition-all duration-300 hover:scale-110 hover:rotate-3 hover:border-red-500 cursor-pointer">
               <img src="/avatars/bleach/img_1.jpg" alt="Bleach" className="w-full h-full object-cover" />
             </div>
-            <div className="w-12 h-12 rounded-lg border border-zinc-800 overflow-hidden bg-zinc-900 shadow-md">
+            <div className="w-12 h-12 rounded-lg border border-zinc-800 overflow-hidden bg-zinc-900 shadow-md transition-all duration-300 hover:scale-110 hover:-rotate-3 hover:border-red-500 cursor-pointer">
               <img src="/avatars/baruto/img_1.jpg" alt="Boruto" className="w-full h-full object-cover" />
             </div>
-            <div className="w-12 h-12 rounded-lg border border-zinc-800 flex items-center justify-center bg-zinc-900/60 shadow-md font-bold text-xs text-zinc-500">
+            <div className="w-12 h-12 rounded-lg border border-zinc-800 flex items-center justify-center bg-zinc-900/60 shadow-md font-bold text-xs text-zinc-500 transition-all duration-300 hover:scale-105 cursor-pointer hover:text-red-500">
               +50
             </div>
           </div>
 
           <div className="flex-1">
             <div className="flex items-center justify-center md:justify-start gap-2 mb-1.5 flex-wrap">
+              <span className="relative flex h-2 w-2 mr-0.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+              </span>
+              <span className="bg-purple-600/10 text-purple-400 border border-purple-500/20 px-2.5 py-0.5 rounded text-[10px] font-black tracking-widest uppercase flex items-center gap-1.5 shadow-sm">
+                <Crown size={12} className="text-purple-400 animate-pulse" />
+                Admin Update
+              </span>
               <span className="bg-red-600/10 text-red-500 border border-red-500/20 px-2.5 py-0.5 rounded text-[10px] font-black tracking-widest uppercase">
                 New Feature
               </span>
-              <span className="text-zinc-500 text-xs font-semibold">
-                Profile Customization
-              </span>
             </div>
             <h3 className="text-white font-bold text-lg leading-tight tracking-tight">
-              Express yourself with Anime Avatars!
+              Profile Avatars are now live!
             </h3>
             <p className="text-zinc-400 text-sm mt-1 max-w-[650px] leading-relaxed">
-              You can now set custom profile pictures. Choose from popular characters from Chainsaw Man, Bleach, Boruto, and more. A few starting avatars have been added, with many more collections coming soon!
+              Hey guys! I've added the option to customize your profile with custom avatars. I've only uploaded a few starter packs (Chainsaw Man, Bleach, Boruto, etc.) for now, but I will be adding many more categories soon! Head over to your profile settings to choose yours.
             </p>
           </div>
         </div>
@@ -74,7 +99,7 @@ const AnnouncementBanner = () => {
         <div className="flex items-center gap-4 shrink-0 w-full lg:w-auto justify-center lg:justify-end">
           <Link
             to={user ? "/profile" : "/home?login=true"}
-            className="flex items-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-wider rounded transition-all duration-200 shadow-lg hover:shadow-red-600/10 active:scale-95 cursor-pointer"
+            className="shimmer-btn relative overflow-hidden flex items-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-wider rounded transition-all duration-200 shadow-lg hover:shadow-red-600/10 active:scale-95 cursor-pointer"
           >
             <span>{user ? "Choose Avatar" : "Login to Choose"}</span>
             <ArrowRight size={14} />
