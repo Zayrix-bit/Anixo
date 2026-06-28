@@ -4,6 +4,46 @@ import { X, ArrowRight, Crown } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { backendApi } from '../../services/api';
 
+// Helper to format localized relative time based on navigator locale
+const getRelativeTime = (timestamp, locale = 'en') => {
+  try {
+    const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
+    const elapsed = timestamp - Date.now();
+
+    const msPerMinute = 60 * 1000;
+    const msPerHour = 60 * msPerMinute;
+    const msPerDay = 24 * msPerHour;
+    const msPerMonth = 30 * msPerDay;
+    const msPerYear = 365 * msPerDay;
+
+    const absElapsed = Math.abs(elapsed);
+
+    if (absElapsed < msPerMinute) {
+      return rtf.format(Math.round(elapsed / 1000), 'second');
+    } else if (absElapsed < msPerHour) {
+      return rtf.format(Math.round(elapsed / msPerMinute), 'minute');
+    } else if (absElapsed < msPerDay) {
+      return rtf.format(Math.round(elapsed / msPerHour), 'hour');
+    } else if (absElapsed < msPerMonth) {
+      return rtf.format(Math.round(elapsed / msPerDay), 'day');
+    } else if (absElapsed < msPerYear) {
+      return rtf.format(Math.round(elapsed / msPerMonth), 'month');
+    } else {
+      return rtf.format(Math.round(elapsed / msPerYear), 'year');
+    }
+  } catch {
+    const elapsed = Date.now() - timestamp;
+    const minutes = Math.floor(elapsed / 60000);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (minutes < 1) return 'just now';
+    if (minutes < 60) return `${minutes}m ago`;
+    if (hours < 24) return `${hours}h ago`;
+    return `${days}d ago`;
+  }
+};
+
 const AnnouncementBanner = () => {
   const { user } = useAuth();
   const [isVisible, setIsVisible] = useState(() => {
@@ -43,6 +83,9 @@ const AnnouncementBanner = () => {
   const activeProfile = isAdminLoggedIn ? user : adminProfile;
   const adminName = activeProfile?.displayName || activeProfile?.username || "ELfen+JEKOP";
   const adminAvatar = activeProfile?.avatar || "/avatars/csm/img_1.jpg";
+
+  const publishDate = new Date("2026-06-28T09:26:00Z");
+  const relativeTime = getRelativeTime(publishDate.getTime(), typeof navigator !== 'undefined' ? navigator.language : 'en');
 
   return (
     <div className="w-full max-w-[1500px] mx-auto px-4 md:px-8 mb-6 mt-4 animate-in fade-in duration-300">
@@ -102,6 +145,10 @@ const AnnouncementBanner = () => {
               </span>
               <span className="text-zinc-500 text-xs font-semibold">
                 By <span className="text-zinc-300 font-bold">{adminName}</span>
+              </span>
+              <span className="text-zinc-600 text-xs select-none">•</span>
+              <span className="text-zinc-500 text-[11px] font-medium" title={publishDate.toLocaleString()}>
+                {relativeTime}
               </span>
             </div>
             <h3 className="text-white font-bold text-[17px] leading-tight tracking-tight">
