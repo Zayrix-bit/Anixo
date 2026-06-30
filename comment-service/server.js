@@ -117,6 +117,19 @@ app.get('/api/comments', async (req, res) => {
     }
 });
 
+// Get recent global comments
+app.get('/api/recent-comments', async (req, res) => {
+    try {
+        const { limit = 15 } = req.query;
+        const comments = await Comment.find({ isDeleted: false })
+            .sort({ createdAt: -1 })
+            .limit(parseInt(limit));
+        res.json(comments);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Socket.IO Logic - Verify JWT directly (no HTTP call needed)
 io.use(async (socket, next) => {
     const token = socket.handshake.auth.token;
@@ -187,6 +200,8 @@ io.on('connection', (socket) => {
 
             const room = `${animeId}:${episodeNumber}`;
             io.to(room).emit('new_comment', newComment);
+            // Emit global event for homepage live feed
+            io.emit('global_new_comment', newComment);
 
             if (callback) callback({ success: true, comment: newComment });
         } catch (err) {

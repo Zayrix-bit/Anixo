@@ -40,6 +40,21 @@ export default function Watch() {
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Scroll to comment if hash is present
+  useEffect(() => {
+    const hash = location.hash;
+    if (hash) {
+      // Wait for comments to render, then scroll
+      const timer = setTimeout(() => {
+        const element = document.querySelector(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [location.hash]);
   const { openSmartLink } = useAdsterraSmartLink();
   const queryParams = new URLSearchParams(location.search);
   const isMal = queryParams.get("mal") === "true";

@@ -25,6 +25,7 @@ import AlphabetNav from "../components/home/AlphabetNav";
 import EstimatedSchedule from "../components/home/EstimatedSchedule";
 import { removeProgress } from "../services/progressService";
 import ProgressAnimeCard from "../components/common/ProgressAnimeCard";
+import LiveComments from "../components/LiveComments";
 
 export default function Home() {
   const { t } = useTranslation();
@@ -244,7 +245,8 @@ export default function Home() {
         />
       </div>
 
-
+      {/* Live Comments */}
+      <LiveComments />
 
       {/* Three-column section */}
       <div className="py-12 lg:py-20">
