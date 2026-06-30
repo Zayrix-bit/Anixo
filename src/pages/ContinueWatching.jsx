@@ -64,18 +64,8 @@ export default function ContinueWatching() {
         setGlobalProgress(prev => prev.filter(p => p.animeId !== animeId));
       }
     } else {
-      // For guests: just remove from localStorage and state
+      // For guests: just remove from state
       setGlobalProgress(prev => prev.filter(p => p.animeId !== animeId));
-      try {
-        const localStr = localStorage.getItem("guest_progress");
-        if (localStr) {
-          let guestProg = JSON.parse(localStr);
-          guestProg = guestProg.filter(p => p.animeId !== animeId);
-          localStorage.setItem("guest_progress", JSON.stringify(guestProg));
-        }
-      } catch (e) {
-        console.warn("Failed to remove guest progress:", e);
-      }
     }
   };
 

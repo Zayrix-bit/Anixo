@@ -36,14 +36,10 @@ export default function Home() {
   const [seasonPage, setSeasonPage] = useState(1);
 
   // Toggle Continue Watching
-  const [showContinueWatching, setShowContinueWatching] = useState(() => {
-    return localStorage.getItem("show_continue_watching") !== "false";
-  });
+  const [showContinueWatching, setShowContinueWatching] = useState(true);
 
   const toggleContinueWatching = () => {
-    const nextVal = !showContinueWatching;
-    setShowContinueWatching(nextVal);
-    localStorage.setItem("show_continue_watching", String(nextVal));
+    setShowContinueWatching(!showContinueWatching);
   };
 
 

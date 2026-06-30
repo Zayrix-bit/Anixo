@@ -23,23 +23,14 @@ export function useWatchProgress({
   const lastIntervalSave = useRef(0);
   const instantSaveRef = useRef({});
 
-  // Helper to save progress to global state and localStorage (for guests)
+  // Helper to save progress to global state
   const saveProgressToState = useCallback((progressData) => {
     // Update global state
     setGlobalProgress((prev) => {
       const filtered = prev.filter((p) => p.animeId !== progressData.animeId);
-      const newProgress = [progressData, ...filtered].slice(0, 100);
-      // Save to localStorage for guests
-      if (!user) {
-        try {
-          localStorage.setItem("guest_progress", JSON.stringify(newProgress));
-        } catch (e) {
-          console.warn("Failed to save guest progress to localStorage:", e);
-        }
-      }
-      return newProgress;
+      return [progressData, ...filtered].slice(0, 100);
     });
-  }, [user, setGlobalProgress]);
+  }, [setGlobalProgress]);
 
   // --- INSTANT SAVE TO CONTINUE WATCHING ---
   useEffect(() => {
@@ -148,7 +139,7 @@ export function useWatchProgress({
   // ── Save on page leave / tab close ──
   useEffect(() => {
     const handleBeforeUnload = () => {
-      if (!anime || !id || lastCapturedTime.current <= 5) return;
+      if (!user || !anime || !id || lastCapturedTime.current <= 5) return;
 
       const coverImg = anime?.coverImage?.large || anime?.coverImage?.extraLarge;
       const title =
@@ -168,38 +159,20 @@ export function useWatchProgress({
         updatedAt: Date.now(),
       };
 
-      if (user) {
-        const token = localStorage.getItem("token");
-        if (!token) return;
-        try {
-          fetch("/progress/save", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(progressData),
-            keepalive: true,
-          });
-        } catch {
-          /* Silently fail */
-        }
-      } else {
-        // Guest user: save to localStorage
-        try {
-          const localStr = localStorage.getItem("guest_progress");
-          let guestProg = localStr ? JSON.parse(localStr) : [];
-          guestProg = guestProg.filter(
-            (p) => p.animeId !== progressData.animeId
-          );
-          guestProg.unshift(progressData);
-          localStorage.setItem(
-            "guest_progress",
-            JSON.stringify(guestProg.slice(0, 100))
-          );
-        } catch {
-          /* Silently fail */
-        }
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      try {
+        fetch("/progress/save", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(progressData),
+          keepalive: true,
+        });
+      } catch {
+        /* Silently fail */
       }
     };
 

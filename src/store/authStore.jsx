@@ -15,12 +15,7 @@ export const AuthProvider = ({ children }) => {
     } catch { return null; }
   });
   const [globalWatchlist, setGlobalWatchlist] = useState([]);
-  const [globalProgress, setGlobalProgress] = useState(() => {
-    try {
-      const cached = localStorage.getItem("guest_progress");
-      return cached ? JSON.parse(cached) : [];
-    } catch { return []; }
-  });
+  const [globalProgress, setGlobalProgress] = useState([]);
   const [globalSettings, setGlobalSettings] = useState(null);
   const [globalNotifications, setGlobalNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -112,13 +107,8 @@ export const AuthProvider = ({ children }) => {
         if (progRes?.success) setGlobalProgress(progRes.continueWatching);
       }).catch(e => console.warn("Progress fetch on user change failed:", e));
     } else {
-      // User logged out: load from local storage
-      try {
-        const cached = localStorage.getItem("guest_progress");
-        if (cached) setGlobalProgress(JSON.parse(cached));
-      } catch {
-        setGlobalProgress([]);
-      }
+      // User logged out: reset progress to empty array
+      setGlobalProgress([]);
     }
   }, [user]);
 
