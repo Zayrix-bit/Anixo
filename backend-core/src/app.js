@@ -32,7 +32,7 @@ const limiter = rateLimit({
   skip: (req) => process.env.NODE_ENV !== 'production' || req.ip === '::1' || req.ip === '127.0.0.1',
   message: { success: false, message: 'Too many requests from this IP, please try again after 15 minutes' }
 });
-app.use(limiter);
+app.use('/api', limiter);
 
 // Routes
 app.use('/auth', authRoutes); // Temporarily removed authLimiter for testing

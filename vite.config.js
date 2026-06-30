@@ -18,7 +18,7 @@ export default defineConfig({
       ignored: ['**/api/**']
     },
     proxy: {
-      '/api': { target: 'http://localhost:7860', changeOrigin: true, secure: false, rewrite: (path) => path.replace(/^\/api/, '') }
+      '/api': { target: 'http://localhost:7860', changeOrigin: true, secure: false }
     }
   }
 })

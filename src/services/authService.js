@@ -32,13 +32,14 @@ export const resetPassword = async (token, password) => {
 
 export const getAnilistAuthUrl = () => {
   const token = localStorage.getItem('token');
-  const isLocal = typeof window !== "undefined" && window.location.hostname === "localhost";
+  const baseUrl = backendApi.defaults.baseURL || "";
   
-  if (isLocal) {
-    return `http://localhost:7860/auth/anilist?token=${token}`;
-  } else {
-    return `${window.location.origin}/api/auth/anilist?token=${token}`;
-  }
+  // In production, we want /auth/anilist, NOT /api/auth/anilist
+  // because vercel.json routes /auth/* to the Node.js backend
+  const isLocal = typeof window !== "undefined" && window.location.hostname === "localhost";
+  const absoluteBaseUrl = baseUrl || (isLocal ? window.location.origin + '/api' : window.location.origin);
+  
+  return `${absoluteBaseUrl}/auth/anilist?token=${token}`;
 };
 
 export const disconnectAnilist = async () => {
