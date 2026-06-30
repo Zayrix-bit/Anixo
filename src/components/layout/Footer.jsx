@@ -97,7 +97,7 @@ export default function Footer() {
             </Link>
 
             <div className="flex gap-3 md:gap-4 md:pt-2">
-              <a href="https://discord.com" target="_blank" rel="noopener noreferrer" aria-label="Join AniXo Discord">
+              <a href="https://discord.com/users/@seiji0x" target="_blank" rel="noopener noreferrer" aria-label="Join AniXo Discord">
                 <MessageSquare className="text-white/20 hover:text-[#5865F2] transition cursor-pointer" size={18} />
               </a>
               <a href="https://reddit.com" target="_blank" rel="noopener noreferrer" aria-label="AniXo on Reddit">
