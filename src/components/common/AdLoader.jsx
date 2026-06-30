@@ -11,29 +11,24 @@ export default function AdLoader() {
   const { isPopunderDisabled } = usePopunder();
 
   useEffect(() => {
-    // Don't load any global ads on the portal page
+    // Don't load AdSense on portal page, but allow popunder
     if (location.pathname === "/") {
-      // Remove scripts if they were previously injected
+      // Remove AdSense if it was previously injected
       const adsenseScript = document.getElementById('adsense-global');
       if (adsenseScript) adsenseScript.remove();
-
-      const popunderScript = document.getElementById('popunder-global');
-      if (popunderScript) popunderScript.remove();
-
-      return;
+    } else {
+      // Load Google AdSense if not already loaded
+      if (!document.getElementById('adsense-global')) {
+        const adsense = document.createElement('script');
+        adsense.id = 'adsense-global';
+        adsense.async = true;
+        adsense.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1545867307724937";
+        adsense.setAttribute('crossorigin', 'anonymous');
+        document.head.appendChild(adsense);
+      }
     }
 
-    // Load Google AdSense if not already loaded
-    if (!document.getElementById('adsense-global')) {
-      const adsense = document.createElement('script');
-      adsense.id = 'adsense-global';
-      adsense.async = true;
-      adsense.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1545867307724937";
-      adsense.setAttribute('crossorigin', 'anonymous');
-      document.head.appendChild(adsense);
-    }
-
-    // Only load Popunder if not disabled by user
+    // Load Popunder if not disabled by user and not already loaded
     if (!document.getElementById('popunder-global') && !isPopunderDisabled) {
       const popunder = document.createElement('script');
       popunder.id = 'popunder-global';
