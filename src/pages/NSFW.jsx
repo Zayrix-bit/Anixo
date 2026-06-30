@@ -714,6 +714,10 @@ function NSFW() {
  ))}
  </div>
 
+ <div className="w-full my-2">
+    <AdNativeBanner />
+  </div>
+
  {isHomePage ? (
  /* ========== HOMEPAGE ========== */
  viewAllSection ? (
@@ -737,11 +741,15 @@ function NSFW() {
  </button>
  </div>
  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
- {(viewAllSection === 'recent' ? recentVideos : trendingVideos).map(video => (
- <VideoCard key={video.id} video={video} onClick={openVideo} />
- ))}
- </div>
- </div>
+  {(viewAllSection === 'recent' ? recentVideos : trendingVideos).map(video => (
+  <VideoCard key={video.id} video={video} onClick={openVideo} />
+  ))}
+  </div>
+
+  <div className="w-full flex justify-center py-4">
+    <AdsterraSmartLinkBanner />
+  </div>
+  </div>
  ) : (
  /* ---- Two Sections ---- */
  <div className="flex flex-col gap-6">
@@ -771,6 +779,10 @@ function NSFW() {
  skeletonCount={10}
  onViewAll={() => fetchTrendingAll(1)}
  />
+
+ <div className="w-full flex justify-center py-4">
+    <AdsterraSmartLinkBanner />
+  </div>
  </div>
  )
 
@@ -824,7 +836,11 @@ function NSFW() {
  {currentVideos.map(video => <VideoCard key={video.id} video={video} onClick={openVideo} />)}
  </div>
 
-  <div className="w-full flex justify-center py-6">
+ <div className="w-full my-2">
+    <AdNativeBanner />
+  </div>
+
+ <div className="w-full flex justify-center py-6">
     <AdsterraSmartLinkBanner />
   </div>
 
@@ -917,7 +933,7 @@ function NSFW() {
  {videoDetails.description && (
  <p className="text-sm text-gray-400 leading-relaxed text-center sm:text-left" dangerouslySetInnerHTML={{ __html: videoDetails.description }} />
  )}
- 
+
  <div className="flex flex-col gap-4 mt-2">
  {(() => {
  const allTags = Array.from(new Set([
@@ -951,6 +967,10 @@ function NSFW() {
  )}
  </div>
  </div>
+
+ <div className="w-full my-2">
+    <AdNativeBanner />
+  </div>
  
   <div className="w-full flex justify-center py-4 border-t border-[#2a2a35]/50 mt-4">
     <AdBanner300x250 />
@@ -987,6 +1007,10 @@ function NSFW() {
  </div>
  </div>
  </div>
+
+ <div className="w-full flex justify-center py-4">
+    <AdsterraSmartLinkBanner />
+  </div>
 
  {/* Related List */}
  {videoDetails.related_videos.length > 1 && (
