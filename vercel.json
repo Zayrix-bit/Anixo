@@ -13,53 +13,47 @@
       "destination": "/api/cron-cleanup.js"
     },
     {
-      "source": "/auth/(.*)",
+      "source": "/api/auth/(.*)",
       "destination": "/api/user.mjs"
     },
     {
-      "source": "/settings",
-      "has": [{ "type": "header", "key": "x-api", "value": "true" }],
+      "source": "/api/settings",
       "destination": "/api/user.mjs"
     },
     {
-      "source": "/settings/(.*)",
-      "has": [{ "type": "header", "key": "x-api", "value": "true" }],
+      "source": "/api/settings/(.*)",
       "destination": "/api/user.mjs"
     },
     {
-      "source": "/watchlist",
-      "has": [{ "type": "header", "key": "x-api", "value": "true" }],
+      "source": "/api/watchlist",
       "destination": "/api/user.mjs"
     },
     {
-      "source": "/watchlist/(.*)",
-      "has": [{ "type": "header", "key": "x-api", "value": "true" }],
+      "source": "/api/watchlist/(.*)",
       "destination": "/api/user.mjs"
     },
     {
-      "source": "/notifications",
-      "has": [{ "type": "header", "key": "x-api", "value": "true" }],
+      "source": "/api/notifications",
       "destination": "/api/user.mjs"
     },
     {
-      "source": "/notifications/(.*)",
-      "has": [{ "type": "header", "key": "x-api", "value": "true" }],
+      "source": "/api/notifications/(.*)",
       "destination": "/api/user.mjs"
     },
     {
-      "source": "/progress",
+      "source": "/api/progress",
       "destination": "/api/user.mjs"
     },
     {
-      "source": "/progress/(.*)",
+      "source": "/api/progress/(.*)",
       "destination": "/api/user.mjs"
     },
     {
-      "source": "/users",
+      "source": "/api/users",
       "destination": "/api/user.mjs"
     },
     {
-      "source": "/users/(.*)",
+      "source": "/api/users/(.*)",
       "destination": "/api/user.mjs"
     },
     {

@@ -35,13 +35,13 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 // Routes
-app.use('/auth', authRoutes); // Temporarily removed authLimiter for testing
-app.use('/watchlist', watchlistRoutes);
-app.use('/progress', progressRoutes);
-app.use('/settings', settingsRoutes);
-app.use('/notifications', notificationRoutes);
-app.use('/users', userRoutes);
-app.use('/ai', aiRoutes);
+app.use('/api/auth', authRoutes); // Temporarily removed authLimiter for testing
+app.use('/api/watchlist', watchlistRoutes);
+app.use('/api/progress', progressRoutes);
+app.use('/api/settings', settingsRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/ai', aiRoutes);
 
 app.get('/', (req, res) => {
   res.send('API running');
