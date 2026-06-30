@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 // @desc    Get public user profile
 // @route   GET /api/users/:profileId
 // @access  Public
+
 export const getPublicProfile = async (req, res) => {
   try {
     const { profileId } = req.params;
