@@ -112,6 +112,12 @@ const AiChat = () => {
   const [activeTrailerId, setActiveTrailerId] = useState(null);
   const [persona, setPersona] = useState('tsundere');
   
+  // Drag state
+  const [isDragging, setIsDragging] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const chatWindowRef = useRef(null);
+  
   const [messages, setMessages] = useState(() => {
     const saved = localStorage.getItem('anixo_chat_history');
     if (saved) {
@@ -176,6 +182,69 @@ const AiChat = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages, isLoading]);
+
+  // Drag handlers
+  const handleMouseDown = (e) => {
+    if (isExpanded) return;
+    setIsDragging(true);
+    const rect = chatWindowRef.current.getBoundingClientRect();
+    setDragOffset({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    });
+  };
+
+  const handleTouchStart = (e) => {
+    if (isExpanded) return;
+    setIsDragging(true);
+    const touch = e.touches[0];
+    const rect = chatWindowRef.current.getBoundingClientRect();
+    setDragOffset({
+      x: touch.clientX - rect.left,
+      y: touch.clientY - rect.top
+    });
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!isDragging) return;
+      setPosition({
+        x: e.clientX - dragOffset.x,
+        y: e.clientY - dragOffset.y
+      });
+    };
+
+    const handleTouchMove = (e) => {
+      if (!isDragging) return;
+      const touch = e.touches[0];
+      setPosition({
+        x: touch.clientX - dragOffset.x,
+        y: touch.clientY - dragOffset.y
+      });
+    };
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+    };
+
+    const handleTouchEnd = () => {
+      setIsDragging(false);
+    };
+
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      document.addEventListener('touchmove', handleTouchMove, { passive: false });
+      document.addEventListener('touchend', handleTouchEnd);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [isDragging, dragOffset]);
 
   const handleSubmit = async (e, overrideMessage) => {
     if (e) e.preventDefault();
@@ -252,14 +321,24 @@ const AiChat = () => {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className={`fixed bg-[#0d0d0f] border border-white/10 shadow-2xl flex flex-col z-[100] overflow-hidden backdrop-blur-xl transition-all duration-300
-          ${isExpanded 
-            ? 'inset-0 sm:inset-auto sm:bottom-24 sm:right-6 sm:w-[80vw] sm:h-[80vh] sm:max-w-[900px] sm:max-h-[900px] rounded-none sm:rounded-2xl' 
-            : 'bottom-20 right-4 w-[calc(100vw-2rem)] h-[65vh] min-h-[450px] max-h-[600px] sm:bottom-24 sm:right-6 sm:w-[380px] sm:h-[550px] sm:max-h-[80vh] rounded-2xl'
-          }
-        `}>
+        <div 
+          ref={chatWindowRef}
+          style={{ 
+            transform: isExpanded ? 'none' : `translate(${position.x}px, ${position.y}px)`,
+            touchAction: isDragging ? 'none' : 'auto'
+          }}
+          className={`fixed bg-[#0d0d0f] border border-white/10 shadow-2xl flex flex-col z-[100] overflow-hidden backdrop-blur-xl transition-all duration-300
+            ${isExpanded 
+              ? 'inset-0 sm:inset-auto sm:bottom-24 sm:right-6 sm:w-[80vw] sm:h-[80vh] sm:max-w-[900px] sm:max-h-[900px] rounded-none sm:rounded-2xl' 
+              : 'bottom-20 right-4 w-[calc(100vw-2rem)] h-[65vh] min-h-[450px] max-h-[600px] sm:bottom-24 sm:right-6 sm:w-[380px] sm:h-[550px] sm:max-h-[80vh] rounded-2xl'
+            }
+          `}>
           {/* Header */}
-          <div className="p-3 sm:p-4 border-b border-white/15 bg-[#0d0d0f] flex items-center justify-between relative z-20">
+          <div 
+            onMouseDown={handleMouseDown}
+            onTouchStart={handleTouchStart}
+            className={`p-3 sm:p-4 border-b border-white/15 bg-[#0d0d0f] flex items-center justify-between relative z-20 ${!isExpanded ? 'cursor-grab active:cursor-grabbing' : ''}`}
+          >
             <div className="flex items-center gap-3 relative z-10">
               <div className="relative">
                 <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#1a1a1c] border border-white/10 flex items-center justify-center text-red-500 shadow-sm">
