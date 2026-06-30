@@ -24,7 +24,8 @@ const OnlineUsers = () => {
         isAdmin,
         username: user?.username || '',
         displayName: user?.displayName || user?.username || '',
-        avatar: user?.avatar || ''
+        avatar: user?.avatar || '',
+        profileId: user?.profileId || ''
       });
     });
 
@@ -53,7 +54,8 @@ const OnlineUsers = () => {
         isAdmin,
         username: user?.username || '',
         displayName: user?.displayName || user?.username || '',
-        avatar: user?.avatar || ''
+        avatar: user?.avatar || '',
+        profileId: user?.profileId || ''
       });
     }
   }, [user]);

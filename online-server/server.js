@@ -108,8 +108,9 @@ io.on('connection', (socket) => {
     const userInfo = typeof data === 'object' ? {
       username: data?.username || 'User',
       displayName: data?.displayName || 'User',
-      avatar: data?.avatar || ''
-    } : { username: 'User', displayName: 'User', avatar: '' };
+      avatar: data?.avatar || '',
+      profileId: data?.profileId || ''
+    } : { username: 'User', displayName: 'User', avatar: '', profileId: '' };
     
     // Remove from previous status if exists
     onlineUsers.registered.delete(socket.id);

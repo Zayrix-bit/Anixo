@@ -42,7 +42,8 @@ export default function Admin() {
         isAdmin: true,
         username: user.username || '',
         displayName: user.displayName || user.username || '',
-        avatar: user.avatar || ''
+        avatar: user.avatar || '',
+        profileId: user.profileId || ''
       });
     });
 
@@ -67,7 +68,7 @@ export default function Admin() {
     <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col">
       <Navbar />
 
-      <div className="w-full pt-[80px] px-3 md:px-8 pb-12 max-w-[700px] mx-auto flex-1">
+      <div className="w-full pt-[80px] px-3 md:px-8 pb-12 max-w-[1200px] mx-auto flex-1">
         
         {/* Navigation Tabs */}
         <div className="flex overflow-x-auto sm:overflow-visible justify-center gap-1.5 sm:gap-2 md:gap-3 mb-8 w-full max-w-4xl mx-auto px-1 sm:px-0 pb-2 sm:pb-0">
@@ -120,11 +121,12 @@ export default function Admin() {
             </div>
 
             {onlineStats.users && onlineStats.users.length > 0 ? (
-              <div className="space-y-3">
+              <div className="space-y-4 md:grid md:grid-cols-2 md:gap-4 md:space-y-0">
                 {onlineStats.users.map((user, index) => (
-                  <div
+                  <Link
                     key={index}
-                    className="flex items-center gap-3 md:gap-4 p-3 md:p-4 rounded-lg bg-[#0a0a0a] border border-[#2a2a2a]"
+                    to={user.profileId ? `/user/${user.profileId}` : '#'}
+                    className={`flex items-center gap-3 md:gap-4 p-3 md:p-4 rounded-lg bg-[#0a0a0a] border border-[#2a2a2a] transition-all ${user.profileId ? 'hover:bg-[#151515] hover:border-white/20 cursor-pointer' : ''}`}
                   >
                     <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden bg-[#2a2a2a] flex-shrink-0">
                       {user.avatar ? (
@@ -161,7 +163,7 @@ export default function Admin() {
                       <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                       <span className="text-[10px] md:text-xs text-white/40 hidden sm:inline">Online</span>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             ) : (
