@@ -20,50 +20,7 @@ const onlineUsers = {
   registered: new Map(), // socket.id -> { username, displayName, avatar }
   guests: new Set(),
   admins: new Map(), // socket.id -> { username, displayName, avatar }
-  uniqueRegistered: new Map() // username -> { userData, count: number }
 };
-
-// Track fake count state
-let fakeCountState = {
-  baseCount: 100 + Math.floor(Math.random() * 200), // Start between 100-300
-  lastUpdated: Date.now(),
-  trend: 0,
-  lastTrendChange: Date.now()
-};
-
-// Update fake count trend very fast
-function updateFakeCountTrend() {
-  const now = Date.now();
-  const timeSinceLastChange = now - fakeCountState.lastTrendChange;
-  const timeSinceLastUpdate = now - fakeCountState.lastUpdated;
-  
-  // Change trend every 3-10 seconds
-  if (timeSinceLastChange > 3000 + Math.random() * 7000) {
-    // 40% chance of stable (trend = 0), 60% chance of changing
-    if (Math.random() < 0.4) {
-      fakeCountState.trend = 0;
-    } else {
-      // Random trend: -20 to +20
-      fakeCountState.trend = Math.floor(Math.random() * 41) - 20;
-    }
-    fakeCountState.lastTrendChange = now;
-  }
-  
-  // Change base count (every 500ms)
-  if (timeSinceLastUpdate > 500) {
-    fakeCountState.baseCount = Math.max(100, Math.min(500, fakeCountState.baseCount + fakeCountState.trend));
-    fakeCountState.lastUpdated = now;
-  }
-}
-
-// Helper function to generate fake count with fast realistic variation
-function getFakeCount(realCount) {
-  updateFakeCountTrend();
-  
-  // Add small random variation around base count
-  const variation = Math.floor(Math.random() * 21) - 10; // ±10
-  return Math.max(100, fakeCountState.baseCount + variation);
-}
 
 // Helper function to get all registered users for admin
 function getRegisteredUsers() {
@@ -110,7 +67,7 @@ function getUniqueCounts() {
   };
 }
 
-// Helper function to get counts for a specific user
+// Helper function to get counts for a specific user (ALWAYS REAL NOW!)
 function getCountsForUser(isAdmin) {
   const uniqueCounts = getUniqueCounts();
 
@@ -122,14 +79,15 @@ function getCountsForUser(isAdmin) {
       users: getRegisteredUsers()
     };
   } else {
-    const fakeTotal = getFakeCount(uniqueCounts.total);
-    const fakeRegistered = Math.floor(fakeTotal * 0.3); // 30% registered
-    const fakeGuests = fakeTotal - fakeRegistered;
-    return { total: fakeTotal, registered: fakeRegistered, guests: fakeGuests };
+    return {
+      total: uniqueCounts.total,
+      registered: uniqueCounts.uniqueRegistered,
+      guests: uniqueCounts.guests
+    };
   }
 }
 
-// Broadcast counts to all users (with real or fake)
+// Broadcast counts to all users
 function broadcastCounts() {
   // Emit to each connected socket individually
   io.sockets.sockets.forEach((socket) => {
@@ -174,7 +132,7 @@ io.on('connection', (socket) => {
     broadcastCounts();
   });
   
-  // Emit initial counts when user connects (default to non-admin/fake)
+  // Emit initial counts when user connects (default to non-admin)
   socket.emit('online-count', getCountsForUser(false));
   
   socket.on('disconnect', () => {
@@ -190,11 +148,10 @@ io.on('connection', (socket) => {
   });
 });
 
-// Broadcast updates every 1 second
+// Broadcast updates every 5 seconds (no need for 1s now that it's real)
 setInterval(() => {
-  updateFakeCountTrend();
   broadcastCounts();
-}, 1000);
+}, 5000);
 
 server.listen(PORT, () => {
   console.log(`🚀 Online Users Server running on port ${PORT}`);
