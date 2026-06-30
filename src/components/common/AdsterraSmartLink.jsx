@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-const ADSTERRA_SMART_LINK = "https://dependedunmoved.com/frn634x83?key=9a6dc4b3d875352a8a24a0f683ec35ae";
+const ADSTERRA_SMART_LINK = "https://dependedunmoved.com/kyy99erhbc?key=644614ebc48ade4ce12a485a5a3cea3a";
 
 export function AdsterraSmartLinkBanner() {
   const containerRef = useRef(null);
