@@ -77,16 +77,14 @@ const LiveComments = () => {
   return (
     <div className="w-full py-12 border-t border-white/5">
       <div className="max-w-[1720px] mx-auto px-2 lg:px-4">
-        {/* Header */}
         <div className="flex items-center gap-3 mb-8">
           <div className="w-1 h-6 bg-red-600 rounded-full inline-block"></div>
           <h3 className="text-xl md:text-2xl font-black text-white tracking-tight uppercase">Live Comments</h3>
         </div>
 
-        {/* Main Content */}
-        <div className="flex flex-col md:flex-row items-start gap-6">
-          {/* Anime Girl Image - Left Side on Desktop */}
-          <div className="hidden md:block md:flex-shrink-0">
+        <div className="flex items-start gap-6">
+          {/* Anime Girl Image */}
+          <div className="hidden md:block shrink-0">
             <img 
               src="/konosuba.png" 
               alt="Anime Girl"
@@ -94,14 +92,15 @@ const LiveComments = () => {
             />
           </div>
           
-          {/* Comments Scroll Container */}
-          <div className="flex-1 w-full">
+          {/* Comments Scroll */}
+          <div className="flex-1 w-full overflow-hidden">
             <div 
               ref={containerRef}
               className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide"
               style={{ 
                 scrollBehavior: 'smooth',
-                WebkitOverflowScrolling: 'touch'
+                WebkitOverflowScrolling: 'touch',
+                overflowX: 'auto'
               }}
             >
               {comments.length === 0 ? (
@@ -115,7 +114,6 @@ const LiveComments = () => {
                     to={`/watch/${comment.animeId}?ep=${comment.episodeNumber}#comment-${comment._id}`}
                     className="flex-shrink-0 w-[320px] bg-[#121418] border border-white/10 rounded-xl p-5 hover:border-red-500/30 hover:shadow-xl transition-all duration-300 group"
                   >
-                    {/* User Info */}
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-11 h-11 rounded-full overflow-hidden border border-yellow-500 bg-neutral-800 shrink-0 group-hover:scale-110 transition-transform duration-300">
                         <img 
@@ -135,7 +133,6 @@ const LiveComments = () => {
                       </div>
                     </div>
 
-                    {/* Anime Info */}
                     <div className="flex items-center gap-2 mb-4 px-3 py-1.5 bg-red-600/10 rounded-lg border border-red-500/20">
                       <PlayCircle size={13} className="text-red-500" />
                       <span className="text-[11px] text-red-400 font-semibold truncate flex-1">
@@ -143,7 +140,6 @@ const LiveComments = () => {
                       </span>
                     </div>
 
-                    {/* Comment Text */}
                     <p className="text-white/75 text-sm line-clamp-3 leading-relaxed">
                       {comment.content?.replace(/\|\|/g, '') || ''}
                     </p>
