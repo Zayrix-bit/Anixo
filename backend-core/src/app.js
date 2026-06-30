@@ -32,16 +32,16 @@ const limiter = rateLimit({
   skip: (req) => process.env.NODE_ENV !== 'production' || req.ip === '::1' || req.ip === '127.0.0.1',
   message: { success: false, message: 'Too many requests from this IP, please try again after 15 minutes' }
 });
-app.use('/api', limiter);
+app.use(limiter);
 
 // Routes
-app.use('/api/auth', authRoutes); // Temporarily removed authLimiter for testing
-app.use('/api/watchlist', watchlistRoutes);
-app.use('/api/progress', progressRoutes);
-app.use('/api/settings', settingsRoutes);
-app.use('/api/notifications', notificationRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/ai', aiRoutes);
+app.use('/auth', authRoutes); // Temporarily removed authLimiter for testing
+app.use('/watchlist', watchlistRoutes);
+app.use('/progress', progressRoutes);
+app.use('/settings', settingsRoutes);
+app.use('/notifications', notificationRoutes);
+app.use('/users', userRoutes);
+app.use('/ai', aiRoutes);
 
 app.get('/', (req, res) => {
   res.send('API running');

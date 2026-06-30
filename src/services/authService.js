@@ -32,12 +32,13 @@ export const resetPassword = async (token, password) => {
 
 export const getAnilistAuthUrl = () => {
   const token = localStorage.getItem('token');
-  const baseUrl = backendApi.defaults.baseURL || "";
-  
   const isLocal = typeof window !== "undefined" && window.location.hostname === "localhost";
-  const absoluteBaseUrl = baseUrl || (isLocal ? window.location.origin + '/api' : window.location.origin + '/api');
   
-  return `${absoluteBaseUrl}/auth/anilist?token=${token}`;
+  if (isLocal) {
+    return `http://localhost:7860/auth/anilist?token=${token}`;
+  } else {
+    return `${window.location.origin}/api/auth/anilist?token=${token}`;
+  }
 };
 
 export const disconnectAnilist = async () => {
