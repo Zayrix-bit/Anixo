@@ -185,6 +185,8 @@ const AiChat = () => {
 
   // Drag handlers
   const handleMouseDown = (e) => {
+    // Agar target button hai toh drag na karein
+    if (e.target.closest('button')) return;
     if (isExpanded) return;
     setIsDragging(true);
     const rect = chatWindowRef.current.getBoundingClientRect();
@@ -195,7 +197,10 @@ const AiChat = () => {
   };
 
   const handleTouchStart = (e) => {
+    // Agar target button hai toh drag na karein
+    if (e.target.closest('button')) return;
     if (isExpanded) return;
+    e.preventDefault(); // Prevent scrolling
     setIsDragging(true);
     const touch = e.touches[0];
     const rect = chatWindowRef.current.getBoundingClientRect();
@@ -216,6 +221,7 @@ const AiChat = () => {
 
     const handleTouchMove = (e) => {
       if (!isDragging) return;
+      e.preventDefault(); // Prevent scrolling
       const touch = e.touches[0];
       setPosition({
         x: touch.clientX - dragOffset.x,
@@ -245,6 +251,17 @@ const AiChat = () => {
       document.removeEventListener('touchend', handleTouchEnd);
     };
   }, [isDragging, dragOffset]);
+
+  // Calculate initial position when chat opens
+  useEffect(() => {
+    if (isOpen && chatWindowRef.current) {
+      const rect = chatWindowRef.current.getBoundingClientRect();
+      setPosition({
+        x: 0,
+        y: 0
+      });
+    }
+  }, [isOpen]);
 
   const handleSubmit = async (e, overrideMessage) => {
     if (e) e.preventDefault();
