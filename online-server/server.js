@@ -71,20 +71,12 @@ function getUniqueCounts() {
 function getCountsForUser(isAdmin) {
   const uniqueCounts = getUniqueCounts();
 
-  if (isAdmin) {
-    return {
-      total: uniqueCounts.total,
-      registered: uniqueCounts.uniqueRegistered,
-      guests: uniqueCounts.guests,
-      users: getRegisteredUsers()
-    };
-  } else {
-    return {
-      total: uniqueCounts.total,
-      registered: uniqueCounts.uniqueRegistered,
-      guests: uniqueCounts.guests
-    };
-  }
+  return {
+    total: uniqueCounts.total,
+    registered: uniqueCounts.uniqueRegistered,
+    guests: uniqueCounts.guests,
+    users: getRegisteredUsers()
+  };
 }
 
 // Broadcast counts to all users

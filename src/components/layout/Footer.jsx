@@ -201,11 +201,9 @@ export default function Footer() {
           </div>
           
           {/* Online Users */}
-          {location.pathname !== "/" && (
-            <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-center">
-              <OnlineUsers />
-            </div>
-          )}
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-center">
+            <OnlineUsers />
+          </div>
           
           <p className="text-[10px] md:text-[12px] text-white/40 text-center md:text-right max-w-lg italic select-none animate-[breath_4s_ease-in-out_infinite]">
             Disclaimer: AniXo does not store any files on its server. All contents are provided by non-affiliated third parties.
