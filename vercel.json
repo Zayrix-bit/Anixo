@@ -63,6 +63,24 @@
       "destination": "/api/user.mjs"
     },
     {
+      "source": "/community",
+      "has": [{ "type": "header", "key": "x-api", "value": "true" }],
+      "destination": "/api/user.mjs"
+    },
+    {
+      "source": "/community/(.*)",
+      "has": [{ "type": "header", "key": "x-api", "value": "true" }],
+      "destination": "/api/user.mjs"
+    },
+    {
+      "source": "/ai",
+      "destination": "/api/user.mjs"
+    },
+    {
+      "source": "/ai/(.*)",
+      "destination": "/api/user.mjs"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "/api/index.py"
     },
