@@ -121,8 +121,6 @@ export default function Home() {
   });
   const popularThisSeason = popularThisSeasonData?.media || [];
   const seasonInfo = popularThisSeasonData?.pageInfo || { lastPage: 1 };
-  console.log('Season data:', popularThisSeasonData);
-  console.log('Season info:', seasonInfo);
 
   const { data: newReleasesData = [], isLoading: loadingNew } = useQuery({
     queryKey: ["newReleases"],

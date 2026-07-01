@@ -656,13 +656,20 @@ export async function getPopularThisSeason(page = 1) {
   else if (month >= 6 && month <= 8) season = "SUMMER"; // Jul-Sep
   else season = "FALL"; // Oct-Dec
 
-  return fetchFromAniList(SEASONAL_QUERY, {
+  const anilistRes = await fetchFromAniList(SEASONAL_QUERY, {
     season,
     seasonYear: year,
     sort: ["POPULARITY_DESC"],
     page,
     status_in: ["RELEASING", "FINISHED"]
   });
+
+  if (anilistRes?.media?.length > 0) {
+    return anilistRes;
+  }
+
+  console.warn("[Failover] AniList Popular This Season failed, switching to Jikan...");
+  return fetchFromJikan("/top/anime", { page, filter: "airing", limit: 20 });
 }
 
 
