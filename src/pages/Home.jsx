@@ -108,7 +108,8 @@ export default function Home() {
           media: (chinaRes.media || []).filter((anime) => anime.countryOfOrigin === "CN"),
         };
       } else {
-        res = await getPopularThisSeason(seasonPage);
+        // Use Trending Animes from AniList instead of seasonal data
+        res = await getTrendingAnime(seasonPage);
       }
 
       if (seasonPage === 1 && activeSeasonTab === "All" && res?.media) {
@@ -116,7 +117,6 @@ export default function Home() {
       }
       return res;
     },
-    placeholderData: (seasonPage === 1 && activeSeasonTab === "All") ? getCached("season") : undefined,
     staleTime: 1000 * 60 * 60,
   });
   const popularThisSeason = popularThisSeasonData?.media || [];
