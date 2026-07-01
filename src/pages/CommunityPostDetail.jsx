@@ -16,12 +16,12 @@ import {
 } from "lucide-react";
 
 const CATEGORY_COLORS = {
-  general: "bg-blue-500/15 text-blue-400 border-blue-500/20",
-  anime: "bg-purple-500/15 text-purple-400 border-purple-500/20",
-  feedback: "bg-emerald-500/15 text-emerald-400 border-emerald-500/20",
-  question: "bg-amber-500/15 text-amber-400 border-amber-500/20",
-  news: "bg-red-500/15 text-red-400 border-red-500/20",
-  poll: "bg-cyan-500/15 text-cyan-400 border-cyan-500/20",
+  general: "bg-blue-500/10 text-blue-400 border-blue-500/30",
+  anime: "bg-purple-500/10 text-purple-400 border-purple-500/30",
+  feedback: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
+  question: "bg-amber-500/10 text-amber-400 border-amber-500/30",
+  news: "bg-red-500/10 text-red-400 border-red-500/30",
+  poll: "bg-cyan-500/10 text-cyan-400 border-cyan-500/30",
 };
 
 const timeAgo = (date) => {
@@ -148,11 +148,10 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
             <div className="flex items-center gap-2 mt-3">
               <button
                 onClick={handleLike}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold transition-all duration-200 border cursor-pointer ${
-                  liked
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold transition-all duration-200 border cursor-pointer ${liked
                     ? 'bg-red-500/10 border-red-500/25 text-red-400 shadow-sm shadow-red-500/5'
                     : 'bg-white/[0.03] border-white/[0.06] text-white/45 hover:bg-white/[0.08] hover:text-white/80'
-                }`}
+                  }`}
               >
                 <Heart size={11} fill={liked ? "currentColor" : "none"} className={liked ? 'scale-110' : ''} />
                 <span>{likesCount > 0 ? likesCount : 'Like'}</span>
@@ -161,11 +160,10 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
               {user && depth < maxDepth && (
                 <button
                   onClick={() => setShowReplyBox(!showReplyBox)}
-                  className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold transition-all duration-200 border cursor-pointer ${
-                    showReplyBox
+                  className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold transition-all duration-200 border cursor-pointer ${showReplyBox
                       ? 'bg-white/10 border-white/20 text-white'
                       : 'bg-white/[0.03] border-white/[0.06] text-white/45 hover:bg-white/[0.08] hover:text-white/80'
-                  }`}
+                    }`}
                 >
                   <Reply size={11} />
                   <span>Reply</span>
@@ -425,21 +423,21 @@ export default function CommunityPostDetail() {
         </Link>
 
         {/* Post Card */}
-        <article className="bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-hidden">
+        <article className="bg-[#0e0e0e] border border-white/[0.05] rounded-3xl overflow-hidden shadow-xl shadow-black/20">
           {/* Post Header */}
-          <div className="p-5 md:p-7">
+          <div className="p-6 md:p-9">
             {/* Category + Meta */}
-            <div className="flex items-center gap-2 flex-wrap mb-4">
-              <span className={`px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded border ${CATEGORY_COLORS[post.category] || CATEGORY_COLORS.general}`}>
+            <div className="flex items-center gap-2 flex-wrap mb-5">
+              <span className={`px-2.5 py-0.5 text-[9px] font-black uppercase tracking-widest rounded-full border ${CATEGORY_COLORS[post.category] || CATEGORY_COLORS.general} select-none`}>
                 {post.category}
               </span>
               {post.isPinned && (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-500/10 text-amber-400 text-[10px] font-bold uppercase tracking-wider rounded border border-amber-500/20">
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-500/10 text-amber-400 text-[10px] font-black uppercase tracking-widest rounded-md border border-amber-500/20 shadow-sm select-none animate-pulse">
                   <Pin size={10} /> Pinned
                 </span>
               )}
               {post.isLocked && (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-red-500/10 text-red-400 text-[10px] font-bold uppercase tracking-wider rounded border border-red-500/20">
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-red-500/10 text-red-400 text-[10px] font-black uppercase tracking-widest rounded-md border border-red-500/20 shadow-sm select-none">
                   <Lock size={10} /> Locked
                 </span>
               )}
@@ -451,9 +449,9 @@ export default function CommunityPostDetail() {
             </h1>
 
             {/* Author Info */}
-            <div className="flex items-center gap-3 mb-6 pb-5 border-b border-white/[0.06]">
+            <div className="flex items-center gap-3.5 mb-6 pb-5 border-b border-white/[0.05]">
               <Link to={`/user/${post.author?.profileId || post.author?.username}`}>
-                <div className="w-11 h-11 rounded-full overflow-hidden border-2 border-white/10 bg-neutral-800 hover:border-white/20 transition-colors">
+                <div className="w-10 h-10 rounded-full overflow-hidden border border-white/15 bg-neutral-900 hover:border-white/30 transition-all shadow-sm">
                   <img
                     src={getAvatarUrl(post.author?.avatar, post.author?.username)}
                     alt={post.author?.username}
@@ -471,9 +469,10 @@ export default function CommunityPostDetail() {
                   </Link>
                   <RoleBadge role={post.author?.role} />
                 </div>
-                <div className="flex items-center gap-3 text-[11px] text-white/50 mt-0.5">
-                  <span className="flex items-center gap-1"><Clock size={10} /> {timeAgo(post.createdAt)}</span>
-                  <span className="flex items-center gap-1"><Eye size={10} /> {post.views} views</span>
+                <div className="flex items-center gap-2 text-[10.5px] text-white/40 mt-1">
+                  <span className="flex items-center gap-1"><Clock size={10} className="text-white/20" /> {timeAgo(post.createdAt)}</span>
+                  <span className="text-white/20">•</span>
+                  <span className="flex items-center gap-1"><Eye size={10} className="text-white/20" /> {post.views} views</span>
                 </div>
               </div>
 
@@ -528,10 +527,11 @@ export default function CommunityPostDetail() {
             </div>
 
             {/* Post Content */}
-            <div className="prose prose-invert prose-sm max-w-none text-white/85 leading-relaxed
-              prose-headings:text-white prose-headings:font-bold
+            <div className="prose prose-invert prose-sm sm:prose-base max-w-none text-[#dfdfdf] leading-[1.75] tracking-wide
+              prose-p:mb-4 prose-p:last:mb-0
+              prose-headings:text-white prose-headings:font-extrabold prose-headings:tracking-tight
               prose-a:text-red-400 prose-a:no-underline hover:prose-a:underline
-              prose-strong:text-white
+              prose-strong:text-white font-normal
               prose-code:text-red-300 prose-code:bg-white/[0.05] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
               prose-blockquote:border-red-500/30 prose-blockquote:text-white/60
               prose-li:text-white/70
@@ -556,38 +556,49 @@ export default function CommunityPostDetail() {
           </div>
 
           {/* Vote Bar */}
-          <div className="flex items-center gap-1 px-5 md:px-7 py-3 border-t border-white/[0.04] bg-white/[0.01]">
-            <button
-              onClick={handleLike}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
-                userLiked
-                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/20"
-                  : "text-white/45 hover:text-white/70 hover:bg-white/[0.03]"
-              }`}
-            >
-              <ThumbsUp size={15} fill={userLiked ? "currentColor" : "none"} />
-            </button>
+          <div className="flex items-center justify-between px-6 md:px-9 py-4 border-t border-white/[0.04] bg-[#0c0c0c]">
+            {/* Vote pill group */}
+            <div className="flex items-center bg-white/[0.03] border border-white/[0.06] hover:border-white/10 rounded-full px-1 py-0.5 shadow-md transition-all duration-300">
+              <button
+                onClick={handleLike}
+                className={`flex items-center justify-center w-8 h-8 rounded-full transition-all cursor-pointer ${userLiked
+                    ? "bg-emerald-500/10 text-emerald-400 hover:text-emerald-300"
+                    : "text-white/40 hover:text-white/85 hover:bg-white/[0.04]"
+                  }`}
+                title="Like"
+              >
+                <ThumbsUp size={13} fill={userLiked ? "currentColor" : "none"} />
+              </button>
 
-            <span className={`text-sm font-bold min-w-[24px] text-center ${
-              score > 0 ? 'text-emerald-400' : score < 0 ? 'text-red-400' : 'text-white/40'
-            }`}>
-              {score}
-            </span>
+              <span className={`text-[11px] font-black min-w-[28px] text-center select-none ${score > 0 ? 'text-emerald-400' : score < 0 ? 'text-red-400' : 'text-white/50'
+                }`}>
+                {score > 0 ? `+${score}` : score}
+              </span>
 
-            <button
-              onClick={handleDislike}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
-                userDisliked
-                  ? "bg-red-500/15 text-red-400 border border-red-500/20"
-                  : "text-white/45 hover:text-white/70 hover:bg-white/[0.03]"
-              }`}
-            >
-              <ThumbsDown size={15} fill={userDisliked ? "currentColor" : "none"} />
-            </button>
+              <div className="w-[1px] h-4 bg-white/[0.08] mx-0.5" />
 
-            <div className="ml-auto flex items-center gap-3 text-white/50 text-[12px]">
-              <span className="flex items-center gap-1"><MessageSquare size={13} /> {post.commentCount || 0}</span>
-              <span className="flex items-center gap-1"><Eye size={13} /> {post.views || 0}</span>
+              <button
+                onClick={handleDislike}
+                className={`flex items-center justify-center w-8 h-8 rounded-full transition-all cursor-pointer ${userDisliked
+                    ? "bg-red-500/10 text-red-400 hover:text-red-300"
+                    : "text-white/40 hover:text-white/85 hover:bg-white/[0.04]"
+                  }`}
+                title="Dislike"
+              >
+                <ThumbsDown size={13} fill={userDisliked ? "currentColor" : "none"} />
+              </button>
+            </div>
+
+            <div className="flex items-center gap-4 text-white/40 text-[11px] font-bold">
+              <span className="flex items-center gap-1.5 hover:text-white/60 transition-colors select-none">
+                <MessageSquare size={13} className="text-white/20" />
+                {post.commentCount || 0} comments
+              </span>
+              <span className="w-[3px] h-[3px] bg-white/10 rounded-full" />
+              <span className="flex items-center gap-1.5 hover:text-white/60 transition-colors select-none">
+                <Eye size={13} className="text-white/20" />
+                {post.views || 0} views
+              </span>
             </div>
           </div>
         </article>
