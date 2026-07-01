@@ -40,13 +40,13 @@ const getAvatarUrl = (avatar, username) => {
 
 const RoleBadge = ({ role }) => {
   if (role === 'admin') return (
-    <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-purple-500/20 text-purple-400 text-[9px] font-bold uppercase tracking-wider rounded border border-purple-500/30">
-      <Crown size={9} fill="currentColor" /> Admin
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-purple-500/10 text-purple-400 text-[9px] font-black uppercase tracking-wider rounded-md border border-purple-500/20 shadow-sm select-none">
+      <Crown size={9} fill="currentColor" className="shrink-0" /> Admin
     </span>
   );
   if (role === 'moderator') return (
-    <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[9px] font-bold uppercase tracking-wider rounded border border-red-500/30">
-      <Shield size={9} fill="currentColor" /> Mod
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-red-500/10 text-red-400 text-[9px] font-black uppercase tracking-wider rounded-md border border-red-500/20 shadow-sm select-none">
+      <Shield size={9} fill="currentColor" className="shrink-0" /> Mod
     </span>
   );
   return null;
@@ -113,12 +113,12 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
   const maxDepth = 4;
 
   return (
-    <div className={`${depth > 0 ? 'ml-4 md:ml-8 pl-3 md:pl-4 border-l border-white/[0.06]' : ''}`}>
-      <div className="py-3 group">
+    <div className={`${depth > 0 ? 'ml-2 sm:ml-6 pl-3 sm:pl-4 border-l-2 border-white/[0.08] hover:border-red-500/20 transition-colors duration-300' : ''}`}>
+      <div className="py-4 group">
         {/* Comment Header */}
-        <div className="flex items-start gap-2.5">
+        <div className="flex items-start gap-3">
           <Link to={`/user/${comment.author?.profileId || comment.author?.username}`}>
-            <div className="w-8 h-8 rounded-full overflow-hidden border border-white/10 bg-neutral-800 shrink-0 hover:border-white/20 transition-colors">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full overflow-hidden border border-white/10 bg-neutral-800 shrink-0 hover:border-white/20 transition-colors">
               <img
                 src={getAvatarUrl(comment.author?.avatar, comment.author?.username)}
                 alt={comment.author?.username}
@@ -128,48 +128,55 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
           </Link>
 
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap mb-1">
+            <div className="flex items-center gap-2 flex-wrap mb-1.5">
               <Link
                 to={`/user/${comment.author?.profileId || comment.author?.username}`}
-                className="text-sm font-bold text-white/70 hover:text-white transition-colors"
+                className="text-sm font-bold text-white/85 hover:text-white transition-colors"
               >
                 {comment.author?.displayName || comment.author?.profileId || comment.author?.username}
               </Link>
               <RoleBadge role={comment.author?.role} />
-              <span className="text-[10px] text-white/20">{timeAgo(comment.createdAt)}</span>
+              <span className="text-[10px] text-white/40">{timeAgo(comment.createdAt)}</span>
             </div>
 
             {/* Comment Body */}
-            <p className="text-sm text-white/55 leading-relaxed whitespace-pre-wrap break-words">
+            <p className="text-[13.5px] sm:text-sm text-white/75 leading-relaxed whitespace-pre-wrap break-words">
               {comment.content}
             </p>
 
             {/* Comment Actions */}
-            <div className="flex items-center gap-3 mt-2">
+            <div className="flex items-center gap-2 mt-3">
               <button
                 onClick={handleLike}
-                className={`flex items-center gap-1 text-[11px] font-medium transition-colors ${
-                  liked ? 'text-red-400' : 'text-white/20 hover:text-white/50'
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold transition-all duration-200 border cursor-pointer ${
+                  liked
+                    ? 'bg-red-500/10 border-red-500/25 text-red-400 shadow-sm shadow-red-500/5'
+                    : 'bg-white/[0.03] border-white/[0.06] text-white/45 hover:bg-white/[0.08] hover:text-white/80'
                 }`}
               >
-                <Heart size={12} fill={liked ? "currentColor" : "none"} />
-                {likesCount > 0 && likesCount}
+                <Heart size={11} fill={liked ? "currentColor" : "none"} className={liked ? 'scale-110' : ''} />
+                <span>{likesCount > 0 ? likesCount : 'Like'}</span>
               </button>
 
               {user && depth < maxDepth && (
                 <button
                   onClick={() => setShowReplyBox(!showReplyBox)}
-                  className="flex items-center gap-1 text-[11px] font-medium text-white/20 hover:text-white/50 transition-colors"
+                  className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold transition-all duration-200 border cursor-pointer ${
+                    showReplyBox
+                      ? 'bg-white/10 border-white/20 text-white'
+                      : 'bg-white/[0.03] border-white/[0.06] text-white/45 hover:bg-white/[0.08] hover:text-white/80'
+                  }`}
                 >
-                  <Reply size={12} />
-                  Reply
+                  <Reply size={11} />
+                  <span>Reply</span>
                 </button>
               )}
 
               {canDelete && (
                 <button
                   onClick={handleDelete}
-                  className="flex items-center gap-1 text-[11px] font-medium text-white/15 hover:text-red-400 transition-colors"
+                  className="flex items-center justify-center p-1 rounded-md bg-white/[0.03] border border-white/[0.06] text-white/35 hover:text-red-400 hover:bg-red-500/10 hover:border-red-500/20 transition-all duration-200 cursor-pointer"
+                  title="Delete Comment"
                 >
                   <Trash2 size={11} />
                 </button>
@@ -178,20 +185,22 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
 
             {/* Reply Box */}
             {showReplyBox && (
-              <div className="mt-3 flex gap-2">
-                <input
-                  type="text"
-                  value={replyContent}
-                  onChange={(e) => setReplyContent(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleReply()}
-                  placeholder="Write a reply..."
-                  className="flex-1 bg-white/[0.03] border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/30 transition-all"
-                  autoFocus
-                />
+              <div className="mt-3 flex items-center gap-2 animate-in slide-in-from-top-2 duration-200">
+                <div className="relative flex-1 bg-white/[0.02] border border-white/[0.08] focus-within:border-red-500/30 rounded-xl px-3 py-2 transition-all">
+                  <input
+                    type="text"
+                    value={replyContent}
+                    onChange={(e) => setReplyContent(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleReply()}
+                    placeholder="Write a reply..."
+                    className="w-full bg-transparent border-none text-base md:text-sm text-white placeholder-white/20 focus:outline-none"
+                    autoFocus
+                  />
+                </div>
                 <button
                   onClick={handleReply}
                   disabled={!replyContent.trim() || isSubmitting}
-                  className="px-3 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-40 rounded-lg text-white transition-all"
+                  className="w-10 h-10 bg-red-600 hover:bg-red-700 disabled:opacity-40 rounded-xl text-white flex items-center justify-center shrink-0 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-red-600/10 cursor-pointer"
                 >
                   {isSubmitting ? <Loader size={14} className="animate-spin" /> : <Send size={14} />}
                 </button>
@@ -462,7 +471,7 @@ export default function CommunityPostDetail() {
                   </Link>
                   <RoleBadge role={post.author?.role} />
                 </div>
-                <div className="flex items-center gap-3 text-[11px] text-white/25 mt-0.5">
+                <div className="flex items-center gap-3 text-[11px] text-white/50 mt-0.5">
                   <span className="flex items-center gap-1"><Clock size={10} /> {timeAgo(post.createdAt)}</span>
                   <span className="flex items-center gap-1"><Eye size={10} /> {post.views} views</span>
                 </div>
@@ -473,7 +482,7 @@ export default function CommunityPostDetail() {
                 <div className="ml-auto relative">
                   <button
                     onClick={() => setShowActions(!showActions)}
-                    className="p-2 hover:bg-white/[0.05] rounded-lg text-white/30 hover:text-white transition-colors"
+                    className="p-2 hover:bg-white/[0.05] rounded-lg text-white/50 hover:text-white transition-colors"
                   >
                     <MoreHorizontal size={18} />
                   </button>
@@ -482,7 +491,7 @@ export default function CommunityPostDetail() {
                       {isAuthor && (
                         <Link
                           to={`/community/post/${post._id}`}
-                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/[0.05] transition-colors"
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-white/75 hover:text-white hover:bg-white/[0.05] transition-colors"
                           onClick={() => setShowActions(false)}
                         >
                           <Edit3 size={14} /> Edit Post
@@ -492,13 +501,13 @@ export default function CommunityPostDetail() {
                         <>
                           <button
                             onClick={() => { handlePin(); setShowActions(false); }}
-                            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/[0.05] transition-colors"
+                            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-white/75 hover:text-white hover:bg-white/[0.05] transition-colors"
                           >
                             <Pin size={14} /> {post.isPinned ? 'Unpin' : 'Pin'} Post
                           </button>
                           <button
                             onClick={() => { handleLock(); setShowActions(false); }}
-                            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/[0.05] transition-colors"
+                            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-white/75 hover:text-white hover:bg-white/[0.05] transition-colors"
                           >
                             <Lock size={14} /> {post.isLocked ? 'Unlock' : 'Lock'} Post
                           </button>
@@ -519,13 +528,13 @@ export default function CommunityPostDetail() {
             </div>
 
             {/* Post Content */}
-            <div className="prose prose-invert prose-sm max-w-none text-white/60 leading-relaxed
+            <div className="prose prose-invert prose-sm max-w-none text-white/85 leading-relaxed
               prose-headings:text-white prose-headings:font-bold
               prose-a:text-red-400 prose-a:no-underline hover:prose-a:underline
-              prose-strong:text-white/80
+              prose-strong:text-white
               prose-code:text-red-300 prose-code:bg-white/[0.05] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
-              prose-blockquote:border-red-500/30 prose-blockquote:text-white/40
-              prose-li:text-white/50
+              prose-blockquote:border-red-500/30 prose-blockquote:text-white/60
+              prose-li:text-white/70
             ">
               <ReactMarkdown>{post.content}</ReactMarkdown>
             </div>
@@ -537,7 +546,7 @@ export default function CommunityPostDetail() {
                   <Link
                     key={tag}
                     to={`/community?search=${tag}`}
-                    className="px-2.5 py-1 bg-white/[0.03] text-white/25 text-[11px] font-medium rounded-md border border-white/[0.04] hover:text-white/50 hover:border-white/10 transition-all"
+                    className="px-2.5 py-1 bg-white/[0.03] text-white/45 text-[11px] font-medium rounded-md border border-white/[0.04] hover:text-white/75 hover:border-white/15 transition-all"
                   >
                     #{tag}
                   </Link>
@@ -553,14 +562,14 @@ export default function CommunityPostDetail() {
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                 userLiked
                   ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/20"
-                  : "text-white/25 hover:text-white/50 hover:bg-white/[0.03]"
+                  : "text-white/45 hover:text-white/70 hover:bg-white/[0.03]"
               }`}
             >
               <ThumbsUp size={15} fill={userLiked ? "currentColor" : "none"} />
             </button>
 
             <span className={`text-sm font-bold min-w-[24px] text-center ${
-              score > 0 ? 'text-emerald-400' : score < 0 ? 'text-red-400' : 'text-white/20'
+              score > 0 ? 'text-emerald-400' : score < 0 ? 'text-red-400' : 'text-white/40'
             }`}>
               {score}
             </span>
@@ -570,13 +579,13 @@ export default function CommunityPostDetail() {
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                 userDisliked
                   ? "bg-red-500/15 text-red-400 border border-red-500/20"
-                  : "text-white/25 hover:text-white/50 hover:bg-white/[0.03]"
+                  : "text-white/45 hover:text-white/70 hover:bg-white/[0.03]"
               }`}
             >
               <ThumbsDown size={15} fill={userDisliked ? "currentColor" : "none"} />
             </button>
 
-            <div className="ml-auto flex items-center gap-3 text-white/20 text-[12px]">
+            <div className="ml-auto flex items-center gap-3 text-white/50 text-[12px]">
               <span className="flex items-center gap-1"><MessageSquare size={13} /> {post.commentCount || 0}</span>
               <span className="flex items-center gap-1"><Eye size={13} /> {post.views || 0}</span>
             </div>
@@ -589,14 +598,14 @@ export default function CommunityPostDetail() {
             <div className="w-[3px] h-6 bg-red-600 rounded-full" />
             <h2 className="text-lg font-bold text-white uppercase tracking-tight">
               Comments
-              <span className="text-white/20 text-sm font-normal ml-2">({post.commentCount || 0})</span>
+              <span className="text-white/45 text-sm font-normal ml-2">({post.commentCount || 0})</span>
             </h2>
           </div>
 
           {/* Add Comment Box */}
           {user && !post.isLocked ? (
-            <div className="flex items-start gap-3 mb-6 p-4 bg-white/[0.015] border border-white/[0.05] rounded-xl">
-              <div className="w-9 h-9 rounded-full overflow-hidden border border-white/10 bg-neutral-800 shrink-0">
+            <div className="flex items-start gap-3 mb-8 p-4 bg-white/[0.02] border border-white/[0.06] focus-within:border-white/12 focus-within:bg-white/[0.03] rounded-2xl transition-all duration-300 shadow-lg">
+              <div className="w-9 h-9 rounded-full overflow-hidden border border-white/10 bg-neutral-800 shrink-0 mt-0.5 shadow-md">
                 <img src={getAvatarUrl(user.avatar, user.username)} alt="" className="w-full h-full object-cover" />
               </div>
               <div className="flex-1">
@@ -605,13 +614,13 @@ export default function CommunityPostDetail() {
                   onChange={(e) => setCommentText(e.target.value)}
                   placeholder="Share your thoughts..."
                   rows={3}
-                  className="w-full bg-transparent border-none text-sm text-white placeholder-white/20 focus:outline-none resize-none"
+                  className="w-full bg-transparent border-none text-base md:text-sm text-white placeholder-white/20 focus:outline-none resize-none"
                 />
-                <div className="flex justify-end mt-2">
+                <div className="flex justify-end mt-2 pt-2 border-t border-white/[0.03]">
                   <button
                     onClick={handleAddComment}
                     disabled={!commentText.trim() || isSubmittingComment}
-                    className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg text-white text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2"
+                    className="px-5 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-30 disabled:hover:bg-red-600 disabled:cursor-not-allowed rounded-xl text-white text-xs font-bold uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md shadow-red-600/10 flex items-center gap-2 cursor-pointer"
                   >
                     {isSubmittingComment ? <Loader size={12} className="animate-spin" /> : <Send size={12} />}
                     Comment

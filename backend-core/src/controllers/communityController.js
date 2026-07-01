@@ -213,33 +213,39 @@ export const deletePost = async (req, res) => {
 // @access  Private
 export const likePost = async (req, res) => {
   try {
-    const post = await CommunityPost.findById(req.params.postId);
-    if (!post || post.isDeleted) {
+    const userId = req.user._id;
+    const postId = req.params.postId;
+
+    const post = await CommunityPost.findOne({ _id: postId, isDeleted: { $ne: true } });
+    if (!post) {
       return res.status(404).json({ success: false, message: 'Post not found' });
     }
 
-    const userId = req.user._id;
     const alreadyLiked = post.likes.some(id => id.toString() === userId.toString());
-    const alreadyDisliked = post.dislikes.some(id => id.toString() === userId.toString());
 
+    let update;
     if (alreadyLiked) {
-      // Toggle off
-      post.likes = post.likes.filter(id => id.toString() !== userId.toString());
+      update = {
+        $pull: { likes: userId }
+      };
     } else {
-      post.likes.push(userId);
-      // Remove dislike if exists
-      if (alreadyDisliked) {
-        post.dislikes = post.dislikes.filter(id => id.toString() !== userId.toString());
-      }
+      update = {
+        $addToSet: { likes: userId },
+        $pull: { dislikes: userId }
+      };
     }
 
-    await post.save();
+    const updatedPost = await CommunityPost.findByIdAndUpdate(
+      postId,
+      update,
+      { new: true }
+    );
 
     res.json({
       success: true,
-      likesCount: post.likes.length,
-      dislikesCount: post.dislikes.length,
-      score: post.likes.length - post.dislikes.length,
+      likesCount: updatedPost.likes.length,
+      dislikesCount: updatedPost.dislikes.length,
+      score: updatedPost.likes.length - updatedPost.dislikes.length,
       userLiked: !alreadyLiked,
       userDisliked: false
     });
@@ -254,31 +260,39 @@ export const likePost = async (req, res) => {
 // @access  Private
 export const dislikePost = async (req, res) => {
   try {
-    const post = await CommunityPost.findById(req.params.postId);
-    if (!post || post.isDeleted) {
+    const userId = req.user._id;
+    const postId = req.params.postId;
+
+    const post = await CommunityPost.findOne({ _id: postId, isDeleted: { $ne: true } });
+    if (!post) {
       return res.status(404).json({ success: false, message: 'Post not found' });
     }
 
-    const userId = req.user._id;
     const alreadyDisliked = post.dislikes.some(id => id.toString() === userId.toString());
-    const alreadyLiked = post.likes.some(id => id.toString() === userId.toString());
 
+    let update;
     if (alreadyDisliked) {
-      post.dislikes = post.dislikes.filter(id => id.toString() !== userId.toString());
+      update = {
+        $pull: { dislikes: userId }
+      };
     } else {
-      post.dislikes.push(userId);
-      if (alreadyLiked) {
-        post.likes = post.likes.filter(id => id.toString() !== userId.toString());
-      }
+      update = {
+        $addToSet: { dislikes: userId },
+        $pull: { likes: userId }
+      };
     }
 
-    await post.save();
+    const updatedPost = await CommunityPost.findByIdAndUpdate(
+      postId,
+      update,
+      { new: true }
+    );
 
     res.json({
       success: true,
-      likesCount: post.likes.length,
-      dislikesCount: post.dislikes.length,
-      score: post.likes.length - post.dislikes.length,
+      likesCount: updatedPost.likes.length,
+      dislikesCount: updatedPost.dislikes.length,
+      score: updatedPost.likes.length - updatedPost.dislikes.length,
       userLiked: false,
       userDisliked: !alreadyDisliked
     });
@@ -453,25 +467,29 @@ export const addComment = async (req, res) => {
 // @access  Private
 export const likeComment = async (req, res) => {
   try {
-    const comment = await CommunityComment.findById(req.params.commentId);
-    if (!comment || comment.isDeleted) {
+    const commentId = req.params.commentId;
+    const userId = req.user._id;
+
+    const comment = await CommunityComment.findOne({ _id: commentId, isDeleted: { $ne: true } });
+    if (!comment) {
       return res.status(404).json({ success: false, message: 'Comment not found' });
     }
 
-    const userId = req.user._id;
     const alreadyLiked = comment.likes.some(id => id.toString() === userId.toString());
 
-    if (alreadyLiked) {
-      comment.likes = comment.likes.filter(id => id.toString() !== userId.toString());
-    } else {
-      comment.likes.push(userId);
-    }
+    const update = alreadyLiked
+      ? { $pull: { likes: userId } }
+      : { $addToSet: { likes: userId } };
 
-    await comment.save();
+    const updatedComment = await CommunityComment.findByIdAndUpdate(
+      commentId,
+      update,
+      { new: true }
+    );
 
     res.json({
       success: true,
-      likesCount: comment.likes.length,
+      likesCount: updatedComment.likes.length,
       userLiked: !alreadyLiked
     });
   } catch (error) {

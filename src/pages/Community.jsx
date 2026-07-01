@@ -124,9 +124,9 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal */}
-      <div className="relative w-full max-w-2xl bg-[#111111] border border-white/10 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-2xl bg-[#111111] border border-white/10 rounded-xl md:rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+        <div className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-white/10">
           <h2 className="text-lg font-bold text-white flex items-center gap-2">
             <Plus size={18} className="text-red-500" />
             Create Post
@@ -137,7 +137,7 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
         </div>
 
         {/* Body */}
-        <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto mini-scrollbar">
+        <div className="p-4 md:p-6 space-y-4 max-h-[80vh] md:max-h-[70vh] overflow-y-auto mini-scrollbar">
           {error && (
             <div className="px-4 py-2.5 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
               {error}
@@ -153,7 +153,7 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
               onChange={(e) => setTitle(e.target.value)}
               placeholder="What's on your mind?"
               maxLength={200}
-              className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/20 transition-all text-sm"
+              className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/20 transition-all text-base md:text-sm"
             />
           </div>
 
@@ -186,7 +186,7 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
               placeholder="Share your thoughts, discuss anime, ask questions..."
               maxLength={10000}
               rows={8}
-              className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/20 transition-all text-sm resize-none mini-scrollbar"
+              className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/20 transition-all text-base md:text-sm resize-none mini-scrollbar"
             />
             <p className="text-[10px] text-white/20 mt-1">Supports **bold**, *italic*, and markdown formatting</p>
           </div>
@@ -205,7 +205,7 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
                 onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
                 placeholder="Add a tag..."
                 maxLength={30}
-                className="flex-1 bg-white/[0.03] border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all text-sm"
+                className="flex-1 bg-white/[0.03] border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all text-base md:text-sm"
               />
               <button
                 onClick={() => setShowPopularTags(prev => !prev)}
@@ -261,7 +261,7 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between px-6 py-4 border-t border-white/10 bg-white/[0.02]">
+        <div className="flex items-center justify-between px-4 md:px-6 py-4 border-t border-white/10 bg-white/[0.02]">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-full overflow-hidden border border-white/10 bg-neutral-800">
               <img src={getAvatarUrl(user?.avatar, user?.username)} alt="" className="w-full h-full object-cover" />
@@ -360,10 +360,10 @@ export default function Community() {
                     Beta
                   </span>
                 </div>
-                <p className="text-white/40 text-sm md:text-base max-w-xl leading-relaxed ml-5">
+                <p className="text-white/60 text-sm md:text-base max-w-xl leading-relaxed ml-5">
                   Discuss anime, share recommendations, ask questions, and connect with fellow otakus.
                 </p>
-                <div className="flex items-center gap-2 mt-3.5 ml-5 px-3 py-1.5 bg-amber-500/5 border border-amber-500/10 rounded-lg text-amber-400/80 text-[11px] font-medium max-w-fit shadow-sm">
+                <div className="flex items-center gap-2 mt-3.5 ml-5 px-3 py-1.5 bg-amber-500/5 border border-amber-500/20 rounded-lg text-amber-400 text-[11px] font-semibold max-w-fit shadow-sm">
                   <AlertTriangle size={12} className="shrink-0 text-amber-500" />
                   <span>Note: The community system is currently in testing (Beta version).</span>
                 </div>
@@ -372,7 +372,7 @@ export default function Community() {
               {user && (
                 <button
                   onClick={() => setShowCreateModal(true)}
-                  className="group flex items-center gap-2.5 px-5 py-3 bg-red-600 hover:bg-red-700 rounded-xl text-white font-bold text-xs uppercase tracking-widest transition-all hover:shadow-lg hover:shadow-red-600/20 hover:scale-[1.02] active:scale-[0.98]"
+                  className="group hidden md:flex items-center gap-2.5 px-5 py-3 bg-red-600 hover:bg-red-700 rounded-xl text-white font-bold text-xs uppercase tracking-widest transition-all hover:shadow-lg hover:shadow-red-600/20 hover:scale-[1.02] active:scale-[0.98]"
                 >
                   <Plus size={16} className="group-hover:rotate-90 transition-transform duration-200" />
                   Create Post
@@ -413,35 +413,35 @@ export default function Community() {
               </div>
 
               {/* Search + Sort Row */}
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 {/* Search */}
-                <div className="relative flex-1 max-w-md">
-                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/20" />
+                <div className="relative flex-1">
+                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search posts..."
-                    className="w-full bg-white/[0.03] border border-white/[0.06] rounded-lg pl-9 pr-4 py-2 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/30 transition-all"
+                    className="w-full bg-white/[0.03] border border-white/[0.06] rounded-lg pl-9 pr-4 py-2.5 text-base md:text-sm text-white placeholder-white/40 focus:outline-none focus:border-red-500/40 transition-all"
                   />
                 </div>
 
                 {/* Sort Buttons */}
-                <div className="flex items-center gap-1 bg-white/[0.03] border border-white/[0.06] rounded-lg p-0.5">
+                <div className="flex items-center justify-between sm:justify-start gap-1 bg-white/[0.03] border border-white/[0.06] rounded-lg p-0.5 w-full sm:w-auto shrink-0">
                   {SORT_OPTIONS.map(opt => {
                     const Icon = opt.icon;
                     return (
                       <button
                         key={opt.id}
                         onClick={() => { setIsLoading(true); setActiveSort(opt.id); setCurrentPage(1); }}
-                        className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all ${
+                        className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-[10px] md:text-[11px] font-bold uppercase tracking-wider transition-all ${
                           activeSort === opt.id
-                            ? "bg-white/10 text-white"
-                            : "text-white/30 hover:text-white/60"
+                            ? "bg-white/15 text-white"
+                            : "text-white/55 hover:text-white"
                         }`}
                       >
                         <Icon size={11} />
-                        <span className="hidden sm:inline">{opt.label}</span>
+                        <span>{opt.label}</span>
                       </button>
                     );
                   })}
@@ -484,11 +484,11 @@ export default function Community() {
                   <Link
                     key={post._id}
                     to={`/community/post/${post._id}`}
-                    className="group block bg-white/[0.015] hover:bg-white/[0.03] border border-white/[0.05] hover:border-white/[0.1] rounded-xl p-4 md:p-5 transition-all duration-200"
+                    className="group block bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.05] hover:border-white/[0.1] rounded-xl p-4 md:p-5 transition-all duration-200"
                   >
                     <div className="flex items-start gap-3">
                       {/* Avatar */}
-                      <div className="w-10 h-10 rounded-full overflow-hidden border border-white/10 bg-neutral-800 shrink-0">
+                      <div className="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden border border-white/10 bg-neutral-800 shrink-0">
                         <img
                           src={getAvatarUrl(post.author?.avatar, post.author?.username)}
                           alt={post.author?.username}
@@ -501,31 +501,31 @@ export default function Community() {
                       <div className="flex-1 min-w-0">
                         {/* Author + Meta */}
                         <div className="flex items-center gap-2 mb-1 flex-wrap">
-                          <span className="text-sm font-bold text-white/80 group-hover:text-white transition-colors">
+                          <span className="text-sm font-bold text-white group-hover:text-white transition-colors">
                             {post.author?.displayName || post.author?.profileId || post.author?.username}
                           </span>
                           <RoleBadge role={post.author?.role} />
-                          <span className="text-[10px] text-white/20">•</span>
-                          <span className="text-[10px] text-white/20">{timeAgo(post.createdAt)}</span>
+                          <span className="text-[10px] text-white/40">•</span>
+                          <span className="text-[10px] text-white/40">{timeAgo(post.createdAt)}</span>
                           {post.isPinned && (
-                            <span className="inline-flex items-center gap-0.5 text-[9px] text-amber-400/80 font-bold uppercase">
+                            <span className="inline-flex items-center gap-0.5 text-[9px] text-amber-400 font-bold uppercase">
                               <Pin size={9} /> Pinned
                             </span>
                           )}
                           {post.isLocked && (
-                            <span className="inline-flex items-center gap-0.5 text-[9px] text-red-400/60 font-bold uppercase">
+                            <span className="inline-flex items-center gap-0.5 text-[9px] text-red-400 font-bold uppercase">
                               <Lock size={9} /> Locked
                             </span>
                           )}
                         </div>
 
                         {/* Title */}
-                        <h3 className="text-[15px] md:text-base font-bold text-white/90 group-hover:text-white mb-1.5 line-clamp-2 leading-snug transition-colors">
+                        <h3 className="text-[15px] md:text-base font-bold text-white group-hover:text-white mb-1.5 line-clamp-2 leading-snug transition-colors">
                           {post.title}
                         </h3>
 
                         {/* Excerpt */}
-                        <p className="text-sm text-white/30 line-clamp-2 leading-relaxed mb-3">
+                        <p className="text-sm text-white/55 line-clamp-2 leading-relaxed mb-3">
                           {post.content?.substring(0, 200)}
                         </p>
 
@@ -537,7 +537,7 @@ export default function Community() {
                           </span>
 
                           {/* Stats */}
-                          <div className="flex items-center gap-3 text-white/20 text-[11px]">
+                          <div className="flex items-center gap-3 text-white/45 text-[11px]">
                             <span className="flex items-center gap-1">
                               <ThumbsUp size={11} />
                               {post.score || 0}
@@ -556,7 +556,7 @@ export default function Community() {
                           {post.tags?.length > 0 && (
                             <div className="flex items-center gap-1.5 ml-auto">
                               {post.tags.slice(0, 3).map(tag => (
-                                <span key={tag} className="text-[10px] text-white/15 font-medium">#{tag}</span>
+                                <span key={tag} className="text-[10px] text-white/35 font-medium">#{tag}</span>
                               ))}
                             </div>
                           )}
@@ -564,7 +564,7 @@ export default function Community() {
                       </div>
 
                       {/* Arrow */}
-                      <ChevronRight size={16} className="text-white/10 group-hover:text-white/30 transition-colors shrink-0 mt-1" />
+                      <ChevronRight size={16} className="text-white/20 group-hover:text-white/40 transition-colors shrink-0 mt-1" />
                     </div>
                   </Link>
                 ))
@@ -598,24 +598,24 @@ export default function Community() {
           {/* Right Sidebar */}
           <div className="w-full lg:w-[320px] shrink-0 space-y-4 pt-2">
             {/* Community Stats */}
-            <div className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-5">
-              <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-4 flex items-center gap-2">
+            <div className="bg-white/[0.04] border border-white/[0.05] rounded-xl p-5">
+              <h3 className="text-xs font-bold text-white/60 uppercase tracking-widest mb-4 flex items-center gap-2">
                 <Users size={12} /> Community
               </h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-white/40">Total Posts</span>
+                  <span className="text-sm text-white/50">Total Posts</span>
                   <span className="text-sm font-bold text-white/80">{pagination.total || 0}</span>
                 </div>
               </div>
             </div>
 
             {/* Rules */}
-            <div className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-5">
-              <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-4 flex items-center gap-2">
+            <div className="bg-white/[0.04] border border-white/[0.05] rounded-xl p-5">
+              <h3 className="text-xs font-bold text-white/60 uppercase tracking-widest mb-4 flex items-center gap-2">
                 <AlertTriangle size={12} /> Community Rules
               </h3>
-              <ol className="space-y-2.5 text-[12px] text-white/35 leading-relaxed list-decimal list-inside">
+              <ol className="space-y-2.5 text-[12px] text-white/55 leading-relaxed list-decimal list-inside">
                 <li>Be respectful to all community members</li>
                 <li>No spoilers without proper tags</li>
                 <li>No spam or self-promotion</li>
@@ -643,6 +643,17 @@ export default function Community() {
       </div>
 
       <Footer />
+
+      {/* Floating Action Button for Mobile */}
+      {user && (
+        <button
+          onClick={() => setShowCreateModal(true)}
+          className="fixed bottom-6 right-6 z-[90] md:hidden flex items-center justify-center w-14 h-14 bg-red-600 active:bg-red-700 text-white rounded-full shadow-lg shadow-red-600/30 active:scale-95 transition-all cursor-pointer border border-red-500/20"
+          aria-label="Create Post"
+        >
+          <Plus size={24} />
+        </button>
+      )}
 
       {/* Create Post Modal */}
       <CreatePostModal
