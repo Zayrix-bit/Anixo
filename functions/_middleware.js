@@ -4,9 +4,17 @@
 const BACKEND_URL = 'https://backend-core-backend-core.hf.space';
 
 // Routes that should be proxied to the backend
-const PROXY_PATHS = ['/auth', '/watchlist', '/progress', '/settings', '/notifications', '/users', '/ai'];
+const PROXY_PATHS = ['/auth', '/watchlist', '/progress', '/settings', '/notifications', '/users', '/ai', '/community'];
 
-function shouldProxy(pathname) {
+// Frontend page routes that overlap with backend routes
+const FRONTEND_OVERLAPS = ['/settings', '/watchlist', '/notifications', '/community'];
+
+function shouldProxy(request, pathname) {
+  const isOverlap = FRONTEND_OVERLAPS.some(p => pathname === p || pathname.startsWith(p + '/'));
+  if (isOverlap) {
+    // Only proxy overlap routes if it's an API request from the frontend app (marked by x-api header)
+    return request.headers.get('x-api') === 'true';
+  }
   return PROXY_PATHS.some(p => pathname === p || pathname.startsWith(p + '/'));
 }
 
@@ -14,7 +22,7 @@ export async function onRequest(context) {
   const url = new URL(context.request.url);
 
   // Only proxy backend routes — let everything else pass through (static files, SPA)
-  if (!shouldProxy(url.pathname)) {
+  if (!shouldProxy(context.request, url.pathname)) {
     return context.next();
   }
 
