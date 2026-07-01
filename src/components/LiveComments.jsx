@@ -4,7 +4,7 @@ import { Clock, PlayCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getAnimeDetails } from "../services/api";
 
-const SOCKET_URL = "http://localhost:4000";
+const SOCKET_URL = import.meta.env.VITE_COMMENT_API_URL || "http://localhost:4000";
 
 const LiveComments = () => {
   const [comments, setComments] = useState([]);
