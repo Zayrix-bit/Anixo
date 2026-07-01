@@ -105,7 +105,7 @@ const LiveComments = () => {
             >
               {comments.length === 0 ? (
                 <div className="w-full text-center py-16 text-white/40 text-sm">
-                  Be the first to comment! 🎬
+                  Adding This Feature Soon... 
                 </div>
               ) : (
                 comments.map((comment) => (
