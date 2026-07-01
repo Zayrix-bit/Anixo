@@ -351,15 +351,22 @@ export default function Community() {
           <div className="relative max-w-[1720px] mx-auto px-4 md:px-6 py-10 md:py-16">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
               <div>
-                <div className="flex items-center gap-3 mb-3">
+                <div className="flex items-center gap-3 mb-3 flex-wrap">
                   <div className="w-[3.5px] h-8 bg-red-600 rounded-full" />
                   <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-tighter leading-none">
                     Community
                   </h1>
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[9px] font-black bg-amber-500/10 text-amber-400 border border-amber-500/20 uppercase tracking-widest select-none animate-pulse">
+                    Beta
+                  </span>
                 </div>
                 <p className="text-white/40 text-sm md:text-base max-w-xl leading-relaxed ml-5">
                   Discuss anime, share recommendations, ask questions, and connect with fellow otakus.
                 </p>
+                <div className="flex items-center gap-2 mt-3.5 ml-5 px-3 py-1.5 bg-amber-500/5 border border-amber-500/10 rounded-lg text-amber-400/80 text-[11px] font-medium max-w-fit shadow-sm">
+                  <AlertTriangle size={12} className="shrink-0 text-amber-500" />
+                  <span>Note: The community system is currently in testing (Beta version).</span>
+                </div>
               </div>
 
               {user && (
