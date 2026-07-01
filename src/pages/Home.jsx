@@ -121,6 +121,8 @@ export default function Home() {
   });
   const popularThisSeason = popularThisSeasonData?.media || [];
   const seasonInfo = popularThisSeasonData?.pageInfo || { lastPage: 1 };
+  console.log('Season data:', popularThisSeasonData);
+  console.log('Season info:', seasonInfo);
 
   const { data: newReleasesData = [], isLoading: loadingNew } = useQuery({
     queryKey: ["newReleases"],
@@ -221,6 +223,9 @@ export default function Home() {
         </div>
       )}
 
+      {/* Live Comments */}
+      <LiveComments />
+
       {/* Popular This Season */}
       <div id="popular-season" className="pt-8 md:pt-6">
         <AnimeRow
@@ -244,9 +249,6 @@ export default function Home() {
           }}
         />
       </div>
-
-      {/* Live Comments */}
-      <LiveComments />
 
       {/* Three-column section */}
       <div className="py-12 lg:py-20">
