@@ -34,6 +34,8 @@ const Admin = lazy(() => import("./pages/Admin"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const ChatRoom = lazy(() => import("./pages/ChatRoom"));
+const Community = lazy(() => import("./pages/Community"));
+const CommunityPostDetail = lazy(() => import("./pages/CommunityPostDetail"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 import { Loader } from "lucide-react";
@@ -106,6 +108,8 @@ function AppRoutes() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route path="/chat" element={<ChatRoom />} />
+            <Route path="/community" element={<Community />} />
+            <Route path="/community/post/:postId" element={<CommunityPostDetail />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

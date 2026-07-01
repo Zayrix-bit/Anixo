@@ -7,7 +7,6 @@ import {
   getTrendingAnime,
   getPopularAnime,
   getNewReleases,
-  getPopularThisSeason,
   getBrowseAnime,
   getJustCompletedAnime,
 } from "../services/api";

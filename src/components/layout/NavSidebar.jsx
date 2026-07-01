@@ -191,6 +191,7 @@ export default function NavSidebar({ open, onClose, initialTab = "menu" }) {
                     { label: "Home", path: "/home" },
                     { label: "HENTAI (18+)", path: "/nsfw" },
                     { label: "Live Chat", path: "/chat" },
+                    { label: "Community", path: "/community" },
                     { label: "Recent Releases", path: "/browse?sort=START_DATE_DESC" },
                     { label: "Popular", path: "/browse?sort=POPULARITY_DESC" },
                     { label: "Top Rated", path: "/browse?sort=SCORE_DESC" },

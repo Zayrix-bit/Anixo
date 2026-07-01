@@ -103,6 +103,7 @@ export default function Navbar() {
     { name: "GENRES", path: "/browse", dropdown: "genres" },
     { name: "NEW RELEASES", path: "/browse?sort=START_DATE_DESC" },
     { name: "LIVE CHAT", path: "/chat" },
+    { name: "COMMUNITY", path: "/community" },
     { name: "SCHEDULE", action: "sidebar" },
     { name: "HENTAI", path: "/nsfw" },
   ];

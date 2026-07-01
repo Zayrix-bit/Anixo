@@ -35,13 +35,13 @@ const SimpleDonut = ({ segments, size = 120 }) => {
   const circumference = 2 * Math.PI * radius;
   const total = segments.reduce((s, seg) => s + seg.value, 0) || 1;
   
-  let offset = 0;
-  const processed = segments.map(seg => {
+  const processed = [];
+  let currentOffset = 0;
+  for (const seg of segments) {
     const dash = (seg.value / total) * circumference;
-    const res = { ...seg, dash, offset: -offset };
-    offset += dash;
-    return res;
-  });
+    processed.push({ ...seg, dash, offset: -currentOffset });
+    currentOffset += dash;
+  }
 
   return (
     <div className="relative" style={{ width: size, height: size }}>

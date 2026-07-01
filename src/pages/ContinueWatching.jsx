@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
@@ -14,7 +14,6 @@ import { User, Clock, Heart, Bell, Download, Settings as SettingsIcon, Trash2, R
 export default function ContinueWatching() {
   const { t } = useTranslation();
   const { user, globalProgress, setGlobalProgress } = useAuth();
-  const navigate = useNavigate();
   const location = useLocation();
 
   const [currentPage, setCurrentPage] = useState(1);

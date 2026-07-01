@@ -164,7 +164,7 @@ export default function Notifications() {
               return (
               <Link
                 key={notif._id}
-                to={notif.animeId ? `/watch/${notif.animeId}` : '#'}
+                to={notif.targetUrl || (notif.animeId ? `/watch/${notif.animeId}` : '#')}
                 onClick={() => { if (!notif.isRead) handleMarkRead(notif._id); }}
                 className={`py-4 border-b border-[#1a1a1a] flex gap-4 cursor-pointer hover:bg-[#111] transition-colors ${!notif.isRead ? 'bg-[#111]' : ''}`}
               >

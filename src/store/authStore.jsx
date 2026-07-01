@@ -108,7 +108,9 @@ export const AuthProvider = ({ children }) => {
       }).catch(e => console.warn("Progress fetch on user change failed:", e));
     } else {
       // User logged out: reset progress to empty array
-      setGlobalProgress([]);
+      Promise.resolve().then(() => {
+        setGlobalProgress([]);
+      });
     }
   }, [user]);
 
