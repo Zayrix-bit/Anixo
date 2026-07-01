@@ -36,8 +36,16 @@ export default function Home() {
   // Pagination States
   const [seasonPage, setSeasonPage] = useState(1);
 
-  // Toggle Continue Watching
-  const [showContinueWatching, setShowContinueWatching] = useState(true);
+  // Toggle Continue Watching with localStorage
+  const [showContinueWatching, setShowContinueWatching] = useState(() => {
+    const saved = localStorage.getItem('showContinueWatching');
+    return saved !== null ? JSON.parse(saved) : true;
+  });
+
+  // Update localStorage whenever state changes
+  React.useEffect(() => {
+    localStorage.setItem('showContinueWatching', JSON.stringify(showContinueWatching));
+  }, [showContinueWatching]);
 
   const toggleContinueWatching = () => {
     setShowContinueWatching(!showContinueWatching);
