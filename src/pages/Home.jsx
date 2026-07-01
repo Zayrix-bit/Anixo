@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Zap, X, ArrowRight, RefreshCw, Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -43,7 +43,7 @@ export default function Home() {
   });
 
   // Update localStorage whenever state changes
-  React.useEffect(() => {
+  useEffect(() => {
     localStorage.setItem('showContinueWatching', JSON.stringify(showContinueWatching));
   }, [showContinueWatching]);
 
