@@ -410,9 +410,10 @@ export const addComment = async (req, res) => {
       return res.status(403).json({ success: false, message: 'This post is locked' });
     }
 
+    let parentComment = null;
     // Validate parent comment if provided
     if (parentId) {
-      const parentComment = await CommunityComment.findById(parentId);
+      parentComment = await CommunityComment.findById(parentId);
       if (!parentComment || parentComment.post.toString() !== post._id.toString()) {
         return res.status(400).json({ success: false, message: 'Invalid parent comment' });
       }
@@ -429,19 +430,33 @@ export const addComment = async (req, res) => {
     post.commentCount = (post.commentCount || 0) + 1;
     await post.save();
 
-    // Send notification to post author (if commenter is not the author)
-    if (post.author.toString() !== req.user._id.toString()) {
-      try {
-        await Notification.create({
-          user: post.author,
-          title: `New reply on "${post.title.substring(0, 50)}"`,
-          message: `${req.user.displayName || req.user.username} commented on your post`,
-          type: 'REPLY',
-          targetUrl: `/community/post/${post._id}`
-        });
-      } catch (notifErr) {
-        console.warn('[Community] Notification creation failed:', notifErr.message);
+    // Send notification
+    try {
+      if (parentId && parentComment) {
+        // Threaded reply: Notify comment author (if commenter is not the comment author)
+        if (parentComment.author.toString() !== req.user._id.toString()) {
+          await Notification.create({
+            user: parentComment.author,
+            title: 'New reply to your comment',
+            message: `${req.user.displayName || req.user.username} replied to your comment on "${post.title.substring(0, 40)}"`,
+            type: 'REPLY',
+            targetUrl: `/community/post/${post._id}`
+          });
+        }
+      } else {
+        // Root comment: Notify post author (if commenter is not the post author)
+        if (post.author.toString() !== req.user._id.toString()) {
+          await Notification.create({
+            user: post.author,
+            title: `New reply on "${post.title.substring(0, 40)}"`,
+            message: `${req.user.displayName || req.user.username} commented on your post`,
+            type: 'REPLY',
+            targetUrl: `/community/post/${post._id}`
+          });
+        }
       }
+    } catch (notifErr) {
+      console.warn('[Community] Notification creation failed:', notifErr.message);
     }
 
     const populated = await CommunityComment.findById(comment._id)
