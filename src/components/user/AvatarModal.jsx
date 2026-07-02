@@ -9,27 +9,8 @@ const AVATAR_DATA = {
 
   "Boruto": getImages('baruto', 17),
   "ChainsawMan": getImages('csm', 24),
-  "DemonSlayer": [
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Tanjiro",
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Nezuko",
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Zenitsu",
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Inosuke"
-  ],
-  "Doraemon": [
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Dora1",
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Nobita",
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Sizuka"
-  ],
-  "DragonBall": [
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Goku",
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Vegeta",
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Gohan"
-  ],
-  "Eyes": [
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Eye1",
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Eye2",
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Eye3"
-  ],
+  "DemonSlayer": getImages('demon_slayer', 27),
+  "Eyes": getImages('eye', 15),
   "FairyTail": [
     "https://api.dicebear.com/7.x/avataaars/svg?seed=Natsu",
     "https://api.dicebear.com/7.x/avataaars/svg?seed=Lucy",
