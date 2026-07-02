@@ -475,8 +475,8 @@ export default function Community() {
                           <span className="text-[10px] text-white/20">/</span>
                           <span className="text-[10px] text-white/40">{timeAgo(post.createdAt)}</span>
                           {post.isPinned && (
-                            <span className="inline-flex items-center gap-0.5 text-[9px] text-amber-400 font-bold uppercase ml-1">
-                              <Pin size={9} /> Pinned
+                            <span className="inline-flex items-center text-amber-400 ml-1" title="Pinned">
+                              <Pin size={9} />
                             </span>
                           )}
                           {post.isLocked && (

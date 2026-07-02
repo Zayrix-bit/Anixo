@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
@@ -7,12 +7,13 @@ import ReactMarkdown from "react-markdown";
 import {
   getCommunityPost, likeCommunityPost, dislikeCommunityPost,
   deleteCommunityPost, pinCommunityPost, lockCommunityPost,
-  getPostComments, addPostComment, likePostComment, deletePostComment
+  getPostComments, addPostComment, likePostComment, deletePostComment,
+  updateCommunityPost
 } from "../services/communityService";
 import {
   ThumbsUp, ThumbsDown, MessageSquare, Eye, Clock, ArrowLeft, Pin, Lock,
   Crown, Shield, Trash2, Edit3, MoreHorizontal, Send, Reply, Heart,
-  ChevronDown, ChevronUp, Loader, AlertTriangle, Users
+  ChevronDown, ChevronUp, Loader, AlertTriangle, Users, Tag, X
 } from "lucide-react";
 
 const CATEGORY_COLORS = {
@@ -81,8 +82,17 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
   const handleLike = async (e) => {
     e.stopPropagation();
     if (!user) return;
+    const wasLiked = liked;
+    const prevCount = likesCount;
+
+    setLiked(!wasLiked);
+    setLikesCount(prev => wasLiked ? prev - 1 : prev + 1);
+
     const res = await likePostComment(comment._id);
-    if (res.success) {
+    if (!res.success) {
+      setLiked(wasLiked);
+      setLikesCount(prevCount);
+    } else {
       setLiked(res.userLiked);
       setLikesCount(res.likesCount);
     }
@@ -261,6 +271,216 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
   );
 }
 
+// ==================== EDIT POST MODAL ====================
+const EDIT_CATEGORIES = [
+  { id: "general", label: "General" },
+  { id: "anime", label: "Anime" },
+  { id: "feedback", label: "Feedback" },
+  { id: "question", label: "Questions" },
+  { id: "news", label: "News" },
+  { id: "poll", label: "Polls" },
+];
+
+const RECOMMENDED_TAGS = ["discussion", "recommendation", "news", "review", "help", "meme", "theory", "question"];
+
+function EditPostModal({ isOpen, onClose, onUpdated, post }) {
+  const [title, setTitle] = useState(() => post?.title || "");
+  const [content, setContent] = useState(() => post?.content || "");
+  const [category, setCategory] = useState(() => post?.category || "general");
+  const [tagInput, setTagInput] = useState("");
+  const [tags, setTags] = useState(() => post?.tags || []);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [showPopularTags, setShowPopularTags] = useState(false);
+
+  const handleAddTag = () => {
+    const tag = tagInput.trim().toLowerCase().replace(/[^a-zA-Z0-9-]/g, "");
+    if (tag && tags.length < 5 && !tags.includes(tag)) {
+      setTags([...tags, tag]);
+      setTagInput("");
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!title.trim() || !content.trim()) {
+      setError("Title and content are required");
+      return;
+    }
+    setError("");
+    setIsSubmitting(true);
+    const res = await updateCommunityPost(post._id, { title, content, category, tags });
+    setIsSubmitting(false);
+    if (res.success) {
+      onUpdated(res.post);
+      onClose();
+    } else {
+      setError(res.message || "Failed to update post");
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
+
+      {/* Modal */}
+      <div className="relative w-full max-w-2xl max-h-[95vh] bg-[#111111] border border-white/10 rounded-md shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-white/10">
+          <h2 className="text-lg font-bold text-white flex items-center gap-2">
+            <Edit3 size={18} className="text-[#5865F2]" />
+            Edit Post
+          </h2>
+          <button onClick={onClose} className="p-1.5 hover:bg-white/10 rounded-lg transition-colors text-white/40 hover:text-white cursor-pointer">
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="p-4 md:p-6 space-y-4 max-h-[80vh] md:max-h-[70vh] overflow-y-auto mini-scrollbar text-left">
+          {error && (
+            <div className="px-4 py-2.5 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
+              {error}
+            </div>
+          )}
+
+          {/* Title */}
+          <div>
+            <label className="text-[11px] font-bold text-white/40 uppercase tracking-wider mb-1.5 block">Title</label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="What's on your mind?"
+              maxLength={200}
+              className="w-full bg-white/[0.03] border border-white/10 rounded-md px-3 md:px-4 py-2.5 md:py-3 text-white placeholder-white/20 focus:outline-none focus:border-[#5865F2]/50 focus:ring-1 focus:ring-[#5865F2]/20 transition-all text-sm"
+            />
+          </div>
+
+          {/* Category */}
+          <div>
+            <label className="text-[11px] font-bold text-white/40 uppercase tracking-wider mb-1.5 block">Category</label>
+            <div className="flex flex-wrap gap-2">
+              {EDIT_CATEGORIES.map(cat => (
+                <button
+                  key={cat.id}
+                  onClick={() => setCategory(cat.id)}
+                  className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all border cursor-pointer ${category === cat.id
+                      ? "bg-[#5865F2] text-white border-[#5865F2]"
+                      : "bg-white/[0.03] border-white/10 text-white/50 hover:text-white hover:border-white/20"
+                    }`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Content */}
+          <div>
+            <label className="text-[11px] font-bold text-white/40 uppercase tracking-wider mb-1.5 block">Content</label>
+            <textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="Share your thoughts, discuss anime, ask questions..."
+              maxLength={10000}
+              rows={6}
+              className="w-full bg-white/[0.03] border border-white/10 rounded-md px-3 md:px-4 py-2.5 md:py-3 text-white placeholder-white/20 focus:outline-none focus:border-[#5865F2]/50 focus:ring-1 focus:ring-[#5865F2]/20 transition-all text-sm resize-none mini-scrollbar"
+            />
+            <p className="text-[10px] text-white/20 mt-1">Supports **bold**, *italic*, and markdown formatting</p>
+          </div>
+
+          {/* Tags */}
+          <div>
+            <div className="flex justify-between items-center mb-1.5">
+              <label className="text-[11px] font-bold text-white/40 uppercase tracking-wider block">Tags (optional)</label>
+              <span className="text-[10px] text-white/30">{tags.length}/5 tags</span>
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
+                placeholder="Add a tag..."
+                maxLength={30}
+                className="flex-1 bg-white/[0.03] border border-white/10 rounded-md px-3 md:px-4 py-2 md:py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-[#5865F2]/50 transition-all text-sm"
+              />
+              <button
+                onClick={() => setShowPopularTags(prev => !prev)}
+                className={`px-3 py-2 border rounded-md transition-all cursor-pointer ${showPopularTags
+                    ? "bg-[#5865F2]/10 border-[#5865F2]/30 text-[#5865F2] hover:text-[#5865F2]"
+                    : "bg-white/[0.05] border-white/10 text-white/50 hover:text-white"
+                  }`}
+              >
+                <Tag size={14} />
+              </button>
+            </div>
+
+            {/* Recommended Tags */}
+            {showPopularTags && (
+              <div className="mt-3 animate-in slide-in-from-top-2 fade-in duration-200">
+                <span className="text-[10px] font-semibold text-white/35 uppercase tracking-wider block mb-1.5">Popular Tags:</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {RECOMMENDED_TAGS.map(recTag => {
+                    const isSelected = tags.includes(recTag);
+                    return (
+                      <button
+                        key={recTag}
+                        disabled={isSelected || tags.length >= 5}
+                        onClick={() => setTags([...tags, recTag])}
+                        className={`px-2.5 py-1 rounded-md text-[10px] font-semibold border transition-all cursor-pointer ${isSelected
+                            ? "bg-[#5865F2]/10 border-[#5865F2]/20 text-[#5865F2]/50 cursor-not-allowed"
+                            : "bg-white/[0.02] border-white/[0.08] text-white/40 hover:text-white/80 hover:bg-white/[0.06] hover:border-white/12"
+                          }`}
+                      >
+                        #{recTag}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {tags.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-white/[0.04]">
+                {tags.map(tag => (
+                  <span key={tag} className="px-2.5 py-1 bg-[#5865F2]/10 border border-[#5865F2]/25 text-[#5865F2] text-[11px] font-bold rounded-md flex items-center gap-1.5 animate-in fade-in zoom-in-95 duration-100">
+                    #{tag}
+                    <button onClick={() => setTags(tags.filter(t => t !== tag))} className="text-[#5865F2]/50 hover:text-[#5865F2] transition-colors cursor-pointer">
+                      <X size={10} />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-end px-4 md:px-6 py-4 border-t border-white/10 bg-white/[0.02] gap-3">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 border border-white/10 hover:bg-white/[0.05] text-white text-xs font-bold uppercase tracking-widest rounded-md transition-all cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={isSubmitting || !title.trim() || !content.trim()}
+            className="px-5 py-2 bg-[#5865F2] hover:bg-[#5b73c7] disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold uppercase tracking-widest rounded-md transition-all flex items-center gap-2 cursor-pointer"
+          >
+            {isSubmitting ? <Loader size={14} className="animate-spin" /> : <Send size={14} />}
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ==================== MAIN POST DETAIL PAGE ====================
 export default function CommunityPostDetail() {
   const { postId } = useParams();
@@ -278,6 +498,20 @@ export default function CommunityPostDetail() {
   const [showActions, setShowActions] = useState(false);
   const [isCommentExpanded, setIsCommentExpanded] = useState(false);
   const [visibleCommentsCount, setVisibleCommentsCount] = useState(5);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const actionsRef = useRef(null);
+
+  // Close actions dropdown when clicking outside
+  useEffect(() => {
+    if (!showActions) return;
+    const handleClickOutside = (e) => {
+      if (actionsRef.current && !actionsRef.current.contains(e.target)) {
+        setShowActions(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showActions]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -307,8 +541,30 @@ export default function CommunityPostDetail() {
 
   const handleLike = async () => {
     if (!user) return;
+    const wasLiked = userLiked;
+    const wasDisliked = userDisliked;
+    const prevScore = score;
+
+    let newScore = score;
+    if (wasLiked) {
+      newScore -= 1;
+      setUserLiked(false);
+    } else {
+      newScore += 1;
+      setUserLiked(true);
+      if (wasDisliked) {
+        newScore += 1;
+        setUserDisliked(false);
+      }
+    }
+    setScore(newScore);
+
     const res = await likeCommunityPost(postId);
-    if (res.success) {
+    if (!res.success) {
+      setUserLiked(wasLiked);
+      setUserDisliked(wasDisliked);
+      setScore(prevScore);
+    } else {
       setUserLiked(res.userLiked);
       setUserDisliked(res.userDisliked);
       setScore(res.score);
@@ -317,8 +573,30 @@ export default function CommunityPostDetail() {
 
   const handleDislike = async () => {
     if (!user) return;
+    const wasLiked = userLiked;
+    const wasDisliked = userDisliked;
+    const prevScore = score;
+
+    let newScore = score;
+    if (wasDisliked) {
+      newScore += 1;
+      setUserDisliked(false);
+    } else {
+      newScore -= 1;
+      setUserDisliked(true);
+      if (wasLiked) {
+        newScore -= 1;
+        setUserLiked(false);
+      }
+    }
+    setScore(newScore);
+
     const res = await dislikeCommunityPost(postId);
-    if (res.success) {
+    if (!res.success) {
+      setUserLiked(wasLiked);
+      setUserDisliked(wasDisliked);
+      setScore(prevScore);
+    } else {
       setUserLiked(res.userLiked);
       setUserDisliked(res.userDisliked);
       setScore(res.score);
@@ -442,18 +720,18 @@ export default function CommunityPostDetail() {
           {/* Post Header */}
           <div className="p-4 md:p-7">
             {/* Category + Meta */}
-            <div className="flex items-center gap-1.5 md:gap-2 flex-wrap mb-4 md:mb-5">
-              <span className={`px-2.5 py-0.5 text-[9px] font-black uppercase tracking-widest rounded-md border ${CATEGORY_COLORS[post.category] || CATEGORY_COLORS.general} select-none`}>
+            <div className="flex items-center gap-2 flex-wrap mb-4 md:mb-5">
+              <span className={`px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded border ${CATEGORY_COLORS[post.category] || CATEGORY_COLORS.general} select-none`}>
                 {post.category}
               </span>
               {post.isPinned && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-500/10 text-amber-400 text-[10px] font-black uppercase tracking-widest rounded-md border border-amber-500/20 shadow-sm select-none animate-pulse">
-                  <Pin size={10} /> Pinned
+                <span className="flex items-center gap-1 text-[10px] text-amber-400/70 select-none">
+                  <Pin size={10} />
                 </span>
               )}
               {post.isLocked && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-red-500/10 text-red-400 text-[10px] font-black uppercase tracking-widest rounded-md border border-red-500/20 shadow-sm select-none">
-                  <Lock size={10} /> Locked
+                <span className="flex items-center gap-1 text-[10px] text-red-400/60 select-none">
+                  <Lock size={10} />
                 </span>
               )}
             </div>
@@ -485,7 +763,12 @@ export default function CommunityPostDetail() {
                   <RoleBadge role={post.author?.role} />
                 </div>
                 <div className="flex items-center gap-2 text-[11px] text-white/45 mt-1">
-                  <span className="flex items-center gap-1"><Clock size={10} /> {timeAgo(post.createdAt)}</span>
+                  <span className="flex items-center gap-1">
+                    <Clock size={10} /> {timeAgo(post.createdAt)}
+                    {post.updatedAt && post.createdAt && new Date(post.updatedAt) - new Date(post.createdAt) > 1000 && (
+                      <span className="text-white/25" title={`Edited ${timeAgo(post.updatedAt)}`}>(edited)</span>
+                    )}
+                  </span>
                   <span className="text-white/20">/</span>
                   <span className="flex items-center gap-1"><Eye size={10} /> {post.views} views</span>
                 </div>
@@ -493,35 +776,34 @@ export default function CommunityPostDetail() {
 
               {/* Action Menu */}
               {(isAuthor || isAdminOrMod) && (
-                <div className="ml-auto relative">
+                <div className="ml-auto relative" ref={actionsRef}>
                   <button
                     onClick={() => setShowActions(!showActions)}
-                    className="p-2 hover:bg-white/[0.05] rounded-lg text-white/50 hover:text-white transition-colors"
+                    className="p-2 hover:bg-white/[0.05] rounded-lg text-white/50 hover:text-white transition-colors cursor-pointer"
                   >
                     <MoreHorizontal size={18} />
                   </button>
                   {showActions && (
                     <div className="absolute right-0 top-full mt-1 w-44 bg-[#181818] border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                      {isAuthor && (
-                        <Link
-                          to={`/community/post/${post._id}`}
-                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-white/75 hover:text-white hover:bg-white/[0.05] transition-colors"
-                          onClick={() => setShowActions(false)}
+                      {(isAuthor || isAdminOrMod) && (
+                        <button
+                          onClick={() => { setShowEditModal(true); setShowActions(false); }}
+                          className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-white/75 hover:text-white hover:bg-white/[0.05] transition-colors cursor-pointer"
                         >
                           <Edit3 size={14} /> Edit Post
-                        </Link>
+                        </button>
                       )}
                       {isAdminOrMod && (
                         <>
                           <button
                             onClick={() => { handlePin(); setShowActions(false); }}
-                            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-white/75 hover:text-white hover:bg-white/[0.05] transition-colors"
+                            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-white/75 hover:text-white hover:bg-white/[0.05] transition-colors cursor-pointer"
                           >
                             <Pin size={14} /> {post.isPinned ? 'Unpin' : 'Pin'} Post
                           </button>
                           <button
                             onClick={() => { handleLock(); setShowActions(false); }}
-                            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-white/75 hover:text-white hover:bg-white/[0.05] transition-colors"
+                            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-white/75 hover:text-white hover:bg-white/[0.05] transition-colors cursor-pointer"
                           >
                             <Lock size={14} /> {post.isLocked ? 'Unlock' : 'Lock'} Post
                           </button>
@@ -530,7 +812,7 @@ export default function CommunityPostDetail() {
                       {(isAuthor || isAdminOrMod) && (
                         <button
                           onClick={() => { handleDelete(); setShowActions(false); }}
-                          className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/[0.05] transition-colors"
+                          className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/[0.05] transition-colors cursor-pointer"
                         >
                           <Trash2 size={14} /> Delete Post
                         </button>
@@ -571,38 +853,41 @@ export default function CommunityPostDetail() {
           </div>
 
           {/* Vote Bar */}
-          <div className="flex items-center justify-between px-4 md:px-7 py-2.5 md:py-3 border-t border-white/[0.08]">
-            <div className="flex items-center gap-1">
+          <div className="flex items-center justify-between px-4 md:px-7 py-2.5 md:py-3 border-t border-white/[0.08] bg-white/[0.01]">
+            <div className="flex items-center bg-white/[0.02] border border-white/[0.08] rounded-md p-0.5">
               <button
                 onClick={handleLike}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
-                  userLiked ? "text-emerald-400" : "text-white/35 hover:text-white/70"
+                className={`flex items-center justify-center w-7 h-7 rounded transition-all cursor-pointer ${
+                  userLiked
+                    ? "bg-emerald-500/10 text-emerald-400"
+                    : "text-white/40 hover:text-white/70 hover:bg-white/[0.03]"
                 }`}
                 title="Like"
               >
-                <ThumbsUp size={13} fill={userLiked ? "currentColor" : "none"} />
+                <ThumbsUp size={12} fill={userLiked ? "currentColor" : "none"} />
               </button>
 
-              <span className={`text-xs font-bold min-w-[20px] text-center select-none ${
-                score > 0 ? 'text-emerald-400' : score < 0 ? 'text-red-400' : 'text-white/30'
+              <span className={`text-[11px] font-bold px-2.5 select-none min-w-[28px] text-center ${
+                score > 0 ? 'text-emerald-400' : score < 0 ? 'text-red-400' : 'text-white/45'
               }`}>
                 {score > 0 ? `+${score}` : score}
               </span>
 
               <button
                 onClick={handleDislike}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
-                  userDisliked ? "text-red-400" : "text-white/35 hover:text-white/70"
+                className={`flex items-center justify-center w-7 h-7 rounded transition-all cursor-pointer ${
+                  userDisliked
+                    ? "bg-red-500/10 text-red-400"
+                    : "text-white/40 hover:text-white/70 hover:bg-white/[0.03]"
                 }`}
                 title="Dislike"
               >
-                <ThumbsDown size={13} fill={userDisliked ? "currentColor" : "none"} />
+                <ThumbsDown size={12} fill={userDisliked ? "currentColor" : "none"} />
               </button>
             </div>
 
             <div className="flex items-center gap-3 text-[11px] text-white/40">
               <span className="flex items-center gap-1"><MessageSquare size={12} /> {post.commentCount || 0}</span>
-              <span className="flex items-center gap-1"><Eye size={12} /> {post.views || 0}</span>
             </div>
           </div>
         </article>
@@ -724,6 +1009,16 @@ export default function CommunityPostDetail() {
       </div>
 
       <Footer />
+
+      {showEditModal && (
+        <EditPostModal
+          isOpen={showEditModal}
+          onClose={() => setShowEditModal(false)}
+          onUpdated={(updatedPost) => setPost(updatedPost)}
+          post={post}
+          key={post?._id}
+        />
+      )}
     </div>
   );
 }
