@@ -402,7 +402,7 @@ export default function Navbar() {
               {/* Single Language Toggle */}
               <button
                 onClick={toggleLanguage}
-                className="flex items-center justify-center bg-[#2a2a2a] border border-white/10 h-[26px] min-w-[34px] rounded-[4px] text-[10px] font-black text-white hover:bg-red-600 transition-all duration-300 group overflow-hidden"
+                className="hidden md:flex items-center justify-center bg-[#2a2a2a] border border-white/10 h-[26px] min-w-[34px] rounded-[4px] text-[10px] font-black text-white hover:bg-red-600 transition-all duration-300 group overflow-hidden"
                 title={`Switch to ${language === 'EN' ? 'Japanese' : 'English'}`}
               >
                 <span className="italic tracking-tighter transform group-hover:scale-110 transition-transform">
@@ -410,8 +410,8 @@ export default function Navbar() {
                 </span>
               </button>
 
-              {/* Bell icon - Desktop Only */}
-              <div className="hidden lg:relative lg:block">
+              {/* Bell icon - Mobile and Desktop */}
+              <div className="relative">
                 <button
                   onMouseDown={(e) => e.stopPropagation()}
                   onClick={() => {
