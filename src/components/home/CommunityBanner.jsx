@@ -74,10 +74,7 @@ const CommunityBanner = () => {
                 <Users className="w-5 h-5 md:w-6 md:h-6 text-[#7c8af8]" />
               </div>
               {/* Live dot */}
-              <div className="absolute -top-1 -right-1 flex items-center justify-center">
-                <span className="absolute w-3 h-3 rounded-full bg-green-500/30 animate-ping" />
-                <span className="relative w-2 h-2 rounded-full bg-green-400 shadow-[0_0_6px_rgba(74,222,128,0.5)]" />
-              </div>
+              <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-green-400 shadow-[0_0_6px_rgba(74,222,128,0.5)]" />
             </div>
 
             {/* Text content */}
