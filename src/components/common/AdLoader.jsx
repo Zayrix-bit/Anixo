@@ -9,8 +9,12 @@ export default function AdLoader() {
   const location = useLocation();
 
   useEffect(() => {
-    // Don't load AdSense on portal page, but allow popunder
-    if (location.pathname === "/") {
+    const isCommunityPage = location.pathname === "/community" || location.pathname.startsWith("/community/");
+    const isPortalPage = location.pathname === "/";
+    const isAdFreePage = isPortalPage || isCommunityPage;
+
+    // Don't load AdSense on portal or community pages
+    if (isAdFreePage) {
       // Remove AdSense if it was previously injected
       const adsenseScript = document.getElementById('adsense-global');
       if (adsenseScript) adsenseScript.remove();
@@ -26,8 +30,8 @@ export default function AdLoader() {
       }
     }
 
-    // Load Popunder if not already loaded
-    if (!document.getElementById('popunder-global')) {
+    // Don't load Popunder on community pages
+    if (!isCommunityPage && !document.getElementById('popunder-global')) {
       const popunder = document.createElement('script');
       popunder.id = 'popunder-global';
       const hostname = window.location.hostname;
@@ -37,6 +41,12 @@ export default function AdLoader() {
         popunder.src = "https://dependedunmoved.com/4f/1b/2f/4f1b2fdd5cf3e2306bcfee1c78e77468.js";
       }
       document.body.appendChild(popunder);
+    }
+
+    // Remove Popunder when navigating TO community pages
+    if (isCommunityPage) {
+      const popunderScript = document.getElementById('popunder-global');
+      if (popunderScript) popunderScript.remove();
     }
   }, [location.pathname]);
 
