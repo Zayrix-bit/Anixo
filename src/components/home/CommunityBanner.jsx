@@ -1,9 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Users, MessageSquare, HelpCircle, ArrowRight, Sparkles, PenLine, TrendingUp, Heart } from "lucide-react";
+import { backendApi } from "../../services/api";
 
 const CommunityBanner = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [creator, setCreator] = useState(null);
+
+  useEffect(() => {
+    const fetchCreator = async () => {
+      try {
+        const res = await backendApi.get("/users/9b9046b5");
+        if (res.data?.success) {
+          setCreator(res.data.profile);
+        }
+      } catch {
+        // Silently fail — banner still works without creator info
+      }
+    };
+    fetchCreator();
+  }, []);
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -13,11 +29,15 @@ const CommunityBanner = () => {
     });
   };
 
+  const getCreatorAvatar = () => {
+    if (creator?.avatar) return creator.avatar.replace(/[`"]/g, '').trim();
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(creator?.displayName || creator?.username || 'Admin')}&background=5865F2&color=fff&size=80`;
+  };
+
   return (
     <div className="w-full max-w-[1500px] mx-auto px-4 md:px-8 mb-6">
-      <Link
-        to="/community"
-        className="community-banner group relative overflow-hidden rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4 transition-all duration-500 no-underline"
+      <div
+        className="community-banner group relative overflow-hidden rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4 transition-all duration-500"
         onMouseMove={handleMouseMove}
       >
         {/* Main gradient background */}
@@ -40,8 +60,11 @@ const CommunityBanner = () => {
         <div className="absolute top-5 right-[35%] w-1 h-1 rounded-full bg-blue-400/25 animate-pulse" style={{ animationDelay: "0.5s" }} />
         <div className="absolute bottom-3 left-[40%] w-1 h-1 rounded-full bg-[#5865F2]/20 animate-pulse" style={{ animationDelay: "1.5s" }} />
 
+        {/* Main card link for accessibility and SEO */}
+        <Link to="/community" className="absolute inset-0 z-10" aria-label="Explore community" />
+
         {/* Content wrapper */}
-        <div className="relative z-10 w-full p-4 md:p-5 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="relative z-20 w-full p-4 md:p-5 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 pointer-events-none">
           
           {/* Left section */}
           <div className="flex items-center gap-4">
@@ -75,6 +98,23 @@ const CommunityBanner = () => {
 
           {/* Right section */}
           <div className="flex items-center gap-2 md:gap-3">
+            {/* Creator credit */}
+            {creator && (
+              <Link
+                to={`/profile/${creator.profileId}`}
+                className="pointer-events-auto flex items-center gap-0 md:gap-2 p-1 md:px-3 md:py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.06] group-hover:bg-white/[0.05] group-hover:border-white/[0.1] transition-all duration-300 no-underline"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="w-5 h-5 rounded-full overflow-hidden border border-white/10 shrink-0">
+                  <img src={getCreatorAvatar()} alt="" className="w-full h-full object-cover" />
+                </div>
+                <div className="hidden md:flex flex-col">
+                  <span className="text-[8px] text-white/25 font-semibold uppercase tracking-widest leading-none">Created by</span>
+                  <span className="text-[11px] text-white/60 font-bold leading-tight group-hover:text-white/80 transition-colors">{creator.displayName || creator.username}</span>
+                </div>
+              </Link>
+            )}
+
             {/* Feature chips - desktop only */}
             <div className="hidden lg:flex items-center gap-1.5">
               {[
@@ -102,7 +142,7 @@ const CommunityBanner = () => {
             </div>
           </div>
         </div>
-      </Link>
+      </div>
 
       <style>{`
         .community-banner::before {
