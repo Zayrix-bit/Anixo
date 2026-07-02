@@ -210,7 +210,7 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
       {/* Nested Replies */}
       {comment.replies && comment.replies.length > 0 && (
         <>
-          {!showReplies && (
+          {!showReplies ? (
             <button
               onClick={() => setShowReplies(true)}
               className="flex items-center gap-1.5 text-[11px] font-bold text-[#5865F2]/80 hover:text-[#5865F2] ml-9 sm:ml-12 md:ml-16 mb-2 transition-colors cursor-pointer"
@@ -218,19 +218,21 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
               <ChevronDown size={12} />
               Show {comment.replies.length} {comment.replies.length === 1 ? 'reply' : 'replies'}
             </button>
+          ) : (
+            <button
+              onClick={() => {
+                setShowReplies(false);
+                setVisibleRepliesCount(3);
+              }}
+              className="flex items-center gap-1.5 text-[11px] font-bold text-white/20 hover:text-white/40 ml-9 sm:ml-12 md:ml-16 mb-2 transition-colors cursor-pointer"
+            >
+              <ChevronUp size={12} />
+              Hide replies
+            </button>
           )}
+
           {showReplies && (
             <>
-              <button
-                onClick={() => {
-                  setShowReplies(false);
-                  setVisibleRepliesCount(3);
-                }}
-                className="flex items-center gap-1.5 text-[11px] font-bold text-white/20 hover:text-white/40 ml-9 sm:ml-12 md:ml-16 mb-1 transition-colors cursor-pointer"
-              >
-                <ChevronUp size={12} />
-                Hide replies
-              </button>
               {comment.replies.slice(0, visibleRepliesCount).map(reply => (
                 <CommentItem
                   key={reply._id}
@@ -242,7 +244,7 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
                   depth={depth + 1}
                 />
               ))}
-              {comment.replies.length > visibleRepliesCount ? (
+              {comment.replies.length > visibleRepliesCount && (
                 <button
                   onClick={() => setVisibleRepliesCount(prev => prev + 5)}
                   className="flex items-center gap-1.5 text-[11px] font-bold text-[#5865F2] hover:text-[#5b73c7] ml-9 sm:ml-12 md:ml-16 mt-1 mb-2 transition-colors cursor-pointer"
@@ -250,20 +252,10 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
                   <ChevronDown size={12} />
                   View More Replies ({comment.replies.length - visibleRepliesCount} remaining)
                 </button>
-              ) : (
-                <button
-                  onClick={() => {
-                    setShowReplies(false);
-                    setVisibleRepliesCount(3);
-                  }}
-                  className="flex items-center gap-1.5 text-[11px] font-bold text-white/20 hover:text-white/40 ml-9 sm:ml-12 md:ml-16 mt-1 mb-2 transition-colors cursor-pointer"
-                >
-                  <ChevronUp size={12} />
-                  Hide replies
-                </button>
               )}
             </>
-          )}        </>
+          )}
+        </>
       )}
     </div>
   );
