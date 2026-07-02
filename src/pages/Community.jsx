@@ -27,7 +27,7 @@ const SORT_OPTIONS = [
 ];
 
 const CATEGORY_COLORS = {
-  general: "bg-blue-500/15 text-blue-400 border-blue-500/20",
+  general: "bg-[#5865F2]/15 text-[#7289DA] border-[#5865F2]/20",
   anime: "bg-purple-500/15 text-purple-400 border-purple-500/20",
   feedback: "bg-emerald-500/15 text-emerald-400 border-emerald-500/20",
   question: "bg-amber-500/15 text-amber-400 border-amber-500/20",
@@ -128,7 +128,7 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
         {/* Header */}
         <div className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-white/10">
           <h2 className="text-lg font-bold text-white flex items-center gap-2">
-            <Plus size={18} className="text-red-500" />
+            <Plus size={18} className="text-[#5865F2]" />
             Create Post
           </h2>
           <button onClick={onClose} className="p-1.5 hover:bg-white/10 rounded-lg transition-colors text-white/40 hover:text-white">
@@ -153,7 +153,7 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
               onChange={(e) => setTitle(e.target.value)}
               placeholder="What's on your mind?"
               maxLength={200}
-              className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/20 transition-all text-base md:text-sm"
+              className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-[#5865F2]/50 focus:ring-1 focus:ring-[#5865F2]/20 transition-all text-base md:text-sm"
             />
           </div>
 
@@ -167,7 +167,7 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
                   onClick={() => setCategory(cat.id)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all border ${
                     category === cat.id
-                      ? "bg-red-600 text-white border-red-600"
+                      ? "bg-[#5865F2] text-white border-[#5865F2]"
                       : "bg-white/[0.03] border-white/10 text-white/50 hover:text-white hover:border-white/20"
                   }`}
                 >
@@ -186,7 +186,7 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
               placeholder="Share your thoughts, discuss anime, ask questions..."
               maxLength={10000}
               rows={8}
-              className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/20 transition-all text-base md:text-sm resize-none mini-scrollbar"
+              className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-[#5865F2]/50 focus:ring-1 focus:ring-[#5865F2]/20 transition-all text-base md:text-sm resize-none mini-scrollbar"
             />
             <p className="text-[10px] text-white/20 mt-1">Supports **bold**, *italic*, and markdown formatting</p>
           </div>
@@ -205,13 +205,13 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
                 onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
                 placeholder="Add a tag..."
                 maxLength={30}
-                className="flex-1 bg-white/[0.03] border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all text-base md:text-sm"
+                className="flex-1 bg-white/[0.03] border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-[#5865F2]/50 transition-all text-base md:text-sm"
               />
               <button
                 onClick={() => setShowPopularTags(prev => !prev)}
                 className={`px-3 py-2 border rounded-xl transition-all cursor-pointer ${
                   showPopularTags
-                    ? "bg-red-600/10 border-red-500/30 text-red-500 hover:text-red-400"
+                    ? "bg-[#5865F2]/10 border-[#5865F2]/30 text-[#5865F2] hover:text-[#7289DA]"
                     : "bg-white/[0.05] border-white/10 text-white/50 hover:text-white"
                 }`}
               >
@@ -233,7 +233,7 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
                         onClick={() => setTags([...tags, recTag])}
                         className={`px-2.5 py-1 rounded-lg text-[10px] font-semibold border transition-all ${
                           isSelected
-                            ? "bg-red-500/10 border-red-500/20 text-red-400/50 cursor-not-allowed"
+                            ? "bg-[#5865F2]/10 border-[#5865F2]/20 text-[#7289DA]/50 cursor-not-allowed"
                             : "bg-white/[0.02] border-white/[0.06] text-white/40 hover:text-white/80 hover:bg-white/[0.06] hover:border-white/12 cursor-pointer"
                         }`}
                       >
@@ -248,9 +248,9 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
             {tags.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-white/[0.04]">
                 {tags.map(tag => (
-                  <span key={tag} className="px-2.5 py-1 bg-red-500/10 border border-red-500/25 text-red-400 text-[11px] font-bold rounded-lg flex items-center gap-1.5 animate-in fade-in zoom-in-95 duration-100">
+                  <span key={tag} className="px-2.5 py-1 bg-[#5865F2]/10 border border-[#5865F2]/25 text-[#7289DA] text-[11px] font-bold rounded-lg flex items-center gap-1.5 animate-in fade-in zoom-in-95 duration-100">
                     #{tag}
-                    <button onClick={() => setTags(tags.filter(t => t !== tag))} className="text-red-400/50 hover:text-red-400 transition-colors cursor-pointer">
+                    <button onClick={() => setTags(tags.filter(t => t !== tag))} className="text-[#7289DA]/50 hover:text-[#7289DA] transition-colors cursor-pointer">
                       <X size={10} />
                     </button>
                   </span>
@@ -271,7 +271,7 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
           <button
             onClick={handleSubmit}
             disabled={isSubmitting || !title.trim() || !content.trim()}
-            className="px-5 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold uppercase tracking-widest rounded-lg transition-all flex items-center gap-2"
+            className="px-5 py-2 bg-[#5865F2] hover:bg-[#4752C4] disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold uppercase tracking-widest rounded-lg transition-all flex items-center gap-2"
           >
             {isSubmitting ? <Loader size={14} className="animate-spin" /> : <Send size={14} />}
             Post
@@ -338,21 +338,21 @@ export default function Community() {
   };
 
   return (
-    <div className="min-h-screen text-white bg-[#0a0a0a] flex flex-col font-sans selection:bg-red-500/30">
+    <div className="min-h-screen text-white bg-[#0a0a0a] flex flex-col font-sans selection:bg-[#5865F2]/30">
       <Navbar />
 
       {/* Hero Banner */}
       <div className="relative w-full pt-[56px]">
         <div className="relative overflow-hidden">
           {/* Gradient Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-red-950/40 via-[#0a0a0a] to-purple-950/20" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#1a1c4a]/50 via-[#0a0a0a] to-[#1a1c4a]/20" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(220,38,38,0.15),transparent_60%)]" />
 
           <div className="relative max-w-[1720px] mx-auto px-4 md:px-6 py-10 md:py-16">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
               <div>
                 <div className="flex items-center gap-3 mb-3 flex-wrap">
-                  <div className="w-[3.5px] h-8 bg-red-600 rounded-full" />
+                  <div className="w-[3.5px] h-8 bg-[#5865F2] rounded-full" />
                   <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-tighter leading-none">
                     Community
                   </h1>
@@ -372,7 +372,7 @@ export default function Community() {
               {user && (
                 <button
                   onClick={() => setShowCreateModal(true)}
-                  className="group hidden md:flex items-center gap-2.5 px-5 py-3 bg-red-600 hover:bg-red-700 rounded-xl text-white font-bold text-xs uppercase tracking-widest transition-all hover:shadow-lg hover:shadow-red-600/20 hover:scale-[1.02] active:scale-[0.98]"
+                  className="group hidden md:flex items-center gap-2.5 px-5 py-3 bg-[#5865F2] hover:bg-[#4752C4] rounded-xl text-white font-bold text-xs uppercase tracking-widest transition-all hover:shadow-lg hover:shadow-[#5865F2]/20 hover:scale-[1.02] active:scale-[0.98]"
                 >
                   <Plus size={16} className="group-hover:rotate-90 transition-transform duration-200" />
                   Create Post
@@ -401,7 +401,7 @@ export default function Community() {
                       onClick={() => handleCategoryChange(cat.id)}
                       className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all whitespace-nowrap border ${
                         activeCategory === cat.id
-                          ? "bg-red-600 text-white border-red-600 shadow-lg shadow-red-600/10"
+                          ? "bg-[#5865F2] text-white border-[#5865F2] shadow-lg shadow-[#5865F2]/10"
                           : "bg-white/[0.03] border-white/[0.06] text-white/35 hover:text-white/60 hover:border-white/10"
                       }`}
                     >
@@ -422,7 +422,7 @@ export default function Community() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search posts..."
-                    className="w-full bg-white/[0.03] border border-white/[0.06] rounded-lg pl-9 pr-4 py-2.5 text-base md:text-sm text-white placeholder-white/40 focus:outline-none focus:border-red-500/40 transition-all"
+                    className="w-full bg-white/[0.03] border border-white/[0.06] rounded-lg pl-9 pr-4 py-2.5 text-base md:text-sm text-white placeholder-white/40 focus:outline-none focus:border-[#5865F2]/40 transition-all"
                   />
                 </div>
 
@@ -473,7 +473,7 @@ export default function Community() {
                   {user && (
                     <button
                       onClick={() => setShowCreateModal(true)}
-                      className="px-5 py-2.5 bg-red-600 hover:bg-red-700 rounded-lg text-white text-xs font-bold uppercase tracking-widest transition-all"
+                      className="px-5 py-2.5 bg-[#5865F2] hover:bg-[#4752C4] rounded-lg text-white text-xs font-bold uppercase tracking-widest transition-all"
                     >
                       Create Post
                     </button>
@@ -505,7 +505,7 @@ export default function Community() {
                             {post.author?.displayName || post.author?.profileId || post.author?.username}
                           </span>
                           <RoleBadge role={post.author?.role} />
-                          <span className="text-[10px] text-white/40">•</span>
+                          <span className="text-[10px] text-white/20">/</span>
                           <span className="text-[10px] text-white/40">{timeAgo(post.createdAt)}</span>
                           {post.isPinned && (
                             <span className="inline-flex items-center gap-0.5 text-[9px] text-amber-400 font-bold uppercase">
@@ -513,7 +513,7 @@ export default function Community() {
                             </span>
                           )}
                           {post.isLocked && (
-                            <span className="inline-flex items-center gap-0.5 text-[9px] text-red-400 font-bold uppercase">
+                            <span className="inline-flex items-center gap-0.5 text-[9px] text-[#7289DA] font-bold uppercase">
                               <Lock size={9} /> Locked
                             </span>
                           )}
@@ -584,7 +584,7 @@ export default function Community() {
                     }}
                     className={`w-9 h-9 rounded-lg text-xs font-bold transition-all ${
                       currentPage === page
-                        ? "bg-red-600 text-white"
+                        ? "bg-[#5865F2] text-white"
                         : "bg-white/[0.03] text-white/30 hover:text-white hover:bg-white/[0.06] border border-white/[0.04]"
                     }`}
                   >
@@ -627,12 +627,12 @@ export default function Community() {
 
             {/* Quick Links */}
             {!user && (
-              <div className="bg-gradient-to-br from-red-950/30 to-transparent border border-red-500/10 rounded-xl p-5 text-center">
+              <div className="bg-gradient-to-br from-[#1a1c4a]/30 to-transparent border border-[#5865F2]/10 rounded-xl p-5 text-center">
                 <h3 className="text-sm font-bold text-white mb-2">Join the Discussion</h3>
                 <p className="text-[12px] text-white/30 mb-4">Sign in to create posts, comment, and interact with the community.</p>
                 <Link
                   to="/home?login=true"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white text-xs font-bold uppercase tracking-widest transition-all"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#5865F2] hover:bg-[#4752C4] rounded-lg text-white text-xs font-bold uppercase tracking-widest transition-all"
                 >
                   Sign In
                 </Link>
@@ -648,7 +648,7 @@ export default function Community() {
       {user && (
         <button
           onClick={() => setShowCreateModal(true)}
-          className="fixed bottom-6 right-6 z-[90] md:hidden flex items-center justify-center w-14 h-14 bg-red-600 active:bg-red-700 text-white rounded-full shadow-lg shadow-red-600/30 active:scale-95 transition-all cursor-pointer border border-red-500/20"
+          className="fixed bottom-6 right-6 z-[90] md:hidden flex items-center justify-center w-14 h-14 bg-[#5865F2] active:bg-[#4752C4] text-white rounded-full shadow-lg shadow-[#5865F2]/30 active:scale-95 transition-all cursor-pointer border border-[#5865F2]/20"
           aria-label="Create Post"
         >
           <Plus size={24} />
@@ -665,3 +665,5 @@ export default function Community() {
     </div>
   );
 }
+
+

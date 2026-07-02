@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 const CATEGORY_COLORS = {
-  general: "bg-blue-500/10 text-blue-400 border-blue-500/30",
+  general: "bg-[#5865F2]/10 text-[#7289DA] border-[#5865F2]/30",
   anime: "bg-purple-500/10 text-purple-400 border-purple-500/30",
   feedback: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
   question: "bg-amber-500/10 text-amber-400 border-amber-500/30",
@@ -113,12 +113,12 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
   const maxDepth = 4;
 
   return (
-    <div className={`${depth > 0 ? 'ml-2 sm:ml-6 pl-3 sm:pl-4 border-l-2 border-white/[0.08] hover:border-red-500/20 transition-colors duration-300' : ''}`}>
-      <div className="py-4 group">
-        {/* Comment Header */}
+    <div className={`${depth > 0 ? 'ml-8 sm:ml-11 pl-4 border-l border-white/[0.07]' : ''}`}>
+      <div className="py-3 group/comment">
         <div className="flex items-start gap-3">
-          <Link to={`/user/${comment.author?.profileId || comment.author?.username}`}>
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full overflow-hidden border border-white/10 bg-neutral-800 shrink-0 hover:border-white/20 transition-colors">
+          {/* Avatar */}
+          <Link to={`/user/${comment.author?.profileId || comment.author?.username}`} className="shrink-0 mt-0.5">
+            <div className="w-8 h-8 rounded-full overflow-hidden bg-neutral-800 ring-1 ring-white/10 hover:ring-white/20 transition-all">
               <img
                 src={getAvatarUrl(comment.author?.avatar, comment.author?.username)}
                 alt={comment.author?.username}
@@ -128,42 +128,41 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
           </Link>
 
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap mb-1.5">
+            {/* Header row */}
+            <div className="flex items-center gap-2 flex-wrap mb-1">
               <Link
                 to={`/user/${comment.author?.profileId || comment.author?.username}`}
-                className="text-sm font-bold text-white/85 hover:text-white transition-colors"
+                className="text-[13px] font-semibold text-white/90 hover:text-white transition-colors leading-none"
               >
                 {comment.author?.displayName || comment.author?.profileId || comment.author?.username}
               </Link>
               <RoleBadge role={comment.author?.role} />
-              <span className="text-[10px] text-white/40">{timeAgo(comment.createdAt)}</span>
+              <span className="text-[11px] text-white/30">{timeAgo(comment.createdAt)}</span>
             </div>
 
-            {/* Comment Body */}
-            <p className="text-[13.5px] sm:text-sm text-white/75 leading-relaxed whitespace-pre-wrap break-words">
+            {/* Body */}
+            <p className="text-[13px] text-white/70 leading-relaxed whitespace-pre-wrap break-words mb-2">
               {comment.content}
             </p>
 
-            {/* Comment Actions */}
-            <div className="flex items-center gap-2 mt-3">
+            {/* Actions — plain text links */}
+            <div className="flex items-center gap-4">
               <button
                 onClick={handleLike}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold transition-all duration-200 border cursor-pointer ${liked
-                    ? 'bg-red-500/10 border-red-500/25 text-red-400 shadow-sm shadow-red-500/5'
-                    : 'bg-white/[0.03] border-white/[0.06] text-white/45 hover:bg-white/[0.08] hover:text-white/80'
-                  }`}
+                className={`flex items-center gap-1 text-[11px] font-medium transition-colors cursor-pointer ${
+                  liked ? 'text-red-400' : 'text-white/35 hover:text-white/65'
+                }`}
               >
-                <Heart size={11} fill={liked ? "currentColor" : "none"} className={liked ? 'scale-110' : ''} />
+                <Heart size={11} fill={liked ? "currentColor" : "none"} />
                 <span>{likesCount > 0 ? likesCount : 'Like'}</span>
               </button>
 
               {user && depth < maxDepth && (
                 <button
                   onClick={() => setShowReplyBox(!showReplyBox)}
-                  className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold transition-all duration-200 border cursor-pointer ${showReplyBox
-                      ? 'bg-white/10 border-white/20 text-white'
-                      : 'bg-white/[0.03] border-white/[0.06] text-white/45 hover:bg-white/[0.08] hover:text-white/80'
-                    }`}
+                  className={`flex items-center gap-1 text-[11px] font-medium transition-colors cursor-pointer ${
+                    showReplyBox ? 'text-white/75' : 'text-white/35 hover:text-white/65'
+                  }`}
                 >
                   <Reply size={11} />
                   <span>Reply</span>
@@ -173,34 +172,32 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
               {canDelete && (
                 <button
                   onClick={handleDelete}
-                  className="flex items-center justify-center p-1 rounded-md bg-white/[0.03] border border-white/[0.06] text-white/35 hover:text-red-400 hover:bg-red-500/10 hover:border-red-500/20 transition-all duration-200 cursor-pointer"
-                  title="Delete Comment"
+                  className="flex items-center gap-1 text-[11px] font-medium text-white/20 hover:text-red-400 transition-colors cursor-pointer"
+                  title="Delete"
                 >
-                  <Trash2 size={11} />
+                  <Trash2 size={10} />
                 </button>
               )}
             </div>
 
-            {/* Reply Box */}
+            {/* Reply input */}
             {showReplyBox && (
-              <div className="mt-3 flex items-center gap-2 animate-in slide-in-from-top-2 duration-200">
-                <div className="relative flex-1 bg-white/[0.02] border border-white/[0.08] focus-within:border-red-500/30 rounded-xl px-3 py-2 transition-all">
-                  <input
-                    type="text"
-                    value={replyContent}
-                    onChange={(e) => setReplyContent(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleReply()}
-                    placeholder="Write a reply..."
-                    className="w-full bg-transparent border-none text-base md:text-sm text-white placeholder-white/20 focus:outline-none"
-                    autoFocus
-                  />
-                </div>
+              <div className="mt-3 flex items-center gap-2">
+                <input
+                  type="text"
+                  value={replyContent}
+                  onChange={(e) => setReplyContent(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleReply()}
+                  placeholder="Write a reply..."
+                  className="flex-1 bg-white/[0.03] border border-white/[0.07] rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:outline-none focus:border-[#5865F2]/40 transition-all"
+                  autoFocus
+                />
                 <button
                   onClick={handleReply}
                   disabled={!replyContent.trim() || isSubmitting}
-                  className="w-10 h-10 bg-red-600 hover:bg-red-700 disabled:opacity-40 rounded-xl text-white flex items-center justify-center shrink-0 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-red-600/10 cursor-pointer"
+                  className="flex items-center gap-1.5 px-3 py-2 bg-[#5865F2] hover:bg-[#4752C4] disabled:opacity-30 disabled:cursor-not-allowed rounded-lg text-white text-[11px] font-bold transition-all cursor-pointer"
                 >
-                  {isSubmitting ? <Loader size={14} className="animate-spin" /> : <Send size={14} />}
+                  {isSubmitting ? <Loader size={11} className="animate-spin" /> : <Send size={11} />}
                 </button>
               </div>
             )}
@@ -214,7 +211,7 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
           {!showReplies && (
             <button
               onClick={() => setShowReplies(true)}
-              className="flex items-center gap-1.5 text-[11px] font-bold text-red-400/60 hover:text-red-400 ml-10 mb-2 transition-colors"
+              className="flex items-center gap-1.5 text-[11px] font-bold text-[#7289DA]/60 hover:text-[#7289DA] ml-10 mb-2 transition-colors"
             >
               <ChevronDown size={12} />
               Show {comment.replies.length} {comment.replies.length === 1 ? 'reply' : 'replies'}
@@ -265,6 +262,7 @@ export default function CommunityPostDetail() {
   const [userDisliked, setUserDisliked] = useState(false);
   const [score, setScore] = useState(0);
   const [showActions, setShowActions] = useState(false);
+  const [isCommentExpanded, setIsCommentExpanded] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -386,7 +384,7 @@ export default function CommunityPostDetail() {
       <div className="min-h-screen bg-[#0a0a0a] flex flex-col font-sans">
         <Navbar />
         <div className="flex-1 flex items-center justify-center">
-          <Loader size={32} className="text-red-600 animate-spin" />
+          <Loader size={32} className="text-[#5865F2] animate-spin" />
         </div>
       </div>
     );
@@ -400,7 +398,7 @@ export default function CommunityPostDetail() {
           <MessageSquare size={48} className="text-white/10 mb-4" />
           <h2 className="text-xl font-bold text-white mb-2">Post Not Found</h2>
           <p className="text-white/40 text-sm mb-6">This post may have been deleted.</p>
-          <Link to="/community" className="px-5 py-2 bg-red-600 text-white rounded-lg font-bold uppercase tracking-widest text-[10px] hover:bg-red-700 transition-colors">
+          <Link to="/community" className="px-5 py-2 bg-[#5865F2] text-white rounded-lg font-bold uppercase tracking-widest text-[10px] hover:bg-[#4752C4] transition-colors">
             Back to Community
           </Link>
         </div>
@@ -409,7 +407,7 @@ export default function CommunityPostDetail() {
   }
 
   return (
-    <div className="min-h-screen text-white bg-[#0a0a0a] flex flex-col font-sans selection:bg-red-500/30">
+    <div className="min-h-screen text-white bg-[#0a0a0a] flex flex-col font-sans selection:bg-[#5865F2]/30">
       <Navbar />
 
       <div className="w-full pt-[72px] md:pt-[80px] px-4 md:px-8 pb-12 max-w-[900px] mx-auto flex-1">
@@ -423,9 +421,9 @@ export default function CommunityPostDetail() {
         </Link>
 
         {/* Post Card */}
-        <article className="bg-[#0e0e0e] border border-white/[0.05] rounded-3xl overflow-hidden shadow-xl shadow-black/20">
+        <article className="bg-[#141414] border border-white/[0.08] rounded-xl overflow-hidden">
           {/* Post Header */}
-          <div className="p-6 md:p-9">
+          <div className="p-5 md:p-7">
             {/* Category + Meta */}
             <div className="flex items-center gap-2 flex-wrap mb-5">
               <span className={`px-2.5 py-0.5 text-[9px] font-black uppercase tracking-widest rounded-full border ${CATEGORY_COLORS[post.category] || CATEGORY_COLORS.general} select-none`}>
@@ -444,12 +442,12 @@ export default function CommunityPostDetail() {
             </div>
 
             {/* Title */}
-            <h1 className="text-xl md:text-2xl lg:text-3xl font-black text-white tracking-tight leading-tight mb-5">
+            <h1 className="text-lg md:text-xl font-semibold text-white leading-snug mb-4">
               {post.title}
             </h1>
 
             {/* Author Info */}
-            <div className="flex items-center gap-3.5 mb-6 pb-5 border-b border-white/[0.05]">
+            <div className="flex items-center gap-3.5 mb-6 pb-5 border-b border-white/[0.06]">
               <Link to={`/user/${post.author?.profileId || post.author?.username}`}>
                 <div className="w-10 h-10 rounded-full overflow-hidden border border-white/15 bg-neutral-900 hover:border-white/30 transition-all shadow-sm">
                   <img
@@ -463,16 +461,16 @@ export default function CommunityPostDetail() {
                 <div className="flex items-center gap-2">
                   <Link
                     to={`/user/${post.author?.profileId || post.author?.username}`}
-                    className="text-sm font-bold text-white hover:text-red-400 transition-colors"
+                    className="text-sm font-bold text-white hover:text-[#7289DA] transition-colors"
                   >
                     {post.author?.displayName || post.author?.profileId || post.author?.username}
                   </Link>
                   <RoleBadge role={post.author?.role} />
                 </div>
-                <div className="flex items-center gap-2 text-[10.5px] text-white/40 mt-1">
-                  <span className="flex items-center gap-1"><Clock size={10} className="text-white/20" /> {timeAgo(post.createdAt)}</span>
-                  <span className="text-white/20">•</span>
-                  <span className="flex items-center gap-1"><Eye size={10} className="text-white/20" /> {post.views} views</span>
+                <div className="flex items-center gap-2 text-[11px] text-white/45 mt-1">
+                  <span className="flex items-center gap-1"><Clock size={10} /> {timeAgo(post.createdAt)}</span>
+                  <span className="text-white/20">/</span>
+                  <span className="flex items-center gap-1"><Eye size={10} /> {post.views} views</span>
                 </div>
               </div>
 
@@ -530,10 +528,10 @@ export default function CommunityPostDetail() {
             <div className="prose prose-invert prose-sm sm:prose-base max-w-none text-[#dfdfdf] leading-[1.75] tracking-wide
               prose-p:mb-4 prose-p:last:mb-0
               prose-headings:text-white prose-headings:font-extrabold prose-headings:tracking-tight
-              prose-a:text-red-400 prose-a:no-underline hover:prose-a:underline
+              prose-a:text-[#7289DA] prose-a:no-underline hover:prose-a:underline
               prose-strong:text-white font-normal
-              prose-code:text-red-300 prose-code:bg-white/[0.05] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
-              prose-blockquote:border-red-500/30 prose-blockquote:text-white/60
+              prose-code:text-[#99AAF5] prose-code:bg-white/[0.05] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
+              prose-blockquote:border-[#5865F2]/30 prose-blockquote:text-white/60
               prose-li:text-white/70
             ">
               <ReactMarkdown>{post.content}</ReactMarkdown>
@@ -556,87 +554,91 @@ export default function CommunityPostDetail() {
           </div>
 
           {/* Vote Bar */}
-          <div className="flex items-center justify-between px-6 md:px-9 py-4 border-t border-white/[0.04] bg-[#0c0c0c]">
-            {/* Vote pill group */}
-            <div className="flex items-center bg-white/[0.03] border border-white/[0.06] hover:border-white/10 rounded-full px-1 py-0.5 shadow-md transition-all duration-300">
+          <div className="flex items-center justify-between px-5 md:px-7 py-3 border-t border-white/[0.06]">
+            <div className="flex items-center gap-1">
               <button
                 onClick={handleLike}
-                className={`flex items-center justify-center w-8 h-8 rounded-full transition-all cursor-pointer ${userLiked
-                    ? "bg-emerald-500/10 text-emerald-400 hover:text-emerald-300"
-                    : "text-white/40 hover:text-white/85 hover:bg-white/[0.04]"
-                  }`}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
+                  userLiked ? "text-emerald-400" : "text-white/35 hover:text-white/70"
+                }`}
                 title="Like"
               >
                 <ThumbsUp size={13} fill={userLiked ? "currentColor" : "none"} />
               </button>
 
-              <span className={`text-[11px] font-black min-w-[28px] text-center select-none ${score > 0 ? 'text-emerald-400' : score < 0 ? 'text-red-400' : 'text-white/50'
-                }`}>
+              <span className={`text-xs font-bold min-w-[20px] text-center select-none ${
+                score > 0 ? 'text-emerald-400' : score < 0 ? 'text-red-400' : 'text-white/30'
+              }`}>
                 {score > 0 ? `+${score}` : score}
               </span>
 
-              <div className="w-[1px] h-4 bg-white/[0.08] mx-0.5" />
-
               <button
                 onClick={handleDislike}
-                className={`flex items-center justify-center w-8 h-8 rounded-full transition-all cursor-pointer ${userDisliked
-                    ? "bg-red-500/10 text-red-400 hover:text-red-300"
-                    : "text-white/40 hover:text-white/85 hover:bg-white/[0.04]"
-                  }`}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
+                  userDisliked ? "text-red-400" : "text-white/35 hover:text-white/70"
+                }`}
                 title="Dislike"
               >
                 <ThumbsDown size={13} fill={userDisliked ? "currentColor" : "none"} />
               </button>
             </div>
 
-            <div className="flex items-center gap-4 text-white/40 text-[11px] font-bold">
-              <span className="flex items-center gap-1.5 hover:text-white/60 transition-colors select-none">
-                <MessageSquare size={13} className="text-white/20" />
-                {post.commentCount || 0} comments
-              </span>
-              <span className="w-[3px] h-[3px] bg-white/10 rounded-full" />
-              <span className="flex items-center gap-1.5 hover:text-white/60 transition-colors select-none">
-                <Eye size={13} className="text-white/20" />
-                {post.views || 0} views
-              </span>
+            <div className="flex items-center gap-3 text-[11px] text-white/40">
+              <span className="flex items-center gap-1"><MessageSquare size={12} /> {post.commentCount || 0}</span>
+              <span className="flex items-center gap-1"><Eye size={12} /> {post.views || 0}</span>
             </div>
           </div>
         </article>
 
         {/* Comments Section */}
         <div className="mt-8">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-[3px] h-6 bg-red-600 rounded-full" />
-            <h2 className="text-lg font-bold text-white uppercase tracking-tight">
+          <div className="flex items-center gap-2 mb-6">
+            <h2 className="text-sm font-bold text-white/60 uppercase tracking-widest">
               Comments
-              <span className="text-white/45 text-sm font-normal ml-2">({post.commentCount || 0})</span>
             </h2>
+            <span className="text-white/20 text-xs font-bold">({post.commentCount || 0})</span>
           </div>
 
           {/* Add Comment Box */}
           {user && !post.isLocked ? (
-            <div className="flex items-start gap-3 mb-8 p-4 bg-white/[0.02] border border-white/[0.06] focus-within:border-white/12 focus-within:bg-white/[0.03] rounded-2xl transition-all duration-300 shadow-lg">
-              <div className="w-9 h-9 rounded-full overflow-hidden border border-white/10 bg-neutral-800 shrink-0 mt-0.5 shadow-md">
+            <div className="flex items-start gap-2.5 mb-6 p-3 bg-white/[0.02] border border-white/[0.05] rounded-xl transition-all duration-200">
+              <div className="w-7 h-7 rounded-full overflow-hidden bg-neutral-800 ring-1 ring-white/10 shrink-0 mt-0.5 animate-fade-in">
                 <img src={getAvatarUrl(user.avatar, user.username)} alt="" className="w-full h-full object-cover" />
               </div>
               <div className="flex-1">
                 <textarea
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
+                  onFocus={() => setIsCommentExpanded(true)}
                   placeholder="Share your thoughts..."
-                  rows={3}
-                  className="w-full bg-transparent border-none text-base md:text-sm text-white placeholder-white/20 focus:outline-none resize-none"
+                  rows={isCommentExpanded ? 3 : 1}
+                  className="w-full bg-transparent border-none text-sm text-white placeholder-white/25 focus:outline-none resize-none transition-all duration-250 py-0.5"
                 />
-                <div className="flex justify-end mt-2 pt-2 border-t border-white/[0.03]">
-                  <button
-                    onClick={handleAddComment}
-                    disabled={!commentText.trim() || isSubmittingComment}
-                    className="px-5 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-30 disabled:hover:bg-red-600 disabled:cursor-not-allowed rounded-xl text-white text-xs font-bold uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md shadow-red-600/10 flex items-center gap-2 cursor-pointer"
-                  >
-                    {isSubmittingComment ? <Loader size={12} className="animate-spin" /> : <Send size={12} />}
-                    Comment
-                  </button>
-                </div>
+                {isCommentExpanded && (
+                  <div className="flex justify-end gap-2 pt-2 mt-1.5 border-t border-white/[0.04] animate-in fade-in slide-in-from-top-1 duration-200">
+                    <button
+                      onClick={() => {
+                        setIsCommentExpanded(false);
+                        setCommentText("");
+                      }}
+                      type="button"
+                      className="px-3 py-1.5 rounded-md text-white/35 hover:text-white/60 text-[11px] font-bold uppercase tracking-wide transition-all cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={async () => {
+                        await handleAddComment();
+                        setIsCommentExpanded(false);
+                      }}
+                      disabled={!commentText.trim() || isSubmittingComment}
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-[#5865F2] hover:bg-[#4752C4] disabled:opacity-30 disabled:cursor-not-allowed rounded-md text-white text-[11px] font-bold uppercase tracking-wide transition-all cursor-pointer"
+                    >
+                      {isSubmittingComment ? <Loader size={10} className="animate-spin" /> : <Send size={10} />}
+                      Comment
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           ) : post.isLocked ? (
@@ -645,7 +647,7 @@ export default function CommunityPostDetail() {
             </div>
           ) : (
             <div className="flex items-center justify-center gap-2 p-4 bg-white/[0.02] border border-white/[0.05] rounded-xl mb-6">
-              <Link to="/home?login=true" className="text-sm text-red-400 hover:text-red-300 transition-colors font-medium">
+              <Link to="/home?login=true" className="text-sm text-[#7289DA] hover:text-[#99AAF5] transition-colors font-medium">
                 Sign in to comment
               </Link>
             </div>
@@ -653,16 +655,17 @@ export default function CommunityPostDetail() {
 
           {/* Comments List */}
           {comments.length > 0 ? (
-            <div className="space-y-0 divide-y divide-white/[0.03]">
-              {comments.map(comment => (
-                <CommentItem
-                  key={comment._id}
-                  comment={comment}
-                  user={user}
-                  postId={postId}
-                  onCommentAdded={handleCommentAdded}
-                  onCommentDeleted={handleCommentDeleted}
-                />
+            <div className="flex flex-col gap-0">
+              {comments.map((comment, i) => (
+                <div key={comment._id} className={i > 0 ? 'border-t border-white/[0.04]' : ''}>
+                  <CommentItem
+                    comment={comment}
+                    user={user}
+                    postId={postId}
+                    onCommentAdded={handleCommentAdded}
+                    onCommentDeleted={handleCommentDeleted}
+                  />
+                </div>
               ))}
             </div>
           ) : (
@@ -678,3 +681,5 @@ export default function CommunityPostDetail() {
     </div>
   );
 }
+
+
