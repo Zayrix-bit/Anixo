@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 const CATEGORY_COLORS = {
-  general: "bg-[#9fb1f0]/10 text-[#9fb1f0] border-[#9fb1f0]/30",
+  general: "bg-[#5865F2]/10 text-[#9fb1f0] border-[#9fb1f0]/30",
   anime: "bg-purple-500/10 text-purple-400 border-purple-500/30",
   feedback: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
   question: "bg-amber-500/10 text-amber-400 border-amber-500/30",
@@ -113,12 +113,12 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
   const maxDepth = 4;
 
   return (
-    <div className={`${depth > 0 ? 'ml-8 sm:ml-11 pl-4 border-l border-white/[0.07]' : ''}`}>
+    <div className={`${depth > 0 ? 'ml-5 sm:ml-8 md:ml-11 pl-3 md:pl-4 border-l border-white/[0.07]' : ''}`}>
       <div className="py-3 group/comment">
-        <div className="flex items-start gap-3">
+        <div className="flex items-start gap-2.5 md:gap-3">
           {/* Avatar */}
           <Link to={`/user/${comment.author?.profileId || comment.author?.username}`} className="shrink-0 mt-0.5">
-            <div className="w-8 h-8 rounded-full overflow-hidden bg-neutral-800 ring-1 ring-white/10 hover:ring-white/20 transition-all">
+            <div className="w-7 h-7 md:w-8 md:h-8 rounded-full overflow-hidden bg-neutral-800 ring-1 ring-white/10 hover:ring-white/20 transition-all">
               <img
                 src={getAvatarUrl(comment.author?.avatar, comment.author?.username)}
                 alt={comment.author?.username}
@@ -189,13 +189,13 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
                   onChange={(e) => setReplyContent(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleReply()}
                   placeholder="Write a reply..."
-                  className="flex-1 bg-white/[0.03] border border-white/[0.07] rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:outline-none focus:border-[#9fb1f0]/40 transition-all"
+                  className="flex-1 bg-white/[0.03] border border-white/[0.07] rounded-md px-3 py-1.5 md:py-2 text-sm text-white placeholder-white/20 focus:outline-none focus:border-[#9fb1f0]/40 transition-all"
                   autoFocus
                 />
                 <button
                   onClick={handleReply}
                   disabled={!replyContent.trim() || isSubmitting}
-                  className="flex items-center gap-1.5 px-3 py-2 bg-[#9fb1f0] hover:bg-[#5b73c7] disabled:opacity-30 disabled:cursor-not-allowed rounded-lg text-white text-[11px] font-bold transition-all cursor-pointer"
+                  className="flex items-center gap-1.5 px-3 py-2 bg-[#5865F2] hover:bg-[#5b73c7] disabled:opacity-30 disabled:cursor-not-allowed rounded-lg text-white text-[11px] font-bold transition-all cursor-pointer"
                 >
                   {isSubmitting ? <Loader size={11} className="animate-spin" /> : <Send size={11} />}
                 </button>
@@ -398,7 +398,7 @@ export default function CommunityPostDetail() {
           <MessageSquare size={48} className="text-white/10 mb-4" />
           <h2 className="text-xl font-bold text-white mb-2">Post Not Found</h2>
           <p className="text-white/40 text-sm mb-6">This post may have been deleted.</p>
-          <Link to="/community" className="px-5 py-2 bg-[#9fb1f0] text-white rounded-lg font-bold uppercase tracking-widest text-[10px] hover:bg-[#5b73c7] transition-colors">
+          <Link to="/community" className="px-5 py-2 bg-[#5865F2] text-white rounded-lg font-bold uppercase tracking-widest text-[10px] hover:bg-[#5b73c7] transition-colors">
             Back to Community
           </Link>
         </div>
@@ -407,25 +407,25 @@ export default function CommunityPostDetail() {
   }
 
   return (
-    <div className="min-h-screen text-white bg-[#080808] flex flex-col font-sans selection:bg-[#9fb1f0]/30">
+    <div className="min-h-screen text-white bg-[#080808] flex flex-col font-sans selection:bg-[#5865F2]/30">
       <Navbar />
 
-      <div className="w-full pt-[72px] md:pt-[80px] px-4 md:px-8 pb-12 max-w-[900px] mx-auto flex-1">
+      <div className="w-full pt-[64px] md:pt-[80px] px-3 md:px-8 pb-16 md:pb-12 max-w-[900px] mx-auto flex-1">
         {/* Back Button */}
         <Link
           to="/community"
-          className="inline-flex items-center gap-2 text-sm text-white/30 hover:text-white mb-6 transition-colors group"
+          className="inline-flex items-center gap-1.5 md:gap-2 text-xs md:text-sm text-white/30 hover:text-white mb-4 md:mb-6 transition-colors group"
         >
-          <ArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
-          Back to Community
+          <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
+          Back
         </Link>
 
         {/* Post Card */}
         <article className="bg-[#121212] border border-white/[0.08] rounded-md overflow-hidden">
           {/* Post Header */}
-          <div className="p-5 md:p-7">
+          <div className="p-4 md:p-7">
             {/* Category + Meta */}
-            <div className="flex items-center gap-2 flex-wrap mb-5">
+            <div className="flex items-center gap-1.5 md:gap-2 flex-wrap mb-4 md:mb-5">
               <span className={`px-2.5 py-0.5 text-[9px] font-black uppercase tracking-widest rounded-md border ${CATEGORY_COLORS[post.category] || CATEGORY_COLORS.general} select-none`}>
                 {post.category}
               </span>
@@ -442,14 +442,14 @@ export default function CommunityPostDetail() {
             </div>
 
             {/* Title */}
-            <h1 className="text-lg md:text-xl font-semibold text-white leading-snug mb-4">
+            <h1 className="text-base md:text-xl font-semibold text-white leading-snug mb-3 md:mb-4">
               {post.title}
             </h1>
 
             {/* Author Info */}
-            <div className="flex items-center gap-3.5 mb-6 pb-5 border-b border-white/[0.08]">
+            <div className="flex items-center gap-3 md:gap-3.5 mb-5 md:mb-6 pb-4 md:pb-5 border-b border-white/[0.08]">
               <Link to={`/user/${post.author?.profileId || post.author?.username}`}>
-                <div className="w-10 h-10 rounded-full overflow-hidden border border-white/15 bg-neutral-900 hover:border-white/30 transition-all shadow-sm">
+                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden border border-white/15 bg-neutral-900 hover:border-white/30 transition-all shadow-sm">
                   <img
                     src={getAvatarUrl(post.author?.avatar, post.author?.username)}
                     alt={post.author?.username}
@@ -525,12 +525,12 @@ export default function CommunityPostDetail() {
             </div>
 
             {/* Post Content */}
-            <div className="prose prose-invert prose-sm sm:prose-base max-w-none text-[#dfdfdf] leading-[1.75] tracking-wide
-              prose-p:mb-4 prose-p:last:mb-0
+            <div className="prose prose-invert prose-sm sm:prose-base text-white/80 max-w-none
+              prose-p:leading-relaxed prose-p:mb-3 md:prose-p:mb-4 prose-p:text-[13px] md:prose-p:text-base
               prose-headings:text-white prose-headings:font-extrabold prose-headings:tracking-tight
               prose-a:text-[#9fb1f0] prose-a:no-underline hover:prose-a:underline
               prose-strong:text-white font-normal
-              prose-code:text-[#b8c5f7] prose-code:bg-white/[0.05] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
+              prose-code:text-[#b8c5f7] prose-code:bg-white/[0.05] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-[12px] md:prose-code:text-sm
               prose-blockquote:border-[#9fb1f0]/30 prose-blockquote:text-white/60
               prose-li:text-white/70
             ">
@@ -539,7 +539,7 @@ export default function CommunityPostDetail() {
 
             {/* Tags */}
             {post.tags?.length > 0 && (
-              <div className="flex items-center gap-2 flex-wrap mt-6 pt-4 border-t border-white/[0.04]">
+              <div className="flex items-center gap-1.5 md:gap-2 flex-wrap mt-5 md:mt-6 pt-3 md:pt-4 border-t border-white/[0.04]">
                 {post.tags.map(tag => (
                   <Link
                     key={tag}
@@ -554,7 +554,7 @@ export default function CommunityPostDetail() {
           </div>
 
           {/* Vote Bar */}
-          <div className="flex items-center justify-between px-5 md:px-7 py-3 border-t border-white/[0.08]">
+          <div className="flex items-center justify-between px-4 md:px-7 py-2.5 md:py-3 border-t border-white/[0.08]">
             <div className="flex items-center gap-1">
               <button
                 onClick={handleLike}
@@ -591,8 +591,8 @@ export default function CommunityPostDetail() {
         </article>
 
         {/* Comments Section */}
-        <div className="mt-8">
-          <div className="flex items-center gap-2 mb-6">
+        <div className="mt-6 md:mt-8">
+          <div className="flex items-center gap-2 mb-4 md:mb-6">
             <h2 className="text-sm font-bold text-white/60 uppercase tracking-widest">
               Comments
             </h2>
@@ -632,7 +632,7 @@ export default function CommunityPostDetail() {
                         setIsCommentExpanded(false);
                       }}
                       disabled={!commentText.trim() || isSubmittingComment}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-[#9fb1f0] hover:bg-[#5b73c7] disabled:opacity-30 disabled:cursor-not-allowed rounded-md text-white text-[11px] font-bold uppercase tracking-wide transition-all cursor-pointer"
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-[#5865F2] hover:bg-[#5b73c7] disabled:opacity-30 disabled:cursor-not-allowed rounded-md text-white text-[11px] font-bold uppercase tracking-wide transition-all cursor-pointer"
                     >
                       {isSubmittingComment ? <Loader size={10} className="animate-spin" /> : <Send size={10} />}
                       Comment
