@@ -1,0 +1,149 @@
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import cron from 'node-cron';
+import { 
+  initAllBots, 
+  getAllActiveBots, 
+  createBotPost, 
+  createBotReply, 
+  shouldReplyToPost,
+  getBotUser,
+  addRandomBotLikes
+} from '../services/aiBotService.js';
+import CommunityPost from '../models/CommunityPost.js';
+import CommunityComment from '../models/CommunityComment.js';
+import User from '../models/User.js';
+
+dotenv.config();
+
+const startWorker = async () => {
+  console.log('[AI Bots] Starting multi-bot worker...');
+
+  try {
+    // Connect to MongoDB
+    const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/anime';
+    await mongoose.connect(mongoUri);
+    console.log('[AI Bots] Connected to MongoDB');
+
+    // Initialize all bots
+    await initAllBots();
+
+    // Schedule automatic posts - run every 30 mins
+    cron.schedule('*/30 * * * *', async () => {
+      await checkAndPost();
+    });
+
+    // Schedule automatic replies - run every 10 mins
+    cron.schedule('*/10 * * * *', async () => {
+      await checkAndReply();
+    });
+
+    console.log('[AI Bots] Worker started successfully!');
+    
+    // Run immediately
+    setTimeout(() => {
+      checkAndPost();
+      checkAndReply();
+    }, 3000);
+
+  } catch (error) {
+    console.error('[AI Bots] Worker failed to start:', error);
+    process.exit(1);
+  }
+};
+
+// Check if any bot should post
+const checkAndPost = async () => {
+  try {
+    const bots = await getAllActiveBots();
+    const now = new Date();
+
+    for (const bot of bots) {
+      if (!bot.isActive || !bot.configuration.enablePosting) continue;
+
+      const lastPost = bot.lastPostAt;
+      const hoursSinceLastPost = lastPost 
+        ? (now - new Date(lastPost)) / (1000 * 60 * 60)
+        : bot.postFrequency + 1;
+
+      if (hoursSinceLastPost >= bot.postFrequency) {
+        console.log(`[AI Bots] ${bot.displayName} is posting...`);
+        await createBotPost(bot);
+        // Small delay to avoid rate limits
+        await new Promise(r => setTimeout(r, 2000));
+      }
+    }
+  } catch (error) {
+    console.error('[AI Bots] Check and post error:', error);
+  }
+};
+
+// Check for new posts and have multiple bots reply (for bot-bot interaction!
+const checkAndReply = async () => {
+  try {
+    const bots = await getAllActiveBots();
+    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    
+    // Get recent posts
+    const recentPosts = await CommunityPost.find({
+      createdAt: { $gte: oneDayAgo },
+      isDeleted: { $ne: true },
+      isLocked: { $ne: true }
+    })
+      .sort({ createdAt: -1 })
+      .populate('author', 'username displayName profileId avatar role')
+      .limit(15);
+
+    // For each recent post
+    for (const post of recentPosts) {
+      // 30% chance to add random likes to this existing post too!
+      if (Math.random() < 0.3 && post.likes.length < 25) {
+        await addRandomBotLikes(post._id);
+        await new Promise(r => setTimeout(r, 1000));
+      }
+      // Get existing comments
+      const existingComments = await CommunityComment.find({ post: post._id })
+        .populate('author', 'username displayName profileId avatar role');
+      
+      const commentAuthorIds = existingComments.map(c => c.author?._id?.toString()).filter(Boolean);
+      const commentAuthors = await User.find({ _id: { $in: commentAuthorIds } });
+      const commentUsernames = commentAuthors.map(u => u.username);
+
+      // Random number of replies (1-5)
+      const maxReplies = Math.floor(Math.random() * 5) + 1;
+      let repliesThisPost = 0;
+      const shuffledBots = [...bots].sort(() => 0.5 - Math.random());
+      
+      for (const bot of shuffledBots) {
+        if (repliesThisPost >= maxReplies) break;
+        if (!bot.isActive || !bot.configuration.enableReplying) continue;
+        if (commentUsernames.includes(bot.username)) continue;
+        
+        if (shouldReplyToPost(bot, post, commentUsernames)) {
+          try {
+            // 45% chance to reply to a comment instead of the post directly
+            let parentCommentId = null;
+            if (existingComments.length > 0 && Math.random() < 0.45) {
+              // Pick ANY random comment (including nested) to create conversation trees!
+              const randomComment = existingComments[Math.floor(Math.random() * existingComments.length)];
+              parentCommentId = randomComment._id;
+            }
+            
+            await createBotReply(bot, post._id, parentCommentId);
+            repliesThisPost++;
+            commentUsernames.push(bot.username);
+            // Delay between replies for natural conversation
+            await new Promise(r => setTimeout(r, 2500));
+          } catch (err) {
+            console.error(`[AI Bots] ${bot.displayName} reply failed:`, err);
+          }
+        }
+      }
+    }
+  } catch (error) {
+    console.error('[AI Bots] Check and reply error:', error);
+  }
+};
+
+// Start
+startWorker();

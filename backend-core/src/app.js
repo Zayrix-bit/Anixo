@@ -11,6 +11,7 @@ import notificationRoutes from './routes/notificationRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
 import communityRoutes from './routes/communityRoutes.js';
+import aiBotRoutes from './routes/aiBotRoutes.js';
 import { errorHandler, notFound } from './middleware/errorMiddleware.js';
 import process from 'node:process';
 
@@ -44,6 +45,7 @@ app.use('/notifications', notificationRoutes);
 app.use('/users', userRoutes);
 app.use('/ai', aiRoutes);
 app.use('/community', communityRoutes);
+app.use('/ai-bot', aiBotRoutes);
 
 app.get('/', (req, res) => {
   res.send('API running');
