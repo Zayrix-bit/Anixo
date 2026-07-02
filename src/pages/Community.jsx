@@ -27,7 +27,7 @@ const SORT_OPTIONS = [
 ];
 
 const CATEGORY_COLORS = {
-  general: "bg-[#5865F2]/15 text-[#7289DA] border-[#5865F2]/20",
+  general: "bg-[#9fb1f0]/15 text-[#9fb1f0] border-[#9fb1f0]/20",
   anime: "bg-purple-500/15 text-purple-400 border-purple-500/20",
   feedback: "bg-emerald-500/15 text-emerald-400 border-emerald-500/20",
   question: "bg-amber-500/15 text-amber-400 border-amber-500/20",
@@ -128,7 +128,7 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
         {/* Header */}
         <div className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-white/10">
           <h2 className="text-lg font-bold text-white flex items-center gap-2">
-            <Plus size={18} className="text-[#5865F2]" />
+            <Plus size={18} className="text-[#9fb1f0]" />
             Create Post
           </h2>
           <button onClick={onClose} className="p-1.5 hover:bg-white/10 rounded-lg transition-colors text-white/40 hover:text-white">
@@ -153,7 +153,7 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
               onChange={(e) => setTitle(e.target.value)}
               placeholder="What's on your mind?"
               maxLength={200}
-              className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-[#5865F2]/50 focus:ring-1 focus:ring-[#5865F2]/20 transition-all text-base md:text-sm"
+              className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-[#9fb1f0]/50 focus:ring-1 focus:ring-[#9fb1f0]/20 transition-all text-base md:text-sm"
             />
           </div>
 
@@ -165,11 +165,10 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
                 <button
                   key={cat.id}
                   onClick={() => setCategory(cat.id)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all border ${
-                    category === cat.id
-                      ? "bg-[#5865F2] text-white border-[#5865F2]"
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all border ${category === cat.id
+                      ? "bg-[#9fb1f0] text-white border-[#9fb1f0]"
                       : "bg-white/[0.03] border-white/10 text-white/50 hover:text-white hover:border-white/20"
-                  }`}
+                    }`}
                 >
                   {cat.label}
                 </button>
@@ -186,7 +185,7 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
               placeholder="Share your thoughts, discuss anime, ask questions..."
               maxLength={10000}
               rows={8}
-              className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-[#5865F2]/50 focus:ring-1 focus:ring-[#5865F2]/20 transition-all text-base md:text-sm resize-none mini-scrollbar"
+              className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-[#9fb1f0]/50 focus:ring-1 focus:ring-[#9fb1f0]/20 transition-all text-base md:text-sm resize-none mini-scrollbar"
             />
             <p className="text-[10px] text-white/20 mt-1">Supports **bold**, *italic*, and markdown formatting</p>
           </div>
@@ -205,15 +204,14 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
                 onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
                 placeholder="Add a tag..."
                 maxLength={30}
-                className="flex-1 bg-white/[0.03] border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-[#5865F2]/50 transition-all text-base md:text-sm"
+                className="flex-1 bg-white/[0.03] border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-[#9fb1f0]/50 transition-all text-base md:text-sm"
               />
               <button
                 onClick={() => setShowPopularTags(prev => !prev)}
-                className={`px-3 py-2 border rounded-xl transition-all cursor-pointer ${
-                  showPopularTags
-                    ? "bg-[#5865F2]/10 border-[#5865F2]/30 text-[#5865F2] hover:text-[#7289DA]"
+                className={`px-3 py-2 border rounded-xl transition-all cursor-pointer ${showPopularTags
+                    ? "bg-[#9fb1f0]/10 border-[#9fb1f0]/30 text-[#9fb1f0] hover:text-[#9fb1f0]"
                     : "bg-white/[0.05] border-white/10 text-white/50 hover:text-white"
-                }`}
+                  }`}
               >
                 <Tag size={14} />
               </button>
@@ -231,11 +229,10 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
                         key={recTag}
                         disabled={isSelected || tags.length >= 5}
                         onClick={() => setTags([...tags, recTag])}
-                        className={`px-2.5 py-1 rounded-lg text-[10px] font-semibold border transition-all ${
-                          isSelected
-                            ? "bg-[#5865F2]/10 border-[#5865F2]/20 text-[#7289DA]/50 cursor-not-allowed"
-                            : "bg-white/[0.02] border-white/[0.06] text-white/40 hover:text-white/80 hover:bg-white/[0.06] hover:border-white/12 cursor-pointer"
-                        }`}
+                        className={`px-2.5 py-1 rounded-lg text-[10px] font-semibold border transition-all ${isSelected
+                            ? "bg-[#9fb1f0]/10 border-[#9fb1f0]/20 text-[#9fb1f0]/50 cursor-not-allowed"
+                            : "bg-white/[0.02] border-white/[0.08] text-white/40 hover:text-white/80 hover:bg-white/[0.06] hover:border-white/12 cursor-pointer"
+                          }`}
                       >
                         #{recTag}
                       </button>
@@ -248,9 +245,9 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
             {tags.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-white/[0.04]">
                 {tags.map(tag => (
-                  <span key={tag} className="px-2.5 py-1 bg-[#5865F2]/10 border border-[#5865F2]/25 text-[#7289DA] text-[11px] font-bold rounded-lg flex items-center gap-1.5 animate-in fade-in zoom-in-95 duration-100">
+                  <span key={tag} className="px-2.5 py-1 bg-[#9fb1f0]/10 border border-[#9fb1f0]/25 text-[#9fb1f0] text-[11px] font-bold rounded-lg flex items-center gap-1.5 animate-in fade-in zoom-in-95 duration-100">
                     #{tag}
-                    <button onClick={() => setTags(tags.filter(t => t !== tag))} className="text-[#7289DA]/50 hover:text-[#7289DA] transition-colors cursor-pointer">
+                    <button onClick={() => setTags(tags.filter(t => t !== tag))} className="text-[#9fb1f0]/50 hover:text-[#9fb1f0] transition-colors cursor-pointer">
                       <X size={10} />
                     </button>
                   </span>
@@ -271,7 +268,7 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
           <button
             onClick={handleSubmit}
             disabled={isSubmitting || !title.trim() || !content.trim()}
-            className="px-5 py-2 bg-[#5865F2] hover:bg-[#4752C4] disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold uppercase tracking-widest rounded-lg transition-all flex items-center gap-2"
+            className="px-5 py-2 bg-[#9fb1f0] hover:bg-[#5b73c7] disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold uppercase tracking-widest rounded-lg transition-all flex items-center gap-2"
           >
             {isSubmitting ? <Loader size={14} className="animate-spin" /> : <Send size={14} />}
             Post
@@ -338,109 +335,79 @@ export default function Community() {
   };
 
   return (
-    <div className="min-h-screen text-white bg-[#0a0a0a] flex flex-col font-sans selection:bg-[#5865F2]/30">
+    <div className="min-h-screen text-white bg-[#080808] flex flex-col font-sans selection:bg-[#9fb1f0]/30">
       <Navbar />
 
-      {/* Hero Banner */}
-      <div className="relative w-full pt-[56px]">
-        <div className="relative overflow-hidden">
-          {/* Gradient Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#1a1c4a]/50 via-[#0a0a0a] to-[#1a1c4a]/20" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(220,38,38,0.15),transparent_60%)]" />
+      {/* Main Content */}
+      <div className="flex-1 max-w-[1200px] mx-auto w-full px-4 md:px-6 pt-[88px] md:pt-[100px] pb-12">
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
 
-          <div className="relative max-w-[1720px] mx-auto px-4 md:px-6 py-10 md:py-16">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-              <div>
-                <div className="flex items-center gap-3 mb-3 flex-wrap">
-                  <div className="w-[3.5px] h-8 bg-[#5865F2] rounded-full" />
-                  <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-tighter leading-none">
-                    Community
-                  </h1>
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[9px] font-black bg-amber-500/10 text-amber-400 border border-amber-500/20 uppercase tracking-widest select-none animate-pulse">
-                    Beta
-                  </span>
-                </div>
-                <p className="text-white/60 text-sm md:text-base max-w-xl leading-relaxed ml-5">
-                  Discuss anime, share recommendations, ask questions, and connect with fellow otakus.
-                </p>
-                <div className="flex items-center gap-2 mt-3.5 ml-5 px-3 py-1.5 bg-amber-500/5 border border-amber-500/20 rounded-lg text-amber-400 text-[11px] font-semibold max-w-fit shadow-sm">
-                  <AlertTriangle size={12} className="shrink-0 text-amber-500" />
-                  <span>Note: The community system is currently in testing (Beta version).</span>
-                </div>
-              </div>
-
-              {user && (
-                <button
-                  onClick={() => setShowCreateModal(true)}
-                  className="group hidden md:flex items-center gap-2.5 px-5 py-3 bg-[#5865F2] hover:bg-[#4752C4] rounded-xl text-white font-bold text-xs uppercase tracking-widest transition-all hover:shadow-lg hover:shadow-[#5865F2]/20 hover:scale-[1.02] active:scale-[0.98]"
-                >
-                  <Plus size={16} className="group-hover:rotate-90 transition-transform duration-200" />
-                  Create Post
-                </button>
-              )}
+          {/* Left Column: Categories Sidebar (Vertical list of capsules) */}
+          <div className="w-full lg:w-[180px] lg:sticky lg:top-[100px] shrink-0">
+            <div className="flex lg:flex-col gap-2 overflow-x-auto scrollbar-hide pb-3 lg:pb-0">
+              {CATEGORIES.map(cat => {
+                const Icon = cat.icon;
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => handleCategoryChange(cat.id)}
+                    className={`flex items-center justify-start gap-2.5 px-3.5 py-2.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap border cursor-pointer ${activeCategory === cat.id
+                        ? "bg-[#9fb1f0]/10 text-[#9fb1f0] border-[#9fb1f0]/45"
+                        : "bg-transparent border-white/[0.08] text-white/45 hover:text-white/75 hover:border-white/12"
+                      }`}
+                  >
+                    <Icon size={12} className={activeCategory === cat.id ? "text-[#9fb1f0]" : "text-white/25"} />
+                    <span>{cat.label}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="flex-1 max-w-[1720px] mx-auto w-full px-4 md:px-6 pb-12">
-        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Vertical Separator Line */}
+          <div className="hidden lg:block w-[1px] bg-white/[0.06] self-stretch min-h-[500px] shrink-0" />
 
-          {/* Left Content */}
-          <div className="flex-1 min-w-0">
-            {/* Filters Bar */}
-            <div className="sticky top-[56px] z-40 bg-[#0a0a0a]/95 backdrop-blur-md pb-4 pt-2 -mx-4 px-4 md:-mx-6 md:px-6 border-b border-white/[0.04]">
-              {/* Category Tabs */}
-              <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide pb-3">
-                {CATEGORIES.map(cat => {
-                  const Icon = cat.icon;
-                  return (
-                    <button
-                      key={cat.id}
-                      onClick={() => handleCategoryChange(cat.id)}
-                      className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all whitespace-nowrap border ${
-                        activeCategory === cat.id
-                          ? "bg-[#5865F2] text-white border-[#5865F2] shadow-lg shadow-[#5865F2]/10"
-                          : "bg-white/[0.03] border-white/[0.06] text-white/35 hover:text-white/60 hover:border-white/10"
-                      }`}
-                    >
-                      <Icon size={12} />
-                      {cat.label}
-                    </button>
-                  );
-                })}
+          {/* Right Column: Search, Sort and Feed */}
+          <div className="flex-1 min-w-0 w-full">
+            {/* Top Toolbar: Search & Sort inline segmented boxes */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+              {/* Search */}
+              <div className="relative flex-1 max-w-md">
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search posts..."
+                  className="w-full bg-white/[0.02] border border-white/[0.08] rounded-md pl-9 pr-4 py-2 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#9fb1f0]/40 transition-all"
+                />
               </div>
 
-              {/* Search + Sort Row */}
-              <div className="flex flex-col sm:flex-row gap-3">
-                {/* Search */}
-                <div className="relative flex-1">
-                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search posts..."
-                    className="w-full bg-white/[0.03] border border-white/[0.06] rounded-lg pl-9 pr-4 py-2.5 text-base md:text-sm text-white placeholder-white/40 focus:outline-none focus:border-[#5865F2]/40 transition-all"
-                  />
-                </div>
+              {/* Create Post & Segmented Sort Buttons */}
+              <div className="flex items-center gap-3 self-end md:self-auto shrink-0">
+                {user && (
+                  <button
+                    onClick={() => setShowCreateModal(true)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-[#9fb1f0] hover:bg-[#5b73c7] rounded-md text-white text-[11px] font-bold uppercase tracking-wider transition-all cursor-pointer"
+                  >
+                    <Plus size={12} />
+                    <span>Create Post</span>
+                  </button>
+                )}
 
-                {/* Sort Buttons */}
-                <div className="flex items-center justify-between sm:justify-start gap-1 bg-white/[0.03] border border-white/[0.06] rounded-lg p-0.5 w-full sm:w-auto shrink-0">
-                  {SORT_OPTIONS.map(opt => {
+                <div className="flex items-center bg-white/[0.02] border border-white/[0.08] rounded-md p-0.5">
+                  {SORT_OPTIONS.map((opt, idx) => {
                     const Icon = opt.icon;
                     return (
                       <button
                         key={opt.id}
                         onClick={() => { setIsLoading(true); setActiveSort(opt.id); setCurrentPage(1); }}
-                        className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-[10px] md:text-[11px] font-bold uppercase tracking-wider transition-all ${
-                          activeSort === opt.id
-                            ? "bg-white/15 text-white"
-                            : "text-white/55 hover:text-white"
-                        }`}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wider transition-all cursor-pointer ${activeSort === opt.id
+                            ? "bg-white/10 text-white"
+                            : "text-white/40 hover:text-white/70"
+                          } ${idx > 0 ? "border-l border-white/[0.08]" : ""}`}
                       >
-                        <Icon size={11} />
+                        <Icon size={11} className="text-white/25" />
                         <span>{opt.label}</span>
                       </button>
                     );
@@ -450,30 +417,30 @@ export default function Community() {
             </div>
 
             {/* Posts Feed */}
-            <div className="mt-4 space-y-2">
+            <div className="space-y-3">
               {isLoading ? (
                 // Skeleton Loaders
                 Array.from({ length: 5 }).map((_, i) => (
-                  <div key={i} className="bg-white/[0.02] border border-white/[0.04] rounded-xl p-5 animate-shimmer">
+                  <div key={i} className="bg-[#121212] border border-white/[0.08] rounded-md p-5 animate-pulse">
                     <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-full bg-white/[0.05]" />
+                      <div className="w-10 h-10 rounded-full bg-white/[0.03]" />
                       <div className="flex-1 space-y-2">
-                        <div className="h-4 w-3/4 bg-white/[0.05] rounded" />
-                        <div className="h-3 w-1/2 bg-white/[0.03] rounded" />
-                        <div className="h-3 w-full bg-white/[0.03] rounded" />
+                        <div className="h-4 w-3/4 bg-white/[0.03] rounded" />
+                        <div className="h-3 w-1/2 bg-white/[0.02] rounded" />
+                        <div className="h-3 w-full bg-white/[0.02] rounded" />
                       </div>
                     </div>
                   </div>
                 ))
               ) : posts.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-20 text-center">
-                  <MessageSquare size={48} className="text-white/[0.06] mb-4" />
-                  <h3 className="text-lg font-bold text-white/20 mb-2">No Posts Yet</h3>
-                  <p className="text-sm text-white/10 mb-6">Be the first to start a discussion!</p>
+                <div className="flex flex-col items-center justify-center py-20 text-center bg-[#121212] border border-white/[0.08] rounded-md">
+                  <MessageSquare size={36} className="text-white/[0.06] mb-3" />
+                  <h3 className="text-sm font-bold text-white/30 mb-1">No Posts Yet</h3>
+                  <p className="text-xs text-white/15 mb-4">Be the first to start a discussion!</p>
                   {user && (
                     <button
                       onClick={() => setShowCreateModal(true)}
-                      className="px-5 py-2.5 bg-[#5865F2] hover:bg-[#4752C4] rounded-lg text-white text-xs font-bold uppercase tracking-widest transition-all"
+                      className="px-4 py-2 bg-[#9fb1f0] hover:bg-[#5b73c7] rounded-lg text-white text-xs font-bold uppercase tracking-wider transition-all cursor-pointer"
                     >
                       Create Post
                     </button>
@@ -484,11 +451,11 @@ export default function Community() {
                   <Link
                     key={post._id}
                     to={`/community/post/${post._id}`}
-                    className="group block bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.05] hover:border-white/[0.1] rounded-xl p-4 md:p-5 transition-all duration-200"
+                    className="group block bg-[#121212] border border-white/[0.08] hover:border-white/12 rounded-md p-4 transition-all duration-200"
                   >
                     <div className="flex items-start gap-3">
                       {/* Avatar */}
-                      <div className="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden border border-white/10 bg-neutral-800 shrink-0">
+                      <div className="w-8 h-8 rounded-full overflow-hidden bg-neutral-800 ring-1 ring-white/10 shrink-0">
                         <img
                           src={getAvatarUrl(post.author?.avatar, post.author?.username)}
                           alt={post.author?.username}
@@ -501,43 +468,43 @@ export default function Community() {
                       <div className="flex-1 min-w-0">
                         {/* Author + Meta */}
                         <div className="flex items-center gap-2 mb-1 flex-wrap">
-                          <span className="text-sm font-bold text-white group-hover:text-white transition-colors">
+                          <span className="text-xs font-bold text-white/90 group-hover:text-white transition-colors">
                             {post.author?.displayName || post.author?.profileId || post.author?.username}
                           </span>
                           <RoleBadge role={post.author?.role} />
                           <span className="text-[10px] text-white/20">/</span>
                           <span className="text-[10px] text-white/40">{timeAgo(post.createdAt)}</span>
                           {post.isPinned && (
-                            <span className="inline-flex items-center gap-0.5 text-[9px] text-amber-400 font-bold uppercase">
+                            <span className="inline-flex items-center gap-0.5 text-[9px] text-amber-400 font-bold uppercase ml-1">
                               <Pin size={9} /> Pinned
                             </span>
                           )}
                           {post.isLocked && (
-                            <span className="inline-flex items-center gap-0.5 text-[9px] text-[#7289DA] font-bold uppercase">
+                            <span className="inline-flex items-center gap-0.5 text-[9px] text-[#9fb1f0] font-bold uppercase ml-1">
                               <Lock size={9} /> Locked
                             </span>
                           )}
                         </div>
 
                         {/* Title */}
-                        <h3 className="text-[15px] md:text-base font-bold text-white group-hover:text-white mb-1.5 line-clamp-2 leading-snug transition-colors">
+                        <h3 className="text-sm font-semibold text-white/90 group-hover:text-[#9fb1f0] mb-1 leading-snug transition-colors">
                           {post.title}
                         </h3>
 
                         {/* Excerpt */}
-                        <p className="text-sm text-white/55 line-clamp-2 leading-relaxed mb-3">
+                        <p className="text-[13px] text-white/50 line-clamp-2 leading-relaxed mb-3">
                           {post.content?.substring(0, 200)}
                         </p>
 
                         {/* Footer */}
                         <div className="flex items-center gap-4 flex-wrap">
                           {/* Category Badge */}
-                          <span className={`px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded border ${CATEGORY_COLORS[post.category] || CATEGORY_COLORS.general}`}>
+                          <span className={`px-2 py-0.5 text-[9px] font-black uppercase tracking-widest rounded-full border ${CATEGORY_COLORS[post.category] || CATEGORY_COLORS.general}`}>
                             {post.category}
                           </span>
 
                           {/* Stats */}
-                          <div className="flex items-center gap-3 text-white/45 text-[11px]">
+                          <div className="flex items-center gap-3 text-white/40 text-[11px]">
                             <span className="flex items-center gap-1">
                               <ThumbsUp size={11} />
                               {post.score || 0}
@@ -564,7 +531,7 @@ export default function Community() {
                       </div>
 
                       {/* Arrow */}
-                      <ChevronRight size={16} className="text-white/20 group-hover:text-white/40 transition-colors shrink-0 mt-1" />
+                      <ChevronRight size={14} className="text-white/20 group-hover:text-white/40 transition-colors shrink-0 mt-1" />
                     </div>
                   </Link>
                 ))
@@ -582,60 +549,14 @@ export default function Community() {
                       setCurrentPage(page);
                       window.scrollTo({ top: 0, behavior: "smooth" });
                     }}
-                    className={`w-9 h-9 rounded-lg text-xs font-bold transition-all ${
-                      currentPage === page
-                        ? "bg-[#5865F2] text-white"
-                        : "bg-white/[0.03] text-white/30 hover:text-white hover:bg-white/[0.06] border border-white/[0.04]"
-                    }`}
+                    className={`w-9 h-9 rounded-md text-xs font-bold transition-all cursor-pointer ${currentPage === page
+                        ? "bg-[#9fb1f0]"
+                        : "bg-white/[0.03] text-white/30 hover:bg-white/[0.06] border border-white/[0.04]"
+                      }`}
                   >
                     {page}
                   </button>
                 ))}
-              </div>
-            )}
-          </div>
-
-          {/* Right Sidebar */}
-          <div className="w-full lg:w-[320px] shrink-0 space-y-4 pt-2">
-            {/* Community Stats */}
-            <div className="bg-white/[0.04] border border-white/[0.05] rounded-xl p-5">
-              <h3 className="text-xs font-bold text-white/60 uppercase tracking-widest mb-4 flex items-center gap-2">
-                <Users size={12} /> Community
-              </h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-white/50">Total Posts</span>
-                  <span className="text-sm font-bold text-white/80">{pagination.total || 0}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Rules */}
-            <div className="bg-white/[0.04] border border-white/[0.05] rounded-xl p-5">
-              <h3 className="text-xs font-bold text-white/60 uppercase tracking-widest mb-4 flex items-center gap-2">
-                <AlertTriangle size={12} /> Community Rules
-              </h3>
-              <ol className="space-y-2.5 text-[12px] text-white/55 leading-relaxed list-decimal list-inside">
-                <li>Be respectful to all community members</li>
-                <li>No spoilers without proper tags</li>
-                <li>No spam or self-promotion</li>
-                <li>Keep discussions related to anime</li>
-                <li>No NSFW content outside designated areas</li>
-                <li>Follow the site's Terms of Service</li>
-              </ol>
-            </div>
-
-            {/* Quick Links */}
-            {!user && (
-              <div className="bg-gradient-to-br from-[#1a1c4a]/30 to-transparent border border-[#5865F2]/10 rounded-xl p-5 text-center">
-                <h3 className="text-sm font-bold text-white mb-2">Join the Discussion</h3>
-                <p className="text-[12px] text-white/30 mb-4">Sign in to create posts, comment, and interact with the community.</p>
-                <Link
-                  to="/home?login=true"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#5865F2] hover:bg-[#4752C4] rounded-lg text-white text-xs font-bold uppercase tracking-widest transition-all"
-                >
-                  Sign In
-                </Link>
               </div>
             )}
           </div>
@@ -648,7 +569,7 @@ export default function Community() {
       {user && (
         <button
           onClick={() => setShowCreateModal(true)}
-          className="fixed bottom-6 right-6 z-[90] md:hidden flex items-center justify-center w-14 h-14 bg-[#5865F2] active:bg-[#4752C4] text-white rounded-full shadow-lg shadow-[#5865F2]/30 active:scale-95 transition-all cursor-pointer border border-[#5865F2]/20"
+          className="fixed bottom-6 right-6 z-[90] md:hidden flex items-center justify-center w-14 h-14 bg-[#9fb1f0] active:bg-[#5b73c7] text-white rounded-full shadow-lg shadow-[#9fb1f0]/30 active:scale-95 transition-all cursor-pointer border border-[#9fb1f0]/20"
           aria-label="Create Post"
         >
           <Plus size={24} />
@@ -665,5 +586,7 @@ export default function Community() {
     </div>
   );
 }
+
+
 
 
