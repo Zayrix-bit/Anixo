@@ -65,7 +65,8 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
     return false;
   });
   const [likesCount, setLikesCount] = useState(comment.likesCount || 0);
-  const [showReplies, setShowReplies] = useState(depth < 2);
+  const [showReplies, setShowReplies] = useState(false);
+  const [visibleRepliesCount, setVisibleRepliesCount] = useState(3);
 
   const [prevComment, setPrevComment] = useState(comment);
   const [prevUser, setPrevUser] = useState(user);
@@ -97,6 +98,7 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
       setReplyContent("");
       setShowReplyBox(false);
       setShowReplies(true);
+      setVisibleRepliesCount(prev => Math.max(prev + 1, (comment.replies?.length || 0) + 1));
     }
   };
 
@@ -211,7 +213,7 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
           {!showReplies && (
             <button
               onClick={() => setShowReplies(true)}
-              className="flex items-center gap-1.5 text-[11px] font-bold text-[#9fb1f0]/60 hover:text-[#9fb1f0] ml-10 mb-2 transition-colors"
+              className="flex items-center gap-1.5 text-[11px] font-bold text-[#5865F2]/80 hover:text-[#5865F2] ml-9 sm:ml-12 md:ml-16 mb-2 transition-colors cursor-pointer"
             >
               <ChevronDown size={12} />
               Show {comment.replies.length} {comment.replies.length === 1 ? 'reply' : 'replies'}
@@ -219,16 +221,17 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
           )}
           {showReplies && (
             <>
-              {comment.replies.length > 2 && (
-                <button
-                  onClick={() => setShowReplies(false)}
-                  className="flex items-center gap-1.5 text-[11px] font-bold text-white/20 hover:text-white/40 ml-10 mb-1 transition-colors"
-                >
-                  <ChevronUp size={12} />
-                  Hide replies
-                </button>
-              )}
-              {comment.replies.map(reply => (
+              <button
+                onClick={() => {
+                  setShowReplies(false);
+                  setVisibleRepliesCount(3);
+                }}
+                className="flex items-center gap-1.5 text-[11px] font-bold text-white/20 hover:text-white/40 ml-9 sm:ml-12 md:ml-16 mb-1 transition-colors cursor-pointer"
+              >
+                <ChevronUp size={12} />
+                Hide replies
+              </button>
+              {comment.replies.slice(0, visibleRepliesCount).map(reply => (
                 <CommentItem
                   key={reply._id}
                   comment={reply}
@@ -239,9 +242,28 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
                   depth={depth + 1}
                 />
               ))}
+              {comment.replies.length > visibleRepliesCount ? (
+                <button
+                  onClick={() => setVisibleRepliesCount(prev => prev + 5)}
+                  className="flex items-center gap-1.5 text-[11px] font-bold text-[#5865F2] hover:text-[#5b73c7] ml-9 sm:ml-12 md:ml-16 mt-1 mb-2 transition-colors cursor-pointer"
+                >
+                  <ChevronDown size={12} />
+                  View More Replies ({comment.replies.length - visibleRepliesCount} remaining)
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setShowReplies(false);
+                    setVisibleRepliesCount(3);
+                  }}
+                  className="flex items-center gap-1.5 text-[11px] font-bold text-white/20 hover:text-white/40 ml-9 sm:ml-12 md:ml-16 mt-1 mb-2 transition-colors cursor-pointer"
+                >
+                  <ChevronUp size={12} />
+                  Hide replies
+                </button>
+              )}
             </>
-          )}
-        </>
+          )}        </>
       )}
     </div>
   );
@@ -263,6 +285,7 @@ export default function CommunityPostDetail() {
   const [score, setScore] = useState(0);
   const [showActions, setShowActions] = useState(false);
   const [isCommentExpanded, setIsCommentExpanded] = useState(false);
+  const [visibleCommentsCount, setVisibleCommentsCount] = useState(5);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -341,6 +364,7 @@ export default function CommunityPostDetail() {
       setComments(prev => [...prev, res.comment]);
       setCommentText("");
       setPost(prev => ({ ...prev, commentCount: (prev.commentCount || 0) + 1 }));
+      setVisibleCommentsCount(prev => Math.max(prev + 1, comments.length + 1));
     }
   };
 
@@ -361,6 +385,7 @@ export default function CommunityPostDetail() {
       setComments(addReplyToTree(comments));
     } else {
       setComments(prev => [...prev, newComment]);
+      setVisibleCommentsCount(prev => Math.max(prev + 1, comments.length + 1));
     }
     setPost(prev => ({ ...prev, commentCount: (prev.commentCount || 0) + 1 }));
   };
@@ -592,7 +617,7 @@ export default function CommunityPostDetail() {
 
         {/* Comments Section */}
         <div className="mt-6 md:mt-8">
-          <div className="flex items-center gap-2 mb-4 md:mb-6">
+          <div id="comments-section-header" className="flex items-center gap-2 mb-4 md:mb-6">
             <h2 className="text-sm font-bold text-white/60 uppercase tracking-widest">
               Comments
             </h2>
@@ -656,7 +681,7 @@ export default function CommunityPostDetail() {
           {/* Comments List */}
           {comments.length > 0 ? (
             <div className="flex flex-col gap-0">
-              {comments.map((comment, i) => (
+              {comments.slice(0, visibleCommentsCount).map((comment, i) => (
                 <div key={comment._id} className={i > 0 ? 'border-t border-white/[0.04]' : ''}>
                   <CommentItem
                     comment={comment}
@@ -667,6 +692,35 @@ export default function CommunityPostDetail() {
                   />
                 </div>
               ))}
+
+              {(comments.length > visibleCommentsCount || visibleCommentsCount > 5) && (
+                <div className="flex items-center justify-center gap-3 mt-6">
+                  {comments.length > visibleCommentsCount && (
+                    <button
+                      onClick={() => setVisibleCommentsCount(prev => prev + 5)}
+                      className="flex items-center gap-1.5 px-4 py-2 bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.06] hover:border-white/10 rounded-md text-xs font-bold uppercase tracking-wider text-white/50 hover:text-white transition-all cursor-pointer"
+                    >
+                      <ChevronDown size={14} />
+                      View More Comments ({comments.length - visibleCommentsCount} remaining)
+                    </button>
+                  )}
+                  {visibleCommentsCount > 5 && (
+                    <button
+                      onClick={() => {
+                        setVisibleCommentsCount(5);
+                        const commentsHeaderEl = document.getElementById('comments-section-header');
+                        if (commentsHeaderEl) {
+                          commentsHeaderEl.scrollIntoView({ behavior: 'smooth' });
+                        }
+                      }}
+                      className="flex items-center gap-1.5 px-4 py-2 bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.06] hover:border-white/10 rounded-md text-xs font-bold uppercase tracking-wider text-white/50 hover:text-white transition-all cursor-pointer"
+                    >
+                      <ChevronUp size={14} />
+                      Show Less
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center py-12 text-center">
