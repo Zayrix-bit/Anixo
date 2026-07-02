@@ -339,52 +339,52 @@ export default function Community() {
       <Navbar />
 
       {/* Main Content */}
-      <div className="flex-1 max-w-[1200px] mx-auto w-full px-2 sm:px-3 md:px-6 pt-[60px] md:pt-[100px] pb-20 md:pb-12">
-        <div className="flex flex-row items-start">
+      <div className="flex-1 max-w-[1200px] mx-auto w-full px-3 md:px-6 pt-[72px] md:pt-[100px] pb-20 md:pb-12">
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
 
-          {/* Left Column: Categories Sidebar — always vertical */}
-          <div className="w-[90px] sm:w-[120px] md:w-[160px] lg:w-[180px] sticky top-[60px] md:top-[100px] shrink-0 py-2 md:py-0 pr-2 sm:pr-3 md:pr-0">
-            <div className="flex flex-col gap-1">
+          {/* Left Column: Categories Sidebar */}
+          <div className="w-full lg:w-[180px] lg:sticky lg:top-[100px] shrink-0">
+            <div className="flex lg:flex-col gap-1.5 md:gap-2 overflow-x-auto scrollbar-hide pb-2 lg:pb-0 -mx-3 px-3 md:mx-0 md:px-0">
               {CATEGORIES.map(cat => {
                 const Icon = cat.icon;
                 return (
                   <button
                     key={cat.id}
                     onClick={() => handleCategoryChange(cat.id)}
-                    className={`flex items-center gap-1.5 md:gap-2.5 px-2 md:px-3.5 py-1.5 md:py-2.5 rounded-md text-[10px] md:text-xs font-bold uppercase tracking-wide md:tracking-wider transition-all whitespace-nowrap border cursor-pointer ${activeCategory === cat.id
+                    className={`flex items-center justify-start gap-2 md:gap-2.5 px-3 md:px-3.5 py-2 md:py-2.5 rounded-md text-[11px] md:text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap border cursor-pointer ${activeCategory === cat.id
                         ? "bg-[#5865F2]/10 text-[#9fb1f0] border-[#9fb1f0]/45"
-                        : "bg-transparent border-transparent text-white/45 hover:text-white/75 hover:border-white/12"
+                        : "bg-transparent border-white/[0.08] text-white/45 hover:text-white/75 hover:border-white/12"
                       }`}
                   >
-                    <Icon size={11} className={`shrink-0 ${activeCategory === cat.id ? "text-[#9fb1f0]" : "text-white/25"}`} />
-                    <span className="truncate">{cat.label}</span>
+                    <Icon size={12} className={activeCategory === cat.id ? "text-[#9fb1f0]" : "text-white/25"} />
+                    <span>{cat.label}</span>
                   </button>
                 );
               })}
             </div>
           </div>
 
-          {/* Vertical Separator Line — always visible */}
-          <div className="w-[1px] bg-white/[0.06] self-stretch min-h-[400px] shrink-0" />
+          {/* Vertical Separator Line */}
+          <div className="hidden lg:block w-[1px] bg-white/[0.06] self-stretch min-h-[500px] shrink-0" />
 
           {/* Right Column: Search, Sort and Feed */}
-          <div className="flex-1 min-w-0 pl-2 sm:pl-3 md:pl-5">
+          <div className="flex-1 min-w-0 w-full">
             {/* Top Toolbar: Search & Sort */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-3 md:mb-6 pt-2 md:pt-0">
+            <div className="flex items-center justify-between gap-3 mb-4 md:mb-6">
               {/* Search */}
               <div className="relative flex-1">
-                <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-white/30" />
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search..."
-                  className="w-full bg-white/[0.02] border border-white/[0.08] rounded-md pl-8 pr-3 py-1.5 md:py-2 text-xs md:text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#9fb1f0]/40 transition-all"
+                  placeholder="Search posts..."
+                  className="w-full bg-white/[0.02] border border-white/[0.08] rounded-md pl-9 pr-4 py-2 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#9fb1f0]/40 transition-all"
                 />
               </div>
 
-              {/* Sort Buttons + Create Post */}
-              <div className="flex items-center gap-2 shrink-0">
+              {/* Sort Buttons (always visible) + Create Post (desktop only, FAB on mobile) */}
+              <div className="flex items-center gap-2 md:gap-3 shrink-0">
                 {user && (
                   <button
                     onClick={() => setShowCreateModal(true)}
@@ -402,12 +402,12 @@ export default function Community() {
                       <button
                         key={opt.id}
                         onClick={() => { setIsLoading(true); setActiveSort(opt.id); setCurrentPage(1); }}
-                        className={`flex items-center gap-1 px-1.5 sm:px-2 md:px-3 py-1 md:py-1.5 rounded text-[9px] sm:text-[10px] md:text-[11px] font-bold uppercase tracking-wider transition-all cursor-pointer ${activeSort === opt.id
+                        className={`flex items-center gap-1 md:gap-1.5 px-2 md:px-3 py-1.5 rounded text-[10px] md:text-[11px] font-bold uppercase tracking-wider transition-all cursor-pointer ${activeSort === opt.id
                             ? "bg-white/10 text-white"
                             : "text-white/40 hover:text-white/70"
-                          } ${idx > 0 ? "border-l border-white/[0.06]" : ""}`}
+                          } ${idx > 0 ? "border-l border-white/[0.08]" : ""}`}
                       >
-                        <Icon size={10} className="text-white/25" />
+                        <Icon size={11} className="text-white/25" />
                         <span className="hidden sm:inline">{opt.label}</span>
                       </button>
                     );
@@ -453,9 +453,9 @@ export default function Community() {
                     to={`/community/post/${post._id}`}
                     className="group block bg-[#121212] border border-white/[0.08] hover:border-white/12 rounded-md p-3 md:p-4 transition-all duration-200"
                   >
-                    <div className="flex items-start gap-2 md:gap-3">
-                      {/* Avatar - hidden on very small, visible sm+ */}
-                      <div className="hidden sm:block w-8 h-8 rounded-full overflow-hidden bg-neutral-800 ring-1 ring-white/10 shrink-0">
+                    <div className="flex items-start gap-2.5 md:gap-3">
+                      {/* Avatar */}
+                      <div className="w-8 h-8 rounded-full overflow-hidden bg-neutral-800 ring-1 ring-white/10 shrink-0">
                         <img
                           src={getAvatarUrl(post.author?.avatar, post.author?.username)}
                           alt={post.author?.username}
@@ -487,34 +487,34 @@ export default function Community() {
                         </div>
 
                         {/* Title */}
-                        <h3 className="text-[13px] md:text-sm font-semibold text-white/90 group-hover:text-[#9fb1f0] mb-0.5 md:mb-1 leading-snug transition-colors line-clamp-2">
+                        <h3 className="text-sm font-semibold text-white/90 group-hover:text-[#9fb1f0] mb-1 leading-snug transition-colors">
                           {post.title}
                         </h3>
 
-                        {/* Excerpt - hidden on very small screens */}
-                        <p className="hidden sm:block text-[12px] md:text-[13px] text-white/50 line-clamp-2 leading-relaxed mb-2 md:mb-3">
+                        {/* Excerpt */}
+                        <p className="text-[13px] text-white/50 line-clamp-2 leading-relaxed mb-3">
                           {post.content?.substring(0, 200)}
                         </p>
 
                         {/* Footer */}
-                        <div className="flex items-center gap-2 md:gap-4 flex-wrap">
+                        <div className="flex items-center gap-4 flex-wrap">
                           {/* Category Badge */}
                           <span className={`px-2 py-0.5 text-[9px] font-black uppercase tracking-widest rounded-md border ${CATEGORY_COLORS[post.category] || CATEGORY_COLORS.general}`}>
                             {post.category}
                           </span>
 
                           {/* Stats */}
-                          <div className="flex items-center gap-2 md:gap-3 text-white/40 text-[10px] md:text-[11px]">
-                            <span className="flex items-center gap-0.5 md:gap-1">
-                              <ThumbsUp size={10} />
+                          <div className="flex items-center gap-3 text-white/40 text-[11px]">
+                            <span className="flex items-center gap-1">
+                              <ThumbsUp size={11} />
                               {post.score || 0}
                             </span>
-                            <span className="flex items-center gap-0.5 md:gap-1">
-                              <MessageSquare size={10} />
+                            <span className="flex items-center gap-1">
+                              <MessageSquare size={11} />
                               {post.commentCount || 0}
                             </span>
-                            <span className="flex items-center gap-0.5 md:gap-1">
-                              <Eye size={10} />
+                            <span className="flex items-center gap-1">
+                              <Eye size={11} />
                               {post.views || 0}
                             </span>
                           </div>
