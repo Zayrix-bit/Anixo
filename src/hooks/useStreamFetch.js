@@ -207,9 +207,63 @@ export function useStreamFetch({
           }
         }
 
+        // --- SERVER 6: ANIKO BACKUP ---
+        let hasSources = false;
+        if (activeServer === 6) {
+          const langParam = playerLang.toLowerCase() === "dub" ? "dub" : "sub";
+          const anilistId = anime?.id || (!isMal ? id : null);
+          const anikoBase = import.meta.env.VITE_ANIKO_API || "http://localhost:3000";
+
+          if (anilistId) {
+            try {
+              const res = await fetch(`${anikoBase}/api/watch/${anilistId}/${langParam}/${activeEpisode}`);
+              if (!res.ok) throw new Error("Failed to fetch Server 6");
+              const data = await res.json();
+              
+              const audioKey = langParam === "sub" ? "ssub" : "sdub";
+              const providerData = data[audioKey];
+              
+              if (providerData && providerData.streams && providerData.streams.length > 0) {
+                const hlsStream = providerData.streams.find(s => s.type === "hls");
+                const embedStream = providerData.streams.find(s => s.type === "embed");
+                
+                if (hlsStream) {
+                  // Pass HLS directly to VideoPlayer via proxy to bypass 403 Forbidden
+                  const proxyUrl = `${anikoBase}/api/proxy?url=${encodeURIComponent(hlsStream.url)}&referer=${encodeURIComponent(hlsStream.referer || 'https://anikoto.com/')}`;
+                  setStreamData({
+                    server_name: "SERVER 6 (Aniko)",
+                    lang: langParam,
+                    sources: [{ url: proxyUrl, type: "hls" }],
+                    subtitles: providerData.subtitles || []
+                  });
+                  hasSources = true;
+                } else if (embedStream) {
+                  url = embedStream.url;
+                  setStreamData({
+                    server_name: "SERVER 6 (Aniko)",
+                    lang: langParam,
+                  });
+                } else {
+                  url = providerData.streams[0].url;
+                  setStreamData({
+                    server_name: "SERVER 6 (Aniko)",
+                    lang: langParam,
+                  });
+                }
+              } else {
+                setFetchError("No valid video source found on Server 6.");
+              }
+            } catch {
+              setFetchError("Error fetching from Server 6.");
+            }
+          } else {
+            setFetchError("AniList ID is required for Server 6. Try another server.");
+          }
+        }
+
         if (url) {
           if (activeServer >= 3) {
-            // Keep Vidnest, Tryembed, Anineko URLs clean without Megaplay-specific parameters
+            // Keep Vidnest, Tryembed, Anineko, Aniko URLs clean without Megaplay-specific parameters
             setStreamUrl(url);
           } else {
             // Inject Autoplay and premium params for Megaplay
@@ -234,6 +288,9 @@ export function useStreamFetch({
               setStreamUrl(finalUrl);
             }
           }
+        } else if (activeServer === 6 && hasSources) {
+          // If we have HLS sources set for Server 6, we don't need a URL
+          setStreamUrl("");
         } else {
           setFetchError("Stream link not found for this server.");
         }
