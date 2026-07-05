@@ -342,7 +342,7 @@ export default function Watch() {
     streamUrl, streamData, streamLoading, fetchError, iframeLoaded, setIframeLoaded
   } = useStreamFetch({
     id, anime, activeEpisode, playerLang, activeServer, autoPlay,
-    episodesLength: episodesList.length, setPageLoading, isMal, initialTime, activeSubServer,
+    setPageLoading, isMal, initialTime, activeSubServer,
   });
 
   const [stableSeasons, setStableSeasons] = useState([]);
