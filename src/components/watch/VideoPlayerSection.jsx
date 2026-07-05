@@ -25,8 +25,11 @@ export default function VideoPlayerSection({
   episodesList,
   setActiveEpisode,
   iframeRef,
+  activeSubServer = 0,
 }) {
   const { t } = useTranslation();
+
+  const anikoBase = import.meta.env.VITE_ANIKO_API || "http://localhost:3000";
 
   // Resolve current episode image for player background/loading placeholder
   const currentEpisodeImage = useMemo(() => {
@@ -51,6 +54,27 @@ export default function VideoPlayerSection({
       anime?.coverImage?.large
     );
   }, [anime, malEpisodes, activeEpisode]);
+
+  let videoSrc = null;
+  let videoType = null;
+  let isIframe = false;
+  let currentIframeUrl = streamUrl;
+
+  if (activeServer === 6 && streamData?.all_streams) {
+    const currentStream = streamData.all_streams[activeSubServer] || streamData.all_streams[0];
+    if (currentStream && currentStream.type === "hls") {
+      videoSrc = `${anikoBase}/api/proxy?url=${encodeURIComponent(currentStream.url)}&referer=${encodeURIComponent(currentStream.referer || 'https://anikoto.com/')}`;
+      videoType = "hls";
+    } else if (currentStream) {
+      isIframe = true;
+      currentIframeUrl = currentStream.url;
+    }
+  } else if ((streamData?.sources && Array.isArray(streamData.sources) && streamData.sources.length > 0 && !streamData?.iframe_url) || (activeServer === 2 && streamData?.sources)) {
+    videoSrc = streamData.sources[0].url;
+    videoType = streamData.sources[0].type;
+  } else {
+    isIframe = true;
+  }
 
   return (
     <>
@@ -183,18 +207,14 @@ export default function VideoPlayerSection({
 
           {/* Server Rendering Logic */}
           <div className="w-full h-full">
-            {(streamData?.sources &&
-              Array.isArray(streamData.sources) &&
-              streamData.sources.length > 0 &&
-              !streamData?.iframe_url) ||
-            (activeServer === 2 && streamData?.sources) ? (
+            {!isIframe && videoSrc ? (
               <VideoPlayer
-                src={streamData.sources[0].url}
-                type={streamData.sources[0].type}
+                src={videoSrc}
+                type={videoType}
                 poster={
                   anime?.coverImage?.extraLarge || anime?.coverImage?.large
                 }
-                subtitles={streamData.subtitles || []}
+                subtitles={streamData?.subtitles || []}
                 initialTime={initialTime}
                 onReady={() => setTimeout(() => setIframeLoaded(true), 0)}
                 onEnded={() => {
@@ -209,10 +229,10 @@ export default function VideoPlayerSection({
             ) : (
               <iframe
                 ref={iframeRef}
-                key={`${activeServer}-${activeEpisode}-${playerLang}`}
-                src={streamUrl || "about:blank"}
+                key={`${activeServer}-${activeEpisode}-${playerLang}-${activeSubServer}`}
+                src={currentIframeUrl || "about:blank"}
                 onLoad={() => {
-                  if (streamUrl) setTimeout(() => setIframeLoaded(true), 0);
+                  if (currentIframeUrl) setTimeout(() => setIframeLoaded(true), 0);
                 }}
                 className={`w-full h-full border-0 transition-opacity duration-500 ${
                   !iframeLoaded ? "opacity-0" : "opacity-100"

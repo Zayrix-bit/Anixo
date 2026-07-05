@@ -224,30 +224,25 @@ export function useStreamFetch({
               const providerData = data[audioKey];
               
               if (providerData && providerData.streams && providerData.streams.length > 0) {
-                const hlsStream = providerData.streams.find(s => s.type === "hls");
-                const embedStream = providerData.streams.find(s => s.type === "embed");
+                // Determine if we have at least one HLS source (for triggering VideoPlayer mount)
+                const hasHls = providerData.streams.some(s => s.type === "hls");
                 
-                if (hlsStream) {
-                  // Pass HLS directly to VideoPlayer via proxy to bypass 403 Forbidden
-                  const proxyUrl = `${anikoBase}/api/proxy?url=${encodeURIComponent(hlsStream.url)}&referer=${encodeURIComponent(hlsStream.referer || 'https://anikoto.com/')}`;
+                if (hasHls) {
                   setStreamData({
                     server_name: "SERVER 6 (Aniko)",
                     lang: langParam,
-                    sources: [{ url: proxyUrl, type: "hls" }],
+                    // Pass the raw streams; VideoPlayerSection will handle proxy wrapping and selection
+                    all_streams: providerData.streams,
                     subtitles: providerData.subtitles || []
                   });
                   hasSources = true;
-                } else if (embedStream) {
-                  url = embedStream.url;
-                  setStreamData({
-                    server_name: "SERVER 6 (Aniko)",
-                    lang: langParam,
-                  });
                 } else {
+                  // Fallback to embed if no HLS is available
                   url = providerData.streams[0].url;
                   setStreamData({
                     server_name: "SERVER 6 (Aniko)",
                     lang: langParam,
+                    all_streams: providerData.streams,
                   });
                 }
               } else {

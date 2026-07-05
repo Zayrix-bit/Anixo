@@ -142,6 +142,13 @@ export default function Watch() {
   const [hasSub, setHasSub] = useState(false); // Strict: Hide until verified
   const [hasDub, setHasDub] = useState(false);
   const [isFocusMode, setIsFocusMode] = useState(false);
+  const [activeSubServer, setActiveSubServer] = useState(0);
+
+  const [prevEpAndServer, setPrevEpAndServer] = useState({ ep: activeEpisode, server: activeServer });
+  if (prevEpAndServer.ep !== activeEpisode || prevEpAndServer.server !== activeServer) {
+    setPrevEpAndServer({ ep: activeEpisode, server: activeServer });
+    setActiveSubServer(0);
+  }
 
   // Sync Focus Mode to Body class for global styling overrides
   useEffect(() => {
@@ -335,7 +342,7 @@ export default function Watch() {
     streamUrl, streamData, streamLoading, fetchError, iframeLoaded, setIframeLoaded
   } = useStreamFetch({
     id, anime, activeEpisode, playerLang, activeServer, autoPlay,
-    episodesLength: episodesList.length, setPageLoading, isMal, initialTime,
+    episodesLength: episodesList.length, setPageLoading, isMal, initialTime, activeSubServer,
   });
 
   const [stableSeasons, setStableSeasons] = useState([]);
@@ -569,6 +576,7 @@ export default function Watch() {
                 fetchError={fetchError}
                 activeServer={activeServer}
                 setActiveServer={setActiveServer}
+                activeSubServer={activeSubServer}
                 streamData={streamData}
                 playerLang={playerLang}
                 initialTime={initialTime}
@@ -578,6 +586,28 @@ export default function Watch() {
                 iframeRef={iframeRef}
               />
             </section>
+
+            {/* Sub-Server Selector for Server 6 */}
+            {activeServer === 6 && streamData?.all_streams && streamData.all_streams.length > 1 && (
+              <div className="flex flex-wrap items-center gap-2 px-4 py-3 bg-[#0a0a0a] border-b border-x border-white/15">
+                <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider mr-2">
+                  Available Streams:
+                </span>
+                {streamData.all_streams.map((stream, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveSubServer(idx)}
+                    className={`px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-sm border transition-all ${
+                      activeSubServer === idx
+                        ? "bg-red-600 border-red-600 text-white shadow-[0_0_10px_rgba(220,38,38,0.3)]"
+                        : "border-white/10 text-white/50 hover:text-white hover:border-white/20 bg-white/5"
+                    }`}
+                  >
+                    {stream.server || `Stream ${idx + 1}`}
+                  </button>
+                ))}
+              </div>
+            )}
 
             {/* Player Toolbar + Server Selector */}
             <PlayerToolbar
