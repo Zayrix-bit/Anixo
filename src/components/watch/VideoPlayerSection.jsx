@@ -134,21 +134,22 @@ export default function VideoPlayerSection({
         <>
           {/* Loader & Error Overlay */}
           {(streamLoading ||
-            (streamUrl && !iframeLoaded) ||
-            (!streamLoading && (!streamUrl || fetchError))) && (
+            (isIframe && !iframeLoaded) ||
+            (!streamLoading && fetchError) ||
+            (!streamLoading && !videoSrc && !isIframe)) && (
             <div className="absolute inset-0 z-20 group">
               <img
                 src={currentEpisodeImage}
                 alt="Poster"
                 key={activeEpisode}
                 className={`absolute inset-0 w-full h-full object-cover z-0 transition-all duration-700 animate-in fade-in fill-mode-both ${
-                  fetchError || (!streamLoading && !streamUrl)
+                  fetchError || (!streamLoading && !videoSrc && !isIframe)
                     ? "brightness-[0.7]"
                     : "brightness-[0.4]"
                 }`}
               />
               <div className="relative z-10 w-full h-full flex flex-col items-center justify-center p-8 text-center">
-                {(streamLoading || (streamUrl && !iframeLoaded)) &&
+                {(streamLoading || (isIframe && !iframeLoaded)) &&
                 activeServer !== 2 ? (
                   <div className="flex flex-col items-center gap-4 transition-all duration-300">
                     <div className="w-10 h-10 border-[3px] border-red-600 border-t-transparent rounded-full animate-spin shadow-[0_0_20px_rgba(220,38,38,0.3)]"></div>
