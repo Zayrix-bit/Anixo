@@ -245,7 +245,7 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
             autoPlayback: false,
             pip: true,
             autoSize: true,
-            screenshot: true,
+            screenshot: false,
             setting: true,
             settings: customSettings,
             autoHideCursor: false,
@@ -430,6 +430,24 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
 
         art.on('ready', () => {
             updateMutedIndicator();
+            
+            // Move chromecast button to the top right of the player
+            // The plugin adds the button asynchronously, so we wait for it
+            const checkChromecast = setInterval(() => {
+                const chromecastBtn = art.container.querySelector('.art-control-chromecast');
+                const topControls = art.container.querySelector('.art-top') || art.template.$top;
+                if (chromecastBtn && topControls) {
+                    chromecastBtn.style.position = 'absolute';
+                    chromecastBtn.style.right = '20px';
+                    chromecastBtn.style.top = '20px';
+                    chromecastBtn.style.zIndex = '50';
+                    topControls.appendChild(chromecastBtn);
+                    clearInterval(checkChromecast);
+                }
+            }, 100);
+
+            // Cleanup interval after 5 seconds if not found
+            setTimeout(() => clearInterval(checkChromecast), 5000);
             
             // Prevent page scrolling on mobile when dragging the timeline
             const progressElement = art.template.$progress || art.container.querySelector('.art-progress');
