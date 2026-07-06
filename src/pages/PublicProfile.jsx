@@ -4,7 +4,7 @@ import { backendApi } from "../services/api";
 import axios from "axios";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
-import { User, Calendar, PlayCircle, Clock, Heart, Eye, Tv, MessageCircle, Ban, Crown, Shield } from "lucide-react";
+import { User, Calendar, PlayCircle, Clock, Heart, Eye, Tv, MessageCircle, Ban, Crown, Shield, ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function PublicProfile() {
   const { profileId } = useParams();
@@ -18,6 +18,10 @@ export default function PublicProfile() {
   const [totalEpisodes, setTotalEpisodes] = useState(0);
 
   const [activeTab, setActiveTab] = useState("activity");
+  const [listPage, setListPage] = useState(1);
+  const [activityPage, setActivityPage] = useState(1);
+  const ITEMS_PER_PAGE = 24;
+  const ACTIVITY_PER_PAGE = 10;
 
   const getRelativeTime = (dateString) => {
     if (!dateString) return "Unknown";
@@ -335,11 +339,15 @@ export default function PublicProfile() {
         )}
 
         {/* WATCHLIST TAB */}
-        {activeTab === "watchlist" && (
+        {activeTab === "watchlist" && (() => {
+          const totalListPages = Math.ceil(watchlist.length / ITEMS_PER_PAGE);
+          const paginatedList = watchlist.slice((listPage - 1) * ITEMS_PER_PAGE, listPage * ITEMS_PER_PAGE);
+          return (
           <div>
             {watchlist.length > 0 ? (
+              <>
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-4">
-                {watchlist.map(w => (
+                {paginatedList.map(w => (
                   <Link key={w.animeId} to={`/watch/${w.animeId}`} className="group relative aspect-[2/3] rounded-md sm:rounded-lg overflow-hidden bg-white/5">
                     {w.anime?.coverImage?.large && (
                       <img src={w.anime.coverImage.large} alt="" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
@@ -352,6 +360,49 @@ export default function PublicProfile() {
                   </Link>
                 ))}
               </div>
+              {totalListPages > 1 && (
+                <div className="flex items-center justify-center gap-2 mt-6">
+                  <button
+                    onClick={() => { setListPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                    disabled={listPage === 1}
+                    className="p-2 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  {Array.from({ length: totalListPages }, (_, i) => i + 1)
+                    .filter(p => p === 1 || p === totalListPages || Math.abs(p - listPage) <= 2)
+                    .reduce((acc, p, i, arr) => {
+                      if (i > 0 && p - arr[i - 1] > 1) acc.push('...');
+                      acc.push(p);
+                      return acc;
+                    }, [])
+                    .map((p, i) =>
+                      p === '...' ? (
+                        <span key={`dot-${i}`} className="px-1 text-white/30 text-sm">...</span>
+                      ) : (
+                        <button
+                          key={p}
+                          onClick={() => { setListPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                          className={`min-w-[32px] h-8 rounded-lg text-xs font-bold transition-colors ${
+                            listPage === p
+                              ? 'bg-red-600 text-white'
+                              : 'bg-white/5 border border-white/10 text-white/60 hover:bg-white/10'
+                          }`}
+                        >
+                          {p}
+                        </button>
+                      )
+                    )}
+                  <button
+                    onClick={() => { setListPage(p => Math.min(totalListPages, p + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                    disabled={listPage === totalListPages}
+                    className="p-2 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+              )}
+              </>
             ) : (
               <div className="text-center py-16 sm:py-20 text-white/40">
                 <Heart size={36} className="mx-auto mb-3 opacity-20" />
@@ -359,14 +410,19 @@ export default function PublicProfile() {
               </div>
             )}
           </div>
-        )}
+          );
+        })()}
 
         {/* ACTIVITY TAB */}
-        {activeTab === "activity" && (
+        {activeTab === "activity" && (() => {
+          const totalActivityPages = Math.ceil(activityFeed.length / ACTIVITY_PER_PAGE);
+          const paginatedActivity = activityFeed.slice((activityPage - 1) * ACTIVITY_PER_PAGE, activityPage * ACTIVITY_PER_PAGE);
+          return (
           <div className="max-w-3xl mx-auto py-6">
             {activityFeed.length > 0 ? (
+              <>
               <div className="relative border-l border-[#1d2721] ml-4 sm:ml-6 pl-6 sm:pl-8 space-y-8">
-                {activityFeed.map(item => (
+                {paginatedActivity.map(item => (
                   <div key={item._id} className="relative">
                     {/* Timeline Dot with Icon */}
                     <div className="absolute -left-[38px] sm:-left-[46px] top-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#0a0a0a] border border-[#1d2721] flex items-center justify-center z-10">
@@ -415,11 +471,55 @@ export default function PublicProfile() {
                   </div>
                 ))}
               </div>
+              {totalActivityPages > 1 && (
+                <div className="flex items-center justify-center gap-2 mt-10">
+                  <button
+                    onClick={() => { setActivityPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                    disabled={activityPage === 1}
+                    className="p-2 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  {Array.from({ length: totalActivityPages }, (_, i) => i + 1)
+                    .filter(p => p === 1 || p === totalActivityPages || Math.abs(p - activityPage) <= 2)
+                    .reduce((acc, p, i, arr) => {
+                      if (i > 0 && p - arr[i - 1] > 1) acc.push('...');
+                      acc.push(p);
+                      return acc;
+                    }, [])
+                    .map((p, i) =>
+                      p === '...' ? (
+                        <span key={`dot-${i}`} className="px-1 text-white/30 text-sm">...</span>
+                      ) : (
+                        <button
+                          key={p}
+                          onClick={() => { setActivityPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                          className={`min-w-[32px] h-8 rounded-lg text-xs font-bold transition-colors ${
+                            activityPage === p
+                              ? 'bg-red-600 text-white'
+                              : 'bg-white/5 border border-white/10 text-white/60 hover:bg-white/10'
+                          }`}
+                        >
+                          {p}
+                        </button>
+                      )
+                    )}
+                  <button
+                    onClick={() => { setActivityPage(p => Math.min(totalActivityPages, p + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                    disabled={activityPage === totalActivityPages}
+                    className="p-2 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+              )}
+              </>
             ) : (
               <p className="text-center text-white/40 py-10 text-sm">No recent activity.</p>
             )}
           </div>
-        )}
+          );
+        })()}
 
       </div>
       <Footer />
