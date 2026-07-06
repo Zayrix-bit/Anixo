@@ -30,6 +30,7 @@ export const AuthProvider = ({ children }) => {
       document.documentElement.style.setProperty('--discord-400', globalSettings.themeColor);
       document.documentElement.style.setProperty('--discord-800', globalSettings.themeColor);
       document.documentElement.style.setProperty('--discord-900', globalSettings.themeColor);
+      localStorage.setItem("anixo_theme_color", globalSettings.themeColor);
     } else {
       document.documentElement.style.removeProperty('--discord-600');
       document.documentElement.style.removeProperty('--discord-500');
@@ -37,6 +38,7 @@ export const AuthProvider = ({ children }) => {
       document.documentElement.style.removeProperty('--discord-400');
       document.documentElement.style.removeProperty('--discord-800');
       document.documentElement.style.removeProperty('--discord-900');
+      localStorage.removeItem("anixo_theme_color");
     }
   }, [globalSettings?.themeColor]);
 
@@ -168,6 +170,7 @@ export const AuthProvider = ({ children }) => {
   const logoutAuth = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("cached_user");
+    localStorage.removeItem("anixo_theme_color");
     setUser(null);
     setGlobalWatchlist([]);
     setGlobalProgress([]);

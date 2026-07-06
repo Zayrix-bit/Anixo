@@ -15,6 +15,19 @@
   <meta name="apple-mobile-web-app-title" content="Anixo" />
 
   <!-- Performance: Preconnect to external APIs -->
+  <script>
+    try {
+      const themeColor = localStorage.getItem("anixo_theme_color");
+      if (themeColor) {
+        document.documentElement.style.setProperty('--discord-600', themeColor);
+        document.documentElement.style.setProperty('--discord-500', themeColor);
+        document.documentElement.style.setProperty('--discord-700', themeColor);
+        document.documentElement.style.setProperty('--discord-400', themeColor);
+        document.documentElement.style.setProperty('--discord-800', themeColor);
+        document.documentElement.style.setProperty('--discord-900', themeColor);
+      }
+    } catch (e) {}
+  </script>
 
   <link rel="preconnect" href="https://api.jikan.moe" />
   <link rel="preconnect" href="https://kitsu.io" />
