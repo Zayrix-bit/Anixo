@@ -410,7 +410,7 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                 },
             },
             subtitle: {
-                url: subtitles[0]?.url || '',
+                url: subtitles[0]?.url || subtitles[0]?.file || '',
                 type: 'vtt',
                 style: {
                     color: '#fff',
