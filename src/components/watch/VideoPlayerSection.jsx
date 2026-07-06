@@ -82,11 +82,15 @@ export default function VideoPlayerSection({
       if (currentStream.type === "hls" || currentStream.url.includes('.m3u8')) {
         videoSrc = `${anikoBase}/api/proxy?url=${encodeURIComponent(currentStream.url)}&referer=${encodeURIComponent(currentStream.referer || 'https://anikoto.com/')}`;
         videoType = "hls";
+        isIframe = false;
+      } else if (currentStream.type === "embed" || currentStream.url.includes('embed')) {
+        isIframe = true;
+        currentIframeUrl = currentStream.url;
       } else {
         videoSrc = currentStream.url;
         videoType = currentStream.type || "mp4";
+        isIframe = false;
       }
-      isIframe = false;
     }
   } else if ((streamData?.sources && Array.isArray(streamData.sources) && streamData.sources.length > 0 && !streamData?.iframe_url) || (activeServer === 2 && streamData?.sources)) {
     videoSrc = streamData.sources[0].url;

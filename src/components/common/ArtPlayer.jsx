@@ -200,8 +200,8 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
             const subOptions = [
                 { html: 'None', value: 'none', default: false },
                 ...subtitles.map((s, i) => ({
-                    html: s.lang || `Track ${i + 1}`,
-                    value: s.url,
+                    html: s.label || s.lang || s.language || `Track ${i + 1}`,
+                    value: s.file || s.url,
                     default: i === 0
                 }))
             ];
@@ -210,7 +210,7 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                 name: 'subtitle-select',
                 width: 200,
                 html: 'Subtitles',
-                tooltip: subtitles[0]?.lang || 'English',
+                tooltip: subtitles[0]?.label || subtitles[0]?.lang || subtitles[0]?.language || 'English',
                 selector: subOptions,
                 onSelect: function (item) {
                     const player = artInstance.current;
