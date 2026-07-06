@@ -66,7 +66,7 @@ export default function Watch() {
 
   const [activeEpisode, setActiveEpisode] = useState(initialEp);
   const lastOpenedEpisode = useRef(initialEp);
-  const [recPage, setRecPage] = useState(1);
+  const [recPage, setRecPage] = useState(6);
 
   // --- Real Watch History Tracking ---
   const [watchedEpisodes, setWatchedEpisodes] = useState(() => {
