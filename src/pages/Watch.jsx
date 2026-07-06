@@ -144,6 +144,7 @@ export default function Watch() {
   const [hasDub, setHasDub] = useState(false);
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [activeSubServer, setActiveSubServer] = useState(0);
+  const [showSubServers, setShowSubServers] = useState(false);
 
   const [prevEpAndServer, setPrevEpAndServer] = useState({ ep: activeEpisode, server: activeServer });
   if (prevEpAndServer.ep !== activeEpisode || prevEpAndServer.server !== activeServer) {
@@ -570,7 +571,7 @@ export default function Watch() {
             <div className="mb-2 bg-[#1a1a1a] border border-[#ff0000]/30 rounded-sm px-4 py-2 flex items-center gap-2.5">
               <Info className="text-[#ff0000] flex-shrink-0" size={16} />
               <p className="text-white/80 text-[11px] sm:text-xs">
-                <strong className="text-[#ff0000]">Notice:</strong> For newly releasing anime, please use <strong className="text-white">Server 6</strong> for the latest episodes and fastest updates.
+                <strong className="text-[#ff0000]">Notice:</strong> For newly releasing anime, please use <strong className="text-white">Server 3</strong> for the latest episodes and fastest updates.
               </p>
             </div>
 
@@ -599,25 +600,40 @@ export default function Watch() {
               />
             </section>
 
-            {/* Sub-Server Selector for Server 6 */}
-            {activeServer === 6 && streamData?.all_streams && streamData.all_streams.length > 1 && (
-              <div className="flex flex-wrap items-center gap-2 px-4 py-3 bg-[#0a0a0a] border-b border-x border-white/15">
-                <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider mr-2">
-                  Available Streams:
-                </span>
-                {streamData.all_streams.map((stream, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setActiveSubServer(idx)}
-                    className={`px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-sm border transition-all ${
-                      activeSubServer === idx
-                        ? "bg-red-600 border-red-600 text-white shadow-[0_0_10px_rgba(220,38,38,0.3)]"
-                        : "border-white/10 text-white/50 hover:text-white hover:border-white/20 bg-white/5"
-                    }`}
+            {/* Sub-Server Selector for Server 3 */}
+            {activeServer === 3 && streamData?.all_streams && streamData.all_streams.length > 1 && (
+              <div className="bg-[#0a0a0a] border-b border-x border-white/15">
+                <button
+                  onClick={() => setShowSubServers(prev => !prev)}
+                  className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-white/5 transition-colors"
+                >
+                  <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">
+                    Available Streams ({streamData.all_streams.length})
+                  </span>
+                  <svg
+                    className={`w-3.5 h-3.5 text-white/40 transition-transform duration-200 ${showSubServers ? 'rotate-180' : ''}`}
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor"
                   >
-                    {stream.server || `Stream ${idx + 1}`}
-                  </button>
-                ))}
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {showSubServers && (
+                  <div className="flex flex-wrap items-center gap-2 px-4 pb-3 animate-in fade-in slide-in-from-top-1 duration-200">
+                    {streamData.all_streams.map((stream, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => setActiveSubServer(idx)}
+                        className={`px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-sm border transition-all ${
+                          activeSubServer === idx
+                            ? "bg-red-600 border-red-600 text-white shadow-[0_0_10px_rgba(220,38,38,0.3)]"
+                            : "border-white/10 text-white/50 hover:text-white hover:border-white/20 bg-white/5"
+                        }`}
+                      >
+                        {stream.server || `Stream ${idx + 1}`}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 

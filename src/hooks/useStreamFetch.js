@@ -124,36 +124,52 @@ export function useStreamFetch({
           }
         }
 
-        // --- SERVER 3: TRYEMBED (AniList ID) ---
-        else if (activeServer === 3) {
-          const langParam =
-            playerLang.toLowerCase() === "dub" ? "dub" : "sub";
+        // --- SERVER 3: ANIKO BACKUP ---
+        let hasSources = false;
+        if (activeServer === 3) {
+          const langParam = playerLang.toLowerCase() === "dub" ? "dub" : "sub";
           const anilistId = anime?.id || (!isMal ? id : null);
+          const anikoBase = import.meta.env.VITE_ANIKO_API || "http://localhost:3000";
 
           if (anilistId) {
-            const queryParams = [];
-            if (autoPlay) {
-              queryParams.push("autoplay=true");
+            try {
+              const res = await fetch(`${anikoBase}/api/watch/${anilistId}/${langParam}/${activeEpisode}`);
+              if (!res.ok) throw new Error("Failed to fetch Server 3");
+              const data = await res.json();
+              
+              const audioKey = langParam === "sub" ? "ssub" : "sdub";
+              const providerData = data[audioKey];
+              
+              if (providerData && providerData.streams && providerData.streams.length > 0) {
+                // Determine if we have at least one HLS source (for triggering VideoPlayer mount)
+                const hasHls = providerData.streams.some(s => s.type === "hls");
+                
+                if (hasHls) {
+                  setStreamData({
+                    server_name: "SERVER 3 (Aniko)",
+                    lang: langParam,
+                    // Pass the raw streams; VideoPlayerSection will handle proxy wrapping and selection
+                    all_streams: providerData.streams,
+                    subtitles: providerData.subtitles || []
+                  });
+                  hasSources = true;
+                } else {
+                  // Fallback to embed if no HLS is available
+                  url = providerData.streams[0].url;
+                  setStreamData({
+                    server_name: "SERVER 3 (Aniko)",
+                    lang: langParam,
+                    all_streams: providerData.streams,
+                  });
+                }
+              } else {
+                setFetchError("No valid video source found on Server 3.");
+              }
+            } catch {
+              setFetchError("Error fetching from Server 3.");
             }
-            queryParams.push("autoSkip=true");
-            queryParams.push("autoNext=false");
-            queryParams.push("lang-type=false");
-            
-            if (initialTime && initialTime > 0) {
-              queryParams.push(`startAt=${Math.floor(initialTime)}`);
-            }
-
-            const queryString = queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
-            url = `https://tryembed.us.cc/embed/anime/${anilistId}/${activeEpisode}/${langParam}${queryString}`;
-
-            setStreamData({
-              server_name: "SERVER 3 (Tryembed)",
-              lang: langParam,
-            });
           } else {
-            setFetchError(
-              "AniList ID is required for Server 3. Try another server."
-            );
+            setFetchError("AniList ID is required for Server 3. Try another server.");
           }
         }
 
@@ -206,52 +222,36 @@ export function useStreamFetch({
           }
         }
 
-        // --- SERVER 6: ANIKO BACKUP ---
-        let hasSources = false;
-        if (activeServer === 6) {
-          const langParam = playerLang.toLowerCase() === "dub" ? "dub" : "sub";
+        // --- SERVER 6: TRYEMBED (AniList ID) ---
+        else if (activeServer === 6) {
+          const langParam =
+            playerLang.toLowerCase() === "dub" ? "dub" : "sub";
           const anilistId = anime?.id || (!isMal ? id : null);
-          const anikoBase = import.meta.env.VITE_ANIKO_API || "http://localhost:3000";
 
           if (anilistId) {
-            try {
-              const res = await fetch(`${anikoBase}/api/watch/${anilistId}/${langParam}/${activeEpisode}`);
-              if (!res.ok) throw new Error("Failed to fetch Server 6");
-              const data = await res.json();
-              
-              const audioKey = langParam === "sub" ? "ssub" : "sdub";
-              const providerData = data[audioKey];
-              
-              if (providerData && providerData.streams && providerData.streams.length > 0) {
-                // Determine if we have at least one HLS source (for triggering VideoPlayer mount)
-                const hasHls = providerData.streams.some(s => s.type === "hls");
-                
-                if (hasHls) {
-                  setStreamData({
-                    server_name: "SERVER 6 (Aniko)",
-                    lang: langParam,
-                    // Pass the raw streams; VideoPlayerSection will handle proxy wrapping and selection
-                    all_streams: providerData.streams,
-                    subtitles: providerData.subtitles || []
-                  });
-                  hasSources = true;
-                } else {
-                  // Fallback to embed if no HLS is available
-                  url = providerData.streams[0].url;
-                  setStreamData({
-                    server_name: "SERVER 6 (Aniko)",
-                    lang: langParam,
-                    all_streams: providerData.streams,
-                  });
-                }
-              } else {
-                setFetchError("No valid video source found on Server 6.");
-              }
-            } catch {
-              setFetchError("Error fetching from Server 6.");
+            const queryParams = [];
+            if (autoPlay) {
+              queryParams.push("autoplay=true");
             }
+            queryParams.push("autoSkip=true");
+            queryParams.push("autoNext=false");
+            queryParams.push("lang-type=false");
+            
+            if (initialTime && initialTime > 0) {
+              queryParams.push(`startAt=${Math.floor(initialTime)}`);
+            }
+
+            const queryString = queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
+            url = `https://tryembed.us.cc/embed/anime/${anilistId}/${activeEpisode}/${langParam}${queryString}`;
+
+            setStreamData({
+              server_name: "SERVER 6 (Tryembed)",
+              lang: langParam,
+            });
           } else {
-            setFetchError("AniList ID is required for Server 6. Try another server.");
+            setFetchError(
+              "AniList ID is required for Server 6. Try another server."
+            );
           }
         }
 
@@ -282,8 +282,8 @@ export function useStreamFetch({
               setStreamUrl(finalUrl);
             }
           }
-        } else if (activeServer === 6 && hasSources) {
-          // If we have HLS sources set for Server 6, we don't need a URL
+        } else if (activeServer === 3 && hasSources) {
+          // If we have HLS sources set for Server 3, we don't need a URL
           setStreamUrl("");
         } else {
           setFetchError("Stream link not found for this server.");
