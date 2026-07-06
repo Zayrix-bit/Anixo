@@ -232,7 +232,7 @@ export default function Settings() {
 
                 <div className="flex flex-col gap-4 pt-4 border-t border-white/5">
                   <span className="text-[13px] font-medium text-white/60">Theme Color</span>
-                  <div className="flex items-center gap-3 flex-wrap">
+                  <div className="grid grid-cols-8 gap-3 mt-1">
                     {THEME_COLORS.map((theme) => {
                       const isActive = formData.themeColor.toUpperCase() === theme.color.toUpperCase();
                       return (
@@ -241,13 +241,10 @@ export default function Settings() {
                           type="button"
                           title={theme.label}
                           onClick={() => setFormData({...formData, themeColor: theme.color})}
-                          className={`w-8 h-8 rounded-full transition-all duration-300 flex items-center justify-center relative
+                          className={`w-8 h-8 rounded-full transition-all duration-300 flex items-center justify-center relative justify-self-center
                             ${isActive ? 'scale-125 ring-2 ring-white ring-offset-2 ring-offset-[#111] z-10' : 'hover:scale-110 opacity-70 hover:opacity-100'}
                           `}
-                          style={{ 
-                            backgroundColor: theme.color,
-                            boxShadow: isActive ? `0 0 20px ${theme.color}80` : `0 0 10px ${theme.color}40`,
-                          }}
+                          style={{ backgroundColor: theme.color }}
                         >
                           <div className="absolute inset-0 rounded-full bg-white/10 mix-blend-overlay"></div>
                           {isActive && <CheckCircle2 size={14} className="text-white drop-shadow-md relative z-10" />}
@@ -261,22 +258,24 @@ export default function Settings() {
             </div>
 
             {/* Submit Button */}
-            <button 
-              type="submit"
-              disabled={isSaving}
-              className="w-full bg-discord-600 hover:bg-discord-700 disabled:opacity-50 text-white font-black py-5 text-[11px] uppercase tracking-[0.25em] transition-all flex items-center justify-center gap-3 active:scale-[0.98]"
-            >
-              {isSaving ? (
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              ) : saveSuccess ? (
-                <>
-                  <CheckCircle2 size={18} />
-                  <span>Config Saved</span>
-                </>
-              ) : (
-                <span>Push Updates</span>
-              )}
-            </button>
+            <div className="mt-8">
+              <button 
+                type="submit"
+                disabled={isSaving}
+                className="w-full bg-discord-600 hover:bg-discord-700 disabled:opacity-50 text-white font-semibold py-3.5 rounded-xl text-[14px] transition-all flex items-center justify-center gap-2 shadow-lg shadow-discord-600/20 active:scale-[0.98]"
+              >
+                {isSaving ? (
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : saveSuccess ? (
+                  <>
+                    <CheckCircle2 size={18} />
+                    <span>Settings Saved Successfully</span>
+                  </>
+                ) : (
+                  <span>Save Changes</span>
+                )}
+              </button>
+            </div>
 
           </form>
         </div>
