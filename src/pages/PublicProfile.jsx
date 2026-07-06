@@ -49,7 +49,7 @@ export default function PublicProfile() {
           const progIds = progress.map(p => parseInt(p.animeId)).filter(id => !isNaN(id));
           const commIds = comments.map(c => parseInt(c.animeId)).filter(id => !isNaN(id));
           
-          const allIds = [...new Set([...watchIds, ...progIds, ...commIds])].slice(0, 50);
+          const allIds = [...new Set([...watchIds, ...progIds, ...commIds])];
 
           if (allIds.length > 0) {
             const query = `
@@ -65,14 +65,26 @@ export default function PublicProfile() {
               }
             `;
             try {
-              const { data } = await axios.post("https://graphql.anilist.co", {
-                query,
-                variables: { ids: allIds }
-              }, { headers: { "Content-Type": "application/json", "Accept": "application/json" } });
-
-              const mediaList = data?.data?.Page?.media || [];
+              // Batch into chunks of 50 (AniList API limit)
               const mediaMap = {};
-              mediaList.forEach(m => mediaMap[m.id] = m);
+              const chunks = [];
+              for (let i = 0; i < allIds.length; i += 50) {
+                chunks.push(allIds.slice(i, i + 50));
+              }
+              
+              const results = await Promise.all(
+                chunks.map(chunk =>
+                  axios.post("https://graphql.anilist.co", {
+                    query,
+                    variables: { ids: chunk }
+                  }, { headers: { "Content-Type": "application/json", "Accept": "application/json" } })
+                )
+              );
+              
+              results.forEach(({ data }) => {
+                const mediaList = data?.data?.Page?.media || [];
+                mediaList.forEach(m => mediaMap[m.id] = m);
+              });
 
               list = list.map(item => ({ ...item, anime: mediaMap[parseInt(item.animeId)] }));
               progress = progress.map(item => ({ ...item, type: 'progress', timestamp: item.updatedAt, anime: mediaMap[parseInt(item.animeId)] }));
