@@ -101,7 +101,7 @@ export default function VideoPlayerSection({
 
   const processedSubtitles = useMemo(() => {
     const subs = streamData?.subtitles || [];
-    if (activeServer === 3 && !isIframe) {
+    if (!isIframe) {
       return subs.map(sub => {
         if (sub.file && !sub.file.includes('/api/proxy')) {
           return {
