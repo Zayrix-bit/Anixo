@@ -80,7 +80,7 @@ export default function VideoPlayerSection({
     const currentStream = streamData.all_streams[activeSubServer] || streamData.all_streams[0];
     if (currentStream) {
       if (currentStream.type === "hls" || currentStream.url.includes('.m3u8')) {
-        videoSrc = `${anikoBase}/api/proxy?url=${encodeURIComponent(currentStream.url)}&referer=${encodeURIComponent(currentStream.referer || 'https://anikoto.com/')}`;
+        videoSrc = `${anikoBase}/api/proxy?url=${encodeURIComponent(currentStream.url)}&referer=${encodeURIComponent(currentStream.referer || 'https://anikototv.to/')}`;
         videoType = "hls";
         isIframe = false;
       } else if (currentStream.type === "embed" || currentStream.url.includes('embed')) {
@@ -98,6 +98,22 @@ export default function VideoPlayerSection({
   } else {
     isIframe = true;
   }
+
+  const processedSubtitles = useMemo(() => {
+    const subs = streamData?.subtitles || [];
+    if (activeServer === 3 && !isIframe) {
+      return subs.map(sub => {
+        if (sub.file && !sub.file.includes('/api/proxy')) {
+          return {
+            ...sub,
+            file: `${anikoBase}/api/proxy?url=${encodeURIComponent(sub.file)}&referer=${encodeURIComponent(sub.source || 'https://anikototv.to/')}`
+          };
+        }
+        return sub;
+      });
+    }
+    return subs;
+  }, [streamData?.subtitles, activeServer, isIframe, anikoBase]);
 
   return (
     <>
@@ -240,7 +256,7 @@ export default function VideoPlayerSection({
                   poster={
                     anime?.coverImage?.extraLarge || anime?.coverImage?.large
                   }
-                  subtitles={streamData?.subtitles || []}
+                  subtitles={processedSubtitles}
                   skipTimes={skipTimes}
                   initialTime={initialTime}
                   onReady={() => setTimeout(() => setIframeLoaded(true), 0)}
@@ -261,7 +277,7 @@ export default function VideoPlayerSection({
                   poster={
                     anime?.coverImage?.extraLarge || anime?.coverImage?.large
                   }
-                  subtitles={streamData?.subtitles || []}
+                  subtitles={processedSubtitles}
                   initialTime={initialTime}
                   onReady={() => setTimeout(() => setIframeLoaded(true), 0)}
                   onEnded={() => {
