@@ -330,7 +330,7 @@ const AiChat = () => {
         className={`block transition-all transform hover:scale-110 relative ${isOpen ? 'text-red-500' : 'text-[#888] hover:text-white'}`}
         title="Anixo AI"
       >
-        {isOpen ? <X size={20} strokeWidth={2.5} /> : <Bot size={20} strokeWidth={2.5} />}
+        {isOpen ? <X size={20} strokeWidth={2.5} /> : <span className="font-black text-[16px] tracking-tighter">AI</span>}
       </button>
 
       {/* Chat Window */}
@@ -428,12 +428,14 @@ const AiChat = () => {
           <div className="flex-1 overflow-y-auto overscroll-contain p-4 space-y-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
             {!user ? (
               <div className="flex flex-col items-center justify-center h-full min-h-[300px] text-center space-y-4">
-                <Bot size={48} className="text-red-500 mb-2 opacity-50" />
-                <h3 className="text-xl font-bold text-white">Login Required</h3>
-                <p className="text-gray-400 text-sm max-w-[250px]">
-                  Please login to chat with AniXo.
+                <h2 className="text-xl font-semibold text-white mb-1">Chat with AniXo AI</h2>
+                <p className="text-gray-400 text-sm mb-6">for anime recommendation</p>
+                
+                <h3 className="text-base font-bold text-white">Login Required</h3>
+                <p className="text-gray-500 text-sm max-w-[250px]">
+                  Please login to continue.
                 </p>
-                <button onClick={() => { setIsOpen(false); setShowLoginModal(true); }} className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors mt-2">
+                <button onClick={() => { setIsOpen(false); setShowLoginModal(true); }} className="px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors mt-2">
                   Login Now
                 </button>
               </div>
