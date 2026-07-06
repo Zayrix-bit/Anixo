@@ -63,7 +63,7 @@ function ListItem({ anime }) {
         <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300" />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-[13.5px] font-bold text-[#e5e5e5] truncate group-hover:text-red-400 transition-colors leading-snug">
+        <p className="text-[13.5px] font-bold text-[#e5e5e5] truncate group-hover:text-discord-400 transition-colors leading-snug">
           {getTitle(anime.title)}
         </p>
         <div className="flex flex-wrap items-center gap-2 mt-2">
@@ -76,7 +76,7 @@ function ListItem({ anime }) {
             </span>
           )}
           {anime.status === "NOT_YET_RELEASED" ? (
-            <span className="text-[9px] font-black bg-red-500/10 text-red-400 px-1.5 py-0.5 rounded-[3px] uppercase tracking-wider">
+            <span className="text-[9px] font-black bg-discord-500/10 text-discord-400 px-1.5 py-0.5 rounded-[3px] uppercase tracking-wider">
               {t('threeColumn.upcoming')}
             </span>
           ) : (
@@ -98,7 +98,7 @@ function RankedItem({ anime, rank, featured }) {
 
   if (featured) {
     return (
-      <div className="cursor-pointer group mb-4 relative rounded-xl overflow-hidden shadow-2xl ring-1 ring-white/10 hover:ring-red-500/50 transition-all duration-500" onClick={() => navigate(`/watch/${anime.id}`)}>
+      <div className="cursor-pointer group mb-4 relative rounded-xl overflow-hidden shadow-2xl ring-1 ring-white/10 hover:ring-discord-500/50 transition-all duration-500" onClick={() => navigate(`/watch/${anime.id}`)}>
         <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#1a1a1a]">
           <img
             src={anime.coverImage?.large}
@@ -116,16 +116,16 @@ function RankedItem({ anime, rank, featured }) {
             {rank}
           </span>
           <div className="pb-1.5 flex-1 min-w-0">
-            <p className="text-[14px] font-black text-white leading-tight uppercase group-hover:text-red-400 transition-colors drop-shadow-md truncate">
+            <p className="text-[14px] font-black text-white leading-tight uppercase group-hover:text-discord-400 transition-colors drop-shadow-md truncate">
               {getTitle(anime.title)}
             </p>
             <div className="flex flex-wrap items-center gap-2 mt-1.5 text-[9px] font-bold uppercase tracking-wider text-white/80">
               {anime.status === "NOT_YET_RELEASED" ? (
-                <span className="bg-red-500/30 text-red-100 px-1.5 py-0.5 rounded-[3px] backdrop-blur-md">{t('threeColumn.upcoming')}</span>
+                <span className="bg-discord-500/30 text-discord-100 px-1.5 py-0.5 rounded-[3px] backdrop-blur-md">{t('threeColumn.upcoming')}</span>
               ) : (
                 <span className="flex items-center gap-1 bg-white/20 px-1.5 py-0.5 rounded-[3px] backdrop-blur-md"><Tv size={10} className="text-white" /> {anime.episodes || "?"}</span>
               )}
-              <span className="flex items-center gap-1 bg-white/20 px-1.5 py-0.5 rounded-[3px] backdrop-blur-md"><Heart size={10} fill="currentColor" className="text-red-400" /> {anime.favourites || "?"}</span>
+              <span className="flex items-center gap-1 bg-white/20 px-1.5 py-0.5 rounded-[3px] backdrop-blur-md"><Heart size={10} fill="currentColor" className="text-discord-400" /> {anime.favourites || "?"}</span>
               <span className="bg-white/20 px-1.5 py-0.5 rounded-[3px] backdrop-blur-md">{anime.format}</span>
             </div>
           </div>
@@ -139,7 +139,7 @@ function RankedItem({ anime, rank, featured }) {
       className="flex items-center gap-4 py-2.5 px-2 -mx-2 cursor-pointer group border-b border-white/15 last:border-0 hover:bg-white/[0.03] rounded-xl transition-all duration-300"
       onClick={() => navigate(`/watch/${anime.id}`)}
     >
-      <span className="text-[32px] font-black italic text-white/10 group-hover:text-red-500 transition-all duration-300 w-8 text-center select-none group-hover:-translate-y-1 drop-shadow-sm">
+      <span className="text-[32px] font-black italic text-white/10 group-hover:text-discord-500 transition-all duration-300 w-8 text-center select-none group-hover:-translate-y-1 drop-shadow-sm">
         {rank}
       </span>
       <div className="relative overflow-hidden rounded-[6px] shrink-0 shadow-md ring-1 ring-white/5 group-hover:ring-white/20 transition-all duration-300">
@@ -153,16 +153,16 @@ function RankedItem({ anime, rank, featured }) {
         />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-[13.5px] font-bold text-[#e5e5e5] truncate group-hover:text-red-400 transition-colors leading-tight uppercase">
+        <p className="text-[13.5px] font-bold text-[#e5e5e5] truncate group-hover:text-discord-400 transition-colors leading-tight uppercase">
           {getTitle(anime.title)}
         </p>
         <div className="flex flex-wrap items-center gap-2 mt-2 text-[9px] font-bold uppercase tracking-wider text-white/60">
           {anime.status === "NOT_YET_RELEASED" ? (
-             <span className="bg-red-500/10 text-red-400 px-1.5 py-0.5 rounded-[3px]">{t('threeColumn.upcoming')}</span>
+             <span className="bg-discord-500/10 text-discord-400 px-1.5 py-0.5 rounded-[3px]">{t('threeColumn.upcoming')}</span>
           ) : (
              <span className="flex items-center gap-1 bg-white/5 px-1.5 py-0.5 rounded-[3px]"><Tv size={9} /> {anime.episodes || "?"}</span>
           )}
-          <span className="flex items-center gap-1 bg-white/5 px-1.5 py-0.5 rounded-[3px] text-white/80"><Heart size={9} fill="currentColor" className="text-red-500/80" /> {anime.favourites || "?"}</span>
+          <span className="flex items-center gap-1 bg-white/5 px-1.5 py-0.5 rounded-[3px] text-white/80"><Heart size={9} fill="currentColor" className="text-discord-500/80" /> {anime.favourites || "?"}</span>
           <span className="bg-white/5 px-1.5 py-0.5 rounded-[3px]">{anime.format}</span>
         </div>
       </div>
@@ -177,7 +177,7 @@ function SectionHeader({ title, hasArrow = false, path }) {
   return (
     <div className="flex items-center justify-between mb-8">
       <div className="flex items-center gap-2.5">
-        <div className="w-[3px] h-5 bg-red-600 rounded-full" />
+        <div className="w-[3px] h-5 bg-discord-600 rounded-full" />
         <h2 className="text-lg font-extrabold text-white uppercase leading-tight tracking-tight">
           {lines.map((line, i) => (
             <span key={i}>
@@ -190,7 +190,7 @@ function SectionHeader({ title, hasArrow = false, path }) {
       {hasArrow && (
         <span
           onClick={() => path && navigate(path)}
-          className="w-6 h-6 bg-red-600 rounded-[3px] flex items-center justify-center text-white cursor-pointer hover:bg-red-700 transition-colors"
+          className="w-6 h-6 bg-discord-600 rounded-[3px] flex items-center justify-center text-white cursor-pointer hover:bg-discord-700 transition-colors"
         >
           <ArrowUpRight size={14} />
         </span>
@@ -229,7 +229,7 @@ export default function ThreeColumnSection({ newReleases, mostViewed, justComple
         <div className="w-full">
           <div className="flex items-center justify-between mb-5 w-full">
             <div className="flex items-center gap-2.5">
-              <div className="w-[3px] h-5 bg-red-600 rounded-full" />
+              <div className="w-[3px] h-5 bg-discord-600 rounded-full" />
               <h2 className="text-lg font-extrabold text-white uppercase tracking-tight">
                 {t('threeColumn.mostViewed')}
               </h2>

@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+@theme {
+  --color-discord-50: #eef0ff;
+  --color-discord-100: #e0e4ff;
+  --color-discord-200: #c7cdff;
+  --color-discord-300: #a5b0ff;
+  --color-discord-400: var(--discord-400, #818eff);
+  --color-discord-500: var(--discord-500, #5865F2);
+  --color-discord-600: var(--discord-600, #4752C4);
+  --color-discord-700: var(--discord-700, #3c45a5);
+  --color-discord-800: var(--discord-800, #323986);
+  --color-discord-900: var(--discord-900, #2c336b);
+  --color-discord-950: var(--discord-950, #1b1f41);
+}
+
 .reveal-on-click {
   position: relative;
   overflow: hidden;
@@ -201,4 +215,4 @@ body {
 
 .animate-shake {
   animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
-}
+} 

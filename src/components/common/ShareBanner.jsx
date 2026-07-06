@@ -48,7 +48,7 @@ const ShareBanner = () => {
       <div className="relative overflow-hidden bg-gradient-to-r from-[#1a1217] via-[#21141e] to-[#271725] border border-white/15 rounded-2xl p-4 md:p-6 lg:px-10 flex flex-col md:flex-row items-center justify-between gap-5 transition-all duration-300 shadow-2xl">
 
         {/* Subtle decorative glow */}
-        <div className="absolute top-0 left-0 w-64 h-64 bg-red-600/5 rounded-full blur-3xl pointer-events-none -translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute top-0 left-0 w-64 h-64 bg-discord-600/5 rounded-full blur-3xl pointer-events-none -translate-x-1/2 -translate-y-1/2"></div>
 
         {/* Brand Info */}
         <div className="flex items-center gap-4 md:-ml-4">
@@ -61,7 +61,7 @@ const ShareBanner = () => {
             />
           </div>
           <div>
-            <h3 className="text-red-500 font-medium text-[22px] leading-tight tracking-tight">{t('share.loveThisSite')}</h3>
+            <h3 className="text-discord-500 font-medium text-[22px] leading-tight tracking-tight">{t('share.loveThisSite')}</h3>
             <p className="text-white/40 text-[13px] mt-0.5 font-medium">{t('share.shareIt')}</p>
           </div>
         </div>

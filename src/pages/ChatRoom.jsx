@@ -130,7 +130,7 @@ export default function ChatRoom() {
   };
 
   return (
-    <div className="h-dvh bg-gradient-to-b from-[#09090b] to-[#121212] text-white flex flex-col font-sans selection:bg-red-500/30 overflow-hidden overscroll-y-none">
+    <div className="h-dvh bg-gradient-to-b from-[#09090b] to-[#121212] text-white flex flex-col font-sans selection:bg-discord-500/30 overflow-hidden overscroll-y-none">
       <Navbar />
       
       <main className="flex-grow pt-16 md:pt-24 pb-0 md:pb-6 px-0 md:px-8 max-w-5xl mx-auto w-full flex flex-col min-h-0">
@@ -141,17 +141,17 @@ export default function ChatRoom() {
           <div className="bg-[#1a1a1a]/60 backdrop-blur-md border-b border-white/10 p-3 px-4 md:p-5 md:px-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 z-10 relative">
             <div className="flex flex-col pr-2">
               <h1 className="text-base sm:text-lg md:text-2xl font-bold flex items-center gap-2 tracking-tight text-white/90">
-                <MessageCircle className="text-red-600 w-4 h-4 md:w-5 md:h-5 shrink-0" />
+                <MessageCircle className="text-discord-600 w-4 h-4 md:w-5 md:h-5 shrink-0" />
                 Global Live Chat
                 <span className="relative flex h-2 w-2 md:h-3 md:w-3 ml-1 shrink-0">
-                  <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isConnected ? 'bg-green-400' : 'bg-red-400'}`}></span>
-                  <span className={`relative inline-flex rounded-full h-full w-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                  <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isConnected ? 'bg-green-400' : 'bg-discord-400'}`}></span>
+                  <span className={`relative inline-flex rounded-full h-full w-full ${isConnected ? 'bg-green-500' : 'bg-discord-500'}`}></span>
                 </span>
               </h1>
               <p className="text-white/40 text-[10px] md:text-[13px] mt-1 leading-snug">Real-time public chat room. Messages disappear after 5 days.</p>
             </div>
             <div className="flex items-center gap-2 shrink-0">
-              <div className="text-[10px] md:text-xs font-semibold bg-red-500/10 border border-red-500/20 text-red-400 px-2 py-1 md:px-3 md:py-1.5 rounded-full backdrop-blur-sm flex items-center gap-1 whitespace-nowrap">
+              <div className="text-[10px] md:text-xs font-semibold bg-discord-500/10 border border-discord-500/20 text-discord-400 px-2 py-1 md:px-3 md:py-1.5 rounded-full backdrop-blur-sm flex items-center gap-1 whitespace-nowrap">
                 <Users size={12} className="md:w-3.5 md:h-3.5 shrink-0" />
                 <span>{activeUsers} Online</span>
               </div>
@@ -188,9 +188,9 @@ export default function ChatRoom() {
                       {/* Avatar */}
                       <Link to={`/user/${msg.profileId || msg.username}`} className="flex-shrink-0 mt-auto mb-1">
                         {msg.avatar ? (
-                          <img src={msg.avatar} alt={msg.username} className={`w-9 h-9 rounded-full object-cover ring-2 transition-all shadow-lg ${msg.role === 'admin' ? 'ring-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.5)]' : msg.role === 'moderator' ? 'ring-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]' : 'ring-transparent hover:ring-red-500/50'}`} />
+                          <img src={msg.avatar} alt={msg.username} className={`w-9 h-9 rounded-full object-cover ring-2 transition-all shadow-lg ${msg.role === 'admin' ? 'ring-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.5)]' : msg.role === 'moderator' ? 'ring-discord-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]' : 'ring-transparent hover:ring-discord-500/50'}`} />
                         ) : (
-                          <div className={`w-9 h-9 rounded-full bg-gradient-to-tr from-gray-800 to-gray-700 flex items-center justify-center ring-2 transition-all shadow-lg ${msg.role === 'admin' ? 'ring-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.5)]' : msg.role === 'moderator' ? 'ring-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]' : 'ring-transparent hover:ring-red-500/50'}`}>
+                          <div className={`w-9 h-9 rounded-full bg-gradient-to-tr from-gray-800 to-gray-700 flex items-center justify-center ring-2 transition-all shadow-lg ${msg.role === 'admin' ? 'ring-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.5)]' : msg.role === 'moderator' ? 'ring-discord-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]' : 'ring-transparent hover:ring-discord-500/50'}`}>
                             <UserCircle size={20} className="text-white/70" />
                           </div>
                         )}
@@ -199,10 +199,10 @@ export default function ChatRoom() {
                       {/* Message Bubble */}
                       <div className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
                         <div className="flex items-baseline gap-2 mb-1.5 px-2">
-                          <Link to={`/user/${msg.profileId || msg.username}`} className={`text-[13px] font-semibold transition-colors flex items-center gap-1.5 flex-wrap ${msg.role === 'admin' ? 'text-purple-500 hover:text-purple-400' : msg.role === 'moderator' ? 'text-red-500 hover:text-red-400' : 'text-white/70 hover:text-red-400'}`}>
+                          <Link to={`/user/${msg.profileId || msg.username}`} className={`text-[13px] font-semibold transition-colors flex items-center gap-1.5 flex-wrap ${msg.role === 'admin' ? 'text-purple-500 hover:text-purple-400' : msg.role === 'moderator' ? 'text-discord-500 hover:text-discord-400' : 'text-white/70 hover:text-discord-400'}`}>
                             {msg.displayName || msg.username}
                             {msg.role === 'admin' && <span className="bg-purple-600 text-white text-[9px] px-1.5 py-0.5 rounded-[3px] uppercase tracking-wider font-black flex items-center gap-1 leading-none"><Crown size={10} fill="currentColor" /> ADMIN</span>}
-                            {msg.role === 'moderator' && <span className="bg-red-500 text-white text-[9px] px-1.5 py-0.5 rounded-[3px] uppercase tracking-wider font-black flex items-center gap-1 leading-none"><Shield size={10} fill="currentColor" /> MOD</span>}
+                            {msg.role === 'moderator' && <span className="bg-discord-500 text-white text-[9px] px-1.5 py-0.5 rounded-[3px] uppercase tracking-wider font-black flex items-center gap-1 leading-none"><Shield size={10} fill="currentColor" /> MOD</span>}
                             {msg.profileId === 'c34e7bbb' && (
                               <>
                                 <span className="bg-rose-600 text-white text-[9px] px-1.5 py-0.5 rounded-[3px] uppercase tracking-wider font-black leading-none shadow-[0_0_5px_rgba(225,29,72,0.4)]">RANDI KA BACCHA</span>
@@ -230,9 +230,9 @@ export default function ChatRoom() {
                             className={`mb-2 px-2.5 py-1.5 rounded-md text-[11px] border-l-[3px] leading-snug cursor-pointer hover:opacity-80 transition-all ${
                             isMe 
                             ? 'bg-black/10 border-white/60 text-white' 
-                            : 'bg-white/5 border-red-500 text-white/80'
+                            : 'bg-white/5 border-discord-500 text-white/80'
                           }`}>
-                            <div className={`font-bold ${isMe ? 'text-white' : 'text-red-500'}`}>
+                            <div className={`font-bold ${isMe ? 'text-white' : 'text-discord-500'}`}>
                               {msg.replyTo.username}
                             </div>
                             <div className="truncate max-w-[200px] md:max-w-[300px] mt-0.5 opacity-90">
@@ -262,7 +262,7 @@ export default function ChatRoom() {
                               socketRef.current.emit('delete_message', msg._id);
                             }
                           }} 
-                          className="opacity-100 transition-all duration-200 text-white/20 hover:text-red-500 hover:bg-red-500/10 p-2 rounded-full"
+                          className="opacity-100 transition-all duration-200 text-white/20 hover:text-discord-500 hover:bg-discord-500/10 p-2 rounded-full"
                           title="Delete Message"
                         >
                           <Trash2 size={16} />
@@ -280,16 +280,16 @@ export default function ChatRoom() {
         {/* Input Area */}
         <div className="bg-[#181818]/90 backdrop-blur-2xl border-t border-white/10 p-3 pb-5 md:p-6 z-10 relative">
           {error && (
-            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm flex items-center gap-2">
+            <div className="mb-4 p-3 bg-discord-500/10 border border-discord-500/20 rounded-xl text-discord-400 text-sm flex items-center gap-2">
               <AlertCircle size={16} /> {error}
             </div>
           )}
 
           {replyingTo && (
             <div className="mb-3 bg-white/5 border border-white/10 rounded-2xl px-5 py-3 flex items-center justify-between backdrop-blur-md">
-              <div className="text-sm flex-grow overflow-hidden pr-4 border-l-2 border-red-500 pl-3">
+              <div className="text-sm flex-grow overflow-hidden pr-4 border-l-2 border-discord-500 pl-3">
                 <span className="text-white/50 text-xs font-medium uppercase tracking-wider">Replying to </span>
-                <span className="font-bold text-red-400 ml-1">{replyingTo.displayName || replyingTo.username}</span>
+                <span className="font-bold text-discord-400 ml-1">{replyingTo.displayName || replyingTo.username}</span>
                 <p className="text-[13px] text-white/60 truncate mt-1">{replyingTo.text}</p>
               </div>
               <button onClick={() => setReplyingTo(null)} className="text-white/40 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors shrink-0">
@@ -312,13 +312,13 @@ export default function ChatRoom() {
                 placeholder="Type a message..."
                 maxLength={500}
                 rows={1}
-                className="flex-grow bg-[#222] hover:bg-[#2a2a2a] border border-white/10 focus:border-red-500/50 focus:bg-[#2a2a2a] rounded-3xl px-4 py-2.5 md:px-6 md:py-3.5 focus:outline-none focus:ring-4 focus:ring-red-500/10 transition-all text-[14px] md:text-[15px] resize-none overflow-hidden"
+                className="flex-grow bg-[#222] hover:bg-[#2a2a2a] border border-white/10 focus:border-discord-500/50 focus:bg-[#2a2a2a] rounded-3xl px-4 py-2.5 md:px-6 md:py-3.5 focus:outline-none focus:ring-4 focus:ring-discord-500/10 transition-all text-[14px] md:text-[15px] resize-none overflow-hidden"
                 style={{ minHeight: '44px', maxHeight: '120px' }}
               />
               <button
                 type="submit"
                 disabled={!inputText.trim()}
-                className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 disabled:opacity-50 disabled:cursor-not-allowed text-white h-[44px] md:h-[52px] px-5 md:px-6 rounded-full hover:-translate-y-0.5 transition-all flex items-center justify-center shrink-0"
+                className="bg-gradient-to-r from-discord-600 to-discord-700 hover:from-discord-700 hover:to-discord-800 disabled:opacity-50 disabled:cursor-not-allowed text-white h-[44px] md:h-[52px] px-5 md:px-6 rounded-full hover:-translate-y-0.5 transition-all flex items-center justify-center shrink-0"
               >
                 <Send size={18} className="md:mr-2" />
                 <span className="hidden md:inline font-bold">Send</span>
@@ -329,7 +329,7 @@ export default function ChatRoom() {
               <p className="text-white/60 text-[15px]">Join the conversation with other anime fans!</p>
               <Link 
                 to="/home?login=true" 
-                className="bg-white hover:bg-red-50 text-black px-8 py-3 rounded-full text-sm font-bold transition-all flex items-center gap-2 hover:-translate-y-0.5"
+                className="bg-white hover:bg-discord-50 text-black px-8 py-3 rounded-full text-sm font-bold transition-all flex items-center gap-2 hover:-translate-y-0.5"
               >
                 <LogIn size={18} /> Login to Chat
               </Link>

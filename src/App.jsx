@@ -41,7 +41,7 @@ import { Loader } from "lucide-react";
 
 const SuspenseLoader = () => (
   <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-    <Loader className="w-8 h-8 text-red-600 animate-spin" />
+    <Loader className="w-8 h-8 text-discord-600 animate-spin" />
   </div>
 );
 
@@ -62,9 +62,9 @@ const ErrorFallback = ({ error }) => {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center text-white p-6 text-center">
-      <h2 className="text-xl font-bold text-red-500 mb-2">{t('app.somethingWentWrong')}</h2>
+      <h2 className="text-xl font-bold text-discord-500 mb-2">{t('app.somethingWentWrong')}</h2>
       <p className="text-white/40 mb-6 max-w-md text-sm">{error.message}</p>
-      <button onClick={() => window.location.reload()} className="px-6 py-2 bg-red-600 hover:bg-red-700 transition-colors rounded-[2px] font-bold text-xs uppercase tracking-widest">
+      <button onClick={() => window.location.reload()} className="px-6 py-2 bg-discord-600 hover:bg-discord-700 transition-colors rounded-[2px] font-bold text-xs uppercase tracking-widest">
         {t('app.reloadPage')}
       </button>
     </div>

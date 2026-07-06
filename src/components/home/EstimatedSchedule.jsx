@@ -122,7 +122,7 @@ export default function EstimatedSchedule() {
         <div className="p-3 md:p-4 border-b border-white/15">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 md:mb-4 gap-3 sm:gap-0">
             <div className="flex items-center gap-3">
-              <div className="w-[3px] h-4 bg-red-600" />
+              <div className="w-[3px] h-4 bg-discord-600" />
               <h2 className="text-[15px] md:text-[16px] font-black text-white uppercase tracking-wider">
                 Schedule
               </h2>
@@ -341,7 +341,7 @@ export default function EstimatedSchedule() {
                   <div key={item.id} className="relative group">
                     <AnimeCard anime={item.media} />
                     <div className="absolute top-1.5 left-1.5 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded-[4px] text-white text-[10px] font-mono border border-white/10 z-50 pointer-events-none shadow-xl flex items-center gap-1.5">
-                      <Clock size={10} className="text-red-500" />
+                      <Clock size={10} className="text-discord-500" />
                       {formatTime(item.airingAt)}
                     </div>
                   </div>

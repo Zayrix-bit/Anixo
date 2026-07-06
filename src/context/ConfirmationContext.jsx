@@ -44,7 +44,7 @@ export function ConfirmationProvider({ children }) {
               )}
               <button
                 onClick={dialog.onConfirm}
-                className="px-5 py-2.5 text-xs font-medium bg-red-600 hover:bg-red-700 text-white rounded transition-colors"
+                className="px-5 py-2.5 text-xs font-medium bg-discord-600 hover:bg-discord-700 text-white rounded transition-colors"
               >
                 {dialog.confirmText}
               </button>

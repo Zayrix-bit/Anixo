@@ -508,7 +508,7 @@ export default function Watch() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#111] flex items-center justify-center">
-        <div className="w-10 h-10 border-4 border-red-600 border-t-transparent flex items-center justify-center rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-4 border-discord-600 border-t-transparent flex items-center justify-center rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -521,7 +521,7 @@ export default function Watch() {
           We couldn't retrieve the details for this anime (ID: {id}).
           This could be a connectivity issue with the AniList API or an invalid ID.
         </p>
-        <Link to="/home" className="mt-8 px-6 py-2 bg-red-600 hover:bg-red-700 rounded-full transition-colors text-sm font-bold">
+        <Link to="/home" className="mt-8 px-6 py-2 bg-discord-600 hover:bg-discord-700 rounded-full transition-colors text-sm font-bold">
           Go Home
         </Link>
       </div>
@@ -625,7 +625,7 @@ export default function Watch() {
                         onClick={() => setActiveSubServer(idx)}
                         className={`px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-sm border transition-all ${
                           activeSubServer === idx
-                            ? "bg-red-600 border-red-600 text-white shadow-[0_0_10px_rgba(220,38,38,0.3)]"
+                            ? "bg-discord-600 border-discord-600 text-white shadow-[0_0_10px_rgba(220,38,38,0.3)]"
                             : "border-white/10 text-white/50 hover:text-white hover:border-white/20 bg-white/5"
                         }`}
                       >
@@ -716,7 +716,7 @@ export default function Watch() {
             {recommendations && recommendations.length > 0 && (
               <div className="mt-16 pt-8 border-t border-white/15">
                 <h3 className="text-xl font-black text-white mb-6 tracking-tight flex items-center gap-3">
-                  <span className="w-1 h-6 bg-red-600 rounded-full inline-block"></span>
+                  <span className="w-1 h-6 bg-discord-600 rounded-full inline-block"></span>
                   {t('watch.recommendations', 'You May Also Like')}
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-5">

@@ -21,14 +21,14 @@ export function ToastProvider({ children }) {
           <div className={`flex items-center gap-3 px-4 py-3 rounded-lg border shadow-lg backdrop-blur-sm ${
             toast.type === 'success'
               ? 'bg-green-900/70 border-green-500/30 text-green-100'
-              : 'bg-red-900/70 border-red-500/30 text-red-100'
+              : 'bg-discord-900/70 border-discord-500/30 text-discord-100'
           }`}>
             {toast.type === 'success' ? (
               <svg className="w-5 h-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 6L9 17l-5-5" />
               </svg>
             ) : (
-              <svg className="w-5 h-5 text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-5 h-5 text-discord-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M18 6L6 18M6 6l12 12" />
               </svg>
             )}

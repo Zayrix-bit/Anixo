@@ -228,7 +228,7 @@ export default function Browse() {
   };
 
   return (
-    <div className="min-h-screen text-white selection:bg-red-500/30 font-sans bg-transparent">
+    <div className="min-h-screen text-white selection:bg-discord-500/30 font-sans bg-transparent">
       <Navbar />
 
       <main className="container max-w-[1720px] mx-auto px-2 md:px-4 pt-16 md:pt-20">
@@ -236,12 +236,12 @@ export default function Browse() {
         {/* Page Head - Ultra Compact */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-1 h-5 bg-red-600 rounded-full shrink-0" />
+            <div className="w-1 h-5 bg-discord-600 rounded-full shrink-0" />
             <h2 className="text-2xl font-normal tracking-tighter">{t('browse.title')}</h2>
           </div>
           <button 
             onClick={handleReset}
-            className="text-[11px] uppercase tracking-[0.2em] font-bold text-white/50 hover:text-red-500 transition-all flex items-center gap-2 group"
+            className="text-[11px] uppercase tracking-[0.2em] font-bold text-white/50 hover:text-discord-500 transition-all flex items-center gap-2 group"
           >
             <RefreshCw size={12} className={`transition-transform duration-500 ${isResetting ? 'rotate-[360deg]' : ''}`} />
             ( {t('browse.reset')} )
@@ -279,10 +279,10 @@ export default function Browse() {
                     onClick={() => setOpenDropdown(openDropdown === dd.key ? null : dd.key)}
                     className={`w-full h-full flex items-center justify-between px-6 transition-all hover:bg-white/2 ${openDropdown === dd.key ? 'bg-white/3' : ''}`}
                   >
-                    <span className={`text-[11px] uppercase tracking-[0.2em] font-medium transition-colors ${dd.active ? 'text-red-500' : 'text-white/40'}`}>
+                    <span className={`text-[11px] uppercase tracking-[0.2em] font-medium transition-colors ${dd.active ? 'text-discord-500' : 'text-white/40'}`}>
                       {dd.label}
                     </span>
-                    <ChevronDown size={12} className={`text-white/20 transition-transform duration-300 ${openDropdown === dd.key ? 'rotate-180 text-red-500' : ''}`} />
+                    <ChevronDown size={12} className={`text-white/20 transition-transform duration-300 ${openDropdown === dd.key ? 'rotate-180 text-discord-500' : ''}`} />
                   </button>
 
                   {openDropdown === dd.key && (
@@ -306,7 +306,7 @@ export default function Browse() {
                                   setOpenDropdown(null);
                                 }}
                                 className={`w-full px-3 py-1.5 rounded-lg text-left text-[11px] transition-all flex items-center justify-between group ${(dd.key === 'types' ? filters.formats.includes(opt.value) : filters.status === opt.value)
-                                  ? 'bg-red-600/10 text-red-500 font-medium'
+                                  ? 'bg-discord-600/10 text-discord-500 font-medium'
                                   : 'text-white/40 hover:bg-white/3 hover:text-white'
                                   }`}
                               >
@@ -329,15 +329,15 @@ export default function Browse() {
                                   onClick={() => toggleGenre(opt)}
                                   className={`px-2 py-1.5 rounded text-left text-[10px] transition-all flex items-center justify-between group ${
                                     isIncluded
-                                      ? 'bg-red-600/10 text-red-500 font-medium border border-red-500/20'
+                                      ? 'bg-discord-600/10 text-discord-500 font-medium border border-discord-500/20'
                                       : isExcluded
                                         ? 'bg-white/[0.02] text-white/25 font-medium border border-white/10'
                                         : 'text-white/30 border border-transparent hover:bg-white/3 hover:text-white/60'
                                     }`}
                                 >
-                                  <span className={`truncate ${isExcluded ? 'line-through decoration-red-500/60' : ''}`}>{opt}</span>
-                                  {isIncluded && <Check size={9} className="text-red-500 shrink-0" />}
-                                  {isExcluded && <X size={9} className="text-red-500/60 shrink-0" />}
+                                  <span className={`truncate ${isExcluded ? 'line-through decoration-discord-500/60' : ''}`}>{opt}</span>
+                                  {isIncluded && <Check size={9} className="text-discord-500 shrink-0" />}
+                                  {isExcluded && <X size={9} className="text-discord-500/60 shrink-0" />}
                                 </button>
                                 );
                               })}
@@ -379,7 +379,7 @@ export default function Browse() {
                                 <div className="space-y-1 px-0.5">
                                   {[{ label: t('browse.countryOptions.china'), v: "CN" }, { label: t('browse.countryOptions.japan'), v: "JP" }].map(c => (
                                     <button key={c.v} onClick={() => toggleFilter('country', c.v)} className="flex items-center gap-1.5 group w-full py-0.5">
-                                      <div className={`w-2.5 h-2.5 rounded-[2px] border transition-all flex items-center justify-center ${filters.country.includes(c.v) ? 'bg-red-600 border-red-600' : 'bg-white/5 border-white/10 group-hover:border-white/20'}`}>
+                                      <div className={`w-2.5 h-2.5 rounded-[2px] border transition-all flex items-center justify-center ${filters.country.includes(c.v) ? 'bg-discord-600 border-discord-600' : 'bg-white/5 border-white/10 group-hover:border-white/20'}`}>
                                         {filters.country.includes(c.v) && <Check size={7} strokeWidth={4} className="text-white" />}
                                       </div>
                                       <span className={`text-[10px] transition-colors ${filters.country.includes(c.v) ? 'text-white/90' : 'text-white/30 group-hover:text-white/50'}`}>{c.label}</span>
@@ -398,7 +398,7 @@ export default function Browse() {
                                     <label key={l.v} className="flex items-center gap-2 px-2 py-1.5 hover:bg-white/5 rounded-md cursor-pointer group transition-colors">
                                       <div
                                         onClick={() => toggleFilter('language', l.v)}
-                                        className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-all ${filters.language.includes(l.v) ? 'bg-red-600 border-red-600' : 'border-white/20 group-hover:border-white/40'
+                                        className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-all ${filters.language.includes(l.v) ? 'bg-discord-600 border-discord-600' : 'border-white/20 group-hover:border-white/40'
                                           }`}
                                       >
                                         {filters.language.includes(l.v) && <Check size={10} strokeWidth={3} />}
@@ -418,7 +418,7 @@ export default function Browse() {
                                 onClick={() => setSingleFilter("onList", filters.excludeMyList ? "" : "false")}
                                 className="flex items-center gap-1.5 group py-1"
                               >
-                                <div className={`w-2.5 h-2.5 rounded-[2px] border transition-all flex items-center justify-center ${filters.excludeMyList ? 'bg-red-600 border-red-600' : 'bg-white/5 border-white/10 group-hover:border-white/20'}`}>
+                                <div className={`w-2.5 h-2.5 rounded-[2px] border transition-all flex items-center justify-center ${filters.excludeMyList ? 'bg-discord-600 border-discord-600' : 'bg-white/5 border-white/10 group-hover:border-white/20'}`}>
                                   {filters.excludeMyList && <Check size={7} strokeWidth={4} className="text-white" />}
                                 </div>
                                 <span className={`text-[10px] transition-colors ${filters.excludeMyList ? 'text-white/90' : 'text-white/30 group-hover:text-white/50'}`}>{t('browse.excludeList')}</span>
@@ -438,14 +438,14 @@ export default function Browse() {
 
               <button
                 onClick={handleShuffleSort}
-                className="w-16 h-full flex items-center justify-center transition-all hover:bg-white/4 text-white/20 hover:text-red-500 border-r border-white/15"
+                className="w-16 h-full flex items-center justify-center transition-all hover:bg-white/4 text-white/20 hover:text-discord-500 border-r border-white/15"
               >
                 <RefreshCw size={16} className={isFetching ? 'animate-spin' : ''} />
               </button>
 
               <button
                 onClick={() => refetch()}
-                className="px-10 bg-red-600 text-white flex items-center gap-4 rounded-r-xl group active:scale-95 transition-all overflow-hidden relative"
+                className="px-10 bg-discord-600 text-white flex items-center gap-4 rounded-r-xl group active:scale-95 transition-all overflow-hidden relative"
               >
                 <div className="absolute inset-0 bg-white/10 -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
                 <span className="text-[13px] font-normal uppercase tracking-[0.2em] relative z-10">{t('browse.sync')}</span>
@@ -487,12 +487,12 @@ export default function Browse() {
                       onClick={() => setOpenDropdown(openDropdown === dd.key ? null : dd.key)}
                       className={`w-full h-10 flex items-center justify-between px-4 rounded-lg border border-white/10 bg-black/20 transition-all hover:bg-white/3 ${openDropdown === dd.key ? "bg-white/6" : ""}`}
                     >
-                      <span className={`text-[10px] uppercase tracking-[0.18em] font-medium transition-colors ${dd.active ? "text-red-500" : "text-white/50"}`}>
+                      <span className={`text-[10px] uppercase tracking-[0.18em] font-medium transition-colors ${dd.active ? "text-discord-500" : "text-white/50"}`}>
                         {dd.label}
                       </span>
                       <ChevronDown
                         size={12}
-                        className={`text-white/30 transition-transform duration-300 ${openDropdown === dd.key ? "rotate-180 text-red-500" : ""}`}
+                        className={`text-white/30 transition-transform duration-300 ${openDropdown === dd.key ? "rotate-180 text-discord-500" : ""}`}
                       />
                     </button>
 
@@ -520,9 +520,9 @@ export default function Browse() {
                                     }
                                     setOpenDropdown(null);
                                   }}
-                                  className={`w-full px-3 py-1.5 rounded-lg text-left text-[11px] transition-all flex items-center justify-between group ${dd.key === "types" ? (filters.formats.includes(opt.value) ? "bg-red-600/10 text-red-500 font-medium" : "text-white/40 hover:bg-white/3 hover:text-white")
+                                  className={`w-full px-3 py-1.5 rounded-lg text-left text-[11px] transition-all flex items-center justify-between group ${dd.key === "types" ? (filters.formats.includes(opt.value) ? "bg-discord-600/10 text-discord-500 font-medium" : "text-white/40 hover:bg-white/3 hover:text-white")
                                       : filters.status === opt.value
-                                        ? "bg-red-600/10 text-red-500 font-medium"
+                                        ? "bg-discord-600/10 text-discord-500 font-medium"
                                         : "text-white/40 hover:bg-white/3 hover:text-white"
                                     }`}
                                 >
@@ -545,15 +545,15 @@ export default function Browse() {
                                     onClick={() => toggleGenre(opt)}
                                     className={`px-2 py-1.5 rounded text-left text-[10px] transition-all flex items-center justify-between group ${
                                       isIncluded
-                                        ? "bg-red-600/10 text-red-500 font-medium border border-red-500/20"
+                                        ? "bg-discord-600/10 text-discord-500 font-medium border border-discord-500/20"
                                         : isExcluded
                                           ? "bg-white/[0.02] text-white/25 font-medium border border-white/10"
                                           : "text-white/30 border border-transparent hover:bg-white/3 hover:text-white/60"
                                       }`}
                                   >
-                                    <span className={`truncate ${isExcluded ? 'line-through decoration-red-500/60' : ''}`}>{opt}</span>
-                                    {isIncluded && <Check size={9} className="text-red-500 shrink-0" />}
-                                    {isExcluded && <X size={9} className="text-red-500/60 shrink-0" />}
+                                    <span className={`truncate ${isExcluded ? 'line-through decoration-discord-500/60' : ''}`}>{opt}</span>
+                                    {isIncluded && <Check size={9} className="text-discord-500 shrink-0" />}
+                                    {isExcluded && <X size={9} className="text-discord-500/60 shrink-0" />}
                                   </button>
                                   );
                                 })}
@@ -627,7 +627,7 @@ export default function Browse() {
                                       >
                                         <div
                                           className={`w-2.5 h-2.5 rounded-[2px] border transition-all flex items-center justify-center ${filters.country.includes(c.v)
-                                              ? "bg-red-600 border-red-600"
+                                              ? "bg-discord-600 border-discord-600"
                                               : "bg-white/5 border-white/10 group-hover:border-white/20"
                                             }`}
                                         >
@@ -661,7 +661,7 @@ export default function Browse() {
                                         <div
                                           onClick={() => toggleFilter("language", l.v)}
                                           className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-all ${filters.language.includes(l.v)
-                                              ? "bg-red-600 border-red-600"
+                                              ? "bg-discord-600 border-discord-600"
                                               : "border-white/20 group-hover:border-white/40"
                                             }`}
                                         >
@@ -687,7 +687,7 @@ export default function Browse() {
                                   className="flex items-center gap-1.5 group py-1"
                                 >
                                   <div
-                                    className={`w-2.5 h-2.5 rounded-[2px] border transition-all flex items-center justify-center ${filters.excludeMyList ? "bg-red-600 border-red-600" : "bg-white/5 border-white/10 group-hover:border-white/20"
+                                    className={`w-2.5 h-2.5 rounded-[2px] border transition-all flex items-center justify-center ${filters.excludeMyList ? "bg-discord-600 border-discord-600" : "bg-white/5 border-white/10 group-hover:border-white/20"
                                       }`}
                                   >
                                     {filters.excludeMyList && (
@@ -730,13 +730,13 @@ export default function Browse() {
               <div className="flex gap-2">
                 <button
                   onClick={handleShuffleSort}
-                  className="flex-1 h-10 flex items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white/40 hover:text-red-500 hover:bg-white/10 transition-all"
+                  className="flex-1 h-10 flex items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white/40 hover:text-discord-500 hover:bg-white/10 transition-all"
                 >
                   <RefreshCw size={16} className={isFetching ? "animate-spin" : ""} />
                 </button>
                 <button
                   onClick={() => refetch()}
-                  className="flex-2 h-10 bg-red-600 text-white flex items-center justify-center gap-3 rounded-lg active:scale-95 transition-all overflow-hidden relative"
+                  className="flex-2 h-10 bg-discord-600 text-white flex items-center justify-center gap-3 rounded-lg active:scale-95 transition-all overflow-hidden relative"
                 >
                   <div className="absolute inset-0 bg-white/10 -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
                   <span className="text-[11px] font-normal uppercase tracking-[0.2em] relative z-10">{t('browse.sync')}</span>
@@ -749,13 +749,13 @@ export default function Browse() {
           <div className="flex flex-wrap gap-2 pt-2">
             {(filters.include.length + filters.exclude.length + filters.formats.length + (filters.status ? 1 : 0) + (filters.year ? 1 : 0)) > 0 && (
               <>
-                <button onClick={handleReset} className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 border border-white/10 hover:border-red-500/50 hover:bg-red-500/5 text-white/40 hover:text-red-500 rounded-full text-[9px] font-bold uppercase tracking-widest transition-all mr-2">
+                <button onClick={handleReset} className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 border border-white/10 hover:border-discord-500/50 hover:bg-discord-500/5 text-white/40 hover:text-discord-500 rounded-full text-[9px] font-bold uppercase tracking-widest transition-all mr-2">
                   <Trash2 size={10} /> {t('browse.reset')}
                 </button>
                 {filters.include.map(g => (
-                  <div key={g} className="group flex items-center gap-2 px-3 py-1.5 bg-red-600/10 border border-red-600/30 rounded-full text-[9px] text-red-500 font-bold uppercase tracking-widest transition-all">
+                  <div key={g} className="group flex items-center gap-2 px-3 py-1.5 bg-discord-600/10 border border-discord-600/30 rounded-full text-[9px] text-discord-500 font-bold uppercase tracking-widest transition-all">
                     {g}
-                    <X size={10} className="cursor-pointer text-red-500/50 group-hover:text-red-500" onClick={() => toggleGenre(g)} />
+                    <X size={10} className="cursor-pointer text-discord-500/50 group-hover:text-discord-500" onClick={() => toggleGenre(g)} />
                   </div>
                 ))}
                 {filters.exclude.map(g => (
@@ -808,13 +808,13 @@ export default function Browse() {
           ) : (
             <div className="flex flex-col items-center justify-center py-48 text-center">
               <div className="w-28 h-28 bg-white/5 rounded-full flex items-center justify-center mb-10 shadow-inner group">
-                <Search size={32} className="text-white/10 group-hover:text-red-500 transition-colors" />
+                <Search size={32} className="text-white/10 group-hover:text-discord-500 transition-colors" />
               </div>
               <h3 className="text-3xl font-bold tracking-tight mb-4">{t('browse.noResults')}</h3>
               <p className="text-white/40 max-w-sm text-sm mb-12 leading-relaxed font-medium">{t('browse.noResultsDesc')}</p>
               <button
                 onClick={handleReset}
-                className="px-12 py-4 bg-red-600 hover:bg-red-700 text-white text-[12px] font-bold uppercase tracking-[0.3em] rounded-full transition-all shadow-2xl shadow-red-600/30 active:scale-95"
+                className="px-12 py-4 bg-discord-600 hover:bg-discord-700 text-white text-[12px] font-bold uppercase tracking-[0.3em] rounded-full transition-all shadow-2xl shadow-discord-600/30 active:scale-95"
               >
                 {t('browse.clearFilters')}
               </button>

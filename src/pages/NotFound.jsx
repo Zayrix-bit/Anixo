@@ -29,7 +29,7 @@ export default function NotFound() {
               </div>
               {/* Water Fade / Glow Overlay */}
               <div className="absolute inset-0 rounded-2xl shadow-[inset_0_0_40px_20px_rgba(5,5,5,1)]" />
-              <div className="absolute -inset-4 bg-red-600/5 blur-3xl rounded-full opacity-50 -z-10 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute -inset-4 bg-discord-600/5 blur-3xl rounded-full opacity-50 -z-10 group-hover:opacity-100 transition-opacity" />
             </div>
           </div>
 
@@ -39,9 +39,9 @@ export default function NotFound() {
               404
             </h1>
             <div className="flex items-center justify-center gap-3">
-              <div className="h-[1px] w-8 bg-red-600/30" />
-              <h2 className="text-red-600 font-mono text-[10px] tracking-[0.4em] uppercase font-bold">Page Not Found</h2>
-              <div className="h-[1px] w-8 bg-red-600/30" />
+              <div className="h-[1px] w-8 bg-discord-600/30" />
+              <h2 className="text-discord-600 font-mono text-[10px] tracking-[0.4em] uppercase font-bold">Page Not Found</h2>
+              <div className="h-[1px] w-8 bg-discord-600/30" />
             </div>
           </div>
 
@@ -53,7 +53,7 @@ export default function NotFound() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <Link 
               to="/home" 
-              className="w-full sm:w-auto px-10 py-3.5 bg-red-600 text-white text-[12px] font-bold uppercase tracking-[0.2em] rounded hover:bg-red-700 transition-all active:scale-95 shadow-xl shadow-red-600/10"
+              className="w-full sm:w-auto px-10 py-3.5 bg-discord-600 text-white text-[12px] font-bold uppercase tracking-[0.2em] rounded hover:bg-discord-700 transition-all active:scale-95 shadow-xl shadow-discord-600/10"
             >
               Back to Home
             </Link>

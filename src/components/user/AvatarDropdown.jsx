@@ -35,7 +35,7 @@ export default function AvatarDropdown() {
 
       {isOpen && (
         <div
-          className="absolute top-[48px] right-0 bg-[#141414]/95 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] w-[240px] z-[200] animate-in fade-in slide-in-from-top-2 duration-200 border-t-[3px] border-red-600 rounded-b-xl"
+          className="absolute top-[48px] right-0 bg-[#141414]/95 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] w-[240px] z-[200] animate-in fade-in slide-in-from-top-2 duration-200 border-t-[3px] border-discord-600 rounded-b-xl"
         >
           <div className="p-4 border-b border-white/15">
             <p className="text-sm font-medium text-white truncate">{user.displayName || user.username}</p>
@@ -44,7 +44,7 @@ export default function AvatarDropdown() {
                 <Crown size={12} /> Admin
               </p>
             ) : user.role === 'moderator' ? (
-              <p className="text-[10px] text-red-500 font-bold flex items-center gap-1 uppercase tracking-widest mt-1">
+              <p className="text-[10px] text-discord-500 font-bold flex items-center gap-1 uppercase tracking-widest mt-1">
                 <Shield size={12} /> Moderator
               </p>
             ) : (
@@ -100,7 +100,7 @@ export default function AvatarDropdown() {
                 logoutAuth();
                 setIsOpen(false);
               }}
-              className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-red-500 hover:bg-red-500/10 transition-all text-[13px] font-bold"
+              className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-discord-500 hover:bg-discord-500/10 transition-all text-[13px] font-bold"
             >
               <LogOut size={16} />
               <span>Sign Out</span>

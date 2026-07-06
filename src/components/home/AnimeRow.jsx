@@ -44,7 +44,7 @@ export default function AnimeRow({ title, data, isLoading, limit = 6, tabs = [],
         <div className="flex flex-col items-center md:items-start gap-4 w-full md:w-auto">
           <div className="flex items-center gap-3">
             {/* Vertical Accent Bar */}
-            <div className="w-[3.5px] h-6 bg-red-600 rounded-full" />
+            <div className="w-[3.5px] h-6 bg-discord-600 rounded-full" />
             <h2 className="text-xl md:text-2xl font-bold text-white uppercase leading-none tracking-tighter text-center md:text-left">
               {title}
             </h2>
@@ -66,7 +66,7 @@ export default function AnimeRow({ title, data, isLoading, limit = 6, tabs = [],
                 >
                   {tab}
                   {activeTab === tab && (
-                    <div className="absolute -bottom-1 left-0 w-full h-[2px] bg-red-600 rounded-full" />
+                    <div className="absolute -bottom-1 left-0 w-full h-[2px] bg-discord-600 rounded-full" />
                   )}
                 </button>
               ))}
@@ -168,7 +168,7 @@ export default function AnimeRow({ title, data, isLoading, limit = 6, tabs = [],
                       e.stopPropagation();
                       onRemove(anime.id);
                     }}
-                    className="absolute top-2 right-2 z-50 bg-black/80 backdrop-blur-md text-white hover:text-red-500 hover:bg-black p-2.5 rounded-full shadow-2xl transition-all duration-300 opacity-100 md:opacity-0 md:group-hover/card:opacity-100 border border-white/10 active:scale-90"
+                    className="absolute top-2 right-2 z-50 bg-black/80 backdrop-blur-md text-white hover:text-discord-500 hover:bg-black p-2.5 rounded-full shadow-2xl transition-all duration-300 opacity-100 md:opacity-0 md:group-hover/card:opacity-100 border border-white/10 active:scale-90"
                     title="Remove from history"
                   >
                     <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

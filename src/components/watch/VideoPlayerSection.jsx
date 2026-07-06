@@ -126,9 +126,9 @@ export default function VideoPlayerSection({
             className="absolute inset-0 w-full h-full object-cover opacity-20 blur-sm brightness-[0.3]"
           />
           <div className="relative z-10 flex flex-col items-center gap-6 max-w-md animate-in fade-in zoom-in duration-700">
-            <div className="w-20 h-20 bg-red-600/10 rounded-3xl flex items-center justify-center border border-red-600/20 shadow-[0_0_40px_rgba(220,38,38,0.15)]">
+            <div className="w-20 h-20 bg-discord-600/10 rounded-3xl flex items-center justify-center border border-discord-600/20 shadow-[0_0_40px_rgba(220,38,38,0.15)]">
               <svg
-                className="w-10 h-10 text-red-600"
+                className="w-10 h-10 text-discord-600"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -152,7 +152,7 @@ export default function VideoPlayerSection({
             </div>
             {anime.nextAiringEpisode && (
               <div className="bg-white/5 border border-white/10 px-6 py-3 rounded-2xl backdrop-blur-md">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-red-500 mb-1">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-discord-500 mb-1">
                   {t("watch.estimatedArrival")}
                 </p>
                 <p className="text-lg font-bold text-white">
@@ -191,16 +191,16 @@ export default function VideoPlayerSection({
                 {(streamLoading || (isIframe && !iframeLoaded)) &&
                 activeServer !== 2 ? (
                   <div className="flex flex-col items-center gap-4 transition-all duration-300">
-                    <div className="w-10 h-10 border-[3px] border-red-600 border-t-transparent rounded-full animate-spin shadow-[0_0_20px_rgba(220,38,38,0.3)]"></div>
+                    <div className="w-10 h-10 border-[3px] border-discord-600 border-t-transparent rounded-full animate-spin shadow-[0_0_20px_rgba(220,38,38,0.3)]"></div>
                     <p className="text-white/20 text-[8px] font-bold uppercase tracking-[0.3em] animate-pulse">
                       {t("watch.loading")}
                     </p>
                   </div>
                 ) : fetchError ? (
                   <div className="flex flex-col items-center gap-6 animate-in fade-in zoom-in-95 duration-300">
-                    <div className="w-16 h-16 bg-red-600/10 rounded-full flex items-center justify-center border border-red-600/20">
+                    <div className="w-16 h-16 bg-discord-600/10 rounded-full flex items-center justify-center border border-discord-600/20">
                       <svg
-                        className="w-8 h-8 text-red-600"
+                        className="w-8 h-8 text-discord-600"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -234,7 +234,7 @@ export default function VideoPlayerSection({
                             prev === 1 ? 2 : prev === 2 ? 3 : prev === 3 ? 4 : 1
                           )
                         }
-                        className="px-5 py-2 bg-red-600 hover:bg-red-700 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all shadow-lg shadow-red-600/20"
+                        className="px-5 py-2 bg-discord-600 hover:bg-discord-700 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all shadow-lg shadow-discord-600/20"
                       >
                         {t("watch.switchServer")}
                       </button>

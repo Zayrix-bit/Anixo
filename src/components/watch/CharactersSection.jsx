@@ -16,7 +16,7 @@ export default function CharactersSection({ characters }) {
     <div className="space-y-6">
       <header className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="h-6 w-1 bg-red-600 rounded-full" />
+          <div className="h-6 w-1 bg-discord-600 rounded-full" />
           <h2 className="text-[14px] font-bold tracking-[0.3em] text-white uppercase">{t('characters.cast')}</h2>
         </div>
         <span className="text-[10px] font-medium text-white/20 uppercase tracking-widest hidden sm:block">
@@ -66,15 +66,15 @@ export default function CharactersSection({ characters }) {
           <Link
             key={edge.node.id}
             to={`/character/${edge.node.id}`}
-            className="group flex bg-[#0d0d0d] rounded-sm overflow-hidden border border-white/15 h-[76px] transition-all hover:bg-[#111] hover:border-red-600/30"
+            className="group flex bg-[#0d0d0d] rounded-sm overflow-hidden border border-white/15 h-[76px] transition-all hover:bg-[#111] hover:border-discord-600/30"
           >
             {/* Character Side */}
             <div className="relative w-14 h-full overflow-hidden shrink-0">
               <img src={edge.node.image?.large} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
-              <div className="absolute inset-0 bg-red-600/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute inset-0 bg-discord-600/10 opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
             <div className="flex flex-col justify-center px-3 flex-1 min-w-0">
-              <span className="text-[11px] font-bold text-white transition-colors group-hover:text-red-500 truncate">{edge.node.name?.userPreferred}</span>
+              <span className="text-[11px] font-bold text-white transition-colors group-hover:text-discord-500 truncate">{edge.node.name?.userPreferred}</span>
               <span className="text-[8px] font-medium text-white/20 uppercase tracking-widest truncate">{edge.role}</span>
             </div>
             {/* Voice Actor Side */}

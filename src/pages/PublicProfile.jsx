@@ -124,7 +124,7 @@ export default function PublicProfile() {
       <div className="min-h-screen bg-[#0a0a0a] flex flex-col font-sans">
         <Navbar />
         <div className="flex-1 flex items-center justify-center">
-          <div className="w-8 h-8 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-4 border-discord-600 border-t-transparent rounded-full animate-spin"></div>
         </div>
       </div>
     );
@@ -138,7 +138,7 @@ export default function PublicProfile() {
           <User size={48} className="text-white/10 mb-4" />
           <h2 className="text-xl font-bold text-white mb-2">User Not Found</h2>
           <p className="text-white/40 text-sm mb-6">{error}</p>
-          <Link to="/" className="px-5 py-2 bg-red-600 text-white rounded font-bold uppercase tracking-widest text-[10px] hover:bg-red-700 transition-colors">
+          <Link to="/" className="px-5 py-2 bg-discord-600 text-white rounded font-bold uppercase tracking-widest text-[10px] hover:bg-discord-700 transition-colors">
             Go Home
           </Link>
         </div>
@@ -185,7 +185,7 @@ export default function PublicProfile() {
               {/* Crown for Admin/Mod */}
               {(profile.role === 'admin' || profile.role === 'moderator') && (
                 <div className={`absolute -top-1 -right-1 p-1 rounded-full shadow-lg ${
-                  profile.role === 'admin' ? 'bg-purple-600' : 'bg-red-600'
+                  profile.role === 'admin' ? 'bg-purple-600' : 'bg-discord-600'
                 } border-2 border-[#0a0a0a]`}>
                   {profile.role === 'admin' ? (
                     <Crown size={14} fill="currentColor" />
@@ -247,13 +247,13 @@ export default function PublicProfile() {
                   key={t.id}
                   onClick={() => setActiveTab(t.id)}
                   className={`pb-2.5 sm:pb-3 px-2.5 sm:px-3 flex items-center gap-1.5 text-[11px] sm:text-[12px] font-bold uppercase tracking-wider whitespace-nowrap transition-colors relative ${
-                    activeTab === t.id ? "text-red-500" : "text-white/35 active:text-white/60"
+                    activeTab === t.id ? "text-discord-500" : "text-white/35 active:text-white/60"
                   }`}
                 >
                   <Icon size={13} className="sm:w-3.5 sm:h-3.5" />
                   {t.label}
                   {activeTab === t.id && (
-                    <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-red-600 rounded-t" />
+                    <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-discord-600 rounded-t" />
                   )}
                 </button>
               );
@@ -267,11 +267,11 @@ export default function PublicProfile() {
         
         {/* BAN BANNER */}
         {profile?.banUntil && new Date(profile.banUntil) > new Date() && (
-          <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-start gap-3">
+          <div className="mb-6 p-4 rounded-xl bg-discord-500/10 border border-discord-500/20 text-discord-400 flex items-start gap-3">
             <div className="mt-0.5"><Ban size={18} /></div>
             <div>
               <h4 className="font-bold text-sm">Account Restricted</h4>
-              <p className="text-xs text-red-400/80 mt-1">
+              <p className="text-xs text-discord-400/80 mt-1">
                 This user is currently banned from commenting until {new Date(profile.banUntil).toLocaleString()} 
                 {profile.bannedByRole ? ` by ${profile.bannedByRole}.` : '.'}
               </p>
@@ -289,8 +289,8 @@ export default function PublicProfile() {
                   <div className="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-1">Total Anime</div>
                   <div className="text-2xl font-black">{watchlist.length}</div>
                 </div>
-                <div className="w-11 h-11 bg-red-500/10 rounded-full flex items-center justify-center">
-                  <Tv size={20} className="text-red-500" />
+                <div className="w-11 h-11 bg-discord-500/10 rounded-full flex items-center justify-center">
+                  <Tv size={20} className="text-discord-500" />
                 </div>
               </div>
               <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-5 flex items-center justify-between">
@@ -308,7 +308,7 @@ export default function PublicProfile() {
             <div className="md:col-span-2 space-y-5 sm:space-y-8">
               <div>
                 <h3 className="text-sm sm:text-base font-bold mb-3 sm:mb-4 flex items-center gap-2">
-                  <Clock size={16} className="text-red-500" /> Recent Activity
+                  <Clock size={16} className="text-discord-500" /> Recent Activity
                 </h3>
                 {recentProgress.length > 0 ? (
                   <div className="space-y-2 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-3">
@@ -354,7 +354,7 @@ export default function PublicProfile() {
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 p-1.5 sm:p-2.5">
-                      <div className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider text-red-500 mb-0.5">{w.status}</div>
+                      <div className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider text-discord-500 mb-0.5">{w.status}</div>
                       <div className="text-[10px] sm:text-xs font-bold truncate leading-tight">{w.anime?.title?.english || w.anime?.title?.romaji || "Unknown"}</div>
                     </div>
                   </Link>
@@ -385,7 +385,7 @@ export default function PublicProfile() {
                           onClick={() => { setListPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                           className={`min-w-[32px] h-8 rounded-lg text-xs font-bold transition-colors ${
                             listPage === p
-                              ? 'bg-red-600 text-white'
+                              ? 'bg-discord-600 text-white'
                               : 'bg-white/5 border border-white/10 text-white/60 hover:bg-white/10'
                           }`}
                         >
@@ -496,7 +496,7 @@ export default function PublicProfile() {
                           onClick={() => { setActivityPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                           className={`min-w-[32px] h-8 rounded-lg text-xs font-bold transition-colors ${
                             activityPage === p
-                              ? 'bg-red-600 text-white'
+                              ? 'bg-discord-600 text-white'
                               : 'bg-white/5 border border-white/10 text-white/60 hover:bg-white/10'
                           }`}
                         >

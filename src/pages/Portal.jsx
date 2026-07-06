@@ -35,7 +35,7 @@ export default function Portal() {
   ];
 
   return (
-    <div className="min-h-screen text-white font-sans selection:bg-red-600/30">
+    <div className="min-h-screen text-white font-sans selection:bg-discord-600/30">
       <main className="pt-6 md:pt-10 pb-6 md:pb-10 px-3 md:px-6 max-w-[1300px] mx-auto min-h-screen flex flex-col justify-start lg:justify-center">
 
         {/* Main Portal Container - Professional Chamfered Design */}
@@ -54,7 +54,7 @@ export default function Portal() {
             {/* Section: Interactive (First on Mobile) */}
             <div className="flex-1 p-5 md:p-10 md:pl-16 bg-black/40 backdrop-blur-md flex flex-col justify-center items-center lg:items-start border-b lg:border-b-0 lg:border-r border-white/15 relative overflow-hidden group">
               {/* Subtle top cut indicator */}
-              <div className="absolute top-0 left-[20px] md:left-[40px] right-0 h-[2px] bg-gradient-to-r from-red-600/30 to-transparent" />
+              <div className="absolute top-0 left-[20px] md:left-[40px] right-0 h-[2px] bg-gradient-to-r from-discord-600/30 to-transparent" />
 
               {/* Logo area */}
               <div className="mb-4 md:mb-8 flex items-center justify-center lg:justify-start gap-0">
@@ -63,12 +63,12 @@ export default function Portal() {
 
               <h1 className="text-xl md:text-[36px] font-bold text-white mb-4 md:mb-6 leading-[1.1] tracking-tight text-center lg:text-left">
                 {t('portal.watchFree')} <br className="hidden md:block" />
-                <span className="text-red-600">{t('portal.anime')}</span> {t('portal.online')}
+                <span className="text-discord-600">{t('portal.anime')}</span> {t('portal.online')}
               </h1>
 
               {/* Search Bar */}
               <form onSubmit={handleSearch} className="relative w-full max-w-[480px] mb-4 md:mb-5 mx-auto lg:mx-0">
-                <div className="flex items-center bg-[#1a1a1a] border border-white/10 rounded-[4px] p-1 md:p-1 focus-within:border-red-600/5 transition-all shadow-inner">
+                <div className="flex items-center bg-[#1a1a1a] border border-white/10 rounded-[4px] p-1 md:p-1 focus-within:border-discord-600/5 transition-all shadow-inner">
                   <Search className="w-4 h-4 md:w-5 md:h-5 ml-2 md:ml-3 text-white/50" />
                   <input
                     type="text"
@@ -80,7 +80,7 @@ export default function Portal() {
                   <button
                     type="button"
                     onClick={() => navigate("/browse")}
-                    className="bg-red-600 hover:bg-red-700 text-white px-3 md:px-5 py-1.5 md:py-1.5 rounded-[3px] text-[12px] md:text-[13px] font-bold flex items-center gap-2 transition-all active:scale-95"
+                    className="bg-discord-600 hover:bg-discord-700 text-white px-3 md:px-5 py-1.5 md:py-1.5 rounded-[3px] text-[12px] md:text-[13px] font-bold flex items-center gap-2 transition-all active:scale-95"
                   >
                     <span className="hidden md:inline">{t('portal.filter')}</span>
                     <Filter size={14} className="stroke-[3]" />
@@ -95,7 +95,7 @@ export default function Portal() {
                     <Link
                       key={s}
                       to={`/browse?search=${s}`}
-                      className="text-[9px] md:text-[11px] font-medium text-white/70 hover:text-red-500 whitespace-nowrap bg-white/5 border border-white/15 px-2 md:px-2.5 py-0.5 md:py-1 rounded-[4px] transition-colors"
+                      className="text-[9px] md:text-[11px] font-medium text-white/70 hover:text-discord-500 whitespace-nowrap bg-white/5 border border-white/15 px-2 md:px-2.5 py-0.5 md:py-1 rounded-[4px] transition-colors"
                     >
                       {s}
                     </Link>
@@ -106,14 +106,14 @@ export default function Portal() {
               {/* Primary CTA - Professional Redesign */}
               <Link
                 to="/home"
-                className="group relative flex items-center justify-center gap-3 bg-red-600 hover:bg-red-700 text-white w-full lg:w-fit px-10 md:px-12 py-3 md:py-4 shadow-xl transition-all duration-300 active:scale-95 rounded-[4px] md:rounded-none"
+                className="group relative flex items-center justify-center gap-3 bg-discord-600 hover:bg-discord-700 text-white w-full lg:w-fit px-10 md:px-12 py-3 md:py-4 shadow-xl transition-all duration-300 active:scale-95 rounded-[4px] md:rounded-none"
                 style={{
                   clipPath: window.innerWidth >= 768 ? 'polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px)' : 'none'
                 }}
               >
                 <div className="flex items-center gap-3 relative z-10">
                   <div className="w-5 h-5 flex items-center justify-center bg-white rounded-full">
-                    <svg className="w-3 h-3 text-red-600 fill-current translate-x-[1px]" viewBox="0 0 24 24">
+                    <svg className="w-3 h-3 text-discord-600 fill-current translate-x-[1px]" viewBox="0 0 24 24">
                       <path d="M5 3l14 9-14 9V3z" />
                     </svg>
                   </div>
@@ -128,14 +128,14 @@ export default function Portal() {
             {/* Section: Content */}
             <div className="flex-1 p-5 md:p-10 md:pr-10 bg-[#141414] relative overflow-y-auto overflow-x-hidden mini-scrollbar max-h-[500px] lg:max-h-[600px]">
               {/* Subtle bottom cut indicator */}
-              <div className="absolute bottom-0 left-0 right-[20px] md:right-[40px] h-[2px] bg-gradient-to-l from-red-600/30 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-[20px] md:right-[40px] h-[2px] bg-gradient-to-l from-discord-600/30 to-transparent" />
 
               <div className="relative z-10">
                 <PortalSEO />
               </div>
 
               {/* Subtle background decoration */}
-              <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-red-600/[0.03] rounded-full blur-[80px]" />
+              <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-discord-600/[0.03] rounded-full blur-[80px]" />
             </div>
           </div>
         </div>

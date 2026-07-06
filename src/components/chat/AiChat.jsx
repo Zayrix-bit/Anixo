@@ -35,7 +35,7 @@ const TypewriterMessage = ({ content, onComplete, onTick }) => {
   }, [content]);
 
   return (
-    <div className="text-sm leading-relaxed prose prose-invert prose-p:my-1 prose-a:text-red-400 prose-strong:text-white max-w-none">
+    <div className="text-sm leading-relaxed prose prose-invert prose-p:my-1 prose-a:text-discord-400 prose-strong:text-white max-w-none">
       <ReactMarkdown>{displayedContent}</ReactMarkdown>
     </div>
   );
@@ -327,7 +327,7 @@ const AiChat = () => {
       {/* Navbar Icon Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`block transition-all transform hover:scale-110 relative ${isOpen ? 'text-red-500' : 'text-[#888] hover:text-white'}`}
+        className={`block transition-all transform hover:scale-110 relative ${isOpen ? 'text-discord-500' : 'text-[#888] hover:text-white'}`}
         title="Anixo AI"
       >
         {isOpen ? <X size={20} strokeWidth={2.5} /> : <span className="font-black text-[16px] tracking-tighter">AI</span>}
@@ -355,7 +355,7 @@ const AiChat = () => {
           >
             <div className="flex items-center gap-3 relative z-10">
               <div className="relative">
-                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#1a1a1c] border border-white/10 flex items-center justify-center text-red-500 shadow-sm">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#1a1a1c] border border-white/10 flex items-center justify-center text-discord-500 shadow-sm">
                   <Bot size={20} className="sm:w-[22px] sm:h-[22px]" />
                 </div>
                 <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-[#0d0d0f] rounded-full flex items-center justify-center">
@@ -396,7 +396,7 @@ const AiChat = () => {
                         }}
                         className={`w-full text-left px-3 py-2 text-[10px] flex items-center gap-1.5 transition-colors ${
                           persona === key 
-                            ? 'bg-red-500/20 text-red-400' 
+                            ? 'bg-discord-500/20 text-discord-400' 
                             : 'text-gray-300 hover:bg-white/10 hover:text-white'
                         }`}
                       >
@@ -435,7 +435,7 @@ const AiChat = () => {
                 <p className="text-gray-500 text-sm max-w-[250px]">
                   Please login to continue.
                 </p>
-                <button onClick={() => { setIsOpen(false); setShowLoginModal(true); }} className="px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors mt-2">
+                <button onClick={() => { setIsOpen(false); setShowLoginModal(true); }} className="px-6 py-2.5 bg-discord-600 hover:bg-discord-700 text-white text-sm font-medium rounded-lg transition-colors mt-2">
                   Login Now
                 </button>
               </div>
@@ -444,7 +444,7 @@ const AiChat = () => {
             {messages.map((msg, idx) => (
               <div key={idx} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
                   <div className={`max-w-[85%] rounded-2xl p-3 ${msg.role === 'user'
-                    ? 'bg-red-600 text-white rounded-br-none'
+                    ? 'bg-discord-600 text-white rounded-br-none'
                     : 'bg-white/5 text-gray-200 rounded-bl-none border border-white/15'
                     }`}>
                     {msg.role === 'assistant' ? (
@@ -458,7 +458,7 @@ const AiChat = () => {
                           }} 
                         />
                       ) : (
-                        <div className="text-sm leading-relaxed prose prose-invert prose-p:my-1 prose-a:text-red-400 prose-strong:text-white max-w-none">
+                        <div className="text-sm leading-relaxed prose prose-invert prose-p:my-1 prose-a:text-discord-400 prose-strong:text-white max-w-none">
                           <ReactMarkdown>
                             {msg.content}
                           </ReactMarkdown>
@@ -479,7 +479,7 @@ const AiChat = () => {
                         <div key={anime.id} className="flex flex-col gap-1">
                           <Link
                             to={`/watch/${anime.id}`}
-                            className="flex gap-3 p-2 rounded-xl bg-black/40 border border-white/15 hover:border-red-500/30 hover:bg-white/5 transition-all group shadow-sm"
+                            className="flex gap-3 p-2 rounded-xl bg-black/40 border border-white/15 hover:border-discord-500/30 hover:bg-white/5 transition-all group shadow-sm"
                           >
                             {/* Thumbnail */}
                             <div className="w-[70px] h-[100px] rounded-lg overflow-hidden shrink-0 relative shadow-inner">
@@ -499,7 +499,7 @@ const AiChat = () => {
                             {/* Details */}
                             <div className="flex-1 min-w-0 py-1 flex flex-col justify-between">
                               <div>
-                                <h4 className="text-sm font-bold text-gray-100 line-clamp-1 group-hover:text-red-400 transition-colors">
+                                <h4 className="text-sm font-bold text-gray-100 line-clamp-1 group-hover:text-discord-400 transition-colors">
                                   {title}
                                 </h4>
                                 <div className="flex items-center gap-1.5 mt-1 text-[11px] text-gray-400 font-medium">
@@ -527,7 +527,7 @@ const AiChat = () => {
 
                             {/* Play Icon */}
                             <div className="flex items-center pr-2 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                              <div className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center shadow-lg shadow-red-600/30">
+                              <div className="w-8 h-8 rounded-full bg-discord-600 flex items-center justify-center shadow-lg shadow-discord-600/30">
                                 <Play size={14} fill="currentColor" className="text-white ml-0.5" />
                               </div>
                             </div>
@@ -538,7 +538,7 @@ const AiChat = () => {
                             {anime.trailer?.site === "youtube" && (
                               <button
                                 onClick={() => setActiveTrailerId(anime.trailer.id)}
-                                className="flex items-center gap-1 text-[10px] text-red-400 hover:text-red-300 transition-colors text-left pl-1 bg-red-500/10 hover:bg-red-500/20 px-2 py-1 rounded"
+                                className="flex items-center gap-1 text-[10px] text-discord-400 hover:text-discord-300 transition-colors text-left pl-1 bg-discord-500/10 hover:bg-discord-500/20 px-2 py-1 rounded"
                               >
                                 <Play size={10} fill="currentColor" />
                                 Trailer
@@ -547,7 +547,7 @@ const AiChat = () => {
                             <button
                               onClick={() => handleSubmit(null, `Recommend more anime similar to ${title}`)}
                               disabled={isLoading}
-                              className="text-[10px] text-gray-500 hover:text-red-400 transition-colors text-left pl-1 disabled:opacity-40 ml-auto"
+                              className="text-[10px] text-gray-500 hover:text-discord-400 transition-colors text-left pl-1 disabled:opacity-40 ml-auto"
                             >
                               ≈ More like this
                             </button>
@@ -598,12 +598,12 @@ const AiChat = () => {
                 onChange={(e) => setInput(e.target.value)}
                 disabled={isLoading || isBlocked}
                 placeholder={isBlocked ? "You are blocked." : "Ask anything about anime..."}
-                className="w-full bg-[#1a1a1c] border border-white/10 rounded-xl py-2.5 sm:py-3 pl-4 pr-12 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-red-500/50 transition-colors disabled:opacity-50"
+                className="w-full bg-[#1a1a1c] border border-white/10 rounded-xl py-2.5 sm:py-3 pl-4 pr-12 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-discord-500/50 transition-colors disabled:opacity-50"
               />
               <button
                 type="submit"
                 disabled={!input.trim() || isLoading || isBlocked}
-                className="absolute right-2 p-1.5 sm:p-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-700 disabled:text-gray-400 text-white rounded-lg transition-colors"
+                className="absolute right-2 p-1.5 sm:p-2 bg-discord-600 hover:bg-discord-700 disabled:bg-gray-700 disabled:text-gray-400 text-white rounded-lg transition-colors"
               >
                 <Send size={16} />
               </button>
@@ -616,7 +616,7 @@ const AiChat = () => {
             <div className="absolute inset-0 bg-black/90 backdrop-blur-sm z-50 flex flex-col items-center justify-center animate-in fade-in duration-200">
               <button 
                 onClick={() => setActiveTrailerId(null)}
-                className="absolute top-4 right-4 p-2 bg-white/10 hover:bg-red-600 rounded-full text-white transition-all z-50"
+                className="absolute top-4 right-4 p-2 bg-white/10 hover:bg-discord-600 rounded-full text-white transition-all z-50"
               >
                 <X size={20} />
               </button>

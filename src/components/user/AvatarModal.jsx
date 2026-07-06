@@ -111,7 +111,7 @@ export default function AvatarModal({ isOpen, onClose, onSave, currentAvatar }) 
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
                   className={`text-[13px] font-medium transition-colors px-2 py-1 ${activeCategory === cat
-                    ? 'text-red-500'
+                    ? 'text-discord-500'
                     : 'text-white/50 hover:text-white'
                     }`}
                 >
@@ -130,7 +130,7 @@ export default function AvatarModal({ isOpen, onClose, onSave, currentAvatar }) 
                   className="relative cursor-pointer group"
                 >
                   <div className={`aspect-square rounded-full overflow-hidden border-2 transition-all duration-500 ${selectedAvatar === url
-                    ? 'border-red-600 ring-4 ring-red-600/20 scale-105'
+                    ? 'border-discord-600 ring-4 ring-discord-600/20 scale-105'
                     : 'border-white/15 group-hover:border-white/20 group-hover:scale-105'
                     }`}>
                     <img
@@ -143,8 +143,8 @@ export default function AvatarModal({ isOpen, onClose, onSave, currentAvatar }) 
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                     {selectedAvatar === url && (
-                      <div className="absolute inset-0 bg-red-600/10 flex items-center justify-center animate-in fade-in duration-300">
-                        <div className="bg-red-600 rounded-full p-0.5 shadow-lg">
+                      <div className="absolute inset-0 bg-discord-600/10 flex items-center justify-center animate-in fade-in duration-300">
+                        <div className="bg-discord-600 rounded-full p-0.5 shadow-lg">
                           <Check className="text-white" size={12} strokeWidth={5} />
                         </div>
                       </div>
@@ -161,7 +161,7 @@ export default function AvatarModal({ isOpen, onClose, onSave, currentAvatar }) 
           <button
             onClick={() => onSave(selectedAvatar)}
             disabled={!selectedAvatar}
-            className="mx-auto block px-10 py-2.5 bg-red-600 hover:bg-red-700 disabled:opacity-30 disabled:cursor-not-allowed text-white font-black text-[11px] uppercase tracking-[0.2em] rounded-xl transition-all shadow-[0_8px_24px_rgba(220,38,38,0.2)] active:scale-[0.98]"
+            className="mx-auto block px-10 py-2.5 bg-discord-600 hover:bg-discord-700 disabled:opacity-30 disabled:cursor-not-allowed text-white font-black text-[11px] uppercase tracking-[0.2em] rounded-xl transition-all shadow-[0_8px_24px_rgba(220,38,38,0.2)] active:scale-[0.98]"
           >
             Save Changes
           </button>

@@ -255,7 +255,7 @@ export default function Watchlist() {
       <div className="min-h-screen text-white bg-[#0a0a0a]">
         <Navbar />
         <div className="flex items-center justify-center h-[50vh]">
-          <div className="w-8 h-8 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-4 border-discord-600 border-t-transparent rounded-full animate-spin"></div>
         </div>
       </div>
     );
@@ -304,7 +304,7 @@ export default function Watchlist() {
     return 0; // Default or unsupported sort
   });
   return (
-    <div className="min-h-screen text-white bg-[#0a0a0a] flex flex-col font-sans selection:bg-red-500/30">
+    <div className="min-h-screen text-white bg-[#0a0a0a] flex flex-col font-sans selection:bg-discord-500/30">
       <Navbar />
 
       <div className="w-full pt-[80px] px-4 md:px-8 pb-12 max-w-[1600px] mx-auto flex-1">
@@ -321,7 +321,7 @@ export default function Watchlist() {
                 to={item.path}
                 className={`flex items-center justify-center gap-2 px-2.5 sm:px-3 md:px-4 py-2 sm:py-2 rounded-xl transition-all duration-300 border shrink-0 ${
                   isActive 
-                  ? "bg-red-600 text-white border-red-600" 
+                  ? "bg-discord-600 text-white border-discord-600" 
                   : "bg-white/[0.02] border-white/15 text-white/30 hover:text-white hover:bg-white/[0.05]"
                 }`}
               >
@@ -352,7 +352,7 @@ export default function Watchlist() {
           {watchlist.length > 0 && (
             <button
               onClick={() => setShowClearModal(true)}
-              className="text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-md transition-colors bg-red-600/10 text-red-500 border border-red-500/20 hover:bg-red-600 hover:text-white flex items-center gap-1.5 ml-2"
+              className="text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-md transition-colors bg-discord-600/10 text-discord-500 border border-discord-500/20 hover:bg-discord-600 hover:text-white flex items-center gap-1.5 ml-2"
             >
               <Trash2 size={14} /> Clear All
             </button>
@@ -390,10 +390,10 @@ export default function Watchlist() {
                     onClick={() => setOpenDropdown(openDropdown === dd.key ? null : dd.key)}
                     className={`w-full h-full flex items-center justify-between px-6 transition-all hover:bg-white/2 ${openDropdown === dd.key ? 'bg-white/3' : ''}`}
                   >
-                    <span className={`text-[11px] uppercase tracking-[0.2em] font-medium transition-colors ${dd.active ? 'text-red-500' : 'text-white/40'}`}>
+                    <span className={`text-[11px] uppercase tracking-[0.2em] font-medium transition-colors ${dd.active ? 'text-discord-500' : 'text-white/40'}`}>
                       {dd.label}
                     </span>
-                    <ChevronDown size={12} className={`text-white/20 transition-transform duration-300 ${openDropdown === dd.key ? 'rotate-180 text-red-500' : ''}`} />
+                    <ChevronDown size={12} className={`text-white/20 transition-transform duration-300 ${openDropdown === dd.key ? 'rotate-180 text-discord-500' : ''}`} />
                   </button>
 
                   {openDropdown === dd.key && (
@@ -416,7 +416,7 @@ export default function Watchlist() {
                                   setOpenDropdown(null);
                                 }}
                                 className={`w-full px-3 py-1.5 rounded-lg text-left text-[11px] transition-all flex items-center justify-between group ${(dd.key === 'types' ? filters.formats.includes(opt.value) : filters.status === opt.value)
-                                  ? 'bg-red-600/10 text-red-500 font-medium'
+                                  ? 'bg-discord-600/10 text-discord-500 font-medium'
                                   : 'text-white/40 hover:bg-white/3 hover:text-white'
                                   }`}
                               >
@@ -435,7 +435,7 @@ export default function Watchlist() {
                                   key={opt}
                                   onClick={() => toggleGenre(opt)}
                                   className={`px-2 py-1.5 rounded text-left text-[10px] transition-all flex items-center justify-between group ${filters.include.includes(opt)
-                                    ? 'bg-red-600/10 text-red-500 font-medium border border-red-500/20'
+                                    ? 'bg-discord-600/10 text-discord-500 font-medium border border-discord-500/20'
                                     : 'text-white/30 border border-transparent hover:bg-white/3 hover:text-white/60'
                                     }`}
                                 >
@@ -476,7 +476,7 @@ export default function Watchlist() {
                                 <div className="space-y-1 px-0.5">
                                   {[{ label: "China", v: "CN" }, { label: "Japan", v: "JP" }].map(c => (
                                     <button key={c.v} onClick={() => toggleFilter('country', c.v)} className="flex items-center gap-1.5 group w-full py-0.5">
-                                      <div className={`w-2.5 h-2.5 rounded-[2px] border transition-all flex items-center justify-center ${filters.country.includes(c.v) ? 'bg-red-600 border-red-600' : 'bg-white/5 border-white/10 group-hover:border-white/20'}`}>
+                                      <div className={`w-2.5 h-2.5 rounded-[2px] border transition-all flex items-center justify-center ${filters.country.includes(c.v) ? 'bg-discord-600 border-discord-600' : 'bg-white/5 border-white/10 group-hover:border-white/20'}`}>
                                         {filters.country.includes(c.v) && <Check size={7} strokeWidth={4} className="text-white" />}
                                       </div>
                                       <span className={`text-[10px] transition-colors ${filters.country.includes(c.v) ? 'text-white/90' : 'text-white/30 group-hover:text-white/50'}`}>{c.label}</span>
@@ -492,7 +492,7 @@ export default function Watchlist() {
                                 onClick={() => setSingleFilter("onList", filters.excludeMyList ? "" : "false")}
                                 className="flex items-center gap-1.5 group py-1"
                               >
-                                <div className={`w-2.5 h-2.5 rounded-[2px] border transition-all flex items-center justify-center ${filters.excludeMyList ? 'bg-red-600 border-red-600' : 'bg-white/5 border-white/10 group-hover:border-white/20'}`}>
+                                <div className={`w-2.5 h-2.5 rounded-[2px] border transition-all flex items-center justify-center ${filters.excludeMyList ? 'bg-discord-600 border-discord-600' : 'bg-white/5 border-white/10 group-hover:border-white/20'}`}>
                                   {filters.excludeMyList && <Check size={7} strokeWidth={4} className="text-white" />}
                                 </div>
                                 <span className={`text-[10px] transition-colors ${filters.excludeMyList ? 'text-white/90' : 'text-white/30 group-hover:text-white/50'}`}>Exclude my list</span>
@@ -515,7 +515,7 @@ export default function Watchlist() {
               <button
                 onClick={handleSync}
                 disabled={isSyncing}
-                className="px-10 bg-red-600 text-white flex items-center gap-4 rounded-r-xl group active:scale-95 transition-all overflow-hidden relative disabled:opacity-50"
+                className="px-10 bg-discord-600 text-white flex items-center gap-4 rounded-r-xl group active:scale-95 transition-all overflow-hidden relative disabled:opacity-50"
               >
                 <div className="absolute inset-0 bg-white/10 -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
                 <span className="text-[13px] font-normal uppercase tracking-[0.2em] relative z-10">{isSyncing ? "Syncing..." : "Sync"}</span>
@@ -557,12 +557,12 @@ export default function Watchlist() {
                       onClick={() => setOpenDropdown(openDropdown === dd.key ? null : dd.key)}
                       className={`w-full h-10 flex items-center justify-between px-4 rounded-lg border border-white/10 bg-black/20 transition-all hover:bg-white/3 ${openDropdown === dd.key ? "bg-white/6" : ""}`}
                     >
-                      <span className={`text-[10px] uppercase tracking-[0.18em] font-medium transition-colors ${dd.active ? "text-red-500" : "text-white/50"}`}>
+                      <span className={`text-[10px] uppercase tracking-[0.18em] font-medium transition-colors ${dd.active ? "text-discord-500" : "text-white/50"}`}>
                         {dd.label}
                       </span>
                       <ChevronDown
                         size={12}
-                        className={`text-white/30 transition-transform duration-300 ${openDropdown === dd.key ? "rotate-180 text-red-500" : ""}`}
+                        className={`text-white/30 transition-transform duration-300 ${openDropdown === dd.key ? "rotate-180 text-discord-500" : ""}`}
                       />
                     </button>
 
@@ -590,9 +590,9 @@ export default function Watchlist() {
                                     }
                                     setOpenDropdown(null);
                                   }}
-                                  className={`w-full px-3 py-1.5 rounded-lg text-left text-[11px] transition-all flex items-center justify-between group ${dd.key === "types" ? (filters.formats.includes(opt.value) ? "bg-red-600/10 text-red-500 font-medium" : "text-white/40 hover:bg-white/3 hover:text-white")
+                                  className={`w-full px-3 py-1.5 rounded-lg text-left text-[11px] transition-all flex items-center justify-between group ${dd.key === "types" ? (filters.formats.includes(opt.value) ? "bg-discord-600/10 text-discord-500 font-medium" : "text-white/40 hover:bg-white/3 hover:text-white")
                                       : filters.status === opt.value
-                                        ? "bg-red-600/10 text-red-500 font-medium"
+                                        ? "bg-discord-600/10 text-discord-500 font-medium"
                                         : "text-white/40 hover:bg-white/3 hover:text-white"
                                     }`}
                                 >
@@ -611,7 +611,7 @@ export default function Watchlist() {
                                     key={opt}
                                     onClick={() => toggleGenre(opt)}
                                     className={`px-2 py-1.5 rounded text-left text-[10px] transition-all flex items-center justify-between group ${filters.include.includes(opt)
-                                        ? "bg-red-600/10 text-red-500 font-medium border border-red-500/20"
+                                        ? "bg-discord-600/10 text-discord-500 font-medium border border-discord-500/20"
                                         : "text-white/30 border border-transparent hover:bg-white/3 hover:text-white/60"
                                       }`}
                                   >
@@ -679,7 +679,7 @@ export default function Watchlist() {
                                       >
                                         <div
                                           className={`w-2.5 h-2.5 rounded-[2px] border transition-all flex items-center justify-center ${filters.country.includes(c.v)
-                                              ? "bg-red-600 border-red-600"
+                                              ? "bg-discord-600 border-discord-600"
                                               : "bg-white/5 border-white/10 group-hover:border-white/20"
                                             }`}
                                         >
@@ -709,7 +709,7 @@ export default function Watchlist() {
                                   className="flex items-center gap-1.5 group py-1"
                                 >
                                   <div
-                                    className={`w-2.5 h-2.5 rounded-[2px] border transition-all flex items-center justify-center ${filters.excludeMyList ? "bg-red-600 border-red-600" : "bg-white/5 border-white/10 group-hover:border-white/20"
+                                    className={`w-2.5 h-2.5 rounded-[2px] border transition-all flex items-center justify-center ${filters.excludeMyList ? "bg-discord-600 border-discord-600" : "bg-white/5 border-white/10 group-hover:border-white/20"
                                       }`}
                                   >
                                     {filters.excludeMyList && (
@@ -754,7 +754,7 @@ export default function Watchlist() {
                 <button
                   onClick={handleSync}
                   disabled={isSyncing || syncCooldown > 0}
-                  className="flex-2 h-10 bg-red-600 text-white flex items-center justify-center gap-3 rounded-lg active:scale-95 transition-all overflow-hidden relative disabled:opacity-50 disabled:cursor-not-allowed group"
+                  className="flex-2 h-10 bg-discord-600 text-white flex items-center justify-center gap-3 rounded-lg active:scale-95 transition-all overflow-hidden relative disabled:opacity-50 disabled:cursor-not-allowed group"
                   title={syncCooldown > 0 ? `Please wait ${syncCooldown}s before syncing again` : "Sync with AniList"}
                 >
                   <div className="absolute inset-0 bg-white/10 -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
@@ -770,13 +770,13 @@ export default function Watchlist() {
           <div className="flex flex-wrap gap-2 pt-2">
             {(filters.include.length + filters.exclude.length + filters.formats.length + (filters.status ? 1 : 0) + (filters.year ? 1 : 0)) > 0 && (
               <>
-                <button onClick={handleReset} className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 border border-white/10 hover:border-red-500/50 hover:bg-red-500/5 text-white/40 hover:text-red-500 rounded-full text-[9px] font-bold uppercase tracking-widest transition-all mr-2">
+                <button onClick={handleReset} className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 border border-white/10 hover:border-discord-500/50 hover:bg-discord-500/5 text-white/40 hover:text-discord-500 rounded-full text-[9px] font-bold uppercase tracking-widest transition-all mr-2">
                   <Trash2 size={10} /> Reset
                 </button>
                 {filters.include.map(g => (
-                  <div key={g} className="group flex items-center gap-2 px-3 py-1.5 bg-red-600/10 border border-red-600/30 rounded-full text-[9px] text-red-500 font-bold uppercase tracking-widest transition-all">
+                  <div key={g} className="group flex items-center gap-2 px-3 py-1.5 bg-discord-600/10 border border-discord-600/30 rounded-full text-[9px] text-discord-500 font-bold uppercase tracking-widest transition-all">
                     {g}
-                    <X size={10} className="cursor-pointer text-red-500/50 group-hover:text-red-500" onClick={() => toggleGenre(g)} />
+                    <X size={10} className="cursor-pointer text-discord-500/50 group-hover:text-discord-500" onClick={() => toggleGenre(g)} />
                   </div>
                 ))}
                 {filters.exclude.map(g => (
@@ -844,7 +844,7 @@ export default function Watchlist() {
                     
                     {/* Top Row: Title & Dropdown */}
                     <div className="flex justify-between items-start gap-4">
-                      <Link to={watchUrl} className="font-medium text-[13px] sm:text-[14px] text-white/90 group-hover:text-red-500 transition-colors line-clamp-2 pr-2 leading-snug tracking-wide">
+                      <Link to={watchUrl} className="font-medium text-[13px] sm:text-[14px] text-white/90 group-hover:text-discord-500 transition-colors line-clamp-2 pr-2 leading-snug tracking-wide">
                         {item.title}
                       </Link>
                       
@@ -881,7 +881,7 @@ export default function Watchlist() {
                             <div className="border-t border-white/15 mt-1 pt-1">
                               <button
                                 onClick={(e) => { handleRemove(item.animeId, e); setOpenStatusPicker(null); }}
-                                className="w-full text-left px-3 py-2.5 text-[11px] text-red-500 hover:bg-red-500/10 transition-colors"
+                                className="w-full text-left px-3 py-2.5 text-[11px] text-discord-500 hover:bg-discord-500/10 transition-colors"
                               >
                                 Remove from List
                               </button>
@@ -967,7 +967,7 @@ export default function Watchlist() {
               </button>
               <button
                 onClick={handleClearAll}
-                className="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white text-[11px] font-bold uppercase tracking-widest rounded-xl transition-all flex justify-center items-center"
+                className="flex-1 py-3 bg-discord-600 hover:bg-discord-700 text-white text-[11px] font-bold uppercase tracking-widest rounded-xl transition-all flex justify-center items-center"
                 disabled={isClearing}
               >
                 {isClearing ? "Clearing..." : "Yes, Delete"}

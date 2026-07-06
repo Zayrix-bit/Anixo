@@ -91,8 +91,8 @@ export default function DMCA() {
               <span className="text-white/50">Signature</span> — A physical or electronic signature of the copyright owner or a person authorized to act on behalf of the copyright owner.
             </li>
           </ol>
-          <div className="mt-6 p-4 bg-red-500/5 border border-red-500/10 rounded-lg">
-            <p className="text-[12px] text-red-400/60 font-normal flex items-start gap-2">
+          <div className="mt-6 p-4 bg-discord-500/5 border border-discord-500/10 rounded-lg">
+            <p className="text-[12px] text-discord-400/60 font-normal flex items-start gap-2">
               <AlertTriangle size={16} className="shrink-0 mt-0.5" />
               <span>
                 Notice: Under Section 512(f) of the DMCA, any person who knowingly and materially misrepresents
@@ -242,8 +242,8 @@ export default function DMCA() {
           </div>
 
           <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-600/20 to-red-900/20 border border-red-500/10 flex items-center justify-center">
-              <Shield size={24} className="text-red-500" />
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-discord-600/20 to-discord-900/20 border border-discord-500/10 flex items-center justify-center">
+              <Shield size={24} className="text-discord-500" />
             </div>
             <div>
               <h1 className="text-[28px] md:text-[36px] font-semibold tracking-tight leading-tight">
@@ -271,12 +271,12 @@ export default function DMCA() {
                 href={`#${section.id}`}
                 className="flex items-center gap-3 text-[13px] font-normal text-white/35 hover:text-white/70 transition-all group"
               >
-                <span className="text-[11px] font-mono text-white/15 group-hover:text-red-500/70 transition w-6">{String(i + 1).padStart(2, "0")}.</span>
+                <span className="text-[11px] font-mono text-white/15 group-hover:text-discord-500/70 transition w-6">{String(i + 1).padStart(2, "0")}.</span>
                 {section.title}
               </a>
             ))}
             <a href="#contact" className="flex items-center gap-3 text-[13px] font-normal text-white/35 hover:text-white/70 transition-all group">
-              <span className="text-[11px] font-mono text-white/15 group-hover:text-red-500/70 transition w-6">{String(sections.length + 1).padStart(2, "0")}.</span>
+              <span className="text-[11px] font-mono text-white/15 group-hover:text-discord-500/70 transition w-6">{String(sections.length + 1).padStart(2, "0")}.</span>
               Contact Information
             </a>
           </nav>
@@ -290,7 +290,7 @@ export default function DMCA() {
               <section key={section.id} id={section.id} className="scroll-mt-28">
                 <div className="flex items-center gap-3 mb-5">
                   <div className="w-8 h-8 rounded-lg bg-white/[0.03] border border-white/15 flex items-center justify-center shrink-0">
-                    <Icon size={16} className="text-red-500/50" />
+                    <Icon size={16} className="text-discord-500/50" />
                   </div>
                   <h2 className="text-[18px] md:text-[22px] font-medium tracking-tight text-white/80">
                     <span className="text-white/15 font-mono text-[14px] mr-3">{String(i + 1).padStart(2, "0")}.</span>
@@ -308,7 +308,7 @@ export default function DMCA() {
           <section id="contact" className="scroll-mt-28">
             <div className="flex items-center gap-3 mb-5">
               <div className="w-8 h-8 rounded-lg bg-white/[0.03] border border-white/15 flex items-center justify-center shrink-0">
-                <Mail size={16} className="text-red-500/50" />
+                <Mail size={16} className="text-discord-500/50" />
               </div>
               <h2 className="text-[18px] md:text-[22px] font-medium tracking-tight text-white/80">
                 <span className="text-white/15 font-mono text-[14px] mr-3">{String(sections.length + 1).padStart(2, "0")}.</span>
@@ -323,16 +323,16 @@ export default function DMCA() {
 
               <div className="p-6 bg-gradient-to-br from-white/[0.03] to-white/[0.01] border border-white/15 rounded-xl space-y-4">
                 <div className="flex items-center gap-3">
-                  <Mail size={18} className="text-red-500/60" />
+                  <Mail size={18} className="text-discord-500/60" />
                   <div>
                     <p className="text-[10px] font-normal uppercase tracking-widest text-white/30 mb-1">Email</p>
-                    <a href="mailto:dmca@anixo.online" className="text-[15px] font-normal text-white/70 hover:text-red-500 transition">
+                    <a href="mailto:dmca@anixo.online" className="text-[15px] font-normal text-white/70 hover:text-discord-500 transition">
                       dmca@anixo.online
                     </a>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <FileText size={18} className="text-red-500/60" />
+                  <FileText size={18} className="text-discord-500/60" />
                   <div>
                     <p className="text-[10px] font-normal uppercase tracking-widest text-white/30 mb-1">Subject Line Format</p>
                     <p className="text-[13px] font-mono text-white/45">DMCA Takedown Notice — [Title of Content]</p>

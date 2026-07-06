@@ -89,7 +89,7 @@ export default function LoginModal({ isOpen, onClose }) {
           </div>
 
           {error && (
-            <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-2 mb-3 text-[12px] font-medium">
+            <div className="bg-discord-500/10 border border-discord-500/50 text-discord-500 p-2 mb-3 text-[12px] font-medium">
               {error}
             </div>
           )}

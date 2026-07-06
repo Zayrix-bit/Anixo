@@ -24,7 +24,7 @@ export default function Character() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+          <div className="w-12 h-12 border-4 border-discord-600 border-t-transparent rounded-full animate-spin" />
           <p className="text-white/60 font-bold uppercase tracking-widest text-[10px]">{t('character.loading')}</p>
         </div>
       </div>
@@ -37,7 +37,7 @@ export default function Character() {
         <h1 className="text-4xl font-black text-white/10 uppercase tracking-tighter">{t('character.notFound')}</h1>
         <button 
           onClick={() => navigate(-1)}
-          className="px-6 py-2 bg-red-600 text-white font-bold rounded-full hover:bg-red-700 transition-colors flex items-center gap-2"
+          className="px-6 py-2 bg-discord-600 text-white font-bold rounded-full hover:bg-discord-700 transition-colors flex items-center gap-2"
         >
           <ChevronLeft size={18} /> {t('character.return')}
         </button>
@@ -81,7 +81,7 @@ export default function Character() {
                 alt={char.name?.full} 
                 className="w-full aspect-[2/3] object-cover"
               />
-              <div className="absolute top-2 right-2 bg-red-600 text-white p-1.5 rounded-full shadow-lg">
+              <div className="absolute top-2 right-2 bg-discord-600 text-white p-1.5 rounded-full shadow-lg">
                 <Heart size={14} fill="white" />
               </div>
             </div>
@@ -102,7 +102,7 @@ export default function Character() {
                 {char.name?.full}
               </h1>
               {char.name?.native && (
-                <p className="text-sm sm:text-lg font-bold text-red-600/70 mb-4 italic">
+                <p className="text-sm sm:text-lg font-bold text-discord-600/70 mb-4 italic">
                   {char.name?.native}
                 </p>
               )}
@@ -123,7 +123,7 @@ export default function Character() {
         {/* Voice Actors — Mobile: horizontal scroll FIRST, before bio */}
         <div className="lg:hidden mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-[3px] h-5 bg-red-600 rounded-full" />
+            <div className="w-[3px] h-5 bg-discord-600 rounded-full" />
             <h2 className="text-sm font-black text-white uppercase tracking-tight">{t('character.voiceActors')}</h2>
           </div>
           <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2 -mx-4 px-4 snap-x">
@@ -147,7 +147,7 @@ export default function Character() {
                   <img 
                     src={va.image?.large} 
                     alt={va.name?.full} 
-                    className="w-20 h-20 mx-auto object-cover rounded-full border-2 border-white/15 group-hover:border-red-500 transition-colors shadow-lg"
+                    className="w-20 h-20 mx-auto object-cover rounded-full border-2 border-white/15 group-hover:border-discord-500 transition-colors shadow-lg"
                     loading="lazy"
                   />
                   <p className="text-[11px] font-semibold text-white/70 mt-2 truncate">{va.name?.full}</p>
@@ -169,7 +169,7 @@ export default function Character() {
             {/* Biography */}
             <section>
               <div className="flex items-center gap-3 mb-4 sm:mb-6">
-                <div className="w-[3px] h-5 bg-red-600 rounded-full" />
+                <div className="w-[3px] h-5 bg-discord-600 rounded-full" />
                 <h2 className="text-base sm:text-xl font-black text-white uppercase tracking-tight">{t('character.biography')}</h2>
               </div>
               <div 
@@ -183,7 +183,7 @@ export default function Character() {
             <section>
               <div className="flex items-center justify-between mb-6 sm:mb-8">
                 <div className="flex items-center gap-3">
-                  <div className="w-[3px] h-5 bg-red-600 rounded-full" />
+                  <div className="w-[3px] h-5 bg-discord-600 rounded-full" />
                   <h2 className="text-base sm:text-xl font-black text-white uppercase tracking-tight">{t('character.appearances')}</h2>
                 </div>
                 <span className="text-[10px] sm:text-[11px] font-bold text-white/40 uppercase tracking-widest">{animeAppearances.length} {t('character.titles')}</span>
@@ -204,7 +204,7 @@ export default function Character() {
                         loading="lazy"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-2 sm:p-3">
-                        <span className="text-[8px] sm:text-[10px] font-black text-red-600 uppercase tracking-widest mb-1">{edge.characterRole}</span>
+                        <span className="text-[8px] sm:text-[10px] font-black text-discord-600 uppercase tracking-widest mb-1">{edge.characterRole}</span>
                         <div className="flex items-center gap-2 text-white/80 text-[9px] sm:text-[10px] font-bold">
                           <span className="flex items-center gap-1"><Tv size={10} /> {edge.node.format}</span>
                           {edge.node.averageScore && <span className="flex items-center gap-1"><Star size={10} fill="currentColor" className="text-yellow-500" /> {edge.node.averageScore}%</span>}
@@ -225,7 +225,7 @@ export default function Character() {
             {/* Voice Actors Section */}
             <section>
               <div className="flex items-center gap-3 mb-8">
-                <div className="w-[3px] h-5 bg-red-600 rounded-full" />
+                <div className="w-[3px] h-5 bg-discord-600 rounded-full" />
                 <h2 className="text-xl font-black text-white uppercase tracking-tight">{t('character.voiceActors')}</h2>
               </div>
               
@@ -247,7 +247,7 @@ export default function Character() {
                     <Link 
                       key={va.id} 
                       to={`/staff/${va.id}`}
-                      className="flex items-center gap-4 bg-white/5 border border-white/15 p-3 rounded-[4px] hover:bg-white/[0.08] hover:border-red-600/30 transition-all group cursor-pointer"
+                      className="flex items-center gap-4 bg-white/5 border border-white/15 p-3 rounded-[4px] hover:bg-white/[0.08] hover:border-discord-600/30 transition-all group cursor-pointer"
                     >
                       <img 
                         src={va.image?.large} 
@@ -255,14 +255,14 @@ export default function Character() {
                         className="w-16 h-16 object-cover rounded-[3px] shadow-lg shrink-0"
                       />
                       <div className="min-w-0">
-                        <p className="text-[14px] font-black text-white group-hover:text-red-500 transition-colors uppercase leading-tight">
+                        <p className="text-[14px] font-black text-white group-hover:text-discord-500 transition-colors uppercase leading-tight">
                           {va.name?.full}
                         </p>
                         <p className="text-[11px] font-bold text-white/50 uppercase tracking-widest mt-1">
                           {va.name?.native}
                         </p>
                         <div className="mt-2 flex items-center gap-1.5 border-t border-white/15 pt-2">
-                           <span className="px-1.5 py-0.5 bg-red-600/10 text-red-500 text-[10px] font-bold uppercase rounded-[2px] flex items-center gap-1">
+                           <span className="px-1.5 py-0.5 bg-discord-600/10 text-discord-500 text-[10px] font-bold uppercase rounded-[2px] flex items-center gap-1">
                             <Activity size={10} />
                             {t('character.japanese')}
                           </span>
@@ -280,8 +280,8 @@ export default function Character() {
 
             {/* Quote / Fun Fact Placeholder */}
             {char.description?.includes("quote") && (
-              <section className="bg-gradient-to-br from-red-600/20 to-transparent p-6 rounded-[8px] border border-red-600/10 grayscale-[0.5] hover:grayscale-0 transition-all">
-                <Info className="text-red-600 mb-4" size={24} />
+              <section className="bg-gradient-to-br from-discord-600/20 to-transparent p-6 rounded-[8px] border border-discord-600/10 grayscale-[0.5] hover:grayscale-0 transition-all">
+                <Info className="text-discord-600 mb-4" size={24} />
                 <p className="text-[13px] text-white/80 italic leading-relaxed">
                   {t('character.favoritedBy', { count: char.favourites?.toLocaleString() })}
                 </p>

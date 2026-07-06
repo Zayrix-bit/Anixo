@@ -37,7 +37,7 @@ const VideoCard = ({ video, onClick }) => (
  {video.censored ? (
  <span className="text-[10px] font-bold uppercase px-1.5 py-0.5 bg-green-950 text-green-500 border border-green-800">Censored</span>
  ) : (
- <span className="text-[10px] font-bold uppercase px-1.5 py-0.5 bg-red-950 text-red-500 border border-red-800">Uncensored</span>
+ <span className="text-[10px] font-bold uppercase px-1.5 py-0.5 bg-red-950 text-discord-500 border border-discord-800">Uncensored</span>
  )}
  </div>
  
@@ -905,7 +905,7 @@ function NSFW() {
  onError={(e) => { e.target.src = 'https://via.placeholder.com/300x400?text=No+Cover' }}
  />
  {videoDetails && videoDetails.is_uncensored && (
- <div className="flex items-center gap-2 px-3 py-1.5 bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-semibold w-full max-w-[160px] justify-center text-center ">
+ <div className="flex items-center gap-2 px-3 py-1.5 bg-discord-500/20 text-discord-400 border border-discord-500/30 text-xs font-semibold w-full max-w-[160px] justify-center text-center ">
  <ShieldAlert className="w-4 h-4" /> Uncensored
  </div>
  )}

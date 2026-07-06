@@ -33,6 +33,10 @@ const settingsSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
+  themeColor: {
+    type: String,
+    default: '#5865F2'
+  },
   updatedAt: {
     type: Date,
     default: Date.now

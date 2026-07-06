@@ -100,9 +100,9 @@ export default function AnimeDetailsSection({
             <div className="flex items-start gap-2">
               <span className="text-white/60 font-medium min-w-[70px]">{t('details.links')}</span>
               <div className="flex items-center gap-1">
-                {anime.idMal && <a href={`https://myanimelist.net/anime/${anime.idMal}`} target="_blank" rel="noreferrer" className="text-white font-bold hover:text-red-500 transition-colors">{t('details.mal')}</a>}
+                {anime.idMal && <a href={`https://myanimelist.net/anime/${anime.idMal}`} target="_blank" rel="noreferrer" className="text-white font-bold hover:text-discord-500 transition-colors">{t('details.mal')}</a>}
                 {anime.idMal && <span className="text-white/90">,</span>}
-                {anime.id && <a href={`https://anilist.co/anime/${anime.id}`} target="_blank" rel="noreferrer" className="text-white font-bold hover:text-red-500 transition-colors ml-1">AL</a>}
+                {anime.id && <a href={`https://anilist.co/anime/${anime.id}`} target="_blank" rel="noreferrer" className="text-white font-bold hover:text-discord-500 transition-colors ml-1">AL</a>}
               </div>
             </div>
             <div className="flex items-start gap-2">

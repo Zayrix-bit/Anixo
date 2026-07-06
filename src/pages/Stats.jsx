@@ -323,7 +323,7 @@ export default function Stats() {
                 to={item.path}
                 className={`flex items-center justify-center gap-2 px-2.5 sm:px-3 md:px-4 py-2 sm:py-2 rounded-xl transition-all duration-300 border shrink-0 ${
                   isActive 
-                    ? "bg-red-600 text-white border-red-600 shadow-lg shadow-red-600/20" 
+                    ? "bg-discord-600 text-white border-discord-600 shadow-lg shadow-discord-600/20" 
                     : "bg-white/[0.02] border-white/15 text-white/30 hover:text-white hover:bg-white/[0.05] hover:border-white/25"
                 }`}
               >
@@ -342,7 +342,7 @@ export default function Stats() {
 
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24">
-            <div className="w-10 h-10 border-2 border-[#333] border-t-red-600 rounded-full animate-spin mb-4" />
+            <div className="w-10 h-10 border-2 border-[#333] border-t-discord-600 rounded-full animate-spin mb-4" />
             <p className="text-[#666]">Crunching your data...</p>
           </div>
         ) : totalInLibrary === 0 ? (
@@ -350,7 +350,7 @@ export default function Stats() {
             <BarChart2 size={40} className="text-[#444] mb-4" />
             <h3 className="text-lg font-medium text-white mb-2">No Data Yet</h3>
             <p className="text-sm text-[#666] mb-6">Start watching and bookmarking anime to see your stats here!</p>
-            <Link to="/browse" className="px-6 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg text-sm font-medium hover:from-red-700 hover:to-red-800 transition-all shadow-lg shadow-red-600/20">Explore Anime</Link>
+            <Link to="/browse" className="px-6 py-2 bg-gradient-to-r from-discord-600 to-discord-700 text-white rounded-lg text-sm font-medium hover:from-discord-700 hover:to-discord-800 transition-all shadow-lg shadow-discord-600/20">Explore Anime</Link>
           </div>
         ) : (
           <div className="flex flex-col gap-8">
@@ -387,10 +387,10 @@ export default function Stats() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Library Status */}
               <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0f0f0f] border border-white/10 rounded-2xl p-8 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-red-600/10 to-transparent rounded-full blur-2xl" />
+                <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-discord-600/10 to-transparent rounded-full blur-2xl" />
                 <div className="relative z-10">
                   <h3 className="text-base font-medium text-white mb-8 flex items-center gap-2">
-                    <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse" />
+                    <div className="w-2 h-2 bg-discord-600 rounded-full animate-pulse" />
                     Library Status
                   </h3>
                   <div className="flex items-center gap-8">

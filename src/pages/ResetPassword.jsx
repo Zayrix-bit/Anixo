@@ -54,7 +54,7 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="min-h-screen text-white flex flex-col font-sans selection:bg-red-500/30">
+    <div className="min-h-screen text-white flex flex-col font-sans selection:bg-discord-500/30">
       <Navbar />
 
       <div className="flex-1 flex items-start lg:items-center justify-center p-6 pt-24 lg:pt-32">
@@ -62,8 +62,8 @@ export default function ResetPassword() {
           <div className="relative bg-[#0d0d0d] border border-white/[0.03] rounded-[32px] p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden group">
             
             {/* Premium Background Elements */}
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-600/40 to-transparent" />
-            <div className="absolute -top-24 -right-24 w-48 h-48 bg-red-600/[0.08] blur-[80px] rounded-full pointer-events-none group-hover:bg-red-600/[0.12] transition-colors duration-700" />
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-discord-600/40 to-transparent" />
+            <div className="absolute -top-24 -right-24 w-48 h-48 bg-discord-600/[0.08] blur-[80px] rounded-full pointer-events-none group-hover:bg-discord-600/[0.12] transition-colors duration-700" />
             
             {/* Subtle Anime Watermark */}
             <div className="absolute inset-0 pointer-events-none opacity-[0.03] grayscale mix-blend-overlay">
@@ -86,7 +86,7 @@ export default function ResetPassword() {
                   </p>
                   <Link 
                     to="/profile" 
-                    className="inline-flex items-center gap-2 text-red-500 hover:text-red-400 font-medium transition-colors"
+                    className="inline-flex items-center gap-2 text-discord-500 hover:text-discord-400 font-medium transition-colors"
                   >
                     Go to Profile <ArrowRight size={16} />
                   </Link>
@@ -102,18 +102,18 @@ export default function ResetPassword() {
 
                   <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                     <div className="flex flex-col gap-2 group">
-                      <label className="text-[10px] font-medium text-white/40 uppercase tracking-[0.2em] ml-1 group-focus-within:text-red-500 transition-colors">
+                      <label className="text-[10px] font-medium text-white/40 uppercase tracking-[0.2em] ml-1 group-focus-within:text-discord-500 transition-colors">
                         New Password
                       </label>
                       <div className="relative">
-                        <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-red-500/50 transition-colors" />
+                        <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-discord-500/50 transition-colors" />
                         <input
                           type={showPassword ? "text" : "password"}
                           required
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           placeholder="••••••••"
-                          className="w-full bg-white/[0.03] border border-white/15 focus:border-red-600/30 focus:bg-white/[0.05] rounded-2xl py-4 pl-12 pr-12 outline-none text-[15px] transition-all placeholder:text-white/10"
+                          className="w-full bg-white/[0.03] border border-white/15 focus:border-discord-600/30 focus:bg-white/[0.05] rounded-2xl py-4 pl-12 pr-12 outline-none text-[15px] transition-all placeholder:text-white/10"
                         />
                         <button
                           type="button"
@@ -126,24 +126,24 @@ export default function ResetPassword() {
                     </div>
 
                     <div className="flex flex-col gap-2 group">
-                      <label className="text-[10px] font-medium text-white/40 uppercase tracking-[0.2em] ml-1 group-focus-within:text-red-500 transition-colors">
+                      <label className="text-[10px] font-medium text-white/40 uppercase tracking-[0.2em] ml-1 group-focus-within:text-discord-500 transition-colors">
                         Confirm Password
                       </label>
                       <div className="relative">
-                        <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-red-500/50 transition-colors" />
+                        <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-discord-500/50 transition-colors" />
                         <input
                           type={showPassword ? "text" : "password"}
                           required
                           value={confirmPassword}
                           onChange={(e) => setConfirmPassword(e.target.value)}
                           placeholder="••••••••"
-                          className="w-full bg-white/[0.03] border border-white/15 focus:border-red-600/30 focus:bg-white/[0.05] rounded-2xl py-4 pl-12 pr-4 outline-none text-[15px] transition-all placeholder:text-white/10"
+                          className="w-full bg-white/[0.03] border border-white/15 focus:border-discord-600/30 focus:bg-white/[0.05] rounded-2xl py-4 pl-12 pr-4 outline-none text-[15px] transition-all placeholder:text-white/10"
                         />
                       </div>
                     </div>
 
                     {error && (
-                      <div className="bg-red-500/5 border border-red-500/10 text-red-500 text-[13px] py-4 px-5 rounded-2xl animate-shake text-center">
+                      <div className="bg-discord-500/5 border border-discord-500/10 text-discord-500 text-[13px] py-4 px-5 rounded-2xl animate-shake text-center">
                         {error}
                       </div>
                     )}
@@ -151,7 +151,7 @@ export default function ResetPassword() {
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="w-full bg-red-600 hover:bg-red-500 disabled:opacity-50 text-white font-bold text-[13px] py-4.5 rounded-2xl transition-all active:scale-[0.98] mt-2 shadow-[0_10px_20px_rgba(229,9,20,0.2)] uppercase tracking-wider"
+                      className="w-full bg-discord-600 hover:bg-discord-500 disabled:opacity-50 text-white font-bold text-[13px] py-4.5 rounded-2xl transition-all active:scale-[0.98] mt-2 shadow-[0_10px_20px_rgba(229,9,20,0.2)] uppercase tracking-wider"
                     >
                       {isLoading ? (
                         <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin mx-auto" />

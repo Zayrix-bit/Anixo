@@ -101,7 +101,7 @@ export default function Notifications() {
   const unreadCount = enrichedNotifications.filter(n => !n.isRead).length;
 
   return (
-    <div className="min-h-screen text-white bg-[#0a0a0a] flex flex-col font-sans selection:bg-red-500/30">
+    <div className="min-h-screen text-white bg-[#0a0a0a] flex flex-col font-sans selection:bg-discord-500/30">
       <Navbar />
 
       <div className="w-full pt-[80px] px-4 md:px-8 pb-12 max-w-[1200px] mx-auto flex-1">
@@ -118,7 +118,7 @@ export default function Notifications() {
                 to={item.path}
                 className={`flex items-center justify-center gap-2 px-2.5 sm:px-3 md:px-4 py-2 sm:py-2 rounded-xl transition-all duration-300 border shrink-0 ${
                   isActive 
-                  ? "bg-red-600 text-white border-red-600" 
+                  ? "bg-discord-600 text-white border-discord-600" 
                   : "bg-white/[0.02] border-white/15 text-white/30 hover:text-white hover:bg-white/[0.05]"
                 }`}
               >

@@ -10,7 +10,7 @@ export default function ReportModal({ activeEpisode, reportDetails, setReportDet
         <div className="p-6 pb-4 flex items-center justify-between">
           <div>
             <h2 className="text-[18px] font-bold text-white mb-1">{t('report.issue')}</h2>
-            <p className="text-white/30 text-[12px] font-medium uppercase tracking-wider">{t('report.episodeLabel')}<span className="text-red-500">{activeEpisode}</span></p>
+            <p className="text-white/30 text-[12px] font-medium uppercase tracking-wider">{t('report.episodeLabel')}<span className="text-discord-500">{activeEpisode}</span></p>
           </div>
           <button 
             onClick={onClose}
@@ -37,7 +37,7 @@ export default function ReportModal({ activeEpisode, reportDetails, setReportDet
               <label key={issue} className="flex items-center gap-3 cursor-pointer group">
                 <div 
                   onClick={() => toggleReportIssue(issue)}
-                  className={`w-4 h-4 border transition-all flex items-center justify-center ${reportDetails.issues.includes(issue) ? 'bg-red-600 border-red-600' : 'bg-white/5 border-white/10 group-hover:border-white/30'}`}
+                  className={`w-4 h-4 border transition-all flex items-center justify-center ${reportDetails.issues.includes(issue) ? 'bg-discord-600 border-discord-600' : 'bg-white/5 border-white/10 group-hover:border-white/30'}`}
                 >
                   {reportDetails.issues.includes(issue) && <Check size={10} className="text-white" strokeWidth={3} />}
                 </div>
@@ -53,7 +53,7 @@ export default function ReportModal({ activeEpisode, reportDetails, setReportDet
               value={reportDetails.other}
               onChange={(e) => setReportDetails(prev => ({ ...prev, other: e.target.value }))}
               placeholder="Please share more details about the issue you're encountering."
-              className="w-full bg-white/5 border border-white/10 rounded-sm p-4 text-[13px] text-white placeholder:text-white/10 outline-none focus:border-red-600/50 transition-all min-h-[120px] resize-none"
+              className="w-full bg-white/5 border border-white/10 rounded-sm p-4 text-[13px] text-white placeholder:text-white/10 outline-none focus:border-discord-600/50 transition-all min-h-[120px] resize-none"
             />
           </div>
         </div>
@@ -63,7 +63,7 @@ export default function ReportModal({ activeEpisode, reportDetails, setReportDet
           <button
             onClick={submitReport}
             disabled={reportDetails.issues.length === 0 && !reportDetails.other.trim()}
-            className="w-full bg-red-600 hover:bg-red-700 disabled:bg-white/5 disabled:text-white/10 text-white font-bold text-[13px] py-4 uppercase tracking-[0.2em] transition-all"
+            className="w-full bg-discord-600 hover:bg-discord-700 disabled:bg-white/5 disabled:text-white/10 text-white font-bold text-[13px] py-4 uppercase tracking-[0.2em] transition-all"
           >
             {t('report.send')}
           </button>

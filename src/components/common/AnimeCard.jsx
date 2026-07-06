@@ -77,14 +77,14 @@ export default function AnimeCard({ anime }) {
       <div className="relative">
         {/* format Tag (e.g. TV, MOVIE) */}
         <div className="absolute -top-1 left-0 flex flex-col items-start z-40 gap-1">
-          <div className="bg-red-600 text-white text-[9px] font-black px-1.5 py-[3px] flex items-center justify-center min-w-[28px]">
+          <div className="bg-discord-600 text-white text-[9px] font-black px-1.5 py-[3px] flex items-center justify-center min-w-[28px]">
             {format}
           </div>
         </div>
 
         {/* 18+ Badge */}
         {(anime.isAdult || anime.ageRating === "R" || anime.rating?.includes("18")) && (
-          <div className="absolute top-1.5 right-1.5 z-40 bg-red-600/90 text-white text-[10px] font-black px-1.5 py-[2px] rounded-[4px] shadow-lg flex items-center justify-center border border-white/10 tracking-widest">
+          <div className="absolute top-1.5 right-1.5 z-40 bg-discord-600/90 text-white text-[10px] font-black px-1.5 py-[2px] rounded-[4px] shadow-lg flex items-center justify-center border border-white/10 tracking-widest">
             18+
           </div>
         )}
@@ -117,7 +117,7 @@ export default function AnimeCard({ anime }) {
               {/* Glowing Timeline Bar */}
               <div className="w-full h-1 bg-white/10 relative overflow-hidden">
                 <div 
-                  className="h-full bg-red-600 shadow-[0_0_12px_rgba(220,38,38,1)] transition-all duration-500 ease-out" 
+                  className="h-full bg-discord-600 shadow-[0_0_12px_rgba(220,38,38,1)] transition-all duration-500 ease-out" 
                   style={{ 
                     width: `${anime.duration ? Math.min(100, (anime.currentTime / anime.duration) * 100) : Math.min(100, (anime.currentTime / 1440) * 100)}%` 
                   }}
@@ -145,7 +145,7 @@ export default function AnimeCard({ anime }) {
               </span>
             ) : (
               <>
-                <span className="text-[9px] font-black bg-red-600 text-white px-2 uppercase tracking-tighter flex items-center justify-center">EP</span>
+                <span className="text-[9px] font-black bg-discord-600 text-white px-2 uppercase tracking-tighter flex items-center justify-center">EP</span>
                 <div className="px-2 py-1 flex items-center gap-1.5">
                   <span className="text-[11px] font-medium text-white">
                     {anime.isProgress ? anime.episode : (releasedEpisodes || "0")}

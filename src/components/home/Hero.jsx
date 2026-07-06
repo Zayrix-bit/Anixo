@@ -119,7 +119,7 @@ export default function Hero({ data = [], isLoading }) {
 
                   {/* Meta Row (Badges + Genres) */}
                   <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-4 md:mb-6">
-                    <div className="px-2 py-0.5 bg-red-600 text-white rounded-[3px] text-[11px] font-black uppercase tracking-wider shadow-lg">
+                    <div className="px-2 py-0.5 bg-discord-600 text-white rounded-[3px] text-[11px] font-black uppercase tracking-wider shadow-lg">
                       {anime.format || "TV"}
                     </div>
                     <span className="text-[12px] font-bold text-white/40">{anime.seasonYear || "2026"}</span>
@@ -163,7 +163,7 @@ export default function Hero({ data = [], isLoading }) {
 
                   {/* Primary Actions (Mobile Centered) */}
                   <div className="flex items-center justify-center md:justify-start gap-3 md:gap-5">
-                    <Link to={`/watch/${anime.id}`} className="group flex items-center justify-center gap-3 md:px-10 py-3 md:py-4 bg-red-600 text-white text-[13px] font-bold uppercase tracking-[0.15em] rounded-full hover:bg-red-700 transition-all transform active:scale-95 shadow-xl min-w-[50px] md:min-w-0">
+                    <Link to={`/watch/${anime.id}`} className="group flex items-center justify-center gap-3 md:px-10 py-3 md:py-4 bg-discord-600 text-white text-[13px] font-bold uppercase tracking-[0.15em] rounded-full hover:bg-discord-700 transition-all transform active:scale-95 shadow-xl min-w-[50px] md:min-w-0">
                       <Play size={20} md:size={18} fill="currentColor" className="group-hover:scale-110 transition-transform" />
                       <span className="hidden md:block">Watch Now</span>
                     </Link>
@@ -213,7 +213,7 @@ export default function Hero({ data = [], isLoading }) {
                                   removeFromList(String(anime.id));
                                   setActiveDropdown(null);
                                 }}
-                                className="w-full flex items-center justify-between px-4 py-2.5 text-[12px] font-medium text-red-500 hover:bg-red-500/10 rounded-lg transition-all mt-1 border-t border-white/15 pt-3"
+                                className="w-full flex items-center justify-between px-4 py-2.5 text-[12px] font-medium text-discord-500 hover:bg-discord-500/10 rounded-lg transition-all mt-1 border-t border-white/15 pt-3"
                               >
                                 Remove
                                 <Trash2 size={14} />

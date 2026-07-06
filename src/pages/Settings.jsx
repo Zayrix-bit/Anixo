@@ -12,8 +12,28 @@ const getDefaults = (settings) => ({
   skipSeconds: settings?.skipSeconds || 5,
   bookmarksPerPage: settings?.bookmarksPerPage || 20,
   autoPlay: settings?.autoPlay ?? true,
-  autoNext: settings?.autoNext ?? true
+  autoNext: settings?.autoNext ?? true,
+  themeColor: settings?.themeColor || '#5865F2'
 });
+
+const THEME_COLORS = [
+  { id: 'default', color: '#5865F2', label: 'Blurple' },
+  { id: 'crimson', color: '#dc2626', label: 'Crimson' },
+  { id: 'rose', color: '#e11d48', label: 'Deep Rose' },
+  { id: 'magenta', color: '#c026d3', label: 'Magenta' },
+  { id: 'violet', color: '#7c3aed', label: 'Violet' },
+  { id: 'indigo', color: '#4f46e5', label: 'Indigo' },
+  { id: 'blue', color: '#2563eb', label: 'Royal Blue' },
+  { id: 'azure', color: '#0284c7', label: 'Azure' },
+  { id: 'cyan', color: '#0891b2', label: 'Cyan' },
+  { id: 'teal', color: '#0d9488', label: 'Teal' },
+  { id: 'emerald', color: '#059669', label: 'Emerald' },
+  { id: 'green', color: '#16a34a', label: 'Forest' },
+  { id: 'lime', color: '#65a30d', label: 'Lime' },
+  { id: 'gold', color: '#d97706', label: 'Gold' },
+  { id: 'orange', color: '#ea580c', label: 'Burnt Orange' },
+  { id: 'rust', color: '#b91c1c', label: 'Rust' },
+];
 
 export default function Settings() {
   const { user, globalSettings, setGlobalSettings } = useAuth();
@@ -33,6 +53,33 @@ export default function Settings() {
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+  // Live Theme Preview & Revert on Unmount
+  useEffect(() => {
+    const applyColor = (color) => {
+      if (color) {
+        document.documentElement.style.setProperty('--discord-600', color);
+        document.documentElement.style.setProperty('--discord-500', color);
+        document.documentElement.style.setProperty('--discord-700', color);
+        document.documentElement.style.setProperty('--discord-400', color);
+        document.documentElement.style.setProperty('--discord-800', color);
+        document.documentElement.style.setProperty('--discord-900', color);
+      } else {
+        document.documentElement.style.removeProperty('--discord-600');
+        document.documentElement.style.removeProperty('--discord-500');
+        document.documentElement.style.removeProperty('--discord-700');
+        document.documentElement.style.removeProperty('--discord-400');
+        document.documentElement.style.removeProperty('--discord-800');
+        document.documentElement.style.removeProperty('--discord-900');
+      }
+    };
+    
+    applyColor(formData.themeColor);
+    
+    return () => {
+      applyColor(globalSettings?.themeColor);
+    };
+  }, [formData.themeColor, globalSettings?.themeColor]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,7 +113,7 @@ export default function Settings() {
   ];
 
   return (
-    <div className="min-h-screen text-white flex flex-col font-sans selection:bg-red-500/30" key={settingsKey}>
+    <div className="min-h-screen text-white flex flex-col font-sans selection:bg-discord-500/30" key={settingsKey}>
       <Navbar />
 
       <div className="w-full pt-[80px] px-4 md:px-8 pb-12 max-w-[1200px] mx-auto flex-1">
@@ -83,7 +130,7 @@ export default function Settings() {
                 to={item.path}
                 className={`flex items-center justify-center gap-2 px-2.5 sm:px-3 md:px-4 py-2 sm:py-2 rounded-xl transition-all duration-300 border shrink-0 ${
                   isActive 
-                  ? "bg-red-600 text-white border-red-600" 
+                  ? "bg-discord-600 text-white border-discord-600" 
                   : "bg-white/[0.02] border-white/15 text-white/30 hover:text-white hover:bg-white/[0.05]"
                 }`}
               >
@@ -126,7 +173,7 @@ export default function Settings() {
                   <button 
                     type="button"
                     onClick={() => setShowConfirmModal(true)}
-                    className="w-full md:w-auto text-[10px] font-bold text-red-500 hover:text-red-400 transition-colors px-4 py-2 bg-red-500/5 rounded-lg border border-red-500/10"
+                    className="w-full md:w-auto text-[10px] font-bold text-discord-500 hover:text-discord-400 transition-colors px-4 py-2 bg-discord-500/5 rounded-lg border border-discord-500/10"
                   >
                     Disconnect
                   </button>
@@ -153,7 +200,7 @@ export default function Settings() {
                       key={lang}
                       type="button"
                       onClick={() => setFormData({...formData, titleLanguage: lang})}
-                      className={`flex-1 md:flex-none px-6 py-2 rounded-lg text-[11px] font-bold transition-all ${formData.titleLanguage === lang ? 'bg-red-600 text-white shadow-lg' : 'text-white/30 hover:text-white/60'}`}
+                      className={`flex-1 md:flex-none px-6 py-2 rounded-lg text-[11px] font-bold transition-all ${formData.titleLanguage === lang ? 'bg-discord-600 text-white shadow-lg' : 'text-white/30 hover:text-white/60'}`}
                     >
                       {lang === 'EN' ? 'English' : 'Japanese'}
                     </button>
@@ -167,7 +214,7 @@ export default function Settings() {
                   <span className="text-[13px] font-medium text-white/60 group-hover:text-white transition-colors">Auto-play next episode</span>
                   <div 
                     onClick={() => setFormData({...formData, autoNext: !formData.autoNext})}
-                    className={`w-10 h-5 rounded-full relative cursor-pointer transition-all duration-300 ${formData.autoNext ? 'bg-red-600' : 'bg-white/10'}`}
+                    className={`w-10 h-5 rounded-full relative cursor-pointer transition-all duration-300 ${formData.autoNext ? 'bg-discord-600' : 'bg-white/10'}`}
                   >
                     <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all duration-300 ${formData.autoNext ? 'left-6' : 'left-1'}`} />
                   </div>
@@ -177,9 +224,36 @@ export default function Settings() {
                   <span className="text-[13px] font-medium text-white/60 group-hover:text-white transition-colors">Auto-start video</span>
                   <div 
                     onClick={() => setFormData({...formData, autoPlay: !formData.autoPlay})}
-                    className={`w-10 h-5 rounded-full relative cursor-pointer transition-all duration-300 ${formData.autoPlay ? 'bg-red-600' : 'bg-white/10'}`}
+                    className={`w-10 h-5 rounded-full relative cursor-pointer transition-all duration-300 ${formData.autoPlay ? 'bg-discord-600' : 'bg-white/10'}`}
                   >
                     <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all duration-300 ${formData.autoPlay ? 'left-6' : 'left-1'}`} />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-4 pt-4 border-t border-white/5">
+                  <span className="text-[13px] font-medium text-white/60">Theme Color</span>
+                  <div className="flex items-center gap-3 flex-wrap">
+                    {THEME_COLORS.map((theme) => {
+                      const isActive = formData.themeColor.toUpperCase() === theme.color.toUpperCase();
+                      return (
+                        <button
+                          key={theme.id}
+                          type="button"
+                          title={theme.label}
+                          onClick={() => setFormData({...formData, themeColor: theme.color})}
+                          className={`w-8 h-8 rounded-full transition-all duration-300 flex items-center justify-center relative
+                            ${isActive ? 'scale-125 ring-2 ring-white ring-offset-2 ring-offset-[#111] z-10' : 'hover:scale-110 opacity-70 hover:opacity-100'}
+                          `}
+                          style={{ 
+                            backgroundColor: theme.color,
+                            boxShadow: isActive ? `0 0 20px ${theme.color}80` : `0 0 10px ${theme.color}40`,
+                          }}
+                        >
+                          <div className="absolute inset-0 rounded-full bg-white/10 mix-blend-overlay"></div>
+                          {isActive && <CheckCircle2 size={14} className="text-white drop-shadow-md relative z-10" />}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -190,7 +264,7 @@ export default function Settings() {
             <button 
               type="submit"
               disabled={isSaving}
-              className="w-full bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-black py-5 text-[11px] uppercase tracking-[0.25em] transition-all flex items-center justify-center gap-3 active:scale-[0.98]"
+              className="w-full bg-discord-600 hover:bg-discord-700 disabled:opacity-50 text-white font-black py-5 text-[11px] uppercase tracking-[0.25em] transition-all flex items-center justify-center gap-3 active:scale-[0.98]"
             >
               {isSaving ? (
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -231,7 +305,7 @@ export default function Settings() {
               <button 
                 type="button"
                 onClick={handleDisconnect}
-                className="flex-1 py-2.5 rounded-lg bg-red-600/90 text-white text-[11px] font-bold hover:bg-red-600 transition-all"
+                className="flex-1 py-2.5 rounded-lg bg-discord-600/90 text-white text-[11px] font-bold hover:bg-discord-600 transition-all"
               >
                 Disconnect
               </button>

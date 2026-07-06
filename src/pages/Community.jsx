@@ -31,7 +31,7 @@ const CATEGORY_COLORS = {
   anime: "bg-purple-500/15 text-purple-400 border-purple-500/20",
   feedback: "bg-emerald-500/15 text-emerald-400 border-emerald-500/20",
   question: "bg-amber-500/15 text-amber-400 border-amber-500/20",
-  news: "bg-red-500/15 text-red-400 border-red-500/20",
+  news: "bg-discord-500/15 text-discord-400 border-discord-500/20",
   poll: "bg-cyan-500/15 text-cyan-400 border-cyan-500/20",
 };
 
@@ -56,7 +56,7 @@ const RoleBadge = ({ role }) => {
     </span>
   );
   if (role === 'moderator') return (
-    <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[9px] font-bold uppercase tracking-wider rounded border border-red-500/30">
+    <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-discord-500/20 text-discord-400 text-[9px] font-bold uppercase tracking-wider rounded border border-discord-500/30">
       <Shield size={9} fill="currentColor" /> Mod
     </span>
   );
@@ -139,7 +139,7 @@ function CreatePostModal({ isOpen, onClose, onCreated, user }) {
         {/* Body */}
         <div className="p-4 md:p-6 space-y-4 max-h-[80vh] md:max-h-[70vh] overflow-y-auto mini-scrollbar">
           {error && (
-            <div className="px-4 py-2.5 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
+            <div className="px-4 py-2.5 bg-discord-500/10 border border-discord-500/20 rounded-lg text-discord-400 text-sm">
               {error}
             </div>
           )}

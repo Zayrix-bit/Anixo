@@ -89,10 +89,10 @@ export default function Schedule() {
             {grouped.map(({ date, items }, idx) => (
               <div key={idx} className="bg-[#121212] rounded-xl border border-white/15 overflow-hidden flex flex-col shadow-lg transition-transform hover:scale-[1.01]">
                 {/* Day Header */}
-                <div className={`p-4 flex items-center justify-between border-b border-white/15 ${new Date().toDateString() === date.toDateString() ? "bg-red-600/5 group" : "bg-white/[0.01]"
+                <div className={`p-4 flex items-center justify-between border-b border-white/15 ${new Date().toDateString() === date.toDateString() ? "bg-discord-600/5 group" : "bg-white/[0.01]"
                   }`}>
                   <div className="flex flex-col">
-                    <span className={`text-[11px] font-black tracking-widest uppercase ${new Date().toDateString() === date.toDateString() ? "text-red-500" : "text-white/30"
+                    <span className={`text-[11px] font-black tracking-widest uppercase ${new Date().toDateString() === date.toDateString() ? "text-discord-500" : "text-white/30"
                       }`}>
                       {dayLabel(date)}
                     </span>
@@ -124,7 +124,7 @@ export default function Schedule() {
                                 {formatTime(item.airingAt)}
                               </span>
                             </div>
-                            <span className={`text-[10px] uppercase ${isPast ? "text-red-900/40" : "text-red-600/60"}`}>
+                            <span className={`text-[10px] uppercase ${isPast ? "text-discord-900/40" : "text-discord-600/60"}`}>
                               AIRING
                             </span>
                           </div>

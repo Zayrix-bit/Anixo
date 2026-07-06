@@ -78,7 +78,7 @@ const LiveComments = () => {
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         {/* Vertical Accent Bar */}
-        <div className="w-[3.5px] h-6 bg-red-600 rounded-full" />
+        <div className="w-[3.5px] h-6 bg-discord-600 rounded-full" />
         <h2 className="text-xl md:text-2xl font-bold text-white uppercase leading-none tracking-tighter">
           Live Comments
         </h2>
@@ -131,7 +131,7 @@ const LiveComments = () => {
                   </div>
 
                   {/* Anime Info */}
-                  <p className="text-[11px] text-red-400 mb-2 truncate font-medium">
+                  <p className="text-[11px] text-discord-400 mb-2 truncate font-medium">
                     {animeTitles[comment.animeId] ? `${animeTitles[comment.animeId]} • ` : ''}Ep {comment.episodeNumber}
                   </p>
 

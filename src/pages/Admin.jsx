@@ -102,7 +102,7 @@ export default function Admin() {
                 to={item.path}
                 className={`flex items-center justify-center gap-2 px-2.5 sm:px-3 md:px-4 py-2 sm:py-2 rounded-xl transition-all duration-300 border shrink-0 ${
                   isActive 
-                    ? "bg-red-600 text-white border-red-600" 
+                    ? "bg-discord-600 text-white border-discord-600" 
                     : "bg-white/[0.02] border-white/15 text-white/30 hover:text-white hover:bg-white/[0.05]"
                 }`}
               >
@@ -118,7 +118,7 @@ export default function Admin() {
         {/* Admin Panel */}
         <div className="bg-[#111] border border-[#2a2a2a] rounded-2xl p-4 md:p-8">
           <h1 className="text-xl md:text-2xl font-bold mb-6 flex items-center gap-2">
-            <Users size={22} className="text-red-500" />
+            <Users size={22} className="text-discord-500" />
             Admin Panel
           </h1>
 
@@ -131,7 +131,7 @@ export default function Admin() {
 
             <div className="flex flex-wrap gap-3 md:gap-4 text-sm">
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-red-500" />
+                <div className="w-2 h-2 rounded-full bg-discord-500" />
                 <span className="text-white/60">Registered: {onlineStats.registered}</span>
               </div>
               <div className="flex items-center gap-2">

@@ -41,7 +41,7 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen text-white flex flex-col font-sans selection:bg-red-500/30">
+    <div className="min-h-screen text-white flex flex-col font-sans selection:bg-discord-500/30">
       <Navbar />
 
       <div className="flex-1 flex items-start lg:items-center justify-center p-6 pt-24 lg:pt-32">
@@ -49,8 +49,8 @@ export default function ForgotPassword() {
           <div className="relative bg-[#0d0d0d] border border-white/[0.03] rounded-[32px] p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden group">
             
             {/* Premium Background Elements */}
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-600/40 to-transparent" />
-            <div className="absolute -top-24 -right-24 w-48 h-48 bg-red-600/[0.08] blur-[80px] rounded-full pointer-events-none group-hover:bg-red-600/[0.12] transition-colors duration-700" />
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-discord-600/40 to-transparent" />
+            <div className="absolute -top-24 -right-24 w-48 h-48 bg-discord-600/[0.08] blur-[80px] rounded-full pointer-events-none group-hover:bg-discord-600/[0.12] transition-colors duration-700" />
             
             {/* Subtle Anime Watermark */}
             <div className="absolute inset-0 pointer-events-none opacity-[0.03] grayscale mix-blend-overlay">
@@ -64,7 +64,7 @@ export default function ForgotPassword() {
             <div className="relative z-10">
               <Link
                 to="/profile"
-                className="inline-flex items-center gap-2 text-white/60 hover:text-red-500 transition-all text-[11px] font-bold uppercase tracking-[0.2em] mb-10 group/back"
+                className="inline-flex items-center gap-2 text-white/60 hover:text-discord-500 transition-all text-[11px] font-bold uppercase tracking-[0.2em] mb-10 group/back"
               >
                 <ArrowLeft size={12} className="group-hover/back:-translate-x-1 transition-transform" />
                 Back to Profile
@@ -82,12 +82,12 @@ export default function ForgotPassword() {
               <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                 <div className="flex flex-col gap-2 group">
                   <div className="flex justify-between items-center px-1">
-                    <label className="text-[10px] font-bold text-white/50 uppercase tracking-[0.2em] group-focus-within:text-red-500/50 transition-colors">
+                    <label className="text-[10px] font-bold text-white/50 uppercase tracking-[0.2em] group-focus-within:text-discord-500/50 transition-colors">
                       Email Address
                     </label>
                   </div>
                   <div className="relative">
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 group-focus-within:text-red-600/40 transition-colors">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 group-focus-within:text-discord-600/40 transition-colors">
                       <Mail size={16} />
                     </div>
                     <input
@@ -96,7 +96,7 @@ export default function ForgotPassword() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="name@example.com"
-                      className="w-full bg-black/40 border border-white/[0.03] focus:border-red-600/30 focus:bg-black/60 rounded-2xl py-4 pl-12 pr-4 outline-none text-[14px] transition-all placeholder:text-white/20 [color-scheme:dark]"
+                      className="w-full bg-black/40 border border-white/[0.03] focus:border-discord-600/30 focus:bg-black/60 rounded-2xl py-4 pl-12 pr-4 outline-none text-[14px] transition-all placeholder:text-white/20 [color-scheme:dark]"
                     />
                   </div>
                 </div>
@@ -112,7 +112,7 @@ export default function ForgotPassword() {
                 `}} />
 
                 {error && (
-                  <div className="bg-red-500/5 border border-red-500/20 text-red-500 text-[11px] font-medium py-3.5 px-4 rounded-xl animate-shake">
+                  <div className="bg-discord-500/5 border border-discord-500/20 text-discord-500 text-[11px] font-medium py-3.5 px-4 rounded-xl animate-shake">
                     {error}
                   </div>
                 )}
@@ -126,7 +126,7 @@ export default function ForgotPassword() {
                 <button
                   type="submit"
                   disabled={isLoading || message}
-                  className="w-full bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:hover:bg-red-600 text-white font-bold text-[11px] uppercase tracking-[0.2em] py-4.5 rounded-2xl transition-all active:scale-[0.98] flex items-center justify-center gap-3 shadow-xl shadow-red-600/10"
+                  className="w-full bg-discord-600 hover:bg-discord-700 disabled:opacity-50 disabled:hover:bg-discord-600 text-white font-bold text-[11px] uppercase tracking-[0.2em] py-4.5 rounded-2xl transition-all active:scale-[0.98] flex items-center justify-center gap-3 shadow-xl shadow-discord-600/10"
                 >
                   {isLoading ? (
                     <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
@@ -142,7 +142,7 @@ export default function ForgotPassword() {
           </div>
 
           <p className="text-center mt-8 text-white/50 text-xs">
-            Remember your password? <Link to="/profile" className="text-red-500/60 hover:text-red-500 transition-colors">Go back</Link>
+            Remember your password? <Link to="/profile" className="text-discord-500/60 hover:text-discord-500 transition-colors">Go back</Link>
           </p>
         </div>
       </div>

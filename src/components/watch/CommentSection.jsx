@@ -694,7 +694,7 @@ export default function CommentSection({ animeId, episode }) {
                             )}
                             
                             <div className="flex gap-3 group/reply animate-in fade-in duration-300 relative z-10">
-                            <div className={`w-10 h-10 rounded-full overflow-hidden shrink-0 relative z-10 border ${reply.isDeleted || reply.bannedByRole ? 'border-white/10 bg-white/5' : reply.user?.role === 'admin' ? 'border-purple-500' : reply.user?.role === 'moderator' ? 'border-red-500' : 'border-yellow-500'}`}>
+                            <div className={`w-10 h-10 rounded-full overflow-hidden shrink-0 relative z-10 border ${reply.isDeleted || reply.bannedByRole ? 'border-white/10 bg-white/5' : reply.user?.role === 'admin' ? 'border-purple-500' : reply.user?.role === 'moderator' ? 'border-discord-500' : 'border-yellow-500'}`}>
                                 {reply.isDeleted || reply.bannedByRole ? (
                                     <div className="w-full h-full bg-white/5 flex items-center justify-center text-white/20 text-xs">?</div>
                                 ) : (
@@ -703,12 +703,12 @@ export default function CommentSection({ animeId, episode }) {
                             </div>
                             <div className="flex-1 min-w-0">
                                 <div className="mb-2">
-                                     <span className={`block font-bold text-[13px] ${reply.isDeleted || reply.bannedByRole ? 'text-white/30' : reply.user?.role === 'admin' ? 'text-purple-500 hover:text-purple-400' : reply.user?.role === 'moderator' ? 'text-red-500 hover:text-red-400' : 'text-orange-400 hover:text-orange-300'} cursor-pointer transition-colors`}>
+                                     <span className={`block font-bold text-[13px] ${reply.isDeleted || reply.bannedByRole ? 'text-white/30' : reply.user?.role === 'admin' ? 'text-purple-500 hover:text-purple-400' : reply.user?.role === 'moderator' ? 'text-discord-500 hover:text-discord-400' : 'text-orange-400 hover:text-orange-300'} cursor-pointer transition-colors`}>
                                         {reply.isDeleted ? '[deleted]' : reply.bannedByRole ? '[restricted]' : (
                                             <Link to={`/user/${reply.user.profileId || reply.user.username}`} className="flex items-center gap-1.5 hover:opacity-80 transition-opacity flex-wrap">
                                                 {reply.user.displayName || reply.user.profileId || reply.user.username}
                                                 {reply.user.role === 'admin' && <span className="bg-purple-600 text-white text-[9px] px-1.5 py-0.5 rounded-[3px] uppercase tracking-wider font-black flex items-center gap-1 leading-none"><Crown size={10} fill="currentColor" /> ADMIN</span>}
-                                                {reply.user.role === 'moderator' && <span className="bg-red-500 text-white text-[9px] px-1.5 py-0.5 rounded-[3px] uppercase tracking-wider font-black flex items-center gap-1 leading-none"><Shield size={10} fill="currentColor" /> MOD</span>}
+                                                {reply.user.role === 'moderator' && <span className="bg-discord-500 text-white text-[9px] px-1.5 py-0.5 rounded-[3px] uppercase tracking-wider font-black flex items-center gap-1 leading-none"><Shield size={10} fill="currentColor" /> MOD</span>}
                                             </Link>
                                         )}
                                     </span>
@@ -750,7 +750,7 @@ export default function CommentSection({ animeId, episode }) {
                                         </button>
                                         <button 
                                             onClick={() => handleVoteReply(commentId, reply._id, 'dislike')}
-                                            className={`flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer ${reply.dislikedBy?.includes(user?.username) ? 'text-red-400' : ''}`}
+                                            className={`flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer ${reply.dislikedBy?.includes(user?.username) ? 'text-discord-400' : ''}`}
                                         >
                                             <ThumbsDown size={12} className={reply.dislikedBy?.includes(user?.username) ? 'fill-current' : ''} />
                                             {reply.dislikes > 0 ? reply.dislikes : ''}
@@ -790,7 +790,7 @@ export default function CommentSection({ animeId, episode }) {
                                                         {(user?.username === reply.user.username || user?.role === 'admin' || user?.role === 'moderator') && (
                                                             <button 
                                                                 onClick={() => { handleDeleteReply(commentId, reply._id); setOpenDropdownId(null); }}
-                                                                className="w-full text-left px-3 py-2 text-xs text-red-400 hover:text-red-300 hover:bg-white/5 transition-colors flex items-center gap-2 cursor-pointer"
+                                                                className="w-full text-left px-3 py-2 text-xs text-discord-400 hover:text-discord-300 hover:bg-white/5 transition-colors flex items-center gap-2 cursor-pointer"
                                                             >
                                                                 <Trash2 size={12} /> Delete
                                                             </button>
@@ -798,7 +798,7 @@ export default function CommentSection({ animeId, episode }) {
                                                         {user?.username !== reply.user.username && (
                                                             <button 
                                                                 onClick={() => { setReportModalOpen({ type: 'reply', id: reply._id, commentId: commentId }); setOpenDropdownId(null); }}
-                                                                className="w-full text-left px-3 py-2 text-xs text-red-400 hover:text-red-300 hover:bg-white/5 transition-colors flex items-center gap-2 cursor-pointer border-t border-white/15 mt-1 pt-2"
+                                                                className="w-full text-left px-3 py-2 text-xs text-discord-400 hover:text-discord-300 hover:bg-white/5 transition-colors flex items-center gap-2 cursor-pointer border-t border-white/15 mt-1 pt-2"
                                                             >
                                                                 <Flag size={12} /> Report
                                                             </button>
@@ -806,7 +806,7 @@ export default function CommentSection({ animeId, episode }) {
                                                         {(user?.role === 'admin' || user?.role === 'moderator') && reply.user.username !== user.username && reply.user.role !== 'admin' && reply.user.role !== 'moderator' && (
                                                             <button 
                                                                 onClick={() => { setBanModalOpen({ username: reply.user.username, commentId: commentId, replyId: reply._id }); setOpenDropdownId(null); }}
-                                                                className="w-full text-left px-3 py-2 text-xs text-red-500 hover:text-red-400 hover:bg-white/5 transition-colors flex items-center gap-2 cursor-pointer border-t border-white/15 mt-1 pt-2"
+                                                                className="w-full text-left px-3 py-2 text-xs text-discord-500 hover:text-discord-400 hover:bg-white/5 transition-colors flex items-center gap-2 cursor-pointer border-t border-white/15 mt-1 pt-2"
                                                             >
                                                                 <Ban size={12} /> Ban User
                                                             </button>
@@ -1025,7 +1025,7 @@ export default function CommentSection({ animeId, episode }) {
                 ) : (
                     sortedComments.slice(0, visibleCount).map(comment => (
                         <div id={`comment-${comment._id}`} key={comment._id} className="flex gap-3 sm:gap-4 group animate-in slide-in-from-bottom-2 duration-300 transition-colors duration-500 rounded-sm">
-                            <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden shrink-0 border ${comment.isDeleted || comment.bannedByRole ? 'border-white/10 bg-white/5' : comment.user?.role === 'admin' ? 'border-purple-500' : comment.user?.role === 'moderator' ? 'border-red-500' : 'border-yellow-500'}`}>
+                            <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden shrink-0 border ${comment.isDeleted || comment.bannedByRole ? 'border-white/10 bg-white/5' : comment.user?.role === 'admin' ? 'border-purple-500' : comment.user?.role === 'moderator' ? 'border-discord-500' : 'border-yellow-500'}`}>
                                 {comment.isDeleted || comment.bannedByRole ? (
                                     <div className="w-full h-full bg-white/5 flex items-center justify-center text-white/20 text-sm">?</div>
                                 ) : (
@@ -1039,12 +1039,12 @@ export default function CommentSection({ animeId, episode }) {
                                     </div>
                                 )}
                                 <div className="mb-1 sm:mb-2 flex flex-wrap items-baseline gap-2 sm:block sm:gap-0">
-                                     <span className={`block font-bold text-sm sm:text-[15px] ${comment.isDeleted || comment.bannedByRole ? 'text-white/30' : comment.user?.role === 'admin' ? 'text-purple-500 hover:text-purple-400' : comment.user?.role === 'moderator' ? 'text-red-500 hover:text-red-400' : 'text-orange-400 hover:text-orange-300'} cursor-pointer transition-colors`}>
+                                     <span className={`block font-bold text-sm sm:text-[15px] ${comment.isDeleted || comment.bannedByRole ? 'text-white/30' : comment.user?.role === 'admin' ? 'text-purple-500 hover:text-purple-400' : comment.user?.role === 'moderator' ? 'text-discord-500 hover:text-discord-400' : 'text-orange-400 hover:text-orange-300'} cursor-pointer transition-colors`}>
                                         {comment.isDeleted ? '[deleted]' : comment.bannedByRole ? '[restricted]' : (
                                             <Link to={`/user/${comment.user.profileId || comment.user.username}`} className="flex items-center gap-1.5 hover:opacity-80 transition-opacity flex-wrap">
                                                 {comment.user.displayName || comment.user.profileId || comment.user.username}
                                                 {comment.user.role === 'admin' && <span className="bg-purple-600 text-white text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-[3px] uppercase tracking-wider font-black flex items-center gap-1 leading-none"><Crown size={10} fill="currentColor" /> ADMIN</span>}
-                                                {comment.user.role === 'moderator' && <span className="bg-red-500 text-white text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-[3px] uppercase tracking-wider font-black flex items-center gap-1 leading-none"><Shield size={10} fill="currentColor" /> MOD</span>}
+                                                {comment.user.role === 'moderator' && <span className="bg-discord-500 text-white text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-[3px] uppercase tracking-wider font-black flex items-center gap-1 leading-none"><Shield size={10} fill="currentColor" /> MOD</span>}
                                             </Link>
                                         )}
                                     </span>
@@ -1078,7 +1078,7 @@ export default function CommentSection({ animeId, episode }) {
                                         </button>
                                         <button 
                                             onClick={() => handleVote(comment._id, 'dislike')}
-                                            className={`flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer ${comment.dislikedBy?.includes(user?.username) ? 'text-red-400' : ''}`}
+                                            className={`flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer ${comment.dislikedBy?.includes(user?.username) ? 'text-discord-400' : ''}`}
                                         >
                                             <ThumbsDown size={14} className={comment.dislikedBy?.includes(user?.username) ? 'fill-current' : ''} />
                                             {comment.dislikes > 0 ? comment.dislikes : ''}
@@ -1118,7 +1118,7 @@ export default function CommentSection({ animeId, episode }) {
                                                         {(user?.username === comment.user.username || user?.role === 'admin' || user?.role === 'moderator') && (
                                                             <button 
                                                                 onClick={() => { handleDelete(comment._id); setOpenDropdownId(null); }}
-                                                                className="w-full text-left px-4 py-2.5 sm:py-2 text-xs text-red-400 hover:text-red-300 hover:bg-white/5 transition-colors flex items-center gap-2 cursor-pointer"
+                                                                className="w-full text-left px-4 py-2.5 sm:py-2 text-xs text-discord-400 hover:text-discord-300 hover:bg-white/5 transition-colors flex items-center gap-2 cursor-pointer"
                                                             >
                                                                 <Trash2 size={12} /> Delete
                                                             </button>
@@ -1126,7 +1126,7 @@ export default function CommentSection({ animeId, episode }) {
                                                         {user?.username !== comment.user.username && (
                                                             <button 
                                                                 onClick={() => { setReportModalOpen({ type: 'comment', id: comment._id }); setOpenDropdownId(null); }}
-                                                                className="w-full text-left px-3 py-2 text-xs text-red-400 hover:text-red-300 hover:bg-white/5 transition-colors flex items-center gap-2 cursor-pointer border-t border-white/15 mt-1 pt-2"
+                                                                className="w-full text-left px-3 py-2 text-xs text-discord-400 hover:text-discord-300 hover:bg-white/5 transition-colors flex items-center gap-2 cursor-pointer border-t border-white/15 mt-1 pt-2"
                                                             >
                                                                 <Flag size={12} /> Report
                                                             </button>
@@ -1135,14 +1135,14 @@ export default function CommentSection({ animeId, episode }) {
                                                             <>
                                                                 <button 
                                                                     onClick={() => { handlePinComment(comment._id); setOpenDropdownId(null); }}
-                                                                    className={`w-full text-left px-3 py-2 text-xs ${user?.role === 'admin' ? 'text-purple-400 hover:text-purple-300' : 'text-red-400 hover:text-red-300'} hover:bg-white/5 transition-colors flex items-center gap-2 cursor-pointer border-t border-white/15 mt-1 pt-2`}
+                                                                    className={`w-full text-left px-3 py-2 text-xs ${user?.role === 'admin' ? 'text-purple-400 hover:text-purple-300' : 'text-discord-400 hover:text-discord-300'} hover:bg-white/5 transition-colors flex items-center gap-2 cursor-pointer border-t border-white/15 mt-1 pt-2`}
                                                                 >
                                                                     <Pin size={12} /> {comment.isPinned ? 'Unpin Comment' : 'Pin Comment'}
                                                                 </button>
                                                                 {comment.user.username !== user.username && comment.user.role !== 'admin' && comment.user.role !== 'moderator' && (
                                                                     <button 
                                                                         onClick={() => { setBanModalOpen({ username: comment.user.username, commentId: comment._id }); setOpenDropdownId(null); }}
-                                                                        className="w-full text-left px-3 py-2 text-xs text-red-500 hover:text-red-400 hover:bg-white/5 transition-colors flex items-center gap-2 cursor-pointer border-t border-white/15 mt-1 pt-2"
+                                                                        className="w-full text-left px-3 py-2 text-xs text-discord-500 hover:text-discord-400 hover:bg-white/5 transition-colors flex items-center gap-2 cursor-pointer border-t border-white/15 mt-1 pt-2"
                                                                     >
                                                                         <Ban size={12} /> Ban User
                                                                     </button>
@@ -1221,7 +1221,7 @@ export default function CommentSection({ animeId, episode }) {
                 <div className="fixed inset-0 z-[100] flex sm:items-center items-end justify-center bg-black/60 backdrop-blur-sm sm:p-4 p-0" onClick={() => setReportModalOpen(null)}>
                     <div className="bg-[#0B0E14] border-t sm:border border-white/10 sm:rounded-lg rounded-t-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-in sm:zoom-in-95 slide-in-from-bottom-full sm:slide-in-from-bottom-0 duration-200" onClick={e => e.stopPropagation()}>
                         <div className="px-5 py-4 border-b border-white/10 flex justify-between items-center bg-white/[0.02]">
-                            <h3 className="text-white font-bold flex items-center gap-2 text-base sm:text-sm"><Flag size={16} className="text-red-400" /> Report Comment</h3>
+                            <h3 className="text-white font-bold flex items-center gap-2 text-base sm:text-sm"><Flag size={16} className="text-discord-400" /> Report Comment</h3>
                             <button onClick={() => setReportModalOpen(null)} className="text-white/40 hover:text-white transition-colors cursor-pointer p-1"><X size={20} /></button>
                         </div>
                         <div className="p-5 pb-8 sm:pb-5 space-y-3 sm:space-y-2">
@@ -1232,7 +1232,7 @@ export default function CommentSection({ animeId, episode }) {
                                     onClick={() => handleReport(reason)}
                                     className="w-full text-left px-4 py-4 sm:py-3 bg-white/5 hover:bg-white/10 text-white/90 text-[15px] sm:text-sm rounded-xl sm:rounded-md transition-colors flex items-center gap-3 cursor-pointer"
                                 >
-                                    <div className="w-2 h-2 rounded-full bg-red-500/50"></div>
+                                    <div className="w-2 h-2 rounded-full bg-discord-500/50"></div>
                                     {reason}
                                 </button>
                             ))}
@@ -1244,9 +1244,9 @@ export default function CommentSection({ animeId, episode }) {
             {/* Ban User Modal */}
             {banModalOpen && (
                 <div className="fixed inset-0 z-[100] flex sm:items-center items-end justify-center bg-black/60 backdrop-blur-sm sm:p-4 p-0" onClick={() => setBanModalOpen(null)}>
-                    <div className="bg-[#0B0E14] border-t sm:border border-red-500/20 sm:rounded-lg rounded-t-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-in sm:zoom-in-95 slide-in-from-bottom-full sm:slide-in-from-bottom-0 duration-200" onClick={e => e.stopPropagation()}>
-                        <div className="px-5 py-4 border-b border-white/10 flex justify-between items-center bg-red-500/5">
-                            <h3 className="text-red-400 font-bold flex items-center gap-2 text-base sm:text-sm"><Ban size={16} /> Ban User: {banModalOpen.username}</h3>
+                    <div className="bg-[#0B0E14] border-t sm:border border-discord-500/20 sm:rounded-lg rounded-t-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-in sm:zoom-in-95 slide-in-from-bottom-full sm:slide-in-from-bottom-0 duration-200" onClick={e => e.stopPropagation()}>
+                        <div className="px-5 py-4 border-b border-white/10 flex justify-between items-center bg-discord-500/5">
+                            <h3 className="text-discord-400 font-bold flex items-center gap-2 text-base sm:text-sm"><Ban size={16} /> Ban User: {banModalOpen.username}</h3>
                             <button onClick={() => setBanModalOpen(null)} className="text-white/40 hover:text-white transition-colors cursor-pointer p-1"><X size={20} /></button>
                         </div>
                         <div className="p-5 pb-8 sm:pb-5 space-y-3 sm:space-y-2">
@@ -1256,7 +1256,7 @@ export default function CommentSection({ animeId, episode }) {
                                 placeholder="E.g. Violation of rules, Spam, etc."
                                 value={banReasonText}
                                 onChange={(e) => setBanReasonText(e.target.value)}
-                                className="w-full bg-white/5 border border-white/10 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500/50 mb-2"
+                                className="w-full bg-white/5 border border-white/10 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-discord-500/50 mb-2"
                             />
                             <p className="text-white/60 text-sm mb-2 mt-3">Select the ban duration for this user:</p>
                             {[
@@ -1268,9 +1268,9 @@ export default function CommentSection({ animeId, episode }) {
                                 <button 
                                     key={option.hours}
                                     onClick={() => handleAdminBan(option.hours)}
-                                    className="w-full text-left px-4 py-4 sm:py-3 bg-red-500/10 hover:bg-red-500/20 text-red-200 text-[15px] sm:text-sm rounded-xl sm:rounded-md transition-colors flex items-center gap-3 cursor-pointer"
+                                    className="w-full text-left px-4 py-4 sm:py-3 bg-discord-500/10 hover:bg-discord-500/20 text-discord-200 text-[15px] sm:text-sm rounded-xl sm:rounded-md transition-colors flex items-center gap-3 cursor-pointer"
                                 >
-                                    <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                                    <div className="w-2 h-2 rounded-full bg-discord-500"></div>
                                     {option.label}
                                 </button>
                             ))}

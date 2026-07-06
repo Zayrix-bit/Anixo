@@ -112,7 +112,7 @@ export default function ContinueWatching() {
   }));
 
   return (
-    <div className="min-h-screen text-white flex flex-col font-sans selection:bg-red-500/30">
+    <div className="min-h-screen text-white flex flex-col font-sans selection:bg-discord-500/30">
       <Navbar />
 
       <div className="w-full pt-[80px] px-4 md:px-8 pb-12 max-w-[1200px] mx-auto flex-1">
@@ -129,7 +129,7 @@ export default function ContinueWatching() {
                 to={item.path}
                 className={`flex items-center justify-center gap-2 px-2.5 sm:px-3 md:px-4 py-2 sm:py-2 rounded-xl transition-all duration-300 border shrink-0 ${
                   isActive 
-                  ? "bg-red-600 text-white border-red-600" 
+                  ? "bg-discord-600 text-white border-discord-600" 
                   : "bg-white/[0.02] border-white/15 text-white/30 hover:text-white hover:bg-white/[0.05]"
                 }`}
               >
@@ -185,7 +185,7 @@ export default function ContinueWatching() {
                       e.stopPropagation();
                       handleRemove(anime.id);
                     }}
-                    className="absolute top-2 right-2 z-50 bg-black/70 backdrop-blur-md text-white/90 hover:text-red-500 hover:bg-black p-2.5 rounded-xl shadow-xl transition-all duration-300 opacity-100 md:opacity-0 md:group-hover:opacity-100 border border-white/10"
+                    className="absolute top-2 right-2 z-50 bg-black/70 backdrop-blur-md text-white/90 hover:text-discord-500 hover:bg-black p-2.5 rounded-xl shadow-xl transition-all duration-300 opacity-100 md:opacity-0 md:group-hover:opacity-100 border border-white/10"
                     title={t('continueWatching.removeFromHistory')}
                   >
                     <Trash2 size={16} strokeWidth={2.5} />
@@ -224,7 +224,7 @@ export default function ContinueWatching() {
                 <button 
                   onClick={handleSync}
                   disabled={isSyncing}
-                  className="bg-red-600 text-white font-black py-3 px-8 rounded-xl text-[11px] uppercase tracking-[0.2em] transition-all hover:scale-105 flex items-center gap-2"
+                  className="bg-discord-600 text-white font-black py-3 px-8 rounded-xl text-[11px] uppercase tracking-[0.2em] transition-all hover:scale-105 flex items-center gap-2"
                 >
                   <RefreshCw size={14} className={isSyncing ? 'animate-spin' : ''} />
                   {isSyncing ? t('continueWatching.syncingLibrary') : t('continueWatching.syncFromAnilist')}

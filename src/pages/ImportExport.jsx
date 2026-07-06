@@ -379,7 +379,7 @@ export default function ImportExport() {
                 to={item.path}
                 className={`flex items-center justify-center gap-2 px-2.5 sm:px-3 md:px-4 py-2 sm:py-2 rounded-xl transition-all duration-300 border shrink-0 ${
                   isActive 
-                  ? "bg-red-600 text-white border-red-600" 
+                  ? "bg-discord-600 text-white border-discord-600" 
                   : "bg-white/[0.02] border-white/15 text-white/30 hover:text-white hover:bg-white/[0.05]"
                 }`}
               >
@@ -400,7 +400,7 @@ export default function ImportExport() {
             <button
               onClick={() => { setActiveTab("import"); setImportResult(null); }}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-medium transition-all rounded-lg ${
-                activeTab === "import" ? "bg-red-600 text-white" : "text-[#888] hover:text-white"
+                activeTab === "import" ? "bg-discord-600 text-white" : "text-[#888] hover:text-white"
               }`}
             >
               <Upload size={16} />
@@ -409,7 +409,7 @@ export default function ImportExport() {
             <button
               onClick={() => { setActiveTab("export"); setImportResult(null); }}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-medium transition-all rounded-lg ${
-                activeTab === "export" ? "bg-red-600 text-white" : "text-[#888] hover:text-white"
+                activeTab === "export" ? "bg-discord-600 text-white" : "text-[#888] hover:text-white"
               }`}
             >
               <Download size={16} />
@@ -442,7 +442,7 @@ export default function ImportExport() {
                       type="button"
                       onClick={() => setImportFrom(p)}
                       className={`flex-1 md:flex-none px-6 py-2 rounded-md text-xs font-medium transition-all ${
-                        importFrom === p ? 'bg-red-600 text-white' : 'text-[#888] hover:text-white'
+                        importFrom === p ? 'bg-discord-600 text-white' : 'text-[#888] hover:text-white'
                       }`}
                     >
                       {p === 'MAL' ? 'MyAnimeList' : 'JSON/File'}
@@ -460,7 +460,7 @@ export default function ImportExport() {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="AniList Username"
-                    className="w-full bg-[#181818] border border-[#2a2a2a] rounded-lg px-4 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-red-600 transition-all"
+                    className="w-full bg-[#181818] border border-[#2a2a2a] rounded-lg px-4 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-discord-600 transition-all"
                   />
                 </div>
               )}
@@ -498,7 +498,7 @@ export default function ImportExport() {
                       type="button"
                       onClick={() => setImportMode(m)}
                       className={`px-5 py-2 rounded-md text-xs font-medium transition-all ${
-                        importMode === m ? 'bg-red-600 text-white' : 'text-[#888] hover:text-white'
+                        importMode === m ? 'bg-discord-600 text-white' : 'text-[#888] hover:text-white'
                       }`}
                     >
                       {m === 'Merge' ? 'Merge' : 'Replace All'}
@@ -509,7 +509,7 @@ export default function ImportExport() {
 
               {/* Progress & Result */}
               {importProgress && (
-                <div className="p-4 bg-red-600/10 border border-red-600/20 rounded-lg text-xs text-red-400 text-center">
+                <div className="p-4 bg-discord-600/10 border border-discord-600/20 rounded-lg text-xs text-discord-400 text-center">
                   {importProgress}
                 </div>
               )}
@@ -518,7 +518,7 @@ export default function ImportExport() {
                 <div className={`p-4 rounded-lg text-xs text-center ${
                   importResult.success 
                     ? 'bg-green-500/10 text-green-400 border border-green-500/20' 
-                    : 'bg-red-500/10 text-red-400 border border-red-500/20'
+                    : 'bg-discord-500/10 text-discord-400 border border-discord-500/20'
                 }`}>
                   {importResult.message}
                 </div>
@@ -527,7 +527,7 @@ export default function ImportExport() {
               <button
                 type="submit"
                 disabled={isImporting}
-                className="w-full bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-medium py-3.5 text-sm transition-all rounded-lg"
+                className="w-full bg-discord-600 hover:bg-discord-700 disabled:opacity-50 text-white font-medium py-3.5 text-sm transition-all rounded-lg"
               >
                 {isImporting ? <Loader2 size={18} className="animate-spin mx-auto" /> : "Start Import"}
               </button>
@@ -553,7 +553,7 @@ export default function ImportExport() {
                       type="button"
                       onClick={() => setExportFormat(f)}
                       className={`px-5 py-2 rounded-md text-xs font-medium transition-all ${
-                        exportFormat === f ? 'bg-red-600 text-white' : 'text-[#888] hover:text-white'
+                        exportFormat === f ? 'bg-discord-600 text-white' : 'text-[#888] hover:text-white'
                       }`}
                     >
                       {f}
@@ -565,7 +565,7 @@ export default function ImportExport() {
               <button
                 onClick={handleExport}
                 disabled={isExporting}
-                className="w-full bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-medium py-3.5 text-sm transition-all rounded-lg"
+                className="w-full bg-discord-600 hover:bg-discord-700 disabled:opacity-50 text-white font-medium py-3.5 text-sm transition-all rounded-lg"
               >
                 {isExporting ? <Loader2 size={18} className="animate-spin mx-auto" /> : "Download Backup"}
               </button>

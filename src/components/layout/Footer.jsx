@@ -53,7 +53,7 @@ export default function Footer() {
     )}
     <footer className="relative bg-[#0b0d12] pt-10 md:pt-20 pb-8 md:pb-10 overflow-hidden border-t border-white/15">
       {/* Top Gradient Line - Truly Full Width */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-red-600/50 to-transparent" />
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-discord-600/50 to-transparent" />
 
       {/* Professional Watermark Background */}
       <div className="absolute inset-0 hidden md:flex items-center justify-center overflow-hidden pointer-events-none select-none z-0">
@@ -101,7 +101,7 @@ export default function Footer() {
                 <MessageSquare className="text-white/20 hover:text-[#5865F2] transition cursor-pointer" size={18} />
               </a>
               <a href="https://reddit.com" target="_blank" rel="noopener noreferrer" aria-label="AniXo on Reddit">
-                <Heart className="text-white/20 hover:text-red-600 transition cursor-pointer" size={18} />
+                <Heart className="text-white/20 hover:text-discord-600 transition cursor-pointer" size={18} />
               </a>
             </div>
           </div>
@@ -133,7 +133,7 @@ export default function Footer() {
                             onClick={link.onClick}
                             className={`${baseClass} ${colorClass} text-left w-full outline-none`}
                           >
-                            {Icon && <Icon className="text-white/10 group-hover:text-red-500 transition" size={12} />}
+                            {Icon && <Icon className="text-white/10 group-hover:text-discord-500 transition" size={12} />}
                             {link.name}
                           </button>
                         </li>
@@ -149,7 +149,7 @@ export default function Footer() {
                             rel="noopener noreferrer"
                             className={`${baseClass} ${colorClass}`}
                           >
-                            {Icon && <Icon className="text-white/10 group-hover:text-red-500 transition" size={12} />}
+                            {Icon && <Icon className="text-white/10 group-hover:text-discord-500 transition" size={12} />}
                             {link.name}
                           </a>
                         </li>
@@ -159,7 +159,7 @@ export default function Footer() {
                     return (
                       <li key={link.name}>
                         <Link to={link.path} className={`${baseClass} ${colorClass}`}>
-                          {Icon && <Icon className="text-white/10 group-hover:text-red-500 transition" size={12} />}
+                          {Icon && <Icon className="text-white/10 group-hover:text-discord-500 transition" size={12} />}
                           {link.name}
                         </Link>
                       </li>
@@ -195,9 +195,9 @@ export default function Footer() {
             <span>&copy; {currentYear} AniXo</span>
             <div className="w-1 h-1 bg-white/10 rounded-full hidden sm:block" />
             <span className="flex items-center gap-1 hidden sm:flex">
-              Made with <Heart size={10} className="text-red-600" fill="currentColor" /> by the community
+              Made with <Heart size={10} className="text-discord-600" fill="currentColor" /> by the community
             </span>
-            <Link to="/nsfw" className="ml-2 text-white/10 hover:text-red-600 transition-colors">18+</Link>
+            <Link to="/nsfw" className="ml-2 text-white/10 hover:text-discord-600 transition-colors">18+</Link>
           </div>
           
           {/* Online Users */}

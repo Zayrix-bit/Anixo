@@ -42,7 +42,7 @@ export default function PlayerToolbar({
         <div className="flex items-center gap-4 sm:gap-6 lg:gap-10">
           <button
             onClick={() => setIsFocusMode(!isFocusMode)}
-            className={`flex items-center gap-1 sm:gap-2 transition-all ${isFocusMode ? 'text-red-500' : 'text-white/70 hover:text-white'}`}
+            className={`flex items-center gap-1 sm:gap-2 transition-all ${isFocusMode ? 'text-discord-500' : 'text-white/70 hover:text-white'}`}
           >
             <Moon size={13} className="sm:w-4 sm:h-4" fill={isFocusMode ? "currentColor" : "none"} />
             <span className="text-[9px] sm:text-[12px] font-medium">{t('player.focus')}</span>
@@ -52,7 +52,7 @@ export default function PlayerToolbar({
             onClick={() => setAutoNext(!autoNext)}
             className="flex items-center gap-1 sm:gap-2 group transition-all"
           >
-            <FastForward size={13} className={`sm:w-4 sm:h-4 transition-all ${autoNext ? 'text-red-500' : 'text-white/60 group-hover:text-white'}`} />
+            <FastForward size={13} className={`sm:w-4 sm:h-4 transition-all ${autoNext ? 'text-discord-500' : 'text-white/60 group-hover:text-white'}`} />
             <span className={`text-[9px] sm:text-[12px] font-medium ${autoNext ? 'text-white' : 'text-white/70'}`}>{t('player.autoNext')}</span>
           </button>
 
@@ -60,7 +60,7 @@ export default function PlayerToolbar({
             onClick={() => setAutoPlay(!autoPlay)}
             className="flex items-center gap-1 sm:gap-2 group transition-all"
           >
-            <PlayCircle size={13} className={`sm:w-4 sm:h-4 transition-all ${autoPlay ? 'text-red-500' : 'text-white/60 group-hover:text-white'}`} />
+            <PlayCircle size={13} className={`sm:w-4 sm:h-4 transition-all ${autoPlay ? 'text-discord-500' : 'text-white/60 group-hover:text-white'}`} />
             <span className={`text-[9px] sm:text-[12px] font-medium ${autoPlay ? 'text-white' : 'text-white/70'}`}>{t('player.autoPlay')}</span>
           </button>
         </div>
@@ -87,7 +87,7 @@ export default function PlayerToolbar({
                 <button
                   onClick={handleToggleBackendWatchlist}
                   disabled={isWatchlistLoading}
-                  className={`flex items-center gap-1 sm:gap-2 transition-all ${isBookmarked ? 'text-red-500' : 'text-white/70 hover:text-white'}`}
+                  className={`flex items-center gap-1 sm:gap-2 transition-all ${isBookmarked ? 'text-discord-500' : 'text-white/70 hover:text-white'}`}
                 >
                   {isWatchlistLoading ? (
                     <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
@@ -108,7 +108,7 @@ export default function PlayerToolbar({
                         <button
                           key={status}
                           onClick={() => handleUpdateWatchlistStatus(status)}
-                          className={`w-full text-left px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${isActive ? 'text-red-500 bg-red-500/5' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
+                          className={`w-full text-left px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${isActive ? 'text-discord-500 bg-discord-500/5' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
                         >
                           {status}
                         </button>
@@ -118,7 +118,7 @@ export default function PlayerToolbar({
                       <div className="border-t border-white/15 mt-2 pt-2">
                         <button
                           onClick={() => handleUpdateWatchlistStatus("Remove")}
-                          className="w-full text-left px-4 py-2 text-[11px] uppercase tracking-wider text-red-600 hover:bg-red-600/10 transition-colors"
+                          className="w-full text-left px-4 py-2 text-[11px] uppercase tracking-wider text-discord-600 hover:bg-discord-600/10 transition-colors"
                         >
                           Remove
                         </button>
@@ -127,7 +127,7 @@ export default function PlayerToolbar({
                     <div className={isBookmarked ? "" : "border-t border-white/15 mt-2 pt-2"}>
                       <button
                         onClick={() => setShowWatchlistDropdown(false)}
-                        className="w-full text-left px-4 py-2 text-[11px] uppercase tracking-wider text-red-600 hover:text-red-500 transition-colors"
+                        className="w-full text-left px-4 py-2 text-[11px] uppercase tracking-wider text-discord-600 hover:text-discord-500 transition-colors"
                       >
                         Cancel
                       </button>
@@ -153,7 +153,7 @@ export default function PlayerToolbar({
         <section className="flex flex-col md:flex-row md:items-center justify-between py-4 lg:py-6 gap-4 lg:gap-6">
           <div className="text-center md:text-left">
             <p className="text-[13px] lg:text-[14px] font-bold text-white/80 tracking-wide">
-              You are watching <span className="text-red-600">{t('player.episode')}{activeEpisode}</span>
+              You are watching <span className="text-discord-600">{t('player.episode')}{activeEpisode}</span>
             </p>
             <p className="text-[9px] lg:text-[10px] text-white/40 font-bold uppercase tracking-[0.2em] mt-1">
               Switch servers if the current link is unstable.
@@ -165,7 +165,7 @@ export default function PlayerToolbar({
               <button
                 onClick={() => setPlayerLang("sub")}
                 disabled={!hasSub}
-                className={`flex items-center gap-2 px-4 py-2 text-[10px] font-bold uppercase tracking-widest rounded-sm transition-all ${playerLang === "sub" ? "bg-red-600 text-white shadow-lg" : "text-white/40 hover:text-white"
+                className={`flex items-center gap-2 px-4 py-2 text-[10px] font-bold uppercase tracking-widest rounded-sm transition-all ${playerLang === "sub" ? "bg-discord-600 text-white shadow-lg" : "text-white/40 hover:text-white"
                   } ${!hasSub ? "opacity-20 pointer-events-none" : ""}`}
               >
                 <MessageSquare size={12} fill="currentColor" className="opacity-50" />
@@ -174,7 +174,7 @@ export default function PlayerToolbar({
               <button
                 onClick={() => setPlayerLang("dub")}
                 disabled={!hasDub}
-                className={`flex items-center gap-2 px-4 py-2 text-[10px] font-bold uppercase tracking-widest rounded-sm transition-all ${playerLang === "dub" ? "bg-red-600 text-white shadow-lg" : "text-white/40 hover:text-white"
+                className={`flex items-center gap-2 px-4 py-2 text-[10px] font-bold uppercase tracking-widest rounded-sm transition-all ${playerLang === "dub" ? "bg-discord-600 text-white shadow-lg" : "text-white/40 hover:text-white"
                   } ${!hasDub ? "opacity-20 pointer-events-none" : ""}`}
               >
                 <Mic size={12} fill="currentColor" className="opacity-50" />
@@ -188,7 +188,7 @@ export default function PlayerToolbar({
                   key={s}
                   onClick={() => setActiveServer(s)}
                   className={`px-1.5 sm:px-3 py-0.5 sm:py-1.5 text-[8.5px] sm:text-[10px] font-bold uppercase tracking-wider rounded-sm border transition-all flex-shrink-0 ${activeServer === s
-                    ? "bg-red-600 border-red-600 text-white shadow-[0_0_10px_rgba(220,38,38,0.3)]"
+                    ? "bg-discord-600 border-discord-600 text-white shadow-[0_0_10px_rgba(220,38,38,0.3)]"
                     : "border-white/15 text-white/40 hover:text-white hover:border-white/15 bg-white/5"
                     }`}
                 >

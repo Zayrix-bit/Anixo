@@ -21,6 +21,25 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [authToast, setAuthToast] = useState(null);
 
+  // Apply custom theme color if present
+  useEffect(() => {
+    if (globalSettings?.themeColor) {
+      document.documentElement.style.setProperty('--discord-600', globalSettings.themeColor);
+      document.documentElement.style.setProperty('--discord-500', globalSettings.themeColor);
+      document.documentElement.style.setProperty('--discord-700', globalSettings.themeColor);
+      document.documentElement.style.setProperty('--discord-400', globalSettings.themeColor);
+      document.documentElement.style.setProperty('--discord-800', globalSettings.themeColor);
+      document.documentElement.style.setProperty('--discord-900', globalSettings.themeColor);
+    } else {
+      document.documentElement.style.removeProperty('--discord-600');
+      document.documentElement.style.removeProperty('--discord-500');
+      document.documentElement.style.removeProperty('--discord-700');
+      document.documentElement.style.removeProperty('--discord-400');
+      document.documentElement.style.removeProperty('--discord-800');
+      document.documentElement.style.removeProperty('--discord-900');
+    }
+  }, [globalSettings?.themeColor]);
+
   const triggerAuthToast = (msg) => {
     setAuthToast(msg);
     setTimeout(() => setAuthToast(null), 4000);

@@ -29,7 +29,7 @@ export default function Staff() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+          <div className="w-12 h-12 border-4 border-discord-600 border-t-transparent rounded-full animate-spin" />
           <p className="text-white/60 font-bold uppercase tracking-[0.3em] text-[10px]">Loading Profile</p>
         </div>
       </div>
@@ -42,7 +42,7 @@ export default function Staff() {
         <h1 className="text-4xl font-black text-white/10 uppercase tracking-tighter">Voice Actor Not Found</h1>
         <button 
           onClick={() => navigate(-1)}
-          className="px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-full transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
+          className="px-8 py-3 bg-discord-600 hover:bg-discord-700 text-white font-bold rounded-full transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
         >
           <ChevronLeft size={20} />
           GO BACK
@@ -52,7 +52,7 @@ export default function Staff() {
   }
 
   return (
-    <div className="min-h-screen text-white selection:bg-red-600/30">
+    <div className="min-h-screen text-white selection:bg-discord-600/30">
       <Navbar />
 
       {/* Hero Section — Mobile-first responsive (Matching Character.jsx) */}
@@ -85,7 +85,7 @@ export default function Staff() {
                 alt={staff.name?.full} 
                 className="w-full aspect-[2/3] object-cover"
               />
-              <div className="absolute top-2 right-2 bg-red-600 text-white p-1.5 rounded-full shadow-lg">
+              <div className="absolute top-2 right-2 bg-discord-600 text-white p-1.5 rounded-full shadow-lg">
                 <Heart size={14} fill="white" />
               </div>
             </div>
@@ -97,7 +97,7 @@ export default function Staff() {
                   Voice Actor Profile
                 </span>
                 {staff.languageV2 && (
-                  <span className="px-2 py-0.5 bg-red-600/20 text-red-400 text-[9px] font-bold uppercase rounded tracking-widest">
+                  <span className="px-2 py-0.5 bg-discord-600/20 text-discord-400 text-[9px] font-bold uppercase rounded tracking-widest">
                     {staff.languageV2}
                   </span>
                 )}
@@ -127,7 +127,7 @@ export default function Staff() {
             {/* Biography */}
             <section>
               <div className="flex items-center gap-3 mb-4 sm:mb-6">
-                <div className="w-[3px] h-5 bg-red-600 rounded-full" />
+                <div className="w-[3px] h-5 bg-discord-600 rounded-full" />
                 <h2 className="text-base sm:text-xl font-black text-white uppercase tracking-tight">Biography</h2>
               </div>
               <div 
@@ -140,7 +140,7 @@ export default function Staff() {
             <section>
               <div className="flex items-center justify-between mb-6 sm:mb-8">
                 <div className="flex items-center gap-3">
-                  <div className="w-[3px] h-5 bg-red-600 rounded-full" />
+                  <div className="w-[3px] h-5 bg-discord-600 rounded-full" />
                   <h2 className="text-base sm:text-xl font-black text-white uppercase tracking-tight">Characters Voiced</h2>
                 </div>
                 <span className="text-[10px] sm:text-[11px] font-bold text-white/40 uppercase tracking-widest">{staff.characterMedia?.edges?.filter(e => e.node.type === "ANIME").length || 0} ROLES</span>
@@ -155,7 +155,7 @@ export default function Staff() {
                   return (
                     <div 
                       key={i}
-                      className="group flex bg-[#0d0d0d] border border-white/15 rounded-[4px] overflow-hidden hover:border-red-600/30 transition-all duration-300"
+                      className="group flex bg-[#0d0d0d] border border-white/15 rounded-[4px] overflow-hidden hover:border-discord-600/30 transition-all duration-300"
                     >
                       {/* Character Side */}
                       <Link to={`/character/${character.id}`} className="flex-1 flex items-center p-3 gap-4 hover:bg-white/[0.02]">
@@ -165,7 +165,7 @@ export default function Staff() {
                           alt={character.name?.full}
                         />
                         <div className="min-w-0">
-                          <p className="text-[13px] font-black text-white truncate group-hover:text-red-500 transition-colors uppercase leading-tight">
+                          <p className="text-[13px] font-black text-white truncate group-hover:text-discord-500 transition-colors uppercase leading-tight">
                             {character.name?.userPreferred}
                           </p>
                           <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest mt-1">
@@ -180,7 +180,7 @@ export default function Staff() {
                           {edge.node.title?.romaji || edge.node.title?.english}
                         </p>
                         <div className="flex items-center gap-2">
-                          <span className="text-[9px] font-bold text-red-500/80 uppercase">
+                          <span className="text-[9px] font-bold text-discord-500/80 uppercase">
                             {edge.node.format}
                           </span>
                           <span className="text-[9px] font-bold text-white/40 uppercase">
@@ -199,7 +199,7 @@ export default function Staff() {
           <div className="space-y-12">
             <section>
               <div className="flex items-center gap-3 mb-8">
-                <div className="w-[3px] h-5 bg-red-600 rounded-full" />
+                <div className="w-[3px] h-5 bg-discord-600 rounded-full" />
                 <h2 className="text-xl font-black text-white uppercase tracking-tight">Details</h2>
               </div>
               
@@ -227,15 +227,15 @@ export default function Staff() {
             </section>
 
             {/* Premium Stats or Something Extra */}
-            <div className="p-8 bg-gradient-to-br from-red-600/20 to-transparent border border-red-600/10 rounded-[4px] relative overflow-hidden group">
+            <div className="p-8 bg-gradient-to-br from-discord-600/20 to-transparent border border-discord-600/10 rounded-[4px] relative overflow-hidden group">
               <div className="relative z-10">
-                < Award className="text-red-500 mb-4" size={32} />
+                < Award className="text-discord-500 mb-4" size={32} />
                 <h3 className="text-[14px] font-black text-white uppercase tracking-widest mb-2">Professional Seiyuu</h3>
                 <p className="text-[12px] text-white/60 font-medium leading-relaxed">
                   Highly acclaimed voice talent contributing to the anime industry's greatest masterpieces.
                 </p>
               </div>
-              <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-red-600/10 rounded-full blur-3xl group-hover:bg-red-600/20 transition-all duration-1000" />
+              <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-discord-600/10 rounded-full blur-3xl group-hover:bg-discord-600/20 transition-all duration-1000" />
             </div>
           </div>
         </div>

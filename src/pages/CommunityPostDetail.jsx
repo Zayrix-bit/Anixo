@@ -21,7 +21,7 @@ const CATEGORY_COLORS = {
   anime: "bg-purple-500/10 text-purple-400 border-purple-500/30",
   feedback: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
   question: "bg-amber-500/10 text-amber-400 border-amber-500/30",
-  news: "bg-red-500/10 text-red-400 border-red-500/30",
+  news: "bg-discord-500/10 text-discord-400 border-discord-500/30",
   poll: "bg-cyan-500/10 text-cyan-400 border-cyan-500/30",
 };
 
@@ -46,7 +46,7 @@ const RoleBadge = ({ role }) => {
     </span>
   );
   if (role === 'moderator') return (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-red-500/10 text-red-400 text-[9px] font-black uppercase tracking-wider rounded-md border border-red-500/20 shadow-sm select-none">
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-discord-500/10 text-discord-400 text-[9px] font-black uppercase tracking-wider rounded-md border border-discord-500/20 shadow-sm select-none">
       <Shield size={9} fill="currentColor" className="shrink-0" /> Mod
     </span>
   );
@@ -162,7 +162,7 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
               <button
                 onClick={handleLike}
                 className={`flex items-center gap-1 text-[11px] font-medium transition-colors cursor-pointer ${
-                  liked ? 'text-red-400' : 'text-white/35 hover:text-white/65'
+                  liked ? 'text-discord-400' : 'text-white/35 hover:text-white/65'
                 }`}
               >
                 <Heart size={11} fill={liked ? "currentColor" : "none"} />
@@ -184,7 +184,7 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
               {canDelete && (
                 <button
                   onClick={handleDelete}
-                  className="flex items-center gap-1 text-[11px] font-medium text-white/20 hover:text-red-400 transition-colors cursor-pointer"
+                  className="flex items-center gap-1 text-[11px] font-medium text-white/20 hover:text-discord-400 transition-colors cursor-pointer"
                   title="Delete"
                 >
                   <Trash2 size={10} />
@@ -341,7 +341,7 @@ function EditPostModal({ isOpen, onClose, onUpdated, post }) {
         {/* Body */}
         <div className="p-4 md:p-6 space-y-4 max-h-[80vh] md:max-h-[70vh] overflow-y-auto mini-scrollbar text-left">
           {error && (
-            <div className="px-4 py-2.5 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
+            <div className="px-4 py-2.5 bg-discord-500/10 border border-discord-500/20 rounded-lg text-discord-400 text-sm">
               {error}
             </div>
           )}
@@ -730,7 +730,7 @@ export default function CommunityPostDetail() {
                 </span>
               )}
               {post.isLocked && (
-                <span className="flex items-center gap-1 text-[10px] text-red-400/60 select-none">
+                <span className="flex items-center gap-1 text-[10px] text-discord-400/60 select-none">
                   <Lock size={10} />
                 </span>
               )}
@@ -812,7 +812,7 @@ export default function CommunityPostDetail() {
                       {(isAuthor || isAdminOrMod) && (
                         <button
                           onClick={() => { handleDelete(); setShowActions(false); }}
-                          className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/[0.05] transition-colors cursor-pointer"
+                          className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-discord-400 hover:text-discord-300 hover:bg-discord-500/[0.05] transition-colors cursor-pointer"
                         >
                           <Trash2 size={14} /> Delete Post
                         </button>
@@ -868,7 +868,7 @@ export default function CommunityPostDetail() {
               </button>
 
               <span className={`text-[11px] font-bold px-2.5 select-none min-w-[28px] text-center ${
-                score > 0 ? 'text-emerald-400' : score < 0 ? 'text-red-400' : 'text-white/45'
+                score > 0 ? 'text-emerald-400' : score < 0 ? 'text-discord-400' : 'text-white/45'
               }`}>
                 {score > 0 ? `+${score}` : score}
               </span>
@@ -877,7 +877,7 @@ export default function CommunityPostDetail() {
                 onClick={handleDislike}
                 className={`flex items-center justify-center w-7 h-7 rounded transition-all cursor-pointer ${
                   userDisliked
-                    ? "bg-red-500/10 text-red-400"
+                    ? "bg-discord-500/10 text-discord-400"
                     : "text-white/40 hover:text-white/70 hover:bg-white/[0.03]"
                 }`}
                 title="Dislike"

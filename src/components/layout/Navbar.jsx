@@ -159,9 +159,9 @@ export default function Navbar() {
                       link.name === "HENTAI"
                         ? "bg-gradient-to-r from-[#ff2a5f] to-[#ff7e40] bg-clip-text text-transparent hover:scale-110"
                         : activeDropdown === link.dropdown && link.dropdown
-                          ? "text-red-500"
+                          ? "text-discord-500"
                           : showSidebar && link.action === "sidebar"
-                            ? "text-red-500"
+                            ? "text-discord-500"
                             : "text-white/40 hover:text-white"
                       }`}
                   >
@@ -185,7 +185,7 @@ export default function Navbar() {
                             key={type.value}
                             to={`/browse?format=${type.value}`}
                             onClick={() => setActiveDropdown(null)}
-                            className="text-white/60 hover:text-white hover:bg-white/[0.03] px-3 py-2.5 rounded text-[13px] font-medium transition-all leading-tight flex items-center hover:text-red-400"
+                            className="text-white/60 hover:text-white hover:bg-white/[0.03] px-3 py-2.5 rounded text-[13px] font-medium transition-all leading-tight flex items-center hover:text-discord-400"
                           >
                             {type.label}
                           </Link>
@@ -207,14 +207,14 @@ export default function Navbar() {
                             onClick={() => setActiveDropdown(null)}
                             className="text-[#888] hover:text-white hover:bg-white/[0.03] px-2 py-1 rounded text-[12px] font-medium transition-all leading-tight flex items-center gap-2 group"
                           >
-                            <div className="w-[3px] h-[3px] bg-red-600 rounded-full group-hover:scale-150 transition-transform" />
+                            <div className="w-[3px] h-[3px] bg-discord-600 rounded-full group-hover:scale-150 transition-transform" />
                             {genre}
                           </Link>
                         ))}
                       </div>
-                      <div className="mt-4 pt-3 border-t border-red-900/30 flex items-center justify-between font-bold uppercase tracking-widest text-[9px]">
+                      <div className="mt-4 pt-3 border-t border-discord-900/30 flex items-center justify-between font-bold uppercase tracking-widest text-[9px]">
                         <span className="text-[#666]">Explore 41 unique categories</span>
-                        <Link to="/browse" className="text-red-500 hover:text-red-400">View All Filters</Link>
+                        <Link to="/browse" className="text-discord-500 hover:text-discord-400">View All Filters</Link>
                       </div>
                     </div>
                   )}
@@ -230,7 +230,7 @@ export default function Navbar() {
               <div ref={searchContainerRef} className="hidden md:relative md:flex md:items-center">
                 <form
                   onSubmit={handleSearchSubmit}
-                  className="flex items-center bg-white/[0.03] border border-white/15 rounded-[6px] px-3 py-1.5 focus-within:border-red-500/50 transition-all w-[240px] xl:w-[320px]"
+                  className="flex items-center bg-white/[0.03] border border-white/15 rounded-[6px] px-3 py-1.5 focus-within:border-discord-500/50 transition-all w-[240px] xl:w-[320px]"
                 >
                   <svg className="w-3.5 h-3.5 text-white/20" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -243,7 +243,7 @@ export default function Navbar() {
                     placeholder="Search anime"
                     className="bg-transparent text-[13px] text-white outline-none px-2.5 w-full placeholder-white/60"
                   />
-                  {isSearching && <div className="w-3 h-3 border-2 border-red-500 border-t-transparent rounded-full animate-spin shrink-0 mr-2" />}
+                  {isSearching && <div className="w-3 h-3 border-2 border-discord-500 border-t-transparent rounded-full animate-spin shrink-0 mr-2" />}
                   <button
                     type="button"
                     onClick={() => {
@@ -266,11 +266,11 @@ export default function Navbar() {
                         <div className="flex items-center justify-between mb-3">
                           <div className="flex items-center gap-2">
                             <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.2em]">Quick Filters</span>
-                            <div className="w-1 h-1 bg-red-600 rounded-full" />
+                            <div className="w-1 h-1 bg-discord-600 rounded-full" />
                           </div>
                           <button
                             onClick={() => setSearchFilters({ format_in: [], status: "", season: "" })}
-                            className="text-[9px] text-red-500 hover:text-red-400 font-bold uppercase"
+                            className="text-[9px] text-discord-500 hover:text-discord-400 font-bold uppercase"
                           >
                             Reset
                           </button>
@@ -285,7 +285,7 @@ export default function Navbar() {
                                   ...prev,
                                   format_in: prev.format_in.includes(f) ? prev.format_in.filter(x => x !== f) : [...prev.format_in, f]
                                 }))}
-                                className={`px-2 py-1 rounded-[4px] text-[9px] font-bold border transition-all ${searchFilters.format_in.includes(f) ? 'bg-red-600 border-red-600 text-white' : 'bg-white/5 border-white/15 text-white/40 hover:border-white/20'}`}
+                                className={`px-2 py-1 rounded-[4px] text-[9px] font-bold border transition-all ${searchFilters.format_in.includes(f) ? 'bg-discord-600 border-discord-600 text-white' : 'bg-white/5 border-white/15 text-white/40 hover:border-white/20'}`}
                               >
                                 {f}
                               </button>
@@ -326,7 +326,7 @@ export default function Navbar() {
                           <span className="text-[10px] font-bold text-white/20 uppercase tracking-widest">Results</span>
                           <button
                             onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowFilters(!showFilters); }}
-                            className={`flex items-center gap-1.5 px-2 py-1 rounded transition-all ${showFilters ? 'bg-red-600/20 text-red-500' : 'text-white/30 hover:text-white/60'}`}
+                            className={`flex items-center gap-1.5 px-2 py-1 rounded transition-all ${showFilters ? 'bg-discord-600/20 text-discord-500' : 'text-white/30 hover:text-white/60'}`}
                           >
                             <SlidersHorizontal size={10} strokeWidth={3} />
                             <span className="text-[9px] font-bold uppercase">Quick Filters</span>
@@ -354,7 +354,7 @@ export default function Navbar() {
                                     className="w-[40px] h-[54px] object-cover rounded-[3px] flex-shrink-0 bg-white/5"
                                   />
                                   <div className="flex flex-col min-w-0 justify-center">
-                                    <span className="text-white text-[13px] font-medium truncate mb-1 group-hover:text-red-500 transition-colors">
+                                    <span className="text-white text-[13px] font-medium truncate mb-1 group-hover:text-discord-500 transition-colors">
                                       {getTitle(anime.title)}
                                     </span>
                                     <div className="flex flex-wrap items-center gap-2">
@@ -403,7 +403,7 @@ export default function Navbar() {
               {/* Single Language Toggle */}
               <button
                 onClick={toggleLanguage}
-                className="hidden md:flex items-center justify-center bg-[#2a2a2a] border border-white/10 h-[26px] min-w-[34px] rounded-[4px] text-[10px] font-black text-white hover:bg-red-600 transition-all duration-300 group overflow-hidden"
+                className="hidden md:flex items-center justify-center bg-[#2a2a2a] border border-white/10 h-[26px] min-w-[34px] rounded-[4px] text-[10px] font-black text-white hover:bg-discord-600 transition-all duration-300 group overflow-hidden"
                 title={`Switch to ${language === 'EN' ? 'Japanese' : 'English'}`}
               >
                 <span className="italic tracking-tighter transform group-hover:scale-110 transition-transform">
@@ -422,13 +422,13 @@ export default function Navbar() {
                     if (!isNotifOpen) fetchNotifications();
                     setIsNotifOpen(!isNotifOpen);
                   }}
-                  className={`block transition-all transform hover:scale-110 relative ${isNotifOpen ? 'text-red-500' : 'text-[#888] hover:text-white'}`}
+                  className={`block transition-all transform hover:scale-110 relative ${isNotifOpen ? 'text-discord-500' : 'text-[#888] hover:text-white'}`}
                 >
-                  <svg className={`w-[19px] h-[19px] ${unreadCount > 0 ? 'fill-red-500/20' : 'fill-[#888]/10'}`} stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <svg className={`w-[19px] h-[19px] ${unreadCount > 0 ? 'fill-discord-500/20' : 'fill-[#888]/10'}`} stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
                   </svg>
                   {unreadCount > 0 && (
-                    <span className="absolute -top-1.5 -right-2 bg-red-600 text-white text-[9px] font-black min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center border-2 border-black animate-in zoom-in duration-300">
+                    <span className="absolute -top-1.5 -right-2 bg-discord-600 text-white text-[9px] font-black min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center border-2 border-black animate-in zoom-in duration-300">
                       {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                   )}
@@ -442,7 +442,7 @@ export default function Navbar() {
               ) : !authLoading ? (
                 <button
                   onClick={() => setShowLoginModal(true)}
-                  className="text-[12px] font-bold bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-[4px] transition-all uppercase tracking-widest ml-1 shadow-[0_0_15px_rgba(220,38,38,0.3)] cursor-pointer"
+                  className="text-[12px] font-bold bg-discord-600 hover:bg-discord-700 text-white px-3 py-1.5 rounded-[4px] transition-all uppercase tracking-widest ml-1 shadow-[0_0_15px_rgba(220,38,38,0.3)] cursor-pointer"
                 >
                   Login
                 </button>
@@ -457,9 +457,9 @@ export default function Navbar() {
             <div className="relative">
               <form
                 onSubmit={handleSearchSubmit}
-                className="flex items-center bg-white/[0.05] border border-red-500/30 rounded-[8px] px-3 py-2"
+                className="flex items-center bg-white/[0.05] border border-discord-500/30 rounded-[8px] px-3 py-2"
               >
-                <svg className="w-4 h-4 text-red-500 mr-2" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-discord-500 mr-2" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 <input
@@ -470,7 +470,7 @@ export default function Navbar() {
                   className="bg-transparent text-[14px] text-white outline-none w-full placeholder-white/60"
                   autoFocus
                 />
-                {isSearching && <div className="w-4 h-4 border-2 border-red-500 border-t-transparent rounded-full animate-spin shrink-0 mr-2" />}
+                {isSearching && <div className="w-4 h-4 border-2 border-discord-500 border-t-transparent rounded-full animate-spin shrink-0 mr-2" />}
                 <button
                   type="button"
                   onClick={() => {
@@ -495,7 +495,7 @@ export default function Navbar() {
                         <span className="text-[11px] font-bold text-white/40 uppercase tracking-[0.2em]">Quick Filters</span>
                         <button
                           onClick={() => setSearchFilters({ format_in: [], status: "", season: "" })}
-                          className="text-[10px] text-red-500 font-bold uppercase"
+                          className="text-[10px] text-discord-500 font-bold uppercase"
                         >
                           Reset
                         </button>
@@ -509,7 +509,7 @@ export default function Navbar() {
                                 ...prev,
                                 format_in: prev.format_in.includes(f) ? prev.format_in.filter(x => x !== f) : [...prev.format_in, f]
                               }))}
-                              className={`px-3 py-1.5 rounded-[6px] text-[10px] font-bold border transition-all ${searchFilters.format_in.includes(f) ? 'bg-red-600 border-red-600 text-white' : 'bg-white/5 border-white/15 text-white/40'}`}
+                              className={`px-3 py-1.5 rounded-[6px] text-[10px] font-bold border transition-all ${searchFilters.format_in.includes(f) ? 'bg-discord-600 border-discord-600 text-white' : 'bg-white/5 border-white/15 text-white/40'}`}
                             >
                               {f}
                             </button>
@@ -549,7 +549,7 @@ export default function Navbar() {
                         <span className="text-[11px] font-bold text-white/20 uppercase tracking-widest">Results</span>
                         <button
                           onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowFilters(!showFilters); }}
-                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${showFilters ? 'bg-red-600/20 text-red-500' : 'bg-white/5 text-white/40'}`}
+                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${showFilters ? 'bg-discord-600/20 text-discord-500' : 'bg-white/5 text-white/40'}`}
                         >
                           <SlidersHorizontal size={12} strokeWidth={3} />
                           <span className="text-[10px] font-bold uppercase">Quick Filters</span>
@@ -579,7 +579,7 @@ export default function Navbar() {
                                 <div className="flex flex-col min-w-0">
                                   <span className="text-white text-[14px] font-medium truncate mb-1">{getTitle(anime.title)}</span>
                                   <div className="flex items-center gap-3">
-                                    <span className="text-[10px] text-red-500 font-bold uppercase tracking-widest">{anime.format || "TV"}</span>
+                                    <span className="text-[10px] text-discord-500 font-bold uppercase tracking-widest">{anime.format || "TV"}</span>
                                     <span className="text-[10px] text-white/40 font-medium">{currentEps || "?"} Episodes</span>
                                   </div>
                                 </div>
@@ -615,7 +615,7 @@ export default function Navbar() {
             <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
               authToast.toLowerCase().includes("welcome") || authToast.toLowerCase().includes("success")
                 ? "bg-green-500/10 text-green-500" 
-                : "bg-red-500/10 text-red-500"
+                : "bg-discord-500/10 text-discord-500"
             }`}>
               <CheckCircle2 size={16} strokeWidth={2.5} />
             </div>

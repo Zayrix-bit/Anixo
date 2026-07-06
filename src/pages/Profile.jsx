@@ -136,7 +136,7 @@ export default function Profile() {
 
   return (
     <>
-      <div key={user?.id || 'profile'} className="min-h-screen text-white flex flex-col font-sans selection:bg-red-500/30">
+      <div key={user?.id || 'profile'} className="min-h-screen text-white flex flex-col font-sans selection:bg-discord-500/30">
         <Navbar />
 
         <div className="w-full pt-[80px] px-4 md:px-8 pb-12 max-w-[1200px] mx-auto flex flex-col items-center">
@@ -152,7 +152,7 @@ export default function Profile() {
                   key={item.id}
                   to={item.path}
                   className={`flex items-center justify-center gap-2 px-2.5 sm:px-3 md:px-4 py-2 sm:py-2 rounded-xl transition-all duration-300 border shrink-0 ${isActive
-                      ? "bg-red-600 text-white border-red-600"
+                      ? "bg-discord-600 text-white border-discord-600"
                       : "bg-white/[0.02] border-white/15 text-white/50 hover:text-white hover:bg-white/[0.05]"
                     }`}
                 >
@@ -167,11 +167,11 @@ export default function Profile() {
 
           {/* BAN BANNER */}
           {user?.banUntil && new Date(user.banUntil) > new Date() && (
-            <div className="w-full max-w-xl mb-6 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-start gap-3">
+            <div className="w-full max-w-xl mb-6 p-4 rounded-2xl bg-discord-500/10 border border-discord-500/20 text-discord-400 flex items-start gap-3">
               <div className="mt-0.5"><Ban size={18} /></div>
               <div>
                 <h4 className="font-bold text-sm">Account Restricted</h4>
-                <p className="text-xs text-red-400/80 mt-1">
+                <p className="text-xs text-discord-400/80 mt-1">
                   You are currently banned from commenting until {new Date(user.banUntil).toLocaleString()} 
                   {user.bannedByRole ? ` by ${user.bannedByRole}.` : '.'}
                 </p>
@@ -198,7 +198,7 @@ export default function Profile() {
                   {/* Pencil Edit Icon */}
                   <button 
                     onClick={() => setShowAvatarModal(true)}
-                    className="absolute -bottom-1 -right-1 bg-red-600 p-2 rounded-full border-2 border-[#111] text-white hover:bg-red-700 hover:scale-110 transition-all shadow-xl shadow-red-600/20"
+                    className="absolute -bottom-1 -right-1 bg-discord-600 p-2 rounded-full border-2 border-[#111] text-white hover:bg-discord-700 hover:scale-110 transition-all shadow-xl shadow-discord-600/20"
                     title={t('profile.changeAvatar')}
                   >
                     <Pencil size={12} strokeWidth={3} />
@@ -206,7 +206,7 @@ export default function Profile() {
                   {/* Crown for Admin/Mod */}
                   {(user.role === 'admin' || user.role === 'moderator') && (
                     <div className={`absolute -top-1 -left-1 p-1 rounded-full shadow-lg ${
-                      user.role === 'admin' ? 'bg-purple-600' : 'bg-red-600'
+                      user.role === 'admin' ? 'bg-purple-600' : 'bg-discord-600'
                     } border-2 border-[#111]`}>
                       {user.role === 'admin' ? (
                         <Crown size={14} fill="currentColor" />
@@ -247,23 +247,23 @@ export default function Profile() {
 
                   {/* Email */}
                   <div className="flex flex-col gap-1.5 group">
-                    <label className="text-[10px] font-medium text-white/40 uppercase tracking-widest ml-1 group-focus-within:text-red-500/50">{t('profile.emailAddress')}</label>
+                    <label className="text-[10px] font-medium text-white/40 uppercase tracking-widest ml-1 group-focus-within:text-discord-500/50">{t('profile.emailAddress')}</label>
                     <input
                       type="email"
                       value={formData.email}
                       onChange={(e) => { setFormData({ ...formData, email: e.target.value }); if (error) setError(null); }}
-                      className="bg-white/[0.02] text-white px-4 py-2.5 rounded-xl border border-white/15 focus:border-red-600/30 focus:bg-white/[0.04] outline-none text-[13px] w-full transition-all"
+                      className="bg-white/[0.02] text-white px-4 py-2.5 rounded-xl border border-white/15 focus:border-discord-600/30 focus:bg-white/[0.04] outline-none text-[13px] w-full transition-all"
                     />
                   </div>
 
                   {/* Display Name */}
                   <div className="flex flex-col gap-1.5 group">
-                    <label className="text-[10px] font-medium text-white/40 uppercase tracking-widest ml-1 group-focus-within:text-red-500/50">{t('profile.displayName')}</label>
+                    <label className="text-[10px] font-medium text-white/40 uppercase tracking-widest ml-1 group-focus-within:text-discord-500/50">{t('profile.displayName')}</label>
                     <input
                       type="text"
                       value={formData.displayName}
                       onChange={(e) => { setFormData({ ...formData, displayName: e.target.value }); if (error) setError(null); }}
-                      className="bg-white/[0.02] text-white px-4 py-2.5 rounded-xl border border-white/15 focus:border-red-600/30 focus:bg-white/[0.04] outline-none text-[13px] w-full transition-all"
+                      className="bg-white/[0.02] text-white px-4 py-2.5 rounded-xl border border-white/15 focus:border-discord-600/30 focus:bg-white/[0.04] outline-none text-[13px] w-full transition-all"
                     />
                   </div>
                 </div>
@@ -275,7 +275,7 @@ export default function Profile() {
                     onClick={() => setShowPasswordFields(!showPasswordFields)}
                     className="flex items-center gap-2 text-[11px] font-medium text-white/50 hover:text-white/60 transition-colors ml-1"
                   >
-                    <Key size={12} className={showPasswordFields ? "text-red-500" : ""} />
+                    <Key size={12} className={showPasswordFields ? "text-discord-500" : ""} />
                     <span>{showPasswordFields ? t('profile.discardPassword') : t('profile.changePassword')}</span>
                   </button>
 
@@ -288,7 +288,7 @@ export default function Profile() {
                           placeholder={t('profile.currentPasswordPlaceholder')}
                           value={formData.currentPassword}
                           onChange={(e) => setFormData({ ...formData, currentPassword: e.target.value })}
-                          className={`bg-white/[0.02] text-white px-4 py-2.5 rounded-xl border outline-none text-[13px] w-full transition-all ${error && error.toLowerCase().includes("current password") ? "border-red-500 animate-shake" : "border-white/15 focus:border-red-600/30"}`}
+                          className={`bg-white/[0.02] text-white px-4 py-2.5 rounded-xl border outline-none text-[13px] w-full transition-all ${error && error.toLowerCase().includes("current password") ? "border-discord-500 animate-shake" : "border-white/15 focus:border-discord-600/30"}`}
                         />
                         <button
                           type="button"
@@ -301,7 +301,7 @@ export default function Profile() {
                       <div className="flex justify-start px-1 -mt-2">
                         <Link 
                           to="/forgot-password"
-                          className="text-red-500 hover:text-red-400 text-[10px] font-medium transition-colors"
+                          className="text-discord-500 hover:text-discord-400 text-[10px] font-medium transition-colors"
                         >
                           {t('profile.forgotPassword')}
                         </Link>
@@ -315,7 +315,7 @@ export default function Profile() {
                             placeholder={t('profile.newPasswordPlaceholder')}
                             value={formData.password}
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                            className="bg-white/[0.02] text-white px-4 py-2.5 rounded-xl border border-white/15 focus:border-red-600/30 outline-none text-[13px] w-full"
+                            className="bg-white/[0.02] text-white px-4 py-2.5 rounded-xl border border-white/15 focus:border-discord-600/30 outline-none text-[13px] w-full"
                           />
                         </div>
 
@@ -326,7 +326,7 @@ export default function Profile() {
                             placeholder={t('profile.confirmPasswordPlaceholder')}
                             value={formData.confirmPassword}
                             onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                            className={`bg-white/[0.02] text-white px-4 py-2.5 rounded-xl border outline-none text-[13px] w-full transition-all ${error && error.toLowerCase().includes("match") ? "border-red-500 animate-shake" : "border-white/15 focus:border-red-600/30"}`}
+                            className={`bg-white/[0.02] text-white px-4 py-2.5 rounded-xl border outline-none text-[13px] w-full transition-all ${error && error.toLowerCase().includes("match") ? "border-discord-500 animate-shake" : "border-white/15 focus:border-discord-600/30"}`}
                           />
                         </div>
                       </div>
@@ -337,7 +337,7 @@ export default function Profile() {
                           <div className="flex justify-between items-center text-[10px] uppercase tracking-wider font-medium">
                             <span className="text-white/40">{t('profile.strength')}</span>
                             <span className={
-                              formData.password.length < 6 ? "text-red-500" :
+                              formData.password.length < 6 ? "text-discord-500" :
                               formData.password.length < 10 ? "text-yellow-500" : "text-emerald-500"
                             }>
                               {formData.password.length < 6 ? t('profile.weak') :
@@ -347,7 +347,7 @@ export default function Profile() {
                           <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
                             <div 
                               className={`h-full transition-all duration-500 ${
-                                formData.password.length < 6 ? "bg-red-500 w-1/3" :
+                                formData.password.length < 6 ? "bg-discord-500 w-1/3" :
                                 formData.password.length < 10 ? "bg-yellow-500 w-2/3" : "bg-emerald-500 w-full"
                               }`}
                             />
@@ -362,7 +362,7 @@ export default function Profile() {
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="mt-2 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-medium text-[11px] uppercase tracking-[0.2em] py-3.5 rounded-xl transition-all active:scale-[0.98]"
+                  className="mt-2 bg-discord-600 hover:bg-discord-700 disabled:opacity-50 text-white font-medium text-[11px] uppercase tracking-[0.2em] py-3.5 rounded-xl transition-all active:scale-[0.98]"
                 >
                   {isSaving ? t('profile.saving') : t('profile.saveChanges')}
                 </button>

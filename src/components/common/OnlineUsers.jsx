@@ -124,7 +124,7 @@ const OnlineUsers = () => {
         </span>
         <div className="flex items-center gap-2 text-xs">
           <div className="flex items-center gap-1">
-            <User size={9} className="text-red-400" />
+            <User size={9} className="text-discord-400" />
             <span className="text-white/70">{onlineStats.registered}</span>
           </div>
           <span className="text-white/30">|</span>
@@ -148,7 +148,7 @@ const OnlineUsers = () => {
             </button>
             
             <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-              <Users size={20} className="text-red-500" />
+              <Users size={20} className="text-discord-500" />
               Online Users
             </h2>
 
@@ -164,7 +164,7 @@ const OnlineUsers = () => {
 
               <div className="flex items-center justify-between p-2.5 bg-[#0a0a0a] rounded-lg border border-white/10">
                 <div className="flex items-center gap-2">
-                  <User size={14} className="text-red-400" />
+                  <User size={14} className="text-discord-400" />
                   <span className="text-xs text-white/70">Registered</span>
                 </div>
                 <span className="text-lg font-bold text-white">{onlineStats.registered}</span>

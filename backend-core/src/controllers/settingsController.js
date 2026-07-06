@@ -22,7 +22,7 @@ export const getSettings = async (req, res) => {
 // @desc    Update user settings
 export const updateSettings = async (req, res) => {
   try {
-    const { titleLanguage, videoLanguage, skipSeconds, bookmarksPerPage, autoPlay, autoNext } = req.body;
+    const { titleLanguage, videoLanguage, skipSeconds, bookmarksPerPage, autoPlay, autoNext, themeColor } = req.body;
 
     const settings = await Settings.findOneAndUpdate(
       { user: req.user._id },
@@ -33,6 +33,7 @@ export const updateSettings = async (req, res) => {
         bookmarksPerPage, 
         autoPlay, 
         autoNext,
+        themeColor,
         updatedAt: Date.now() 
       },
       { new: true, upsert: true, setDefaultsOnInsert: true }

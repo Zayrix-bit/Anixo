@@ -145,7 +145,7 @@ export default function NavSidebar({ open, onClose, initialTab = "menu" }) {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 py-3 flex flex-col items-center gap-1 transition-all relative ${activeTab === tab.id ? "text-red-500" : "text-white/40 hover:text-white/70"
+              className={`flex-1 py-3 flex flex-col items-center gap-1 transition-all relative ${activeTab === tab.id ? "text-discord-500" : "text-white/40 hover:text-white/70"
                 }`}
             >
               <tab.icon size={14} strokeWidth={activeTab === tab.id ? 3 : 2} />
@@ -153,7 +153,7 @@ export default function NavSidebar({ open, onClose, initialTab = "menu" }) {
                 {tab.label}
               </span>
               {activeTab === tab.id && (
-                <div className="absolute bottom-0 left-0 w-full h-[1.5px] bg-red-600 shadow-[0_0_10px_rgba(220,38,38,0.4)]" />
+                <div className="absolute bottom-0 left-0 w-full h-[1.5px] bg-discord-600 shadow-[0_0_10px_rgba(220,38,38,0.4)]" />
               )}
             </button>
           ))}
@@ -173,10 +173,10 @@ export default function NavSidebar({ open, onClose, initialTab = "menu" }) {
                       key={type.value}
                       to={`/browse?format=${type.value}`}
                       onClick={onClose}
-                      className="text-[16px] font-medium text-white/70 hover:text-red-500 transition-all flex items-center justify-between group px-1"
+                      className="text-[16px] font-medium text-white/70 hover:text-discord-500 transition-all flex items-center justify-between group px-1"
                     >
                       <span>{type.label}</span>
-                      <ChevronRight size={14} className="text-white/10 group-hover:text-red-500 transition-colors" />
+                      <ChevronRight size={14} className="text-white/10 group-hover:text-discord-500 transition-colors" />
                     </Link>
                   ))}
                 </div>
@@ -221,7 +221,7 @@ export default function NavSidebar({ open, onClose, initialTab = "menu" }) {
                     onClick={onClose}
                     className="flex items-center gap-2 text-[#777] hover:text-white transition-all group py-0.5"
                   >
-                    <div className="w-[3px] h-[3px] bg-red-600 rounded-full shrink-0 group-hover:shadow-[0_0_6px_rgba(220,38,38,0.8)] transition-all" />
+                    <div className="w-[3px] h-[3px] bg-discord-600 rounded-full shrink-0 group-hover:shadow-[0_0_6px_rgba(220,38,38,0.8)] transition-all" />
                     <span className="text-[12px] font-medium leading-tight truncate">{genre}</span>
                   </Link>
                 ))}
@@ -234,7 +234,7 @@ export default function NavSidebar({ open, onClose, initialTab = "menu" }) {
             <div className="p-5 pb-20 space-y-6 animate-in fade-in duration-300">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-medium text-white/50 font-mono tracking-tighter tabular-nums">{clock.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                <span className="text-[8px] font-medium bg-red-600/10 text-red-500 px-1.5 py-0.5 rounded-sm uppercase tracking-widest">{offsetStr}</span>
+                <span className="text-[8px] font-medium bg-discord-600/10 text-discord-500 px-1.5 py-0.5 rounded-sm uppercase tracking-widest">{offsetStr}</span>
               </div>
 
               {isScheduleLoading ? (
@@ -252,13 +252,13 @@ export default function NavSidebar({ open, onClose, initialTab = "menu" }) {
                   return (
                     <div key={key} className="space-y-3">
                       <div className="flex items-center gap-3">
-                        <div className={`p-1.5 rounded-[3px] border ${isToday ? 'bg-red-600 border-red-600' : 'bg-[#111] border-white/15'} flex flex-col items-center min-w-[34px]`}>
+                        <div className={`p-1.5 rounded-[3px] border ${isToday ? 'bg-discord-600 border-discord-600' : 'bg-[#111] border-white/15'} flex flex-col items-center min-w-[34px]`}>
                           <span className={`text-[12px] font-medium leading-none ${isToday ? 'text-white' : 'text-white/60'}`}>{day}</span>
                           <span className={`text-[7px] font-medium uppercase tracking-tighter ${isToday ? 'text-white/80' : 'text-white/20'}`}>{month.slice(0, 3)}</span>
                         </div>
                         <div className="flex-1">
                           <span className={`text-[12px] font-medium ${isToday ? 'text-white' : 'text-white/40'}`}>{dayName(date)}</span>
-                          {isToday && <div className="text-[8px] font-medium text-red-500/60 uppercase tracking-widest">Today</div>}
+                          {isToday && <div className="text-[8px] font-medium text-discord-500/60 uppercase tracking-widest">Today</div>}
                         </div>
                       </div>
 

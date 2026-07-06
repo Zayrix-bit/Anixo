@@ -117,7 +117,7 @@ export default function AnimeDetails() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-10 h-10 border-4 border-red-600 border-t-transparent flex items-center justify-center rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-4 border-discord-600 border-t-transparent flex items-center justify-center rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -197,7 +197,7 @@ export default function AnimeDetails() {
                   <select
                     value={watchlist.find(i => i.animeId === String(id))?.status || selectStatus}
                     onChange={(e) => handleUpdateStatus(e.target.value)}
-                    className="w-full bg-[#2a2a2a] text-white text-[13px] font-medium outline-none rounded p-2 border border-transparent focus:border-red-600 transition-colors"
+                    className="w-full bg-[#2a2a2a] text-white text-[13px] font-medium outline-none rounded p-2 border border-transparent focus:border-discord-600 transition-colors"
                   >
                     {['Watching', 'On-Hold', 'Planning', 'Completed', 'Dropped'].map(s => (
                       <option key={s} value={s} className="bg-[#222] text-white py-1">{s}</option>
@@ -213,7 +213,7 @@ export default function AnimeDetails() {
                   ) : (
                     <button
                       onClick={() => handleUpdateStatus(selectStatus)}
-                      className="w-full bg-red-600 hover:bg-red-700 text-white font-bold text-[13px] py-2 rounded transition-colors"
+                      className="w-full bg-discord-600 hover:bg-discord-700 text-white font-bold text-[13px] py-2 rounded transition-colors"
                     >
                       {t('details.addToList')}
                     </button>
@@ -227,7 +227,7 @@ export default function AnimeDetails() {
                 disabled={isWatchlistLoading}
                 className={`w-full font-bold text-[13px] py-2.5 rounded transition-colors flex items-center justify-center gap-2 mt-2 ${
                   isBookmarked 
-                    ? "bg-white/[0.05] text-white hover:bg-red-600 border border-white/10" 
+                    ? "bg-white/[0.05] text-white hover:bg-discord-600 border border-white/10" 
                     : "bg-transparent text-[#888] border border-[#888] hover:text-white hover:border-white"
                 }`}
               >
@@ -250,7 +250,7 @@ export default function AnimeDetails() {
             </h1>
             
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-6">
-              <span className="bg-red-600 text-white text-[11px] font-black px-2 py-0.5 rounded-[3px] uppercase tracking-tight">
+              <span className="bg-discord-600 text-white text-[11px] font-black px-2 py-0.5 rounded-[3px] uppercase tracking-tight">
                 {anime.format || "TV"}
               </span>
               <span className="text-[12px] font-bold text-[#888] bg-white/[0.05] px-2 py-0.5 rounded-[3px]">

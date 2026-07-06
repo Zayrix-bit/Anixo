@@ -29,7 +29,7 @@ export default function SeasonsSection({ stableSeasons, getTitle }) {
             to={item.isActive ? "#" : `/watch/${item.id}`}
             onClick={(e) => item.isActive && e.preventDefault()}
             className={`flex-shrink-0 relative group transition-all duration-500 rounded-[8px] overflow-hidden border ${item.isActive
-                ? 'border-red-600/60 shadow-[0_0_25px_rgba(220,38,38,0.2)]'
+                ? 'border-discord-600/60 shadow-[0_0_25px_rgba(220,38,38,0.2)]'
                 : 'border-white/15 hover:border-white/20'
               }`}
             style={{ width: '200px', height: '110px' }}
@@ -54,7 +54,7 @@ export default function SeasonsSection({ stableSeasons, getTitle }) {
 
               {/* Episodes Badge */}
               <div className={`px-3 py-0.5 rounded-full font-black text-[9px] uppercase tracking-wider transition-all ${item.isActive
-                  ? 'bg-red-600 text-white shadow-lg'
+                  ? 'bg-discord-600 text-white shadow-lg'
                   : 'bg-white/10 text-white/40 group-hover:bg-white/20'
                 }`}>
                 {item.episodes || '?'} Eps

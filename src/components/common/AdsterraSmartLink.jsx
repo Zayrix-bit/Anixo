@@ -29,7 +29,7 @@ export function AdsterraSmartLinkBanner() {
     linkButton.style.maxWidth = '800px';
 
     const bannerContent = document.createElement('div');
-    bannerContent.className = "w-full bg-gradient-to-r from-red-900/20 via-red-800/30 to-red-900/20 border border-red-600/30 rounded-lg p-6 text-center cursor-pointer hover:border-red-500/50 transition-all duration-300 hover:scale-[1.02]";
+    bannerContent.className = "w-full bg-gradient-to-r from-discord-900/20 via-discord-800/30 to-discord-900/20 border border-discord-600/30 rounded-lg p-6 text-center cursor-pointer hover:border-discord-500/50 transition-all duration-300 hover:scale-[1.02]";
     
     const sponsoredLabel = document.createElement('div');
     sponsoredLabel.className = "text-[10px] uppercase tracking-widest text-white/30 mb-2";
@@ -44,7 +44,7 @@ export function AdsterraSmartLinkBanner() {
     subtitle.textContent = "Click now to discover amazing deals and content!";
 
     const ctaButton = document.createElement('div');
-    ctaButton.className = "inline-block bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full text-sm transition-all duration-300 active:scale-95";
+    ctaButton.className = "inline-block bg-discord-600 hover:bg-discord-700 text-white font-bold py-2 px-6 rounded-full text-sm transition-all duration-300 active:scale-95";
     ctaButton.textContent = "Explore Now";
 
     bannerContent.appendChild(sponsoredLabel);
