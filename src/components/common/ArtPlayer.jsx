@@ -1,10 +1,17 @@
 import React, { useEffect, useRef } from 'react';
+
 import Artplayer from 'artplayer';
 import Hls from 'hls.js';
 
 const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, onReady, initialTime = 0, className, autoSkip = true, skipTimes, videoQuality = 'best', onQualityChange, availableQualities = [] }) => {
     const artRef = useRef(null);
     const artInstance = useRef(null);
+    const autoSkipRef = useRef(autoSkip);
+
+    // Keep ref in sync when the prop changes
+    useEffect(() => {
+        autoSkipRef.current = autoSkip;
+    }, [autoSkip]);
 
     useEffect(() => {
         if (!src) return;
@@ -53,7 +60,62 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                     return item.html;
                 },
             });
+        } else {
+            // Placeholder for HLS quality so it stays at the top
+            customSettings.push({
+                name: 'quality',
+                width: 150,
+                html: 'Quality',
+                tooltip: 'Auto',
+                selector: [{ html: 'Auto', value: 'auto', default: true }],
+                onSelect: function (item) { return item.html; },
+            });
         }
+
+        // Play Speed (2nd position)
+        customSettings.push({
+            name: 'playSpeed',
+            width: 200,
+            html: 'Play Speed',
+            tooltip: 'Normal',
+            selector: [
+                { html: '0.5x', value: 0.5 },
+                { html: '0.75x', value: 0.75 },
+                { html: 'Normal', value: 1.0, default: true },
+                { html: '1.25x', value: 1.25 },
+                { html: '1.5x', value: 1.5 },
+                { html: '2.0x', value: 2.0 },
+            ],
+            onSelect: function (item) {
+                const player = artInstance.current;
+                if (player) {
+                    player.playbackRate = item.value;
+                    player.setting.update({ name: 'playSpeed', tooltip: item.html });
+                }
+                return item.html;
+            },
+        });
+
+        // Aspect Ratio
+        customSettings.push({
+            name: 'aspectRatio',
+            width: 200,
+            html: 'Aspect Ratio',
+            tooltip: 'Default',
+            selector: [
+                { html: 'Default', value: 'default', default: true },
+                { html: '4:3', value: '4:3' },
+                { html: '16:9', value: '16:9' },
+            ],
+            onSelect: function (item) {
+                const player = artInstance.current;
+                if (player) {
+                    player.aspectRatio = item.value === 'default' ? '' : item.value;
+                    player.setting.update({ name: 'aspectRatio', tooltip: item.html });
+                }
+                return item.html;
+            },
+        });
 
         // Setup Audio Context for Volume Boost
         let audioCtx = null;
@@ -117,16 +179,17 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
             name: 'autoSkip',
             width: 200,
             html: 'Auto Skip OP/ED',
-            tooltip: autoSkip ? 'On' : 'Off',
+            tooltip: autoSkipRef.current ? 'On' : 'Off',
             selector: [
-                { html: 'On', value: true, default: autoSkip === true },
-                { html: 'Off', value: false, default: autoSkip === false },
+                { html: 'On', value: true, default: autoSkipRef.current === true },
+                { html: 'Off', value: false, default: autoSkipRef.current === false },
             ],
             onSelect: function (item) {
+                // Update the ref so the timeupdate handler picks it up immediately
+                autoSkipRef.current = item.value;
                 const player = artInstance.current;
                 if (player) {
                     player.setting.update({ name: 'autoSkip', tooltip: item.html });
-                    // Store preference or just update local state if needed
                 }
                 return item.html;
             },
@@ -166,7 +229,10 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
             });
         }
 
+        const highlight = [];
+
         const art = new Artplayer({
+            highlight: highlight,
             container: artRef.current,
             url: src,
             poster: poster,
@@ -184,9 +250,9 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
             autoHideCursor: false,
             autoHideControl: true,
             loop: false,
-            flip: true,
-            playbackRate: true,
-            aspectRatio: true,
+            flip: false,
+            playbackRate: false,
+            aspectRatio: false,
             fullscreen: true,
             fullscreenWeb: true,
             subtitleOffset: false,
@@ -227,10 +293,10 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                 {
                     name: 'skipButton',
                     html: `
-                        <div class="flex items-center gap-3 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-sm transition-all shadow-[0_0_20px_rgba(220,38,38,0.4)] border border-red-500/20 group">
-                            <span class="text-[12px] font-black uppercase tracking-[0.2em]">Skip Intro</span>
-                            <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                        <div class="flex items-center gap-1.5 bg-black/70 hover:bg-black/90 border border-white/20 text-white px-4 py-1.5 rounded transition-colors shadow-sm">
+                            <span class="skip-text font-semibold text-sm">Skip Intro</span>
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
                             </svg>
                         </div>
                     `,
@@ -386,11 +452,16 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                 // Show/Hide Manual Skip Button
                 if (art.layers.skipButton) {
                     art.layers.skipButton.style.display = (isOP || isED) ? 'block' : 'none';
+                    if (isOP || isED) {
+                        const textSpan = art.layers.skipButton.querySelector('.skip-text');
+                        if (textSpan) {
+                            textSpan.textContent = isOP ? 'Skip Intro' : 'Skip Outro';
+                        }
+                    }
                 }
 
-                // Automatic Skip (if enabled in settings)
-                const isAutoSkipEnabled = art.setting.get('autoSkip') !== 'Off';
-                if (isAutoSkipEnabled) {
+                // Automatic Skip (if enabled via the settings toggle)
+                if (autoSkipRef.current) {
                     if (isOP) {
                         console.info(`[ArtPlayer] ⚡ Auto-skipping OP: ${skipTimes.op[0]}s -> ${skipTimes.op[1]}s`);
                         art.currentTime = skipTimes.op[1];
@@ -414,6 +485,50 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
 
         art.on('ready', () => {
             if (onReady) onReady();
+
+            // Render continuous colored ranges for OP/ED on the progress bar
+            const drawRanges = () => {
+                const duration = art.duration;
+                if (!duration || !skipTimes || !art.template.$progress) return;
+
+                // Remove old ranges
+                const oldRanges = art.template.$progress.querySelectorAll('.art-skip-range');
+                oldRanges.forEach(el => el.remove());
+
+                const createRange = (start, end, color) => {
+                    const startPct = (start / duration) * 100;
+                    const widthPct = ((end - start) / duration) * 100;
+                    const rangeEl = document.createElement('div');
+                    rangeEl.className = 'art-skip-range';
+                    rangeEl.style.position = 'absolute';
+                    rangeEl.style.left = `${startPct}%`;
+                    rangeEl.style.width = `${widthPct}%`;
+                    
+                    // The visual progress track is inside the main progress container.
+                    // We can find it by getting the parent of the 'played' or 'loaded' bar.
+                    const playedBar = art.template.$progress.querySelector('.art-progress-played');
+                    const innerTrack = playedBar ? playedBar.parentElement : art.template.$progress;
+                    
+                    // By appending it directly to the inner track, height: 100% perfectly merges with it.
+                    rangeEl.style.height = '100%';
+                    rangeEl.style.top = '0';
+                    rangeEl.style.backgroundColor = color;
+                    rangeEl.style.zIndex = '25'; 
+                    rangeEl.style.pointerEvents = 'none';
+                    rangeEl.style.borderRadius = '2px';
+                    
+                    innerTrack.appendChild(rangeEl);
+                };
+
+                if (skipTimes.op) createRange(skipTimes.op[0], skipTimes.op[1], 'rgba(88, 101, 242, 0.9)'); // Discord blue for OP
+                if (skipTimes.ed) createRange(skipTimes.ed[0], skipTimes.ed[1], 'rgba(88, 101, 242, 0.9)'); // Discord blue for ED
+            };
+
+            if (art.duration) {
+                drawRanges();
+            } else {
+                art.once('video:loadedmetadata', drawRanges);
+            }
 
             // Safe seek: wait for metadata to load to prevent infinite stalling
             const safeSeek = () => {

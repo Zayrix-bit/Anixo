@@ -18,6 +18,7 @@ import { useWatchSEO } from "../hooks/useWatchSEO";
 import { usePlayerEvents } from "../hooks/usePlayerEvents";
 import { useStreamFetch } from "../hooks/useStreamFetch";
 import { useEpisodeList } from "../hooks/useEpisodeList";
+import { useAniSkip } from "../hooks/useAniSkip";
 
 // Extracted Watch sub-components
 import PlayerToolbar from "../components/watch/PlayerToolbar";
@@ -345,6 +346,8 @@ export default function Watch() {
     setPageLoading, isMal, initialTime, activeSubServer,
   });
 
+  const skipTimes = useAniSkip(anime?.idMal, activeEpisode, 0);
+
   const [stableSeasons, setStableSeasons] = useState([]);
 
   useEffect(() => {
@@ -592,6 +595,7 @@ export default function Watch() {
                 episodesList={episodesList}
                 setActiveEpisode={setActiveEpisode}
                 iframeRef={iframeRef}
+                skipTimes={skipTimes}
               />
             </section>
 

@@ -1,6 +1,7 @@
-import { useMemo } from "react";
+import { useMemo, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import VideoPlayer from "../common/VideoPlayer";
+import ArtPlayer from "../common/ArtPlayer";
 
 /**
  * VideoPlayerSection
@@ -26,10 +27,25 @@ export default function VideoPlayerSection({
   setActiveEpisode,
   iframeRef,
   activeSubServer = 0,
+  skipTimes,
 }) {
   const { t } = useTranslation();
+  const prevServerRef = useRef(activeServer);
 
   const anikoBase = import.meta.env.VITE_ANIKO_API || "http://localhost:3000";
+
+  // When switching servers, kill the old iframe to stop background playback
+  useEffect(() => {
+    if (prevServerRef.current !== activeServer) {
+      // If we were previously on an iframe server, blank it out to stop audio/video
+      if (iframeRef.current) {
+        try {
+          iframeRef.current.src = 'about:blank';
+        } catch { /* cross-origin safety */ }
+      }
+      prevServerRef.current = activeServer;
+    }
+  }, [activeServer]);
 
   // Resolve current episode image for player background/loading placeholder
   const currentEpisodeImage = useMemo(() => {
@@ -62,12 +78,15 @@ export default function VideoPlayerSection({
 
   if (activeServer === 6 && streamData?.all_streams) {
     const currentStream = streamData.all_streams[activeSubServer] || streamData.all_streams[0];
-    if (currentStream && currentStream.type === "hls") {
-      videoSrc = `${anikoBase}/api/proxy?url=${encodeURIComponent(currentStream.url)}&referer=${encodeURIComponent(currentStream.referer || 'https://anikoto.com/')}`;
-      videoType = "hls";
-    } else if (currentStream) {
-      isIframe = true;
-      currentIframeUrl = currentStream.url;
+    if (currentStream) {
+      if (currentStream.type === "hls" || currentStream.url.includes('.m3u8')) {
+        videoSrc = `${anikoBase}/api/proxy?url=${encodeURIComponent(currentStream.url)}&referer=${encodeURIComponent(currentStream.referer || 'https://anikoto.com/')}`;
+        videoType = "hls";
+      } else {
+        videoSrc = currentStream.url;
+        videoType = currentStream.type || "mp4";
+      }
+      isIframe = false;
     }
   } else if ((streamData?.sources && Array.isArray(streamData.sources) && streamData.sources.length > 0 && !streamData?.iframe_url) || (activeServer === 2 && streamData?.sources)) {
     videoSrc = streamData.sources[0].url;
@@ -209,24 +228,48 @@ export default function VideoPlayerSection({
           {/* Server Rendering Logic */}
           <div className="w-full h-full">
             {!isIframe && videoSrc ? (
-              <VideoPlayer
-                src={videoSrc}
-                type={videoType}
-                poster={
-                  anime?.coverImage?.extraLarge || anime?.coverImage?.large
-                }
-                subtitles={streamData?.subtitles || []}
-                initialTime={initialTime}
-                onReady={() => setTimeout(() => setIframeLoaded(true), 0)}
-                onEnded={() => {
-                  if (autoNext && activeEpisode < episodesList.length) {
-                    const nextEp = episodesList.find(
-                      (e) => e.number === activeEpisode + 1
-                    );
-                    if (nextEp) setActiveEpisode(nextEp.number);
+              videoType === 'hls' || videoSrc.includes('.m3u8') ? (
+                <ArtPlayer
+                  key={`artplayer-${activeServer}-${activeEpisode}-${activeSubServer}`}
+                  src={videoSrc}
+                  type={videoType}
+                  poster={
+                    anime?.coverImage?.extraLarge || anime?.coverImage?.large
                   }
-                }}
-              />
+                  subtitles={streamData?.subtitles || []}
+                  skipTimes={skipTimes}
+                  initialTime={initialTime}
+                  onReady={() => setTimeout(() => setIframeLoaded(true), 0)}
+                  onEnded={() => {
+                    if (autoNext && activeEpisode < episodesList.length) {
+                      const nextEp = episodesList.find(
+                        (e) => e.number === activeEpisode + 1
+                      );
+                      if (nextEp) setActiveEpisode(nextEp.number);
+                    }
+                  }}
+                />
+              ) : (
+                <VideoPlayer
+                  key={`videoplayer-${activeServer}-${activeEpisode}-${activeSubServer}`}
+                  src={videoSrc}
+                  type={videoType}
+                  poster={
+                    anime?.coverImage?.extraLarge || anime?.coverImage?.large
+                  }
+                  subtitles={streamData?.subtitles || []}
+                  initialTime={initialTime}
+                  onReady={() => setTimeout(() => setIframeLoaded(true), 0)}
+                  onEnded={() => {
+                    if (autoNext && activeEpisode < episodesList.length) {
+                      const nextEp = episodesList.find(
+                        (e) => e.number === activeEpisode + 1
+                      );
+                      if (nextEp) setActiveEpisode(nextEp.number);
+                    }
+                  }}
+                />
+              )
             ) : (
               <iframe
                 ref={iframeRef}
