@@ -299,15 +299,15 @@ export default function PublicProfile() {
                     {recentProgress.slice(0, 6).map(p => (
                       <Link key={p._id} to={`/watch/${p.animeId}?ep=${p.episode}`} className="flex items-center gap-3 p-2.5 sm:p-3 bg-white/[0.02] hover:bg-white/[0.05] active:bg-white/[0.07] border border-white/15 rounded-lg transition-colors">
                         <div className="w-10 h-14 sm:w-12 sm:h-16 rounded overflow-hidden bg-white/5 shrink-0">
-                          {p.anime?.coverImage?.large ? (
-                            <img src={p.anime.coverImage.large} alt="" className="w-full h-full object-cover" />
+                          {p.anime?.coverImage?.large || p.coverImage ? (
+                            <img src={p.anime?.coverImage?.large || p.coverImage} alt="" className="w-full h-full object-cover" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center"><PlayCircle size={14} className="text-white/20" /></div>
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="text-[12px] sm:text-sm font-bold truncate text-white mb-0.5">
-                            {p.anime?.title?.english || p.anime?.title?.romaji || "Unknown Anime"}
+                            {p.anime?.title?.english || p.anime?.title?.romaji || p.title || "Unknown Anime"}
                           </div>
                           <div className="text-[10px] sm:text-xs font-medium text-white/40">Episode {p.episode}</div>
                         </div>
@@ -380,7 +380,7 @@ export default function PublicProfile() {
                           <span className="font-bold">{item.episode}</span>
                           {" of "}
                           <Link to={`/watch/${item.animeId}?ep=${item.episode}`} className="text-[#2bd966] hover:underline font-medium">
-                            {item.anime?.title?.english || item.anime?.title?.romaji || "Anime"}
+                            {item.anime?.title?.english || item.anime?.title?.romaji || item.title || "Anime"}
                           </Link>
                         </div>
                       ) : (
@@ -391,7 +391,7 @@ export default function PublicProfile() {
                             <span className="font-bold">{item.episodeNumber}</span>
                             {" of "}
                             <Link to={`/watch/${item.animeId}?ep=${item.episodeNumber}`} className="text-[#2bd966] hover:underline font-medium">
-                              {item.anime?.title?.english || item.anime?.title?.romaji || "Anime"}
+                              {item.anime?.title?.english || item.anime?.title?.romaji || item.title || "Anime"}
                             </Link>
                           </div>
                           <div className="bg-white/[0.03] border border-white/10 rounded-lg p-3 text-sm text-white/70 italic inline-block w-full">
