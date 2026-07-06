@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { useTranslation } from "react-i18next";
 import ScrollToTop from "./components/common/ScrollToTop";
@@ -85,7 +85,7 @@ function AppRoutes() {
       <ErrorBoundary FallbackComponent={ErrorFallback} resetKeys={[location.pathname]}>
         <Suspense fallback={<SuspenseLoader />}>
           <Routes>
-            <Route path="/" element={<Portal />} />
+            <Route path="/" element={<Navigate to="/home" replace />} />
             <Route path="/home" element={<Home />} />
             <Route path="/browse" element={<Browse />} />
             <Route path="/nsfw/*" element={<NSFW />} />
