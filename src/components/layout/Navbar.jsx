@@ -9,6 +9,7 @@ import { MessageSquare, Mic, Clock, CheckCircle, CheckCircle2, SlidersHorizontal
 import { useAuth } from "../../hooks/useAuth";
 import LoginModal from "../auth/LoginModal";
 import AvatarDropdown from "../user/AvatarDropdown";
+import AiChat from "../chat/AiChat";
 import NotificationDropdown from "../user/NotificationDropdown";
 
 
@@ -409,6 +410,9 @@ export default function Navbar() {
                   {language === "EN" ? "EN" : "JP"}
                 </span>
               </button>
+
+              {/* Anixo AI Chat Icon */}
+              <AiChat />
 
               {/* Bell icon - Mobile and Desktop */}
               <div className="relative">

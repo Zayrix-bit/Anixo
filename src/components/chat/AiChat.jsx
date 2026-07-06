@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { MessageSquare, X, Send, Bot, Star, Play, Maximize2, Minimize2, Trash2, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -255,7 +256,6 @@ const AiChat = () => {
   // Calculate initial position when chat opens
   useEffect(() => {
     if (isOpen && chatWindowRef.current) {
-      const rect = chatWindowRef.current.getBoundingClientRect();
       setPosition({
         x: 0,
         y: 0
@@ -324,20 +324,17 @@ const AiChat = () => {
 
   return (
     <>
-      {/* Floating Button */}
+      {/* Navbar Icon Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-14 h-14 sm:w-16 sm:h-16 rounded-full transition-all duration-300 z-[110] flex items-center justify-center hover:scale-110 group ${
-          isOpen ? 'bg-red-600 hover:bg-red-700 shadow-lg' : 'bg-gradient-to-tr from-red-600 to-red-400 shadow-lg'
-        }`}
+        className={`block transition-all transform hover:scale-110 relative ${isOpen ? 'text-red-500' : 'text-[#888] hover:text-white'}`}
+        title="Anixo AI"
       >
-        <span className="relative z-10 text-white">
-          {isOpen ? <X size={26} /> : <Bot size={28} className="group-hover:animate-pulse" />}
-        </span>
+        {isOpen ? <X size={20} strokeWidth={2.5} /> : <Bot size={20} strokeWidth={2.5} />}
       </button>
 
       {/* Chat Window */}
-      {isOpen && (
+      {isOpen && createPortal(
         <div 
           ref={chatWindowRef}
           style={{ 
@@ -635,7 +632,8 @@ const AiChat = () => {
               </div>
             </div>
           )}
-        </div>
+        </div>,
+        document.body
       )}
 
       <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
