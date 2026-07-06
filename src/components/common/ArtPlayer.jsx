@@ -410,13 +410,14 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                 },
             },
             subtitle: {
-                url: subtitles[0]?.url || subtitles[0]?.file || '',
+                url: subtitles && subtitles.length > 0 ? (subtitles[0]?.url || subtitles[0]?.file || '') : '',
                 type: 'vtt',
                 style: {
                     color: '#fff',
                     fontSize: '20px',
                 },
                 encoding: 'utf-8',
+                escape: false,
             },
         });
 
@@ -432,9 +433,17 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
         art.on('ready', () => {
             updateMutedIndicator();
             
+            if (art.subtitle && art.subtitle.url) {
+                art.subtitle.show = true;
+            }
+            
             // Move chromecast button to the top right of the player
             // The plugin adds the button asynchronously, so we wait for it
             const checkChromecast = setInterval(() => {
+                if (!art || !art.container) {
+                    clearInterval(checkChromecast);
+                    return;
+                }
                 const chromecastBtn = art.container.querySelector('.art-control-chromecast');
                 const topControls = art.container.querySelector('.art-top') || art.template.$top;
                 if (chromecastBtn && topControls) {
