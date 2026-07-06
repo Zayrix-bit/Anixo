@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 
 import Artplayer from 'artplayer';
 import Hls from 'hls.js';
+import artplayerPluginChromecast from 'artplayer-plugin-chromecast';
 
 const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, onReady, initialTime = 0, className, autoSkip = true, skipTimes, videoQuality = 'best', onQualityChange, availableQualities = [] }) => {
     const artRef = useRef(null);
@@ -259,9 +260,14 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
             mutex: true,
             backdrop: true,
             playsInline: true,
-            airplay: false,
+            airplay: true,
             lock: true,
-            fastForward: false,
+            fastForward: true,
+            plugins: [
+                artplayerPluginChromecast({
+                    // You can specify an app ID or leave it empty for default
+                })
+            ],
             theme: '#ff0000',
             layers: [
                 {
@@ -422,7 +428,17 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
             }
         };
 
-        art.on('ready', updateMutedIndicator);
+        art.on('ready', () => {
+            updateMutedIndicator();
+            
+            // Prevent page scrolling on mobile when dragging the timeline
+            const progressElement = art.template.$progress || art.container.querySelector('.art-progress');
+            if (progressElement) {
+                progressElement.addEventListener('touchmove', (e) => {
+                    e.preventDefault();
+                }, { passive: false });
+            }
+        });
         art.on('video:volumechange', updateMutedIndicator);
 
         // Automatically apply Default Boost when video plays
