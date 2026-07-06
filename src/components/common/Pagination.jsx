@@ -52,7 +52,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
             onClick={() => onPageChange(i)}
             className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-[4px] text-[12px] sm:text-[13px] font-bold transition-all ${
               isActive
-                ? 'bg-discord-600 text-white shadow-[0_0_20px_rgba(220,38,38,0.3)] z-10'
+                ? 'bg-discord-600 text-white z-10'
                 : 'bg-white/[0.07] border border-white/10 text-white/70 hover:bg-white/[0.15] hover:text-white'
             }`}
           >

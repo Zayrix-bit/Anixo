@@ -130,7 +130,7 @@ export default function NavSidebar({ open, onClose, initialTab = "menu" }) {
         {/* Header with Close */}
         <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-0">
-            <img src="/logo.png" alt="AniXo" className="h-[98px] object-contain drop-shadow-[0_0_10px_rgba(220,38,38,0.2)] -ml-2" />
+            <img src="/logo.png" alt="AniXo" className="h-[98px] object-contain -ml-2" />
           </div>
           <button onClick={onClose} className="text-white/20 hover:text-white transition-colors p-1.5"><X size={18} /></button>
         </div>

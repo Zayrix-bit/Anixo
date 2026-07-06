@@ -198,7 +198,7 @@ export default function Profile() {
                   {/* Pencil Edit Icon */}
                   <button 
                     onClick={() => setShowAvatarModal(true)}
-                    className="absolute -bottom-1 -right-1 bg-discord-600 p-2 rounded-full border-2 border-[#111] text-white hover:bg-discord-700 hover:scale-110 transition-all shadow-xl shadow-discord-600/20"
+                    className="absolute -bottom-1 -right-1 bg-discord-600 p-2 rounded-full border-2 border-[#111] text-white hover:bg-discord-700 hover:scale-110 transition-all shadow-xl"
                     title={t('profile.changeAvatar')}
                   >
                     <Pencil size={12} strokeWidth={3} />

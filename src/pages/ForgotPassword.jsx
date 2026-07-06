@@ -126,7 +126,7 @@ export default function ForgotPassword() {
                 <button
                   type="submit"
                   disabled={isLoading || message}
-                  className="w-full bg-discord-600 hover:bg-discord-700 disabled:opacity-50 disabled:hover:bg-discord-600 text-white font-bold text-[11px] uppercase tracking-[0.2em] py-4.5 rounded-2xl transition-all active:scale-[0.98] flex items-center justify-center gap-3 shadow-xl shadow-discord-600/10"
+                  className="w-full bg-discord-600 hover:bg-discord-700 disabled:opacity-50 disabled:hover:bg-discord-600 text-white font-bold text-[11px] uppercase tracking-[0.2em] py-4.5 rounded-2xl transition-all active:scale-[0.98] flex items-center justify-center gap-3 shadow-xl"
                 >
                   {isLoading ? (
                     <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />

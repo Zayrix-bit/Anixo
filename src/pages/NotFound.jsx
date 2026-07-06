@@ -53,7 +53,7 @@ export default function NotFound() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <Link 
               to="/home" 
-              className="w-full sm:w-auto px-10 py-3.5 bg-discord-600 text-white text-[12px] font-bold uppercase tracking-[0.2em] rounded hover:bg-discord-700 transition-all active:scale-95 shadow-xl shadow-discord-600/10"
+              className="w-full sm:w-auto px-10 py-3.5 bg-discord-600 text-white text-[12px] font-bold uppercase tracking-[0.2em] rounded hover:bg-discord-700 transition-all active:scale-95 shadow-xl"
             >
               Back to Home
             </Link>

@@ -262,7 +262,7 @@ export default function Settings() {
               <button 
                 type="submit"
                 disabled={isSaving}
-                className="w-full bg-discord-600 hover:bg-discord-700 disabled:opacity-50 text-white font-semibold py-3.5 rounded-xl text-[14px] transition-all flex items-center justify-center gap-2 shadow-lg shadow-discord-600/20 active:scale-[0.98]"
+                className="w-full bg-discord-600 hover:bg-discord-700 disabled:opacity-50 text-white font-semibold py-3.5 rounded-xl text-[14px] transition-all flex items-center justify-center gap-2 shadow-lg active:scale-[0.98]"
               >
                 {isSaving ? (
                   <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

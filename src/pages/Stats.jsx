@@ -323,7 +323,7 @@ export default function Stats() {
                 to={item.path}
                 className={`flex items-center justify-center gap-2 px-2.5 sm:px-3 md:px-4 py-2 sm:py-2 rounded-xl transition-all duration-300 border shrink-0 ${
                   isActive 
-                    ? "bg-discord-600 text-white border-discord-600 shadow-lg shadow-discord-600/20" 
+                    ? "bg-discord-600 text-white border-discord-600 shadow-lg" 
                     : "bg-white/[0.02] border-white/15 text-white/30 hover:text-white hover:bg-white/[0.05] hover:border-white/25"
                 }`}
               >
@@ -350,7 +350,7 @@ export default function Stats() {
             <BarChart2 size={40} className="text-[#444] mb-4" />
             <h3 className="text-lg font-medium text-white mb-2">No Data Yet</h3>
             <p className="text-sm text-[#666] mb-6">Start watching and bookmarking anime to see your stats here!</p>
-            <Link to="/browse" className="px-6 py-2 bg-gradient-to-r from-discord-600 to-discord-700 text-white rounded-lg text-sm font-medium hover:from-discord-700 hover:to-discord-800 transition-all shadow-lg shadow-discord-600/20">Explore Anime</Link>
+            <Link to="/browse" className="px-6 py-2 bg-gradient-to-r from-discord-600 to-discord-700 text-white rounded-lg text-sm font-medium hover:from-discord-700 hover:to-discord-800 transition-all shadow-lg">Explore Anime</Link>
           </div>
         ) : (
           <div className="flex flex-col gap-8">

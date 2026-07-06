@@ -814,7 +814,7 @@ export default function Browse() {
               <p className="text-white/40 max-w-sm text-sm mb-12 leading-relaxed font-medium">{t('browse.noResultsDesc')}</p>
               <button
                 onClick={handleReset}
-                className="px-12 py-4 bg-discord-600 hover:bg-discord-700 text-white text-[12px] font-bold uppercase tracking-[0.3em] rounded-full transition-all shadow-2xl shadow-discord-600/30 active:scale-95"
+                className="px-12 py-4 bg-discord-600 hover:bg-discord-700 text-white text-[12px] font-bold uppercase tracking-[0.3em] rounded-full transition-all shadow-2xl active:scale-95"
               >
                 {t('browse.clearFilters')}
               </button>

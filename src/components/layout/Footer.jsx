@@ -92,7 +92,7 @@ export default function Footer() {
               <img
                 src="/logo.png"
                 alt="AniXo - Free Anime Streaming"
-                className="h-[60px] md:h-[100px] object-contain drop-shadow-[0_0_15px_rgba(220,38,38,0.2)] hover:scale-105 transition"
+                className="h-[60px] md:h-[100px] object-contain hover:scale-105 transition"
               />
             </Link>
 

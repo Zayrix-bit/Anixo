@@ -527,7 +527,7 @@ const AiChat = () => {
 
                             {/* Play Icon */}
                             <div className="flex items-center pr-2 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                              <div className="w-8 h-8 rounded-full bg-discord-600 flex items-center justify-center shadow-lg shadow-discord-600/30">
+                              <div className="w-8 h-8 rounded-full bg-discord-600 flex items-center justify-center shadow-lg">
                                 <Play size={14} fill="currentColor" className="text-white ml-0.5" />
                               </div>
                             </div>

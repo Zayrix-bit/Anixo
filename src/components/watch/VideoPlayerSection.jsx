@@ -234,7 +234,7 @@ export default function VideoPlayerSection({
                             prev === 1 ? 2 : prev === 2 ? 3 : prev === 3 ? 4 : 1
                           )
                         }
-                        className="px-5 py-2 bg-discord-600 hover:bg-discord-700 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all shadow-lg shadow-discord-600/20"
+                        className="px-5 py-2 bg-discord-600 hover:bg-discord-700 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all shadow-lg"
                       >
                         {t("watch.switchServer")}
                       </button>
