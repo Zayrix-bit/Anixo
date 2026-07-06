@@ -104,9 +104,13 @@ export default function VideoPlayerSection({
     if (!isIframe) {
       return subs.map(sub => {
         if (sub.file && !sub.file.includes('/api/proxy')) {
+          let ref = sub.source || 'https://anikototv.to/';
+          if (!ref.startsWith('http')) {
+             ref = 'https://anikototv.to/';
+          }
           return {
             ...sub,
-            file: `${anikoBase}/api/proxy?url=${encodeURIComponent(sub.file)}&referer=${encodeURIComponent(sub.source || 'https://anikototv.to/')}`
+            file: `${anikoBase}/api/proxy?url=${encodeURIComponent(sub.file)}&referer=${encodeURIComponent(ref)}`
           };
         }
         return sub;
