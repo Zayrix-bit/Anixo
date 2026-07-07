@@ -1,10 +1,11 @@
 import express from 'express';
 const router = express.Router();
-import { register, login, getMe, updateMe, forgotPassword, resetPassword, connectAnilist, anilistCallback, disconnectAnilist, syncAnilistLibrary } from '../controllers/authController.js';
+import { register, login, googleLogin, getMe, updateMe, forgotPassword, resetPassword, connectAnilist, anilistCallback, disconnectAnilist, syncAnilistLibrary } from '../controllers/authController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 router.post('/register', register);
 router.post('/login', login);
+router.post('/google', googleLogin);
 router.get('/me', protect, getMe);
 router.put('/me', protect, updateMe);
 router.post('/forgot-password', forgotPassword);

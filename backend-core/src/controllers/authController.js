@@ -7,6 +7,7 @@ import axios from 'axios';
 import crypto from 'crypto';
 import process from 'node:process';
 import sendEmail from '../utils/sendEmail.js';
+import { OAuth2Client } from 'google-auth-library';
 
 // Helper function to update user in online server
 const updateUserInOnlineServer = async (userData) => {
@@ -145,6 +146,96 @@ export const login = async (req, res) => {
     }
   } catch (error) {
     console.error("LOGIN ERROR:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Login/Register with Google
+export const googleLogin = async (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!token) {
+      return res.status(400).json({ success: false, message: 'Google token is missing' });
+    }
+
+    const clientId = process.env.GOOGLE_CLIENT_ID;
+    if (!clientId) {
+      return res.status(500).json({ success: false, message: 'Google Client ID not configured on server' });
+    }
+
+    const client = new OAuth2Client(clientId);
+
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: clientId,
+    });
+    
+    const payload = ticket.getPayload();
+    if (!payload || !payload.email) {
+      return res.status(400).json({ success: false, message: 'Invalid Google token payload' });
+    }
+
+    const { email, name, picture } = payload;
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      const generatedPassword = crypto.randomBytes(16).toString('hex');
+      const profileId = crypto.randomBytes(4).toString('hex');
+      
+      const baseUsername = (name || email.split('@')[0]).replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+      let username = baseUsername;
+      let counter = 1;
+      
+      while (await User.findOne({ username })) {
+        username = `${baseUsername}${counter}`;
+        counter++;
+      }
+
+      user = await User.create({
+        username,
+        profileId,
+        email,
+        password: generatedPassword,
+        displayName: name || username,
+        avatar: picture || ''
+      });
+    } else {
+      user.lastActive = Date.now();
+      
+      if (!user.avatar && picture) {
+         user.avatar = picture;
+      }
+      
+      if (!user.profileId) {
+        let generatedId;
+        let isUnique = false;
+        while (!isUnique) {
+          generatedId = crypto.randomBytes(4).toString('hex');
+          const existing = await User.findOne({ profileId: generatedId });
+          isUnique = !existing;
+        }
+        user.profileId = generatedId;
+      }
+      await user.save();
+    }
+
+    res.json({
+      success: true,
+      message: 'Google Login successful',
+      token: generateToken(user._id),
+      user: {
+        id: user._id,
+        username: user.username,
+        profileId: user.profileId,
+        email: user.email,
+        role: user.role,
+        avatar: user.avatar,
+        displayName: user.displayName
+      }
+    });
+
+  } catch (error) {
+    console.error("GOOGLE LOGIN ERROR:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

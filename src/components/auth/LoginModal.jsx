@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { login, register } from "../../services/authService";
+import { login, register, loginWithGoogle } from "../../services/authService";
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { Check, X, Eye, EyeOff } from "lucide-react";
@@ -64,8 +65,27 @@ export default function LoginModal({ isOpen, onClose }) {
     }
   };
 
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const res = await loginWithGoogle(credentialResponse.credential);
+      if (res.token) {
+        loginAuth(res.user, res.token);
+        onClose();
+      } else {
+        setError(res.message || "Google Login failed");
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || err.message || "Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || "missing_client_id"}>
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
       {/* Modal Container */}
       <div className="bg-[#1a1a1a] w-[380px] shadow-2xl animate-in zoom-in-95 duration-200 relative font-sans">
 
@@ -189,6 +209,23 @@ export default function LoginModal({ isOpen, onClose }) {
             >
               {isLoading ? "PLEASE WAIT..." : isLogin ? "SIGN IN" : "SIGN UP"}
             </button>
+            
+            <div className="relative flex py-2 items-center">
+              <div className="flex-grow border-t border-white/10"></div>
+              <span className="flex-shrink-0 mx-4 text-white/30 text-[11px] font-bold">OR</span>
+              <div className="flex-grow border-t border-white/10"></div>
+            </div>
+
+            <div className="flex justify-center w-full">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => setError("Google Login was unsuccessful")}
+                theme="filled_black"
+                shape="rectangular"
+                width="100%"
+                text={isLogin ? "signin_with" : "signup_with"}
+              />
+            </div>
           </form>
 
           {/* Footer toggle */}
@@ -211,6 +248,7 @@ export default function LoginModal({ isOpen, onClose }) {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </GoogleOAuthProvider>
   );
 }
