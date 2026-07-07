@@ -571,7 +571,7 @@ export default function Watch() {
             <div className="mb-2 bg-[#1a1a1a] border border-[#ff0000]/30 rounded-sm px-4 py-2 flex items-center gap-2.5">
               <Info className="text-[#ff0000] flex-shrink-0" size={16} />
               <p className="text-white/80 text-[11px] sm:text-xs">
-                <strong className="text-[#ff0000]">Notice:</strong> For newly releasing anime, please use <strong className="text-white">Server 3</strong> for the latest episodes and fastest updates.
+                <strong className="text-[#ff0000]">Notice:</strong> For newly releasing anime, please use <strong className="text-white">Server 1 or Server 3</strong> for the latest episodes and fastest updates.
               </p>
             </div>
 
@@ -600,8 +600,8 @@ export default function Watch() {
               />
             </section>
 
-            {/* Sub-Server Selector for Server 3 */}
-            {activeServer === 3 && streamData?.all_streams && streamData.all_streams.length > 1 && (
+            {/* Sub-Server Selector for Server 1 and 3 */}
+            {(activeServer === 1 || activeServer === 3) && streamData?.all_streams && streamData.all_streams.length > 1 && (
               <div className="bg-[#0a0a0a] border-b border-x border-white/15">
                 <button
                   onClick={() => setShowSubServers(prev => !prev)}
