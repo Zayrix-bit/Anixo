@@ -86,13 +86,14 @@ export function useStreamFetch({
               const res = await fetch(`${aniko2Base}/api/watch/${anilistId}/${langParam}/${activeEpisode}`);
               if (!res.ok) throw new Error("Failed to fetch Server 1");
               const data = await res.json();
-              
+
               const audioKey = langParam === "sub" ? "ssub" : "sdub";
               const providerData = data[audioKey];
-              
+
               if (providerData && providerData.streams && providerData.streams.length > 0) {
                 const hasHls = providerData.streams.some(s => s.type === "hls");
-                
+
+
                 if (hasHls) {
                   setStreamData({
                     server_name: "SERVER 1 (New Aniko2)",
@@ -155,13 +156,13 @@ export function useStreamFetch({
               const res = await fetch(`${anikoBase}/api/watch/${anilistId}/${langParam}/${activeEpisode}`);
               if (!res.ok) throw new Error("Failed to fetch Server 3");
               const data = await res.json();
-              
+
               const audioKey = langParam === "sub" ? "ssub" : "sdub";
               const providerData = data[audioKey];
-              
+
               if (providerData && providerData.streams && providerData.streams.length > 0) {
                 const hasHls = providerData.streams.some(s => s.type === "hls");
-                
+
                 if (hasHls) {
                   setStreamData({
                     server_name: "SERVER 3 (Aniko)",
@@ -280,7 +281,7 @@ export function useStreamFetch({
             queryParams.push("autoSkip=true");
             queryParams.push("autoNext=false");
             queryParams.push("lang-type=false");
-            
+
             if (initialTime && initialTime > 0) {
               queryParams.push(`startAt=${Math.floor(initialTime)}`);
             }
@@ -337,7 +338,7 @@ export function useStreamFetch({
         console.error(`[Player] Server ${activeServer} Fetch Error:`, err);
         setFetchError(
           err.response?.data?.error ||
-            "Failed to fetch stream. Try another server."
+          "Failed to fetch stream. Try another server."
         );
       } finally {
         setStreamLoading(false);
