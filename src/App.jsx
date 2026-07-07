@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { useTranslation } from "react-i18next";
@@ -47,17 +47,26 @@ const SuspenseLoader = () => (
 
 const ErrorFallback = ({ error }) => {
   const { t } = useTranslation();
+  
   // Catch dynamic import chunk failures in Vite
-  if (
-    error.name === 'ChunkLoadError' ||
+  const isChunkError = error.name === 'ChunkLoadError' ||
     error.message.includes('Failed to fetch dynamically imported module') ||
-    error.message.includes('importing a dynamically imported module')
-  ) {
-    if (!sessionStorage.getItem('chunk_load_retried')) {
+    error.message.includes('importing a dynamically imported module');
+    
+  const needsReload = isChunkError && !sessionStorage.getItem('chunk_load_retried');
+
+  useEffect(() => {
+    if (needsReload) {
       sessionStorage.setItem('chunk_load_retried', 'true');
-      window.location.reload();
-      return <SuspenseLoader />;
+      // Force cache bypass safely by using the URL object
+      const url = new URL(window.location.href);
+      url.searchParams.set('t', Date.now().toString());
+      window.location.href = url.toString();
     }
+  }, [needsReload]);
+
+  if (needsReload) {
+    return <SuspenseLoader />;
   }
 
   return (
