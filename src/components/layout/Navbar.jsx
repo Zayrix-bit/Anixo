@@ -4,7 +4,7 @@ import { ALL_GENRES } from "../../constants/genres";
 import NavSidebar from "./NavSidebar";
 import { useLanguage } from "../../context/LanguageContext";
 import { searchAnime } from "../../services/api";
-import { MessageSquare, Mic, Clock, CheckCircle, CheckCircle2, SlidersHorizontal } from "lucide-react";
+import { MessageSquare, Mic, Clock, CheckCircle, CheckCircle2, SlidersHorizontal, X } from "lucide-react";
 
 import { useAuth } from "../../hooks/useAuth";
 import LoginModal from "../auth/LoginModal";
@@ -32,6 +32,14 @@ export default function Navbar() {
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [showLoginTip, setShowLoginTip] = useState(() => {
+    const lastSeen = localStorage.getItem('loginTipSeenAt');
+    if (!lastSeen) return true;
+    
+    // Check if 1 hour (3600000 ms) has passed
+    const hasOneHourPassed = (Date.now() - parseInt(lastSeen, 10)) > 3600000;
+    return hasOneHourPassed;
+  });
   const [searchFilters, setSearchFilters] = useState({
     format_in: [],
     status: "",
@@ -440,12 +448,50 @@ export default function Navbar() {
               {user ? (
                 <AvatarDropdown />
               ) : !authLoading ? (
-                <button
-                  onClick={() => setShowLoginModal(true)}
-                  className="text-[12px] font-bold bg-discord-600 hover:bg-discord-700 text-white px-3 py-1.5 rounded-[4px] transition-all uppercase tracking-widest ml-1 shadow-[0_0_15px_rgba(220,38,38,0.3)] cursor-pointer"
-                >
-                  Login
-                </button>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowLoginModal(true)}
+                    className="text-[12px] font-bold bg-discord-600 hover:bg-discord-700 text-white px-3 py-1.5 rounded-[4px] transition-all uppercase tracking-widest ml-1 shadow-[0_0_15px_rgba(220,38,38,0.3)] cursor-pointer"
+                  >
+                    Login
+                  </button>
+                  
+                  {showLoginTip && (
+                    <div className="absolute top-[calc(100%+14px)] right-0 w-64 bg-[#1a1a1a] border border-discord-500/30 rounded-lg p-3 shadow-2xl z-50 animate-in slide-in-from-top-2 fade-in duration-300">
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowLoginTip(false);
+                          localStorage.setItem('loginTipSeenAt', Date.now().toString());
+                        }}
+                        className="absolute top-1.5 right-1.5 p-1 text-white/40 hover:text-white transition-colors"
+                      >
+                        <X size={12} />
+                      </button>
+                      
+                      <div className="flex gap-2.5 items-start mt-1">
+                        <div className="bg-white/5 p-1.5 rounded-md flex-shrink-0">
+                           <svg viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg">
+                             <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
+                               <path fill="#4285F4" d="M -3.264 51.509 C -3.264 50.719 -3.334 49.969 -3.454 49.239 L -14.754 49.239 L -14.754 53.749 L -8.284 53.749 C -8.574 55.229 -9.424 56.479 -10.684 57.329 L -10.684 60.329 L -6.824 60.329 C -4.564 58.239 -3.264 55.159 -3.264 51.509 Z"/>
+                               <path fill="#34A853" d="M -14.754 63.239 C -11.514 63.239 -8.804 62.159 -6.824 60.329 L -10.684 57.329 C -11.764 58.049 -13.134 58.489 -14.754 58.489 C -17.884 58.489 -20.534 56.379 -21.484 53.529 L -25.464 53.529 L -25.464 56.619 C -23.494 60.539 -19.444 63.239 -14.754 63.239 Z"/>
+                               <path fill="#FBBC05" d="M -21.484 53.529 C -21.734 52.809 -21.864 52.039 -21.864 51.239 C -21.864 50.439 -21.724 49.669 -21.484 48.949 L -21.484 45.859 L -25.464 45.859 C -26.284 47.479 -26.754 49.299 -26.754 51.239 C -26.754 53.179 -26.284 54.999 -25.464 56.619 L -21.484 53.529 Z"/>
+                               <path fill="#EA4335" d="M -14.754 43.989 C -12.984 43.989 -11.404 44.599 -10.154 45.789 L -6.734 42.369 C -8.804 40.429 -11.514 39.239 -14.754 39.239 C -19.444 39.239 -23.494 41.939 -25.464 45.859 L -21.484 48.949 C -20.534 46.099 -17.884 43.989 -14.754 43.989 Z"/>
+                             </g>
+                           </svg>
+                        </div>
+                        <div className="flex-1 pr-2">
+                          <p className="text-[12px] text-white/90 font-medium leading-relaxed">
+                            Now you can sign in or login using your Gmail acc direct
+                          </p>
+                        </div>
+                      </div>
+                      
+                      {/* Triangle Pointer */}
+                      <div className="absolute -top-1.5 right-6 w-3 h-3 bg-[#1a1a1a] border-t border-l border-discord-500/30 rotate-45"></div>
+                    </div>
+                  )}
+                </div>
               ) : null}
             </div>
           )}
@@ -610,16 +656,12 @@ export default function Navbar() {
 
       {/* Global Toast (Premium Minimalist Design) */}
       {authToast && (
-        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[10000] animate-in slide-in-from-bottom-5 fade-in duration-500 pointer-events-none px-4">
-          <div className="bg-[#111]/90 backdrop-blur-xl border border-white/10 px-5 py-3 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex items-center gap-3 pointer-events-auto">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-              authToast.toLowerCase().includes("welcome") || authToast.toLowerCase().includes("success")
-                ? "bg-green-500/10 text-green-500" 
-                : "bg-discord-500/10 text-discord-500"
-            }`}>
-              <CheckCircle2 size={16} strokeWidth={2.5} />
-            </div>
-            <p className="text-white text-[13px] font-bold tracking-tight">
+        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[10000] animate-in slide-in-from-bottom-2 fade-in duration-300 pointer-events-none px-4">
+          <div className="bg-[#1a1a1a] border border-white/10 px-4 py-2.5 rounded-md flex items-center gap-2 shadow-lg pointer-events-auto">
+            {authToast.toLowerCase().includes("welcome") || authToast.toLowerCase().includes("success") ? (
+              <CheckCircle2 size={16} className="text-green-500" />
+            ) : null}
+            <p className="text-white text-[13px] font-medium">
               {authToast}
             </p>
           </div>
