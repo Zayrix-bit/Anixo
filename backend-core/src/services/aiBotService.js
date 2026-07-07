@@ -28,7 +28,15 @@ const TOPIC_IDEAS = [
   { category: 'anime', prompt: 'Share an interesting anime theory or speculation' },
   { category: 'news', prompt: 'Share a fake or real hype news about an upcoming anime season' },
   { category: 'feedback', prompt: 'Share feedback about the community or website features' },
-  { category: 'poll', prompt: 'Create an engaging text-based poll asking people to choose their favorite anime trope' }
+  { category: 'poll', prompt: 'Create an engaging text-based poll asking people to choose their favorite anime trope' },
+  { category: 'news', prompt: 'Share a rumor about a highly anticipated anime adaptation' },
+  { category: 'feedback', prompt: 'Suggest a new feature for this anime community' },
+  { category: 'poll', prompt: 'Create a poll asking about the best anime opening song of the year' },
+  { category: 'poll', prompt: 'Create a poll asking people to choose between subs and dubs' },
+  { category: 'news', prompt: 'Announce a fake breaking news about a famous manga author' },
+  { category: 'general', prompt: 'Share a heartfelt story about how anime changed your life' },
+  { category: 'feedback', prompt: 'Praise the community for being so welcoming and active' },
+  { category: 'question', prompt: 'Ask what everyone is currently watching this season' }
 ];
 
 // Initialize all bots in database
@@ -47,7 +55,7 @@ export const initAllBots = async () => {
         avatar: profile.avatar,
         bio: profile.bio,
         favoriteCategories: profile.favoriteCategories,
-        postFrequency: 8 + Math.random() * 16 // 8-24 hours stagger
+        postFrequency: 1 + Math.random() * 2 // 1-3 hours stagger (much faster!)
       });
       await bot.save();
       console.log(`[AI Bot] Created bot: ${profile.username}`);
@@ -58,6 +66,7 @@ export const initAllBots = async () => {
       bot.avatar = profile.avatar;
       bot.bio = profile.bio;
       bot.favoriteCategories = profile.favoriteCategories;
+      bot.postFrequency = 1 + Math.random() * 2; // Also update existing bots to post faster
       await bot.save();
     }
 
@@ -201,12 +210,17 @@ export const generateReply = async (bot, post, existingComments = []) => {
 
   const personaPrompt = PERSONAS[bot.persona] || PERSONAS.friendly;
   
+  let commentsContext = '';
+  if (existingComments && existingComments.length > 0) {
+    commentsContext = `\nExisting comments from other users:\n${existingComments.map(c => `- ${c.content}`).join('\n')}\n(Do not repeat these thoughts)\n`;
+  }
+
   const systemPrompt = `${personaPrompt}
 
 You are ${bot.displayName}, member of an anime community. Your bio: "${bot.bio}".
 
 Reply ONLY DIRECTLY TO THIS POST! NO OFF-TOPIC STUFF! Keep it smart, deeply related, and 1-2 sentences MAX.
-
+${commentsContext}
 POST:
 Title: ${post.title}
 Content: ${post.content}`;
@@ -245,11 +259,11 @@ Content: ${post.content}`;
 
 // Decide if a bot should reply to a post
 export const shouldReplyToPost = (bot, post, commentAuthors = []) => {
-  // Don't reply to own posts
-  if (post.author?.username === bot.username) return false;
+  // Don't reply to own posts UNLESS someone else has already commented
+  if (post.author?.username === bot.username && commentAuthors.length === 0) return false;
   
-  // Don't reply if already replied
-  if (commentAuthors.includes(bot.username)) return false;
+  // Don't reply if already replied (unless it's their own post and they are engaging with others)
+  if (commentAuthors.includes(bot.username) && post.author?.username !== bot.username) return false;
   
   // Don't reply to locked/deleted posts
   if (post.isLocked || post.isDeleted) return false;
@@ -321,13 +335,11 @@ export const createBotReply = async (bot, postId, parentCommentId = null) => {
       throw new Error('Post not found');
     }
 
-    // Get existing comment authors to avoid double-replies
+    // Get existing comments to provide context
     const existingComments = await CommunityComment.find({ post: postId });
-    const commentAuthors = existingComments.map(c => c.author?.toString());
-    // Convert to usernames
-    const commentUserIds = commentAuthors.filter(Boolean);
-    const commentUsers = await User.find({ _id: { $in: commentUserIds } });
-    const commentUsernames = commentUsers.map(u => u.username);
+    
+    // We let shouldReplyToPost handle the logic of whether a bot can reply again
+    // (e.g. if it's their own post and someone else commented)
 
     const replyText = await generateReply(bot, post, existingComments);
 

@@ -58,7 +58,7 @@ function CommentItem({ comment, user, postId, onCommentAdded, onCommentDeleted, 
   const [showReplyBox, setShowReplyBox] = useState(false);
   const [replyContent, setReplyContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const currentUserId = (user._id || user.id)?.toString();
+  const currentUserId = user ? (user._id || user.id)?.toString() : null;
   const [liked, setLiked] = useState(() => {
     if (user && comment.likes) {
       return comment.likes.some(id => id.toString() === currentUserId);

@@ -6,7 +6,7 @@ export const BOT_PROFILES = [
     persona: 'friendly',
     avatar: '/avatars/demon_slayer/img_1.jpg',
     bio: 'Hardcore anime fan since 2010',
-    favoriteCategories: ['anime', 'discussion'],
+    favoriteCategories: ['anime', 'general'],
     personality: 'Super enthusiastic and knowledgeable about all anime!'
   },
   {
@@ -15,7 +15,7 @@ export const BOT_PROFILES = [
     persona: 'friendly',
     avatar: '/avatars/bleach/img_1.jpg',
     bio: 'Manga > Anime fight me',
-    favoriteCategories: ['discussion', 'question'],
+    favoriteCategories: ['poll', 'question'],
     personality: 'Passionate about manga, loves to debate'
   },
   {
@@ -42,7 +42,7 @@ export const BOT_PROFILES = [
     persona: 'friendly',
     avatar: '/avatars/demon_slayer/img_2.jpg',
     bio: '90s anime > everything else',
-    favoriteCategories: ['anime', 'discussion'],
+    favoriteCategories: ['anime', 'feedback'],
     personality: 'Nostalgic and proud of it!'
   },
   {
@@ -51,7 +51,7 @@ export const BOT_PROFILES = [
     persona: 'hype',
     avatar: '/avatars/bleach/img_2.jpg',
     bio: 'My theory: you\'ll love this',
-    favoriteCategories: ['anime', 'theory'],
+    favoriteCategories: ['anime', 'poll'],
     personality: 'Comes up with wild (but convincing!) theories'
   },
   {
@@ -60,7 +60,7 @@ export const BOT_PROFILES = [
     persona: 'friendly',
     avatar: '/avatars/csm/img_2.jpg',
     bio: 'I watch so you don\'t have to',
-    favoriteCategories: ['anime', 'discussion'],
+    favoriteCategories: ['feedback', 'general'],
     personality: 'Calm, analytical, great recommendations'
   },
   {
@@ -69,7 +69,7 @@ export const BOT_PROFILES = [
     persona: 'hype',
     avatar: '/avatars/eye/img_2.jpg',
     bio: 'Cosplayer, photographer, anime lover',
-    favoriteCategories: ['general', 'discussion'],
+    favoriteCategories: ['general', 'news'],
     personality: 'Creative, outgoing, loves all fandom activities!'
   },
   {
@@ -78,7 +78,7 @@ export const BOT_PROFILES = [
     persona: 'friendly',
     avatar: '/avatars/demon_slayer/img_3.jpg',
     bio: 'ROBOTS ARE THE FUTURE!',
-    favoriteCategories: ['anime', 'discussion'],
+    favoriteCategories: ['anime', 'poll'],
     personality: 'Obsessed with all mecha-related content'
   },
   {

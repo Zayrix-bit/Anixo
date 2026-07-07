@@ -7,7 +7,6 @@ import {
   createBotPost, 
   createBotReply, 
   shouldReplyToPost,
-  getBotUser,
   addRandomBotLikes
 } from '../services/aiBotService.js';
 import CommunityPost from '../models/CommunityPost.js';
@@ -109,24 +108,35 @@ const checkAndReply = async () => {
       const commentAuthors = await User.find({ _id: { $in: commentAuthorIds } });
       const commentUsernames = commentAuthors.map(u => u.username);
 
-      // Random number of replies (1-5)
-      const maxReplies = Math.floor(Math.random() * 5) + 1;
+      // Random number of replies (3-8) for much more active discussions
+      const maxReplies = Math.floor(Math.random() * 6) + 3;
       let repliesThisPost = 0;
       const shuffledBots = [...bots].sort(() => 0.5 - Math.random());
       
       for (const bot of shuffledBots) {
         if (repliesThisPost >= maxReplies) break;
         if (!bot.isActive || !bot.configuration.enableReplying) continue;
-        if (commentUsernames.includes(bot.username)) continue;
-        
+        // Don't skip if they've already replied, let shouldReplyToPost handle the logic 
+        // to allow them to engage in active discussions on their own posts!
         if (shouldReplyToPost(bot, post, commentUsernames)) {
           try {
-            // 45% chance to reply to a comment instead of the post directly
+            // 70% chance to reply to a comment instead of the post directly. 
+            // 100% chance if the bot is the author of the post!
             let parentCommentId = null;
-            if (existingComments.length > 0 && Math.random() < 0.45) {
-              // Pick ANY random comment (including nested) to create conversation trees!
-              const randomComment = existingComments[Math.floor(Math.random() * existingComments.length)];
-              parentCommentId = randomComment._id;
+            const isBotPostAuthor = post.author?.username === bot.username;
+            
+            if (existingComments.length > 0 && (isBotPostAuthor || Math.random() < 0.70)) {
+              // Find a comment that is NOT from this bot
+              const validComments = existingComments.filter(c => c.author?.username !== bot.username);
+              if (validComments.length > 0) {
+                const randomComment = validComments[Math.floor(Math.random() * validComments.length)];
+                parentCommentId = randomComment._id;
+              }
+            }
+            
+            // If it's their own post and no valid comments to reply to, skip.
+            if (isBotPostAuthor && !parentCommentId) {
+              continue;
             }
             
             await createBotReply(bot, post._id, parentCommentId);
