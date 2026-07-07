@@ -154,12 +154,13 @@ export function useStreamFetch({
                   });
                   hasSources = true;
                 } else {
-                  // Fallback to embed if no HLS is available
+                  // Fallback to embed/mp4 if no HLS is available
                   url = providerData.streams[0].url;
                   setStreamData({
                     server_name: "SERVER 3 (Aniko)",
                     lang: langParam,
                     all_streams: providerData.streams,
+                    subtitles: providerData.subtitles || [],
                   });
                 }
               } else {

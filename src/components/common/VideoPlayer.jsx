@@ -149,7 +149,7 @@ const VideoPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate,
               label={sub.label || `Language ${index}`}
               srcLang={sub.lang || sub.language || 'en'}
               src={trackUrl}
-              default={sub.default}
+              default={sub.default || index === 0}
             />
           );
         })}
