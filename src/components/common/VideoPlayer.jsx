@@ -135,18 +135,20 @@ const VideoPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate,
         ref={videoRef}
         playsInline
         controls
+        crossOrigin="anonymous"
         poster={poster}
         className="w-full h-full"
       >
         {Array.isArray(subtitles) && subtitles.map((sub, index) => {
-          if (!sub || !sub.url) return null;
+          const trackUrl = sub?.url || sub?.file;
+          if (!trackUrl) return null;
           return (
             <track
               key={index}
               kind="captions"
               label={sub.label || `Language ${index}`}
-              srcLang={sub.lang || 'en'}
-              src={sub.url}
+              srcLang={sub.lang || sub.language || 'en'}
+              src={trackUrl}
               default={sub.default}
             />
           );
