@@ -102,15 +102,38 @@ export default function VideoPlayerSection({
   const processedSubtitles = useMemo(() => {
     const subs = streamData?.subtitles || [];
     if (!isIframe) {
-      return subs.map(sub => {
-        if (sub.file && !sub.file.includes('/api/proxy')) {
+      // Deduplicate by URL to prevent UI collisions
+      const uniqueSubs = [];
+      const seenUrls = new Set();
+      
+      for (const sub of subs) {
+        const subUrl = sub.file || sub.url;
+        if (!seenUrls.has(subUrl)) {
+           seenUrls.add(subUrl);
+           uniqueSubs.push(sub);
+        }
+      }
+
+      // Make English the default by sorting it to the top
+      uniqueSubs.sort((a, b) => {
+        const aLabel = (a.label || a.lang || a.language || '').toLowerCase();
+        const bLabel = (b.label || b.lang || b.language || '').toLowerCase();
+        if (aLabel.includes('english') || aLabel === 'en') return -1;
+        if (bLabel.includes('english') || bLabel === 'en') return 1;
+        return 0;
+      });
+
+      return uniqueSubs.map(sub => {
+        const subUrl = sub.file || sub.url;
+        if (subUrl && !subUrl.includes('/api/proxy')) {
           let ref = sub.source || 'https://anikototv.to/';
           if (!ref.startsWith('http')) {
              ref = 'https://anikototv.to/';
           }
           return {
             ...sub,
-            file: `${anikoBase}/api/proxy?url=${encodeURIComponent(sub.file)}&referer=${encodeURIComponent(ref)}`
+            file: `${anikoBase}/api/proxy?url=${encodeURIComponent(subUrl)}&referer=${encodeURIComponent(ref)}`,
+            url: `${anikoBase}/api/proxy?url=${encodeURIComponent(subUrl)}&referer=${encodeURIComponent(ref)}`
           };
         }
         return sub;
