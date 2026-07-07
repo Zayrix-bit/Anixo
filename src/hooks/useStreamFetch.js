@@ -79,7 +79,7 @@ export function useStreamFetch({
         if (activeServer === 1) {
           const langParam = playerLang.toLowerCase() === "dub" ? "dub" : "sub";
           const anilistId = anime?.id || (!isMal ? id : null);
-          const aniko2Base = import.meta.env.VITE_ANIKO2_API;
+          const aniko2Base = import.meta.env.VITE_ANIKO2_API || "https://anivexaapi-aniko2.hf.space";
 
           if (anilistId) {
             try {
