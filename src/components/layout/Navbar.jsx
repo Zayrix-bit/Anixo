@@ -451,7 +451,7 @@ export default function Navbar() {
                 <div className="relative">
                   <button
                     onClick={() => setShowLoginModal(true)}
-                    className="text-[12px] font-bold bg-discord-600 hover:bg-discord-700 text-white px-3 py-1.5 rounded-[4px] transition-all uppercase tracking-widest ml-1 shadow-[0_0_15px_rgba(220,38,38,0.3)] cursor-pointer"
+                    className="text-[12px] font-bold bg-discord-600 hover:bg-discord-700 text-white px-3 py-1.5 rounded-[4px] transition-all uppercase tracking-widest ml-1 cursor-pointer"
                   >
                     Login
                   </button>
