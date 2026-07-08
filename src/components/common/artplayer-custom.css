@@ -1,0 +1,41 @@
+/* Mobile Optimizations for ArtPlayer */
+@media (max-width: 768px) {
+  /* Hide the volume control on mobile since they use physical buttons */
+  .art-control-volume {
+    display: none !important;
+  }
+
+  /* Make icons slightly smaller to fit more options */
+  .art-control svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  /* Reduce padding of control buttons */
+  .art-control {
+    padding: 0 8px !important;
+  }
+
+  /* Make the time text smaller and more compact */
+  .art-control-time, .art-time {
+    font-size: 12px !important;
+    padding: 0 4px !important;
+  }
+
+  /* Allow the controls to breathe, keep PiP, Chromecast, Fullscreen in view */
+  .art-controls-right {
+    gap: 4px;
+  }
+}
+
+/* Ensure the central overlay play button is appropriately sized on mobile */
+@media (max-width: 768px) {
+  .art-layer-play .art-state {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  .art-layer-play .art-state svg {
+    width: 25px !important;
+    height: 25px !important;
+  }
+}

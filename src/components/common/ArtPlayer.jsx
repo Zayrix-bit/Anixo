@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 
 import Artplayer from 'artplayer';
 import Hls from 'hls.js';
+import './artplayer-custom.css';
 import artplayerPluginChromecast from 'artplayer-plugin-chromecast';
 
 const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, onReady, initialTime = 0, className, autoSkip = true, skipTimes, videoQuality = 'best', onQualityChange, availableQualities = [] }) => {
@@ -244,7 +245,7 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
             autoplay: false,
             autoPlayback: false,
             pip: true,
-            autoSize: true,
+            autoSize: false,
             screenshot: false,
             setting: true,
             settings: customSettings,
