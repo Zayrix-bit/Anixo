@@ -47,3 +47,14 @@
     height: 25px !important;
   }
 }
+/* Hide scrollbar in ArtPlayer completely */
+.artplayer-app *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.artplayer-app * {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}

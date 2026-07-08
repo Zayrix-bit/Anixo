@@ -5,7 +5,7 @@ import Hls from 'hls.js';
 import './artplayer-custom.css';
 import artplayerPluginChromecast from 'artplayer-plugin-chromecast';
 
-const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, onReady, initialTime = 0, className, autoSkip = true, skipTimes, videoQuality = 'best', onQualityChange, availableQualities = [] }) => {
+const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, onReady, initialTime = 0, className, autoSkip = false, skipTimes, videoQuality = 'best', onQualityChange, availableQualities = [] }) => {
     const artRef = useRef(null);
     const artInstance = useRef(null);
     const autoSkipRef = useRef(autoSkip);

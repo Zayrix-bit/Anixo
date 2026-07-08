@@ -239,38 +239,8 @@ export function useStreamFetch({
           }
         }
 
-        // --- SERVER 6: ANINEKO (Anivexa API HF Deployment) ---
+        // --- SERVER 6: TRYEMBED (AniList ID) ---
         else if (activeServer === 6) {
-          const langParam = playerLang.toLowerCase() === "dub" ? "dub" : "sub";
-          const anilistId = anime?.id || (!isMal ? id : null);
-
-          if (anilistId) {
-            try {
-              const res = await fetch(`https://anivexaapi-api.hf.space/watch/anineko/${anilistId}/${langParam}/anineko-${activeEpisode}`);
-              if (!res.ok) throw new Error("Failed to fetch Server 6");
-              const data = await res.json();
-              const validStreams = data.streams?.filter(s => s.url && !s.url.includes(".json")) || [];
-              if (validStreams.length > 0) {
-                const iframeSource = validStreams.find(s => s.embed || s.type === "iframe" || s.type === "embed" || s.url.includes("embed"));
-                const source = iframeSource || validStreams.find(s => s.quality === "1080p" || s.quality === "auto" || s.quality === "default") || validStreams[0];
-                url = source.embed || (source.type === "embed" ? source.url : source.url);
-                setStreamData({
-                  server_name: "SERVER 6 (Anineko)",
-                  lang: langParam,
-                });
-              } else {
-                setFetchError("No valid video source found on Server 6.");
-              }
-            } catch {
-              setFetchError("Error fetching from Server 6.");
-            }
-          } else {
-            setFetchError("AniList ID is required for Server 6. Try another server.");
-          }
-        }
-
-        // --- SERVER 7: TRYEMBED (AniList ID) ---
-        else if (activeServer === 7) {
           const langParam =
             playerLang.toLowerCase() === "dub" ? "dub" : "sub";
           const anilistId = anime?.id || (!isMal ? id : null);
@@ -280,7 +250,7 @@ export function useStreamFetch({
             if (autoPlay) {
               queryParams.push("autoplay=true");
             }
-            queryParams.push("autoSkip=true");
+            queryParams.push("autoSkip=false");
             queryParams.push("autoNext=false");
             queryParams.push("lang-type=false");
 
@@ -292,12 +262,12 @@ export function useStreamFetch({
             url = `https://tryembed.us.cc/embed/anime/${anilistId}/${activeEpisode}/${langParam}${queryString}`;
 
             setStreamData({
-              server_name: "SERVER 7 (Tryembed)",
+              server_name: "SERVER 6 (Tryembed)",
               lang: langParam,
             });
           } else {
             setFetchError(
-              "AniList ID is required for Server 7. Try another server."
+              "AniList ID is required for Server 6. Try another server."
             );
           }
         }
