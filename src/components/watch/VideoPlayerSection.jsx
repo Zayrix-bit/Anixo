@@ -1,7 +1,7 @@
 import { useMemo, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import VideoPlayer from "../common/VideoPlayer";
-import ArtPlayer from "../common/ArtPlayer";
+import PlyrPlayer from "../common/PlyrPlayer";
 
 /**
  * VideoPlayerSection
@@ -276,8 +276,8 @@ export default function VideoPlayerSection({
           <div className="w-full h-full">
             {!isIframe && videoSrc ? (
               videoType === 'hls' || videoSrc.includes('.m3u8') ? (
-                <ArtPlayer
-                  key={`artplayer-${activeServer}-${activeEpisode}-${activeSubServer}`}
+                <PlyrPlayer
+                  key={`plyrplayer-${activeServer}-${activeEpisode}-${activeSubServer}`}
                   src={videoSrc}
                   type={videoType}
                   poster={

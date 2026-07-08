@@ -1,0 +1,327 @@
+@import 'plyr/dist/plyr.css';
+
+:root {
+  --plyr-color-main: #6c5ce7;
+  --radius: 10px;
+}
+
+/* ─── Premium Player Customization (Plyr) ──────────────────────────────────── */
+
+/* The controls wrapper layout (Flex wrap for full width progress bar) */
+.plyr--video .plyr__controls {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0) 100%) !important;
+  padding: 50px 20px 15px !important;
+  transition: opacity 0.3s ease, background 0.3s ease !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+}
+
+/* Large play button styling (Glassmorphism) */
+.plyr--video .plyr__control--overlaid {
+  background: rgba(108, 92, 231, 0.35) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  padding: 24px !important;
+  border-radius: 50% !important;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+.plyr--video .plyr__control--overlaid:hover {
+  background: rgba(108, 92, 231, 0.9) !important;
+  transform: translate(-50%, -50%) scale(1.15) !important;
+}
+
+.plyr--video .plyr__control--overlaid svg {
+  width: 28px !important;
+  height: 28px !important;
+  fill: #fff !important;
+}
+
+/* Progress Bar full width at the top of controls */
+.plyr__progress__container {
+  flex: 1 0 100% !important;
+  width: 100% !important;
+  margin-bottom: 12px !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Thin Progress Bar & Hover Thumb */
+.plyr--full-ui input[type=range] {
+  height: 4px !important;
+  transition: height 0.2s ease !important;
+}
+.plyr__progress__container:hover input[type=range] {
+  height: 6px !important;
+}
+
+/* Hide thumb default */
+.plyr--full-ui input[type=range]::-webkit-slider-thumb {
+  transform: scale(0);
+  transition: transform 0.2s ease;
+}
+.plyr__progress__container:hover input[type=range]::-webkit-slider-thumb {
+  transform: scale(1);
+}
+
+/* Time formatting (00:00 / 24:00) and Spacing */
+.plyr__time--current {
+  margin-right: 4px !important;
+}
+.plyr__time--current::after {
+  content: " /";
+  color: rgba(255,255,255,0.7);
+  margin-left: 4px;
+}
+.plyr__time--duration {
+  margin-right: auto !important; /* Pushes the right side controls */
+}
+
+/* Tooltip custom styling */
+.plyr__tooltip {
+  background: rgba(20, 20, 31, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  font-family: 'Inter', sans-serif !important;
+  border-radius: 8px !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  padding: 6px 12px !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5) !important;
+}
+
+.plyr__tooltip::before {
+  border-top-color: rgba(20, 20, 31, 0.95) !important;
+}
+
+/* Subtitle (Captions) Styling */
+.plyr__captions {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  transform: translateY(-20px) !important;
+}
+
+.plyr__captions .plyr__caption {
+  background: transparent !important;
+  color: #fff !important;
+  text-shadow: 
+    0px 0px 4px rgba(0,0,0,1), 
+    0px 0px 6px rgba(0,0,0,1), 
+    1.5px 1.5px 3px rgba(0,0,0,1), 
+    -1.5px -1.5px 3px rgba(0,0,0,1), 
+    1.5px -1.5px 3px rgba(0,0,0,1), 
+    -1.5px 1.5px 3px rgba(0,0,0,1) !important;
+}
+
+/* Customize Control Icons spacing and hover */
+.plyr__controls .plyr__control {
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+.plyr__controls .plyr__control:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Make the video wrapper itself rounder slightly and take full height */
+.plyr {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: var(--radius) !important;
+  overflow: hidden !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6) !important;
+}
+
+.plyr__video-wrapper {
+  width: 100% !important;
+  height: 100% !important;
+  background: #000 !important;
+}
+
+.plyr video {
+  object-fit: contain !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Time display */
+.plyr__time {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+}
+
+/* Custom 10s Rewind / Fast Forward Icons */
+button[data-plyr="rewind"] svg,
+button[data-plyr="fast-forward"] svg {
+  display: none !important;
+}
+
+button[data-plyr="rewind"]::after,
+button[data-plyr="fast-forward"]::after {
+  content: "";
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-color: currentColor;
+  -webkit-mask-size: contain;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  margin: 0 auto;
+}
+
+button[data-plyr="rewind"]::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M14 18h4V6H4' fill='none' stroke='black' stroke-width='2' stroke-linecap='square' stroke-linejoin='miter'/%3E%3Cpath d='M8 2L4 6l4 4' fill='none' stroke='black' stroke-width='2' stroke-linecap='square' stroke-linejoin='miter'/%3E%3Ctext x='9' y='17' font-family='Arial, sans-serif' font-size='10' font-weight='bold' fill='black' text-anchor='middle'%3E10%3C/text%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M14 18h4V6H4' fill='none' stroke='black' stroke-width='2' stroke-linecap='square' stroke-linejoin='miter'/%3E%3Cpath d='M8 2L4 6l4 4' fill='none' stroke='black' stroke-width='2' stroke-linecap='square' stroke-linejoin='miter'/%3E%3Ctext x='9' y='17' font-family='Arial, sans-serif' font-size='10' font-weight='bold' fill='black' text-anchor='middle'%3E10%3C/text%3E%3C/svg%3E");
+}
+
+button[data-plyr="fast-forward"]::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10 18H6V6h14' fill='none' stroke='black' stroke-width='2' stroke-linecap='square' stroke-linejoin='miter'/%3E%3Cpath d='M16 2l4 4-4 4' fill='none' stroke='black' stroke-width='2' stroke-linecap='square' stroke-linejoin='miter'/%3E%3Ctext x='15' y='17' font-family='Arial, sans-serif' font-size='10' font-weight='bold' fill='black' text-anchor='middle'%3E10%3C/text%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10 18H6V6h14' fill='none' stroke='black' stroke-width='2' stroke-linecap='square' stroke-linejoin='miter'/%3E%3Cpath d='M16 2l4 4-4 4' fill='none' stroke='black' stroke-width='2' stroke-linecap='square' stroke-linejoin='miter'/%3E%3Ctext x='15' y='17' font-family='Arial, sans-serif' font-size='10' font-weight='bold' fill='black' text-anchor='middle'%3E10%3C/text%3E%3C/svg%3E");
+}
+
+/* Sharp Settings Menu UI */
+.plyr__menu__container {
+  background: #242424 !important; /* Lighter dark for clear visibility */
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6) !important;
+  color: #fff !important;
+  font-family: 'Inter', sans-serif !important;
+  padding: 6px 0 !important;
+}
+
+/* Menu items */
+.plyr__menu__container .plyr__control {
+  color: #f0f0f0 !important;
+  font-size: 0.9rem !important;
+  padding: 8px 16px !important;
+  transition: background 0.1s ease !important;
+  border-radius: 0 !important;
+  font-weight: 500 !important;
+}
+
+/* Hover effects */
+.plyr__menu__container .plyr__control:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+}
+
+/* Fix active items / checkmarks */
+.plyr__menu__container .plyr__control[aria-checked="true"] {
+  background: rgba(108, 92, 231, 0.15) !important;
+  color: #fff !important;
+}
+
+/* Radio button unselected state (the circles) */
+.plyr__menu__container .plyr__control[role="menuitemradio"]::before {
+  background: rgba(255, 255, 255, 0.25) !important;
+  box-shadow: none !important;
+}
+
+/* Radio button selected state */
+.plyr__menu__container .plyr__control[role="menuitemradio"][aria-checked="true"]::before {
+  background: var(--accent) !important;
+}
+
+/* Menu arrow (triangle) at the bottom */
+.plyr__menu__container::after {
+  border-top-color: #242424 !important;
+}
+
+/* Right side labels in the menu (e.g. "English", "480p", "Normal") */
+.plyr__menu__container .plyr__menu__value {
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-weight: 400 !important;
+  font-size: 0.8rem !important;
+  background: transparent !important;
+  padding: 0 !important;
+  margin-left: 16px !important;
+}
+
+/* Back button in submenus */
+.plyr__menu__container .plyr__control--back {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 0 !important;
+  margin-bottom: 4px !important;
+  font-weight: 600 !important;
+  padding-left: 36px !important;
+  background: transparent !important;
+}
+.plyr__menu__container .plyr__control--back::before {
+  left: 14px !important;
+}
+
+/* ─── AniSkip Button ───────────────────────────────────────────────────────── */
+.aniskip-btn {
+  position: absolute;
+  bottom: 70px;
+  right: 20px;
+  background: rgba(15, 15, 15, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  z-index: 50;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+.aniskip-btn.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.aniskip-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.aniskip-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ─── Mobile Responsiveness ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Plyr Controls Adjustments for Mobile */
+  .plyr--video .plyr__controls {
+    padding: 6px 8px !important;
+  }
+  .plyr__time {
+    font-size: 0.75rem !important;
+  }
+  button[data-plyr="rewind"]::after,
+  button[data-plyr="fast-forward"]::after {
+    width: 16px !important;
+    height: 16px !important;
+  }
+  /* Smaller padding on mobile control icons so they fit side-by-side */
+  .plyr__controls .plyr__control {
+    padding: 6px !important;
+  }
+  
+  .aniskip-btn {
+    bottom: 60px;
+    right: 12px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+}
