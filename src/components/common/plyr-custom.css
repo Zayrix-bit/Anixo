@@ -510,6 +510,16 @@
   filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.3));
 }
 
+/* Remove Volume Slider, keep Mute button only */
+.plyr__volume input[type="range"] {
+  display: none !important;
+}
+
+.plyr__volume {
+  min-width: auto !important;
+  max-width: max-content !important;
+}
+
 /* Make the video wrapper itself rounder slightly */
 .plyr {
   border-radius: var(--radius);
@@ -534,8 +544,8 @@ button[data-plyr="rewind"]::after,
 button[data-plyr="fast-forward"]::after {
   content: "";
   display: block;
-  width: 24px;
-  height: 24px;
+  width: var(--plyr-control-icon-size, 24px);
+  height: var(--plyr-control-icon-size, 24px);
   background-color: currentColor;
   -webkit-mask-size: contain;
   -webkit-mask-position: center;
@@ -668,4 +678,46 @@ button[data-plyr="fast-forward"]::after {
 .aniskip-btn svg {
   width: 18px;
   height: 18px;
+}
+
+/* ─── Mobile Responsiveness ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Let Plyr handle the native wrap (Progress bar on top, controls on bottom) */
+  
+  .plyr {
+    --plyr-control-icon-size: 18px !important; /* Scale down from 24px desktop */
+    --plyr-control-spacing: 5px !important; /* Slightly tighter than desktop */
+  }
+
+  .plyr__time {
+    font-size: 0.75rem !important; /* Smaller time font */
+  }
+
+  /* Shrink default subtitles to a readable mobile size while respecting user settings */
+  .plyr__captions {
+    font-size: calc(var(--sub-font-size, 32px) * 0.55) !important;
+    bottom: 70px !important; /* Bring them down safely above controls */
+  }
+
+  /* Shrink custom skip button */
+  .aniskip-btn {
+    bottom: 70px;
+    right: 15px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  /* Shrink central overlaid play button on mobile */
+  .plyr__control--overlaid {
+    padding: 10px !important;
+  }
+  .plyr__control--overlaid svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  /* Shift right-side controls slightly to the left on mobile to close the empty gap */
+  .plyr__time--duration {
+    margin-right: 25px !important;
+  }
 }
