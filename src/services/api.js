@@ -600,8 +600,8 @@ export async function getPopularAnime(page = 1) {
 export async function getNewReleases(page = 1) {
   const anilistRes = await fetchFromAniList(ANIME_QUERY, {
     page,
-    sort: ["START_DATE_DESC", "TRENDING_DESC"],
-    status_in: ["RELEASING", "FINISHED"]
+    sort: ["TRENDING_DESC"],
+    status_in: ["RELEASING"]
   });
   if (anilistRes?.media?.length > 0) return anilistRes;
 
@@ -613,7 +613,7 @@ export async function getNewReleases(page = 1) {
 export async function getJustCompletedAnime(page = 1) {
   const anilistRes = await fetchFromAniList(ANIME_QUERY, {
     page,
-    sort: ["END_DATE_DESC"],
+    sort: ["TRENDING_DESC"],
     status_in: ["FINISHED"]
   });
   if (anilistRes?.media?.length > 0) return anilistRes;
