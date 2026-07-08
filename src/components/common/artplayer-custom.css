@@ -1,5 +1,6 @@
 /* Mobile Optimizations for ArtPlayer */
 @media (max-width: 768px) {
+
   /* Hide the volume control on mobile since they use physical buttons */
   .art-control-volume {
     display: none !important;
@@ -17,14 +18,20 @@
   }
 
   /* Make the time text smaller and more compact */
-  .art-control-time, .art-time {
+  .art-control-time,
+  .art-time {
     font-size: 12px !important;
     padding: 0 4px !important;
   }
 
   /* Allow the controls to breathe, keep PiP, Chromecast, Fullscreen in view */
   .art-controls-right {
-    gap: 4px;
+    gap: 0px;
+    padding-right: 15px !important;
+  }
+
+  .art-controls-right .art-control {
+    padding: 0 2px !important;
   }
 }
 
@@ -34,6 +41,7 @@
     width: 50px !important;
     height: 50px !important;
   }
+
   .art-layer-play .art-state svg {
     width: 25px !important;
     height: 25px !important;

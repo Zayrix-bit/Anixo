@@ -131,10 +131,10 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                 audioCtx = new AudioContext();
                 sourceNode = audioCtx.createMediaElementSource(videoElement);
                 gainNode = audioCtx.createGain();
-                
+
                 sourceNode.connect(gainNode);
                 gainNode.connect(audioCtx.destination);
-                
+
                 // Default to Boost (1.5)
                 gainNode.gain.value = 1.5;
             } catch (err) {
@@ -158,11 +158,11 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
             onSelect: function (item) {
                 const player = artInstance.current;
                 if (!player) return item.html;
-                
+
                 if (!audioCtx) {
                     setupAudioBoost(player.video);
                 }
-                
+
                 if (audioCtx && audioCtx.state === 'suspended') {
                     audioCtx.resume();
                 }
@@ -171,7 +171,7 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                     gainNode.gain.value = item.value;
                     player.setting.update({ name: 'audioBoost', tooltip: item.html });
                 }
-                
+
                 return item.html;
             },
         });
@@ -217,7 +217,7 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                 onSelect: function (item) {
                     const player = artInstance.current;
                     if (!player) return item.html;
-                    
+
                     if (item.value === 'none') {
                         player.subtitle.show = false;
                         player.setting.update({ name: 'subtitle-select', tooltip: 'None' });
@@ -244,18 +244,18 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
             muted: false,
             autoplay: false,
             autoPlayback: false,
-            pip: true,
+            pip: false,
             autoSize: false,
             screenshot: false,
             setting: true,
             settings: customSettings,
-            autoHideCursor: false,
+            autoHideCursor: true,
             autoHideControl: true,
             loop: false,
             flip: false,
             playbackRate: false,
             aspectRatio: false,
-            fullscreen: true,
+            fullscreen: false,
             autoOrientation: true,
             fullscreenWeb: false,
             subtitleOffset: false,
@@ -265,6 +265,52 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
             airplay: true,
             lock: true,
             fastForward: true,
+            controls: [
+                {
+                    position: 'right',
+                    html: '<svg class="art-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>',
+                    tooltip: 'Fullscreen',
+                    style: {
+                        color: '#fff'
+                    },
+                    click: function () {
+                        const player = artInstance.current;
+                        if (!player) return;
+
+                        if (player.fullscreen) {
+                            player.fullscreen = false;
+                        } else {
+                            if (document.fullscreenEnabled) {
+                                player.fullscreen = true;
+                            } else if (player.video.webkitEnterFullscreen) {
+                                player.video.webkitEnterFullscreen();
+                            } else {
+                                player.fullscreenWeb = true;
+                            }
+                        }
+                    },
+                },
+                {
+                    position: 'left',
+                    index: 1,
+                    html: '<svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/><text x="12" y="16" text-anchor="middle" fill="white" font-size="7" font-weight="bold">10</text></svg>',
+                    tooltip: '-10s',
+                    click: function () {
+                        const a = artInstance.current;
+                        if (a) a.currentTime = Math.max(0, a.currentTime - 10);
+                    },
+                },
+                {
+                    position: 'left',
+                    index: 2,
+                    html: '<svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/><text x="12" y="16" text-anchor="middle" fill="white" font-size="7" font-weight="bold">10</text></svg>',
+                    tooltip: '+10s',
+                    click: function () {
+                        const a = artInstance.current;
+                        if (a) a.currentTime = Math.min(a.video.duration || Infinity, a.currentTime + 10);
+                    },
+                },
+            ],
             plugins: [
                 artplayerPluginChromecast({
                     // You can specify an app ID or leave it empty for default
@@ -330,28 +376,7 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                     }
                 },
             ],
-            controls: [
-                {
-                    position: 'left',
-                    index: 1,
-                    html: '<svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/><text x="12" y="16" text-anchor="middle" fill="white" font-size="7" font-weight="bold">10</text></svg>',
-                    tooltip: '-10s',
-                    click: function () {
-                        const a = artInstance.current;
-                        if (a) a.currentTime = Math.max(0, a.currentTime - 10);
-                    },
-                },
-                {
-                    position: 'left',
-                    index: 2,
-                    html: '<svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/><text x="12" y="16" text-anchor="middle" fill="white" font-size="7" font-weight="bold">10</text></svg>',
-                    tooltip: '+10s',
-                    click: function () {
-                        const a = artInstance.current;
-                        if (a) a.currentTime = Math.min(a.video.duration || Infinity, a.currentTime + 10);
-                    },
-                },
-            ],
+
             moreVideoAttr: {
                 crossOrigin: 'anonymous',
                 preload: 'auto', // Hints the browser to start downloading immediately
@@ -360,7 +385,7 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                 m3u8: function (video, url, art) {
                     if (Hls.isSupported()) {
                         if (art.hls) art.hls.destroy();
-                        
+
                         // Smart Preload & Buffer Optimization
                         const hls = new Hls({
                             maxBufferLength: 60, // Aim to keep 60 seconds buffered
@@ -372,7 +397,7 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                         hls.loadSource(url);
                         hls.attachMedia(video);
                         art.hls = hls;
-                        
+
                         hls.on(Hls.Events.MANIFEST_PARSED, function () {
                             const levels = hls.levels;
                             if (levels && levels.length > 0) {
@@ -382,7 +407,7 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                                     level: index,
                                     default: index === 0,
                                 }));
-                                
+
                                 // Add Auto option
                                 quality.unshift({
                                     html: 'Auto',
@@ -433,11 +458,11 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
 
         art.on('ready', () => {
             updateMutedIndicator();
-            
+
             if (art.subtitle && art.subtitle.url) {
                 art.subtitle.show = true;
             }
-            
+
             // Move chromecast button to the top right of the player
             // The plugin adds the button asynchronously, so we wait for it
             const checkChromecast = setInterval(() => {
@@ -459,7 +484,7 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
 
             // Cleanup interval after 5 seconds if not found
             setTimeout(() => clearInterval(checkChromecast), 5000);
-            
+
             // Prevent page scrolling on mobile when dragging the timeline
             const progressElement = art.template.$progress || art.container.querySelector('.art-progress');
             if (progressElement) {
@@ -493,7 +518,7 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
             if (skipTimes) {
                 const isOP = skipTimes.op && currentTime >= skipTimes.op[0] && currentTime < skipTimes.op[1];
                 const isED = skipTimes.ed && currentTime >= skipTimes.ed[0] && currentTime < skipTimes.ed[1];
-                
+
                 // Show/Hide Manual Skip Button
                 if (art.layers.skipButton) {
                     art.layers.skipButton.style.display = (isOP || isED) ? 'block' : 'none';
@@ -548,20 +573,20 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                     rangeEl.style.position = 'absolute';
                     rangeEl.style.left = `${startPct}%`;
                     rangeEl.style.width = `${widthPct}%`;
-                    
+
                     // The visual progress track is inside the main progress container.
                     // We can find it by getting the parent of the 'played' or 'loaded' bar.
                     const playedBar = art.template.$progress.querySelector('.art-progress-played');
                     const innerTrack = playedBar ? playedBar.parentElement : art.template.$progress;
-                    
+
                     // By appending it directly to the inner track, height: 100% perfectly merges with it.
                     rangeEl.style.height = '100%';
                     rangeEl.style.top = '0';
                     rangeEl.style.backgroundColor = color;
-                    rangeEl.style.zIndex = '25'; 
+                    rangeEl.style.zIndex = '25';
                     rangeEl.style.pointerEvents = 'none';
                     rangeEl.style.borderRadius = '2px';
-                    
+
                     innerTrack.appendChild(rangeEl);
                 };
 
