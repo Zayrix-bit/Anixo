@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 const DEFAULT_SETTINGS = {
   fontColor: '#ffffff',
   fontOpacity: '1',
-  fontSize: '22px',
+  fontSize: '32px',
   fontFamily: "'Inter', sans-serif",
   charEdge: '0px 0px 4px rgba(0,0,0,1), 0px 0px 6px rgba(0,0,0,1), 1.5px 1.5px 3px rgba(0,0,0,1), -1.5px -1.5px 3px rgba(0,0,0,1), 1.5px -1.5px 3px rgba(0,0,0,1), -1.5px 1.5px 3px rgba(0,0,0,1)',
   bgColor: 'transparent',
@@ -11,15 +11,15 @@ const DEFAULT_SETTINGS = {
   windowPadding: '0'
 };
 
-const SubtitleSettingsMenu = ({ onClose, containerRef }) => {
+const SubtitleSettingsMenu = ({ onClose, onBack, containerRef }) => {
   const [activeMenu, setActiveMenu] = useState('main'); // 'main' or category name
   const [settings, setSettings] = useState(() => {
-    const saved = localStorage.getItem('anigo_advanced_subs');
+    const saved = localStorage.getItem('anigo_advanced_subs_v2');
     return saved ? JSON.parse(saved) : DEFAULT_SETTINGS;
   });
 
   useEffect(() => {
-    localStorage.setItem('anigo_advanced_subs', JSON.stringify(settings));
+    localStorage.setItem('anigo_advanced_subs_v2', JSON.stringify(settings));
     if (containerRef?.current) {
       const el = containerRef.current;
       el.style.setProperty('--sub-font-color', settings.fontColor);
@@ -44,7 +44,7 @@ const SubtitleSettingsMenu = ({ onClose, containerRef }) => {
   };
 
   // --- Menu Configurations ---
-  
+
   const MENUS = {
     fontColor: {
       title: 'Font Color',
@@ -71,11 +71,11 @@ const SubtitleSettingsMenu = ({ onClose, containerRef }) => {
     fontSize: {
       title: 'Font Size',
       options: [
-        { label: '50%', value: '11px' },
-        { label: '75%', value: '16px' },
-        { label: '100%', value: '22px' },
-        { label: '150%', value: '33px' },
-        { label: '200%', value: '44px' }
+        { label: '50%', value: '16px' },
+        { label: '75%', value: '24px' },
+        { label: '100%', value: '32px' },
+        { label: '150%', value: '48px' },
+        { label: '200%', value: '64px' }
       ]
     },
     fontFamily: {
@@ -124,21 +124,26 @@ const SubtitleSettingsMenu = ({ onClose, containerRef }) => {
   return (
     <div className="sub-settings-overlay" onClick={onClose}>
       <div className="sub-settings-modal" onClick={e => e.stopPropagation()}>
-        
+
         {/* Header */}
         <div className="sub-settings-header">
           {activeMenu !== 'main' ? (
             <>
-              <button onClick={() => setActiveMenu('main')}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
+              <button onClick={() => setActiveMenu('main')} style={{ marginRight: '8px' }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
               </button>
-              <span style={{marginLeft: '8px'}}>{currentMenuObj.title}</span>
+              <span>{currentMenuObj.title}</span>
             </>
           ) : (
-            <span>Subtitle Settings</span>
+            <>
+              <button onClick={onBack} style={{ marginRight: '8px' }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+              </button>
+              <span>Subtitle Settings</span>
+            </>
           )}
-          <button style={{marginLeft: 'auto'}} onClick={onClose}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          <button style={{ marginLeft: 'auto' }} onClick={onClose}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
 
@@ -154,7 +159,7 @@ const SubtitleSettingsMenu = ({ onClose, containerRef }) => {
                     <span>{menu.title}</span>
                     <div className="sub-settings-val">
                       {currentOpt.label}
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
                     </div>
                   </div>
                 );
@@ -165,8 +170,8 @@ const SubtitleSettingsMenu = ({ onClose, containerRef }) => {
             </>
           ) : (
             currentMenuObj.options.map(opt => (
-              <div 
-                key={opt.label} 
+              <div
+                key={opt.label}
                 className={`sub-settings-option ${settings[activeMenu] === opt.value ? 'selected' : ''}`}
                 onClick={() => {
                   updateSetting(activeMenu, opt.value);

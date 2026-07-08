@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import Plyr from 'plyr';
 import Hls from 'hls.js';
 import './plyr-custom.css';
@@ -24,6 +25,7 @@ const PlyrPlayer = ({
   
   const [activeSkip, setActiveSkip] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
+  const [plyrContainer, setPlyrContainer] = useState(null);
 
   // Keep latest props in a ref so they don't trigger re-initialization
   const propsRef = useRef({ onEnded, onReady, onTimeUpdate, skipTimes, subtitles });
@@ -107,7 +109,12 @@ const PlyrPlayer = ({
         }
       };
 
-      plyrRef.current.on('ready', injectSetting);
+      plyrRef.current.on('ready', () => {
+        injectSetting();
+        if (plyrRef.current && plyrRef.current.elements.container) {
+          setPlyrContainer(plyrRef.current.elements.container);
+        }
+      });
 
       // Use a MutationObserver to re-inject if Plyr dynamically rebuilds the menu (e.g., Quality levels loaded)
       const controls = plyrRef.current.elements.controls;
@@ -235,21 +242,32 @@ const PlyrPlayer = ({
         ))}
       </video>
       
-      {showSettings && (
+      {showSettings && plyrContainer && createPortal(
         <SubtitleSettingsMenu 
           onClose={() => setShowSettings(false)} 
+          onBack={() => {
+            setShowSettings(false);
+            if (plyrContainer) {
+              const settingsBtn = plyrContainer.querySelector('[data-plyr="settings"]');
+              if (settingsBtn && settingsBtn.getAttribute('aria-expanded') !== 'true') {
+                settingsBtn.click();
+              }
+            }
+          }}
           containerRef={containerRef} 
-        />
+        />,
+        plyrContainer
       )}
 
-      {activeSkip && (
+      {activeSkip && plyrContainer && createPortal(
         <div className="aniskip-btn show" onClick={handleSkip}>
           <span>{activeSkip.label}</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polygon points="5 4 15 12 5 20 5 4"></polygon>
             <line x1="19" y1="5" x2="19" y2="19"></line>
           </svg>
-        </div>
+        </div>,
+        plyrContainer
       )}
     </div>
   );
