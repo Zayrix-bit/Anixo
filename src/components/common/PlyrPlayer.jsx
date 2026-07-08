@@ -2,45 +2,121 @@ import React, { useEffect, useRef, useState } from 'react';
 import Plyr from 'plyr';
 import Hls from 'hls.js';
 import './plyr-custom.css';
+import SubtitleSettingsMenu from './SubtitleSettingsMenu';
 
 const PlyrPlayer = ({ 
-  src, type, poster, subtitles = [], onEnded, onTimeUpdate, onReady, 
-  initialTime = 0, className, skipTimes
+  src, 
+  type, 
+  poster, 
+  subtitles = [], 
+  onEnded, 
+  onTimeUpdate, 
+  onReady, 
+  initialTime = 0, 
+  className, 
+  skipTimes 
 }) => {
   const videoRef = useRef(null);
   const plyrRef = useRef(null);
   const hlsRef = useRef(null);
+  const observerRef = useRef(null);
+  const containerRef = useRef(null);
+  
   const [activeSkip, setActiveSkip] = useState(null);
+  const [showSettings, setShowSettings] = useState(false);
+
+  // Keep latest props in a ref so they don't trigger re-initialization
+  const propsRef = useRef({ onEnded, onReady, onTimeUpdate, skipTimes, subtitles });
+  useEffect(() => {
+    propsRef.current = { onEnded, onReady, onTimeUpdate, skipTimes, subtitles };
+  }, [onEnded, onReady, onTimeUpdate, skipTimes, subtitles]);
 
   useEffect(() => {
-    if (!src) return;
+    if (!src || !videoRef.current) return;
 
     const video = videoRef.current;
-    if (!video) return;
-
     const isHls = type === 'hls' || src.includes('.m3u8');
     
-    // Subtitles setup
-    const defaultSub = subtitles.find(s => s.isDefault || s.lang?.toLowerCase().includes('en'));
-
     const initPlyr = () => {
-      if (plyrRef.current) plyrRef.current.destroy();
+      if (plyrRef.current) {
+        plyrRef.current.destroy();
+      }
       
+      const qualityOptions = hlsRef.current ? [0, ...hlsRef.current.levels.map(l => l.height)] : [0];
+
       plyrRef.current = new Plyr(video, {
         controls: [
-          'play-large', 'play', 'rewind', 'fast-forward', 
-          'progress', 'current-time', 'duration', 
-          'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'
+          'play-large', 'progress', 'play', 'mute', 'volume', 
+          'current-time', 'duration', 'rewind', 'fast-forward', 
+          'settings', 'pip', 'airplay', 'fullscreen'
         ],
         settings: ['captions', 'quality', 'speed'],
-        captions: { 
-          active: !!defaultSub,
-          language: defaultSub ? (defaultSub.lang?.substring(0, 2).toLowerCase() || 'en') : 'auto',
-          update: false 
+        quality: {
+          default: 0,
+          options: qualityOptions,
+          forced: true,
+          onChange: (newQuality) => {
+            if (!hlsRef.current) return;
+            if (newQuality === 0) {
+              hlsRef.current.currentLevel = -1;
+            } else {
+              hlsRef.current.levels.forEach((level, idx) => {
+                if (level.height === newQuality) hlsRef.current.currentLevel = idx;
+              });
+            }
+          }
         },
+        i18n: { qualityLabel: { 0: 'Auto' } },
         keyboard: { focused: true, global: true },
         tooltips: { controls: true, seek: true }
       });
+
+      const injectSetting = () => {
+        if (!plyrRef.current) return;
+        const container = plyrRef.current.elements.container;
+        if (!container) return;
+        
+        // Find the inner menu wrapper
+        const homeMenu = container.querySelector('.plyr__menu__container [role="menu"]') || container.querySelector('.plyr__menu__container > div > div');
+        if (!homeMenu) return;
+        
+        if (!homeMenu.querySelector('.custom-sub-btn')) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          // Added plyr__control--forward to render the native chevron arrow
+          btn.className = 'plyr__control plyr__control--forward custom-sub-btn';
+          btn.setAttribute('role', 'menuitem');
+          btn.setAttribute('aria-haspopup', 'true');
+          btn.innerHTML = `<span>Subtitle Settings<span class="plyr__menu__value">Custom</span></span>`;
+          
+          btn.onclick = (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            // Close Plyr's menu
+            plyrRef.current.toggleControls(false);
+            // Open our advanced custom menu
+            setShowSettings(true);
+          };
+          
+          // Insert after the first item (Quality/Captions) to make it look native
+          if (homeMenu.children.length > 1) {
+            homeMenu.insertBefore(btn, homeMenu.children[1]);
+          } else {
+            homeMenu.appendChild(btn);
+          }
+        }
+      };
+
+      plyrRef.current.on('ready', injectSetting);
+
+      // Use a MutationObserver to re-inject if Plyr dynamically rebuilds the menu (e.g., Quality levels loaded)
+      const controls = plyrRef.current.elements.controls;
+      if (controls) {
+        if (observerRef.current) observerRef.current.disconnect();
+        const observer = new MutationObserver(() => injectSetting());
+        observer.observe(controls, { childList: true, subtree: true });
+        observerRef.current = observer;
+      }
 
       if (initialTime > 0) {
         plyrRef.current.once('canplay', () => {
@@ -48,13 +124,17 @@ const PlyrPlayer = ({
         });
       }
 
-      if (onEnded) plyrRef.current.on('ended', onEnded);
-      if (onTimeUpdate) plyrRef.current.on('timeupdate', () => onTimeUpdate(plyrRef.current.currentTime));
-      if (onReady) onReady();
-
-      // AniSkip logic
+      plyrRef.current.on('ended', () => {
+        if (propsRef.current.onEnded) propsRef.current.onEnded();
+      });
+      
       plyrRef.current.on('timeupdate', () => {
-        if (!skipTimes) {
+        if (propsRef.current.onTimeUpdate) {
+          propsRef.current.onTimeUpdate(plyrRef.current.currentTime);
+        }
+
+        const currentSkipTimes = propsRef.current.skipTimes;
+        if (!currentSkipTimes) {
           setActiveSkip(null);
           return;
         }
@@ -62,16 +142,18 @@ const PlyrPlayer = ({
         const currentTime = plyrRef.current.currentTime;
         let currentSkipSegment = null;
 
-        if (skipTimes.op && skipTimes.op.length === 2 && currentTime >= skipTimes.op[0] && currentTime <= skipTimes.op[1]) {
-          currentSkipSegment = { type: 'op', end: skipTimes.op[1], label: 'Skip Intro' };
-        } else if (skipTimes.ed && skipTimes.ed.length === 2 && currentTime >= skipTimes.ed[0] && currentTime <= skipTimes.ed[1]) {
-          currentSkipSegment = { type: 'ed', end: skipTimes.ed[1], label: 'Skip Ending' };
-        } else if (skipTimes.recap && skipTimes.recap.length === 2 && currentTime >= skipTimes.recap[0] && currentTime <= skipTimes.recap[1]) {
-          currentSkipSegment = { type: 'recap', end: skipTimes.recap[1], label: 'Skip Recap' };
+        if (currentSkipTimes.op && currentTime >= currentSkipTimes.op[0] && currentTime <= currentSkipTimes.op[1]) {
+          currentSkipSegment = { end: currentSkipTimes.op[1], label: 'Skip Intro' };
+        } else if (currentSkipTimes.ed && currentTime >= currentSkipTimes.ed[0] && currentTime <= currentSkipTimes.ed[1]) {
+          currentSkipSegment = { end: currentSkipTimes.ed[1], label: 'Skip Ending' };
+        } else if (currentSkipTimes.recap && currentTime >= currentSkipTimes.recap[0] && currentTime <= currentSkipTimes.recap[1]) {
+          currentSkipSegment = { end: currentSkipTimes.recap[1], label: 'Skip Recap' };
         }
 
         setActiveSkip(currentSkipSegment);
       });
+
+      if (propsRef.current.onReady) propsRef.current.onReady();
     };
 
     if (isHls && Hls.isSupported()) {
@@ -82,27 +164,26 @@ const PlyrPlayer = ({
       });
       hlsRef.current = hls;
 
-      hls.loadSource(src);
       hls.attachMedia(video);
+      
+      hls.on(Hls.Events.MEDIA_ATTACHED, () => {
+        hls.loadSource(src);
+      });
       
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         initPlyr();
       });
 
-      // Robust Error Handling for Stream Stability
       hls.on(Hls.Events.ERROR, (event, data) => {
         if (data.fatal) {
           switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
-              console.warn("HLS Network Error, attempting to recover...", data);
               hls.startLoad();
               break;
             case Hls.ErrorTypes.MEDIA_ERROR:
-              console.warn("HLS Media Error, attempting to recover...", data);
               hls.recoverMediaError();
               break;
             default:
-              console.error("HLS Fatal Error, cannot recover.", data);
               hls.destroy();
               break;
           }
@@ -114,14 +195,17 @@ const PlyrPlayer = ({
     }
 
     return () => {
-      if (hlsRef.current) {
-        hlsRef.current.destroy();
+      if (observerRef.current) {
+        observerRef.current.disconnect();
       }
       if (plyrRef.current) {
         plyrRef.current.destroy();
       }
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+      }
     };
-  }, [src, type, initialTime, onEnded, onReady, onTimeUpdate, skipTimes, subtitles]);
+  }, [src, type, initialTime]);
 
   const handleSkip = () => {
     if (activeSkip && plyrRef.current) {
@@ -131,7 +215,7 @@ const PlyrPlayer = ({
   };
 
   return (
-    <div className={`relative w-full h-full bg-black rounded-[10px] overflow-hidden ${className || ''}`}>
+    <div ref={containerRef} className={`relative w-full h-full bg-black rounded-[10px] overflow-hidden custom-subs-enabled ${className || ''}`}>
       <video
         ref={videoRef}
         crossOrigin="anonymous"
@@ -139,23 +223,27 @@ const PlyrPlayer = ({
         poster={poster}
         className="w-full h-full"
       >
-        {subtitles && subtitles.map((sub, idx) => (
+        {subtitles && subtitles.slice(0, 10).map((sub, i) => (
           <track
-            key={idx}
-            kind="captions"
-            label={sub.lang || `Subtitle ${idx + 1}`}
-            srcLang={sub.lang ? sub.lang.substring(0, 2).toLowerCase() : 'en'}
-            src={sub.url}
-            default={sub.isDefault || (sub.lang?.toLowerCase().includes('en') && idx === 0)}
+            key={i}
+            kind="subtitles"
+            label={sub.label || `Track ${i + 1}`}
+            srcLang={sub.language || 'und'}
+            src={sub.url || sub.file}
+            default={sub.default || sub.isDefault || i === 0}
           />
         ))}
       </video>
       
+      {showSettings && (
+        <SubtitleSettingsMenu 
+          onClose={() => setShowSettings(false)} 
+          containerRef={containerRef} 
+        />
+      )}
+
       {activeSkip && (
-        <div 
-          className="aniskip-btn show"
-          onClick={handleSkip}
-        >
+        <div className="aniskip-btn show" onClick={handleSkip}>
           <span>{activeSkip.label}</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polygon points="5 4 15 12 5 20 5 4"></polygon>

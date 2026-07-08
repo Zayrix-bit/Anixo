@@ -110,6 +110,7 @@ export function useStreamFetch({
                     all_streams: providerData.streams,
                     subtitles: providerData.subtitles || [],
                   });
+                  hasSources = true;
                 }
               } else {
                 setFetchError("No valid video source found on Server 1.");
@@ -179,6 +180,7 @@ export function useStreamFetch({
                     all_streams: providerData.streams,
                     subtitles: providerData.subtitles || [],
                   });
+                  hasSources = true;
                 }
               } else {
                 setFetchError("No valid video source found on Server 3.");

@@ -126,10 +126,7 @@ export default function VideoPlayerSection({
       return uniqueSubs.map(sub => {
         const subUrl = sub.file || sub.url;
         if (subUrl && !subUrl.includes('/api/proxy')) {
-          let ref = sub.source || 'https://anikototv.to/';
-          if (!ref.startsWith('http')) {
-             ref = 'https://anikototv.to/';
-          }
+          let ref = sub.source === 'VidWish' ? 'https://vidwish.live/' : 'https://megaplay.buzz/';
           return {
             ...sub,
             file: `${anikoBase}/api/proxy?url=${encodeURIComponent(subUrl)}&referer=${encodeURIComponent(ref)}`,
