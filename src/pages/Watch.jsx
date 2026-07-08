@@ -116,7 +116,7 @@ export default function Watch() {
 
   const [episodeLayout, setEpisodeLayout] = useState("grid"); // "grid" | "list"
   const [playerLang, setPlayerLang] = useState("sub");
-  const [activeServer, setActiveServer] = useState(1);
+  const [activeServer, setActiveServer] = useState(3);
 
 
 
@@ -623,11 +623,10 @@ export default function Watch() {
                       <button
                         key={idx}
                         onClick={() => setActiveSubServer(idx)}
-                        className={`px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-sm border transition-all ${
-                          activeSubServer === idx
-                            ? "bg-discord-600 border-discord-600 text-white shadow-[0_0_10px_rgba(220,38,38,0.3)]"
-                            : "border-white/10 text-white/50 hover:text-white hover:border-white/20 bg-white/5"
-                        }`}
+                        className={`px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-sm border transition-all ${activeSubServer === idx
+                          ? "bg-discord-600 border-discord-600 text-white shadow-[0_0_10px_rgba(220,38,38,0.3)]"
+                          : "border-white/10 text-white/50 hover:text-white hover:border-white/20 bg-white/5"
+                          }`}
                       >
                         {stream.server || `Stream ${idx + 1}`}
                       </button>
@@ -703,7 +702,7 @@ export default function Watch() {
               relations={relations}
               recommendations={recommendations}
             />
-            
+
             {/* Ad Banner */}
             <div className="flex justify-center py-4">
               <AdsterraSmartLinkBanner />
@@ -711,7 +710,7 @@ export default function Watch() {
             <div className="flex justify-center py-4">
               <AdBanner300x250 />
             </div>
-            
+
             {/* Recommendations Section */}
             {recommendations && recommendations.length > 0 && (
               <div className="mt-16 pt-8 border-t border-white/15">
@@ -725,10 +724,10 @@ export default function Watch() {
                   ))}
                 </div>
                 {recommendations.length > 12 && (
-                  <Pagination 
-                    currentPage={recPage} 
-                    totalPages={Math.ceil(recommendations.length / 12)} 
-                    onPageChange={setRecPage} 
+                  <Pagination
+                    currentPage={recPage}
+                    totalPages={Math.ceil(recommendations.length / 12)}
+                    onPageChange={setRecPage}
                   />
                 )}
               </div>

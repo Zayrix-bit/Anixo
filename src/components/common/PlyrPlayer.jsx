@@ -33,7 +33,11 @@ const PlyrPlayer = ({
           'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'
         ],
         settings: ['captions', 'quality', 'speed'],
-        captions: { active: !!defaultSub, update: true },
+        captions: { 
+          active: !!defaultSub,
+          language: defaultSub ? (defaultSub.lang?.substring(0, 2).toLowerCase() || 'en') : 'auto',
+          update: false 
+        },
         keyboard: { focused: true, global: true },
         tooltips: { controls: true, seek: true }
       });
@@ -80,8 +84,29 @@ const PlyrPlayer = ({
 
       hls.loadSource(src);
       hls.attachMedia(video);
+      
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         initPlyr();
+      });
+
+      // Robust Error Handling for Stream Stability
+      hls.on(Hls.Events.ERROR, (event, data) => {
+        if (data.fatal) {
+          switch (data.type) {
+            case Hls.ErrorTypes.NETWORK_ERROR:
+              console.warn("HLS Network Error, attempting to recover...", data);
+              hls.startLoad();
+              break;
+            case Hls.ErrorTypes.MEDIA_ERROR:
+              console.warn("HLS Media Error, attempting to recover...", data);
+              hls.recoverMediaError();
+              break;
+            default:
+              console.error("HLS Fatal Error, cannot recover.", data);
+              hls.destroy();
+              break;
+          }
+        }
       });
     } else {
       video.src = src;
@@ -114,12 +139,12 @@ const PlyrPlayer = ({
         poster={poster}
         className="w-full h-full"
       >
-        {subtitles.map((sub, idx) => (
+        {subtitles && subtitles.map((sub, idx) => (
           <track
             key={idx}
             kind="captions"
-            label={sub.lang}
-            srcLang={sub.lang?.substring(0, 2) || 'en'}
+            label={sub.lang || `Subtitle ${idx + 1}`}
+            srcLang={sub.lang ? sub.lang.substring(0, 2).toLowerCase() : 'en'}
             src={sub.url}
             default={sub.isDefault || (sub.lang?.toLowerCase().includes('en') && idx === 0)}
           />
