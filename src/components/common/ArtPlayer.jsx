@@ -386,13 +386,22 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                     if (Hls.isSupported()) {
                         if (art.hls) art.hls.destroy();
 
-                        // Smart Preload & Buffer Optimization
+                        // Smart Preload & Buffer Optimization (Optimized for Low Speed)
                         const hls = new Hls({
                             maxBufferLength: 60, // Aim to keep 60 seconds buffered
                             maxMaxBufferLength: 600, // Hard limit of 10 minutes (to avoid memory bloat)
                             maxBufferSize: 60 * 1024 * 1024, // Up to 60MB of RAM for buffer
                             enableWorker: true, // Use background thread for parsing (no lag)
                             lowLatencyMode: false,
+
+                            // --- SLOW INTERNET OPTIMIZATIONS ---
+                            capLevelToPlayerSize: true, // Prevent loading 1080p if screen is small (saves huge data on mobile)
+                            startLevel: -1, // Always start in Auto mode to gauge user speed first
+                            fragLoadingTimeOut: 20000, // Give slow internet 20 seconds to load a chunk instead of failing early
+                            fragLoadingMaxRetry: 6, // Retry 6 times instead of default 4 before throwing error
+                            fragLoadingRetryDelay: 1000, // Wait 1 second between retries
+                            levelLoadingTimeOut: 20000,
+                            levelLoadingMaxRetry: 6,
                         });
                         hls.loadSource(url);
                         hls.attachMedia(video);
