@@ -98,26 +98,6 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
             },
         });
 
-        // Aspect Ratio
-        customSettings.push({
-            name: 'aspectRatio',
-            width: 200,
-            html: 'Aspect Ratio',
-            tooltip: 'Default',
-            selector: [
-                { html: 'Default', value: 'default', default: true },
-                { html: '4:3', value: '4:3' },
-                { html: '16:9', value: '16:9' },
-            ],
-            onSelect: function (item) {
-                const player = artInstance.current;
-                if (player) {
-                    player.aspectRatio = item.value === 'default' ? '' : item.value;
-                    player.setting.update({ name: 'aspectRatio', tooltip: item.html });
-                }
-                return item.html;
-            },
-        });
 
         // Setup Audio Context for Volume Boost
         let audioCtx = null;
