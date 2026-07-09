@@ -1,9 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { Link, useNavigate } from "react-router-dom";
-import { getSchedule } from "../../services/api";
-import { X, ChevronRight, LayoutGrid, Calendar, List, Download } from "lucide-react";
-import { useLanguage } from "../../context/LanguageContext";
+import { Link } from "react-router-dom";
+import { X, ChevronRight, LayoutGrid, List, Download } from "lucide-react";
 import { ALL_GENRES } from "../../constants/genres";
 
 
@@ -14,8 +11,6 @@ export default function NavSidebar({ open, onClose, initialTab = "menu" }) {
  const [prevOpen, setPrevOpen] = useState(open);
  const [prevInitialTab, setPrevInitialTab] = useState(initialTab);
  const panelRef = useRef(null);
- const { getTitle } = useLanguage();
- const navigate = useNavigate();
 
  // Sync activeTab with initialTab when sidebar opens or external initialTab changes
  if (open !== prevOpen || initialTab !== prevInitialTab) {
@@ -27,8 +22,6 @@ export default function NavSidebar({ open, onClose, initialTab = "menu" }) {
  }
 
  const displayGenres = ALL_GENRES;
-
- const [clock, setClock] = useState(new Date());
 
  // Body Scroll Lock
  useEffect(() => {
@@ -42,12 +35,6 @@ export default function NavSidebar({ open, onClose, initialTab = "menu" }) {
  };
  }, [open]);
 
- // Live clock
- useEffect(() => {
- const interval = setInterval(() => setClock(new Date()), 1000);
- return () => clearInterval(interval);
- }, []);
-
  // Close on outside click
  useEffect(() => {
  function handleClick(e) {
@@ -60,56 +47,6 @@ export default function NavSidebar({ open, onClose, initialTab = "menu" }) {
  }
  return () => document.removeEventListener("mousedown", handleClick);
  }, [open, onClose]);
-
-
-
- // Schedule Logic
- const days = [];
- for (let i = 0; i < 7; i++) {
- const d = new Date();
- d.setHours(0, 0, 0, 0);
- d.setDate(d.getDate() + i);
- const start = Math.floor(d.getTime() / 1000);
- const end = start + 86400;
- days.push({ date: new Date(d), start, end });
- }
-
- const startTs = days[0].start;
- const endTs = days[days.length - 1].end;
-
- const { data: scheduleData = [], isLoading: isScheduleLoading } = useQuery({
- queryKey: ["schedule", startTs, endTs],
- queryFn: () => getSchedule(startTs, endTs),
- enabled: open && activeTab === "schedule",
- staleTime: 5 * 60 * 1000,
- });
-
- const grouped = {};
- days.forEach(({ date, start, end }) => {
- const key = date.toDateString();
- grouped[key] = {
- date,
- items: scheduleData
- .filter((s) => s.airingAt >= start && s.airingAt < end && !s.media?.isAdult)
- .sort((a, b) => a.airingAt - b.airingAt),
- };
- });
-
- const formatTime = (ts) => {
- const d = new Date(ts * 1000);
- return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
- };
-
- const offset = -(clock.getTimezoneOffset());
- const offsetHrs = Math.floor(Math.abs(offset) / 60);
- const offsetMins = Math.abs(offset) % 60;
- const offsetStr = `GMT ${offset >= 0 ? "+" : "-"}${String(offsetHrs).padStart(2, "0")}:${String(offsetMins).padStart(2, "0")}`;
-
- const dayName = (d) => d.toLocaleDateString("en-US", { weekday: "short" });
- const monthDay = (d) => ({
- day: d.getDate(),
- month: d.toLocaleDateString("en-US", { month: "long" }).toUpperCase()
- });
 
  const types = [
  { label: "Movies", value: "MOVIE" },
@@ -139,8 +76,7 @@ export default function NavSidebar({ open, onClose, initialTab = "menu" }) {
  <div className="flex border-b border-white/15 mx-4 mt-1">
  {[
  { id: "menu", label: "Menu", icon: List },
- { id: "genre", label: "Genre", icon: LayoutGrid },
- { id: "schedule", label: "Schedule", icon: Calendar }
+ { id: "genre", label: "Genre", icon: LayoutGrid }
  ].map((tab) => (
  <button
  key={tab.id}
@@ -223,63 +159,6 @@ export default function NavSidebar({ open, onClose, initialTab = "menu" }) {
  </Link>
  ))}
  </div>
- </div>
- )}
-
- {/* SCHEDULE TAB */}
- {activeTab === "schedule" && (
- <div className="p-5 pb-20 space-y-6 animate-in fade-in duration-300">
- <div className="flex items-center justify-between">
- <span className="text-[10px] font-medium text-white/50 font-mono tracking-tighter tabular-nums">{clock.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
- <span className="text-[8px] font-medium bg-discord-600/10 text-discord-500 px-1.5 py-0.5 rounded-sm uppercase tracking-widest">{offsetStr}</span>
- </div>
-
- {isScheduleLoading ? (
- <div className="space-y-4">
- {[1, 2, 3, 4, 5, 6].map(i => (
- <div key={i} className="h-8 bg-white/5 rounded-[3px] animate-pulse" />
- ))}
- </div>
- ) : (
- Object.entries(grouped).map(([key, { date, items }]) => {
- if (items.length === 0) return null;
- const { day, month } = monthDay(date);
- const isToday = new Date().toDateString() === date.toDateString();
-
- return (
- <div key={key} className="space-y-3">
- <div className="flex items-center gap-3">
- <div className={`p-1.5 rounded-[3px] border ${isToday ? 'bg-discord-600 border-discord-600' : 'bg-[#111] border-white/15'} flex flex-col items-center min-w-[34px]`}>
- <span className={`text-[12px] font-medium leading-none ${isToday ? 'text-white' : 'text-white/60'}`}>{day}</span>
- <span className={`text-[7px] font-medium uppercase tracking-tighter ${isToday ? 'text-white/80' : 'text-white/20'}`}>{month.slice(0, 3)}</span>
- </div>
- <div className="flex-1">
- <span className={`text-[12px] font-medium ${isToday ? 'text-white' : 'text-white/40'}`}>{dayName(date)}</span>
- {isToday && <div className="text-[8px] font-medium text-discord-500/60 uppercase tracking-widest">Today</div>}
- </div>
- </div>
-
- <div className="space-y-0.5 pl-0.5">
- {items.slice(0, 8).map((item) => (
- <div
- key={item.id}
- className="flex items-center gap-2.5 py-2 px-2.5 rounded-[3px] hover:bg-white/5 transition-all group cursor-pointer border border-transparent"
- onClick={() => {
- onClose();
- navigate(`/watch/${item.media?.id}`);
- }}
- >
- <span className="text-[10px] text-white/20 font-mono">{formatTime(item.airingAt)}</span>
- <div className="flex-1 min-w-0">
- <div className="text-[11px] font-medium text-white/60 group-hover:text-white truncate transition-colors">{getTitle(item.media?.title)}</div>
- </div>
- </div>
- ))}
- </div>
- </div>
- );
- })
- )}
  </div>
  )}
  </div>
