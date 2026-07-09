@@ -5,12 +5,38 @@ import CacheGuideModal from './CacheGuideModal';
 export default function CacheIssueBanner() {
     const [isVisible, setIsVisible] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    
+    // Initialize synchronously to avoid flicker on first render
+    const [imgSrc, setImgSrc] = useState(() => {
+        return localStorage.getItem('cached_problem_img') || "/problem.jpg";
+    });
 
     useEffect(() => {
+        // Handle banner visibility
         const isDismissed = localStorage.getItem('cache_banner_dismissed');
         if (!isDismissed) {
             // Slight delay so it slides in nicely after initial load
             setTimeout(() => setIsVisible(true), 1500);
+        }
+
+        // Fetch and cache the image if not already cached
+        if (!localStorage.getItem('cached_problem_img')) {
+            fetch('/problem.jpg')
+                .then(res => res.blob())
+                .then(blob => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        const base64data = reader.result;
+                        try {
+                            localStorage.setItem('cached_problem_img', base64data);
+                            setImgSrc(base64data);
+                        } catch (e) {
+                            console.error("Could not save image to localStorage:", e);
+                        }
+                    };
+                    reader.readAsDataURL(blob);
+                })
+                .catch(err => console.error("Failed to fetch problem image:", err));
         }
     }, []);
 
@@ -27,7 +53,7 @@ export default function CacheIssueBanner() {
                         
                         {/* Large Image on top */}
                         <div className="w-full bg-black border-b border-white/10 relative shrink-0">
-                            <img src="/problem.jpg" alt="Error Screen" className="w-full h-auto object-contain max-h-[180px] sm:max-h-[280px]" />
+                            <img src={imgSrc} alt="Error Screen" className="w-full h-auto object-contain max-h-[180px] sm:max-h-[280px]" />
                             <button 
                                 onClick={dismissBanner}
                                 className="absolute top-2 right-2 bg-black/50 hover:bg-black/80 text-white/70 hover:text-white p-1.5 rounded-full backdrop-blur-sm transition-colors"
