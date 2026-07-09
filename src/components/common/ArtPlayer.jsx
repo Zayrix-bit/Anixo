@@ -1,17 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import Artplayer from 'artplayer';
 import Hls from 'hls.js';
 import './artplayer-custom.css';
 import artplayerPluginChromecast from 'artplayer-plugin-chromecast';
-import SubtitleSettingsMenu from './SubtitleSettingsMenu';
 
 const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, onReady, initialTime = 0, className, autoSkip = false, skipTimes, videoQuality = 'best', onQualityChange, availableQualities = [] }) => {
     const artRef = useRef(null);
     const artInstance = useRef(null);
     const autoSkipRef = useRef(autoSkip);
-    const [showSubSettings, setShowSubSettings] = useState(false);
-    const currentSubTooltip = useRef(subtitles[0]?.label || subtitles[0]?.lang || subtitles[0]?.language || 'English');
 
     // Keep ref in sync when the prop changes
     useEffect(() => {
@@ -188,34 +185,25 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                     html: s.label || s.lang || s.language || `Track ${i + 1}`,
                     value: s.file || s.url,
                     default: i === 0
-                })),
-                { html: '<span style="color: #ff0000; font-weight: bold; display: flex; align-items: center; gap: 6px;">⚙️ Subtitle Settings</span>', value: 'custom_settings' }
+                }))
             ];
 
             customSettings.push({
                 name: 'subtitle-select',
                 width: 200,
                 html: 'Subtitles',
-                tooltip: currentSubTooltip.current,
+                tooltip: subtitles[0]?.label || subtitles[0]?.lang || subtitles[0]?.language || 'English',
                 selector: subOptions,
                 onSelect: function (item) {
                     const player = artInstance.current;
                     if (!player) return item.html;
 
-                    if (item.value === 'custom_settings') {
-                        setShowSubSettings(true);
-                        player.setting.show = false; // Close the settings panel
-                        return currentSubTooltip.current;
-                    }
-
                     if (item.value === 'none') {
                         player.subtitle.show = false;
-                        currentSubTooltip.current = 'None';
                         player.setting.update({ name: 'subtitle-select', tooltip: 'None' });
                     } else {
                         player.subtitle.switch(item.value, { name: item.html });
                         player.subtitle.show = true;
-                        currentSubTooltip.current = item.html;
                         player.setting.update({ name: 'subtitle-select', tooltip: item.html });
                     }
                     return item.html;
@@ -378,21 +366,21 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                     if (Hls.isSupported()) {
                         if (art.hls) art.hls.destroy();
 
-                        // Smart Preload & Buffer Optimization (Optimized for Low Speed & Instant Start)
+                        // Smart Preload & Buffer Optimization (Optimized for Low Speed)
                         const hls = new Hls({
-                            maxBufferLength: 15, // Lower initial buffer target for instant loading
-                            maxMaxBufferLength: 30, // Hard limit of 30 seconds to prevent buffering block
-                            maxBufferSize: 30 * 1024 * 1024, // 30MB buffer limit
+                            maxBufferLength: 60, // Aim to keep 60 seconds buffered
+                            maxMaxBufferLength: 600, // Hard limit of 10 minutes (to avoid memory bloat)
+                            maxBufferSize: 60 * 1024 * 1024, // Up to 60MB of RAM for buffer
                             enableWorker: true, // Use background thread for parsing (no lag)
                             lowLatencyMode: false,
 
-                            // --- SLOW INTERNET & INSTANT START OPTIMIZATIONS ---
+                            // --- SLOW INTERNET OPTIMIZATIONS ---
                             capLevelToPlayerSize: true, // Prevent loading 1080p if screen is small (saves huge data on mobile)
-                            startLevel: 0, // Force lowest quality initially for instant playback, ABR will ramp up automatically
-                            fragLoadingTimeOut: 15000,
-                            fragLoadingMaxRetry: 6,
-                            fragLoadingRetryDelay: 1000,
-                            levelLoadingTimeOut: 15000,
+                            startLevel: -1, // Always start in Auto mode to gauge user speed first
+                            fragLoadingTimeOut: 20000, // Give slow internet 20 seconds to load a chunk instead of failing early
+                            fragLoadingMaxRetry: 6, // Retry 6 times instead of default 4 before throwing error
+                            fragLoadingRetryDelay: 1000, // Wait 1 second between retries
+                            levelLoadingTimeOut: 20000,
                             levelLoadingMaxRetry: 6,
                         });
                         hls.loadSource(url);
@@ -665,18 +653,7 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
         };
     }, [src, poster, type, initialTime, autoSkip, skipTimes, videoQuality]);
 
-    return (
-        <div style={{ position: 'relative', width: '100%', height: '100%' }} className={className}>
-            <div ref={artRef} style={{ width: '100%', height: '100%' }}></div>
-            {showSubSettings && (
-                <SubtitleSettingsMenu
-                    onClose={() => setShowSubSettings(false)}
-                    onBack={() => setShowSubSettings(false)}
-                    containerRef={artRef}
-                />
-            )}
-        </div>
-    );
+    return <div ref={artRef} className={className} style={{ width: '100%', height: '100%' }}></div>;
 };
 
 export default ArtPlayer;
