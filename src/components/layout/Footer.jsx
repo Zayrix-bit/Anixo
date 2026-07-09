@@ -46,200 +46,200 @@ export default function Footer() {
 
   return (
     <>
-    
-    {/* Responsive Ad Banner above Footer - Hidden on Portal page */}
-    {location.pathname !== "/" && (
-    <div className="w-full bg-[#0b0d12] border-t border-white/5 pt-2 pb-4">
-      <div className="hidden md:flex justify-center w-full">
-        <AdBanner728x90 />
-      </div>
-      <div className="flex md:hidden justify-center w-full scale-90 origin-top">
-        <AdBanner300x250 />
-      </div>
-    </div>
-    )}
-    <footer className="relative bg-[#0b0d12] pt-10 md:pt-20 pb-8 md:pb-10 overflow-hidden border-t border-white/15">
-      {/* Top Gradient Line - Truly Full Width */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-discord-600/50 to-transparent" />
 
-      {/* Professional Watermark Background */}
-      <div className="absolute inset-0 hidden md:flex items-center justify-center overflow-hidden pointer-events-none select-none z-0">
-        <span className="text-[250px] lg:text-[350px] font-black tracking-tight uppercase whitespace-nowrap" style={{ color: 'rgba(255,255,255,0.02)' }}>
-          AniXo
-        </span>
-      </div>
-
-      <div className="w-full px-4 md:px-8 lg:px-12 relative z-10">
-
-        {/* SEO About Section */}
-        <article className="mb-8 md:mb-14 pb-6 md:pb-10 border-b border-white/15">
-          <h2 className="text-[12px] md:text-[16px] font-medium text-white/80 mb-2 md:mb-4 tracking-wide">
-            AniXo – Watch Free Anime Online in HD
-          </h2>
-          <p className="text-[11px] md:text-[13px] text-white/50 leading-[1.7] md:leading-[1.8] max-w-[900px] font-normal">
-            AniXo is a free anime streaming site where you can watch subbed and dubbed anime online in high definition.
-            Enjoy the latest episodes of popular anime series like One Piece, Demon Slayer, Jujutsu Kaisen, Attack on Titan,
-            My Hero Academia, Naruto Shippuden, Dragon Ball Super, and thousands more — all without ads or interruptions.
-            Our library is updated daily with new releases, seasonal anime, movies, OVAs, and ONAs.
-            Whether you prefer English subtitles or dubbed audio, AniXo delivers a premium, buffer-free viewing experience
-            on desktop and mobile devices. Join millions of anime fans who trust AniXo as their go-to destination for anime streaming.
-          </p>
-        </article>
-
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-12 gap-6 md:gap-12 lg:gap-8 mb-8 md:mb-14">
-
-          {/* Brand Column */}
-          <div className="col-span-2 md:col-span-1 lg:col-span-3 flex md:flex-col items-center md:items-start gap-4 md:gap-0 md:space-y-6">
-            <Link
-              to="/home"
-              onClick={() => window.scrollTo(0, 0)}
-              className="flex items-center shrink-0"
-              aria-label="AniXo Home"
-            >
-              <img
-                src="/logo.png"
-                alt="AniXo - Free Anime Streaming"
-                className="h-[60px] md:h-[100px] object-contain hover:scale-105 transition"
-              />
-            </Link>
-
-            <div className="flex gap-3 md:gap-4 md:pt-2">
-              <a href="https://discord.com/users/@seiji0x" target="_blank" rel="noopener noreferrer" aria-label="Join AniXo Discord">
-                <MessageSquare className="text-white/20 hover:text-[#5865F2] transition cursor-pointer" size={18} />
-              </a>
-              <a href="https://reddit.com" target="_blank" rel="noopener noreferrer" aria-label="AniXo on Reddit">
-                <Heart className="text-white/20 hover:text-discord-600 transition cursor-pointer" size={18} />
-              </a>
-            </div>
+      {/* Responsive Ad Banner above Footer - Hidden on Portal page */}
+      {location.pathname !== "/" && (
+        <div className="w-full bg-[#0b0d12] border-t border-white/5 pt-2 pb-4">
+          <div className="hidden md:flex justify-center w-full">
+            <AdBanner728x90 />
           </div>
-
-          {/* Navigation Links */}
-          <div className="col-span-2 md:col-span-1 lg:col-span-5 grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-8">
-            {footerLinks.map((section) => (
-              <nav key={section.title} className="space-y-3 md:space-y-5" aria-label={section.title}>
-                <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-white/80">
-                  {section.title}
-                </h3>
-
-                <ul className="space-y-2 md:space-y-3">
-                  {section.links.map((link) => {
-                    const Icon = link.icon;
-                    const isExternal = link.path?.startsWith("http") || link.path?.startsWith("mailto:");
-                    const isActive = link.path && location.pathname === link.path;
-
-                    const baseClass =
-                      "group flex items-center gap-2 text-[12px] font-bold transition-all duration-300 hover:translate-x-1";
-                    const colorClass = isActive
-                      ? "text-white"
-                      : "text-white/50 hover:text-white";
-
-                    if (link.onClick) {
-                      return (
-                        <li key={link.name}>
-                          <button
-                            onClick={link.onClick}
-                            className={`${baseClass} ${colorClass} text-left w-full outline-none`}
-                          >
-                            {Icon && <Icon className="text-white/10 group-hover:text-discord-500 transition" size={12} />}
-                            {link.name}
-                          </button>
-                        </li>
-                      );
-                    }
-
-                    if (isExternal) {
-                      return (
-                        <li key={link.name}>
-                          <a
-                            href={link.path}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={`${baseClass} ${colorClass}`}
-                          >
-                            {Icon && <Icon className="text-white/10 group-hover:text-discord-500 transition" size={12} />}
-                            {link.name}
-                          </a>
-                        </li>
-                      );
-                    }
-
-                    return (
-                      <li key={link.name}>
-                        <Link to={link.path} className={`${baseClass} ${colorClass}`}>
-                          {Icon && <Icon className="text-white/10 group-hover:text-discord-500 transition" size={12} />}
-                          {link.name}
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </nav>
-            ))}
+          <div className="flex md:hidden justify-center w-full scale-90 origin-top">
+            <AdBanner300x250 />
           </div>
+        </div>
+      )}
+      <footer className="relative bg-[#0b0d12] pt-10 md:pt-20 pb-8 md:pb-10 overflow-hidden border-t border-white/15">
+        {/* Top Gradient Line - Truly Full Width */}
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-discord-600/50 to-transparent" />
 
-          {/* Popular Genres */}
-          <nav className="col-span-2 md:col-span-1 lg:col-span-4 space-y-3 md:space-y-5" aria-label="Popular Anime Genres">
-            <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-white/80">
-              Popular Genres
-            </h3>
-            <div className="flex gap-1.5 md:gap-2 overflow-x-auto scrollbar-hide pb-1 md:flex-wrap md:overflow-visible -mx-4 px-4 md:mx-0 md:px-0">
-              {["Action", "Romance", "Comedy", "Fantasy", "Sci-Fi", "Slice of Life", "Horror", "Drama", "Mecha", "Sports", "Thriller", "Supernatural"].map((genre) => (
-                <Link
-                  key={genre}
-                  to={`/browse?genres=${genre}`}
-                  className="text-[10px] font-bold text-white/40 bg-white/[0.03] border border-white/15 px-2.5 md:px-3 py-1 md:py-1.5 rounded-[3px] hover:text-white hover:bg-white/[0.06] hover:border-white/10 transition-all whitespace-nowrap shrink-0 md:shrink"
-                >
-                  {genre}
-                </Link>
-              ))}
-            </div>
-          </nav>
+        {/* Professional Watermark Background */}
+        <div className="absolute inset-0 hidden md:flex items-center justify-center overflow-hidden pointer-events-none select-none z-0">
+          <span className="text-[250px] lg:text-[350px] font-black tracking-tight uppercase whitespace-nowrap" style={{ color: 'rgba(255,255,255,0.02)' }}>
+            AniXo
+          </span>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-6 md:pt-8 border-t border-white/15 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
-          <div className="flex items-center gap-2 md:gap-4 text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-white/40">
-            <span>&copy; {currentYear} AniXo</span>
-            <div className="w-1 h-1 bg-white/10 rounded-full hidden sm:block" />
-            <span className="flex items-center gap-1 hidden sm:flex">
-              Made with <Heart size={10} className="text-discord-600" fill="currentColor" /> by the community
-            </span>
-            <Link to="/nsfw" className="ml-2 text-white/10 hover:text-discord-600 transition-colors">18+</Link>
+        <div className="w-full px-4 md:px-8 lg:px-12 relative z-10">
+
+          {/* SEO About Section */}
+          <article className="mb-8 md:mb-14 pb-6 md:pb-10 border-b border-white/15">
+            <h2 className="text-[12px] md:text-[16px] font-medium text-white/80 mb-2 md:mb-4 tracking-wide">
+              AniXo – Watch Free Anime Online in HD
+            </h2>
+            <p className="text-[11px] md:text-[13px] text-white/50 leading-[1.7] md:leading-[1.8] max-w-[900px] font-normal">
+              AniXo is a free anime streaming site where you can watch subbed and dubbed anime online in high definition.
+              Enjoy the latest episodes of popular anime series like One Piece, Demon Slayer, Jujutsu Kaisen, Attack on Titan,
+              My Hero Academia, Naruto Shippuden, Dragon Ball Super, and thousands more — all without ads or interruptions.
+              Our library is updated daily with new releases, seasonal anime, movies, OVAs, and ONAs.
+              Whether you prefer English subtitles or dubbed audio, AniXo delivers a premium, buffer-free viewing experience
+              on desktop and mobile devices. Join millions of anime fans who trust AniXo as their go-to destination for anime streaming.
+            </p>
+          </article>
+
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-12 gap-6 md:gap-12 lg:gap-8 mb-8 md:mb-14">
+
+            {/* Brand Column */}
+            <div className="col-span-2 md:col-span-1 lg:col-span-3 flex md:flex-col items-center md:items-start gap-4 md:gap-0 md:space-y-6">
+              <Link
+                to="/home"
+                onClick={() => window.scrollTo(0, 0)}
+                className="flex items-center shrink-0"
+                aria-label="AniXo Home"
+              >
+                <img
+                  src="/logo.png"
+                  alt="AniXo - Free Anime Streaming"
+                  className="h-[60px] md:h-[100px] object-contain hover:scale-105 transition"
+                />
+              </Link>
+
+              <div className="flex gap-3 md:gap-4 md:pt-2">
+                <a href="https://discord.com/users/@seiji0x" target="_blank" rel="noopener noreferrer" aria-label="Join AniXo Discord">
+                  <MessageSquare className="text-white/20 hover:text-[#5865F2] transition cursor-pointer" size={18} />
+                </a>
+                <a href="https://reddit.com" target="_blank" rel="noopener noreferrer" aria-label="AniXo on Reddit">
+                  <Heart className="text-white/20 hover:text-discord-600 transition cursor-pointer" size={18} />
+                </a>
+              </div>
+            </div>
+
+            {/* Navigation Links */}
+            <div className="col-span-2 md:col-span-1 lg:col-span-5 grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-8">
+              {footerLinks.map((section) => (
+                <nav key={section.title} className="space-y-3 md:space-y-5" aria-label={section.title}>
+                  <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-white/80">
+                    {section.title}
+                  </h3>
+
+                  <ul className="space-y-2 md:space-y-3">
+                    {section.links.map((link) => {
+                      const Icon = link.icon;
+                      const isExternal = link.path?.startsWith("http") || link.path?.startsWith("mailto:");
+                      const isActive = link.path && location.pathname === link.path;
+
+                      const baseClass =
+                        "group flex items-center gap-2 text-[13px] font-bold transition-all duration-300 hover:translate-x-1";
+                      const colorClass = isActive
+                        ? "text-white"
+                        : "text-white/80 hover:text-white";
+
+                      if (link.onClick) {
+                        return (
+                          <li key={link.name}>
+                            <button
+                              onClick={link.onClick}
+                              className={`${baseClass} ${colorClass} text-left w-full outline-none`}
+                            >
+                              {Icon && <Icon className="text-white/50 group-hover:text-discord-500 transition" size={12} />}
+                              {link.name}
+                            </button>
+                          </li>
+                        );
+                      }
+
+                      if (isExternal) {
+                        return (
+                          <li key={link.name}>
+                            <a
+                              href={link.path}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={`${baseClass} ${colorClass}`}
+                            >
+                              {Icon && <Icon className="text-white/50 group-hover:text-discord-500 transition" size={12} />}
+                              {link.name}
+                            </a>
+                          </li>
+                        );
+                      }
+
+                      return (
+                        <li key={link.name}>
+                          <Link to={link.path} className={`${baseClass} ${colorClass}`}>
+                            {Icon && <Icon className="text-white/50 group-hover:text-discord-500 transition" size={12} />}
+                            {link.name}
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </nav>
+              ))}
+            </div>
+
+            {/* Popular Genres */}
+            <nav className="col-span-2 md:col-span-1 lg:col-span-4 space-y-3 md:space-y-5" aria-label="Popular Anime Genres">
+              <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-white/80">
+                Popular Genres
+              </h3>
+              <div className="flex gap-1.5 md:gap-2 overflow-x-auto scrollbar-hide pb-1 md:flex-wrap md:overflow-visible -mx-4 px-4 md:mx-0 md:px-0">
+                {["Action", "Romance", "Comedy", "Fantasy", "Sci-Fi", "Slice of Life", "Horror", "Drama", "Mecha", "Sports", "Thriller", "Supernatural"].map((genre) => (
+                  <Link
+                    key={genre}
+                    to={`/browse?genres=${genre}`}
+                    className="text-[10px] font-bold text-white/40 bg-white/[0.03] border border-white/15 px-2.5 md:px-3 py-1 md:py-1.5 rounded-[3px] hover:text-white hover:bg-white/[0.06] hover:border-white/10 transition-all whitespace-nowrap shrink-0 md:shrink"
+                  >
+                    {genre}
+                  </Link>
+                ))}
+              </div>
+            </nav>
           </div>
-          
-          {/* Online Users */}
-          <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-center">
-            <OnlineUsers />
-          </div>
-          
-          <p className="text-[10px] md:text-[12px] text-white/40 text-center md:text-right max-w-lg italic select-none animate-[breath_4s_ease-in-out_infinite]">
-            Disclaimer: AniXo does not store any files on its server. All contents are provided by non-affiliated third parties.
-          </p>
-          <style>{`
+
+          {/* Bottom Bar */}
+          <div className="pt-6 md:pt-8 border-t border-white/15 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
+            <div className="flex items-center gap-2 md:gap-4 text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-white/40">
+              <span>&copy; {currentYear} AniXo</span>
+              <div className="w-1 h-1 bg-white/10 rounded-full hidden sm:block" />
+              <span className="flex items-center gap-1 hidden sm:flex">
+                Made with <Heart size={10} className="text-discord-600" fill="currentColor" /> by the community
+              </span>
+              <Link to="/nsfw" className="ml-2 text-white/10 hover:text-discord-600 transition-colors">18+</Link>
+            </div>
+
+            {/* Online Users */}
+            <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-center">
+              <OnlineUsers />
+            </div>
+
+            <p className="text-[10px] md:text-[12px] text-white/40 text-center md:text-right max-w-lg italic select-none animate-[breath_4s_ease-in-out_infinite]">
+              Disclaimer: AniXo does not store any files on its server. All contents are provided by non-affiliated third parties.
+            </p>
+            <style>{`
             @keyframes breath {
               0%, 100% { opacity: 0.3; }
               50% { opacity: 0.6; }
             }
           `}</style>
+          </div>
         </div>
-      </div>
 
-      <ContactModal 
-        isOpen={isContactModalOpen} 
-        onClose={() => setIsContactModalOpen(false)} 
-      />
-      
-      <CacheGuideModal
-        isOpen={isCacheGuideOpen}
-        onClose={() => setIsCacheGuideOpen(false)}
-      />
+        <ContactModal
+          isOpen={isContactModalOpen}
+          onClose={() => setIsContactModalOpen(false)}
+        />
 
-      <CacheIssueBanner
-        isOpen={isCacheIssueModalOpen}
-        onClose={() => setIsCacheIssueModalOpen(false)}
-        onOpenCacheGuide={() => setIsCacheGuideOpen(true)}
-      />
-    </footer>
+        <CacheGuideModal
+          isOpen={isCacheGuideOpen}
+          onClose={() => setIsCacheGuideOpen(false)}
+        />
+
+        <CacheIssueBanner
+          isOpen={isCacheIssueModalOpen}
+          onClose={() => setIsCacheIssueModalOpen(false)}
+          onOpenCacheGuide={() => setIsCacheGuideOpen(true)}
+        />
+      </footer>
     </>
   );
 }
