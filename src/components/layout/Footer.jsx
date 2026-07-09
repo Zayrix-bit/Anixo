@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { MessageSquare, Heart, Info, Tv } from "lucide-react";
 import ContactModal from "../common/ContactModal";
+import CacheGuideModal from "../common/CacheGuideModal";
 import { AdBanner728x90, AdBanner300x250 } from "../common/AdBanner";
 import OnlineUsers from "../common/OnlineUsers";
 
@@ -9,6 +10,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
   const location = useLocation();
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [isCacheGuideOpen, setIsCacheGuideOpen] = useState(false);
 
   const footerLinks = [
     {
@@ -34,6 +36,7 @@ export default function Footer() {
         { name: "Terms of Service", path: "/terms", icon: Tv },
         { name: "DMCA", path: "/dmca", icon: Info },
         { name: "Contact Us", onClick: () => setIsContactModalOpen(true) },
+        { name: "Clear Cache Guide", onClick: () => setIsCacheGuideOpen(true), icon: Info },
       ],
     },
   ];
@@ -220,6 +223,11 @@ export default function Footer() {
       <ContactModal 
         isOpen={isContactModalOpen} 
         onClose={() => setIsContactModalOpen(false)} 
+      />
+      
+      <CacheGuideModal
+        isOpen={isCacheGuideOpen}
+        onClose={() => setIsCacheGuideOpen(false)}
       />
     </footer>
     </>
