@@ -117,7 +117,7 @@ export default function Watch() {
 
  const [episodeLayout, setEpisodeLayout] = useState("grid"); // "grid" | "list"
  const [playerLang, setPlayerLang] = useState("sub");
- const [activeServer, setActiveServer] = useState(3);
+ const [activeServer, setActiveServer] = useState(4);
 
 
 
