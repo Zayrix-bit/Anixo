@@ -135,10 +135,15 @@ export const AuthProvider = ({ children }) => {
     }
   }, [user]);
 
-  // Set up polling for notifications every 60 seconds
+  // Set up smart polling for notifications every 60 seconds (only when tab is visible)
   useEffect(() => {
     if (!user) return;
-    const interval = setInterval(fetchNotifications, 60000);
+    const fetchIfVisible = () => {
+      if (document.visibilityState === 'visible') {
+        fetchNotifications();
+      }
+    };
+    const interval = setInterval(fetchIfVisible, 60000);
     return () => clearInterval(interval);
   }, [user]);
 
