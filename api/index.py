@@ -126,7 +126,23 @@ http = HttpClient()
 
 
 app = Flask(__name__)
-CORS(app)
+# Prevent API theft by restricting CORS to allowed domains
+allowed_domains = [
+    "https://anixo.online",
+    "https://www.anixo.online",
+    "https://anixo.buzz",
+    "https://www.anixo.buzz",
+    "http://localhost:5173",   # Local Vite frontend
+    "http://127.0.0.1:5173",   # Local Vite (IP)
+    "http://localhost:3000",   # Local alternative frontend
+    "http://127.0.0.1:3000",   # Local alternative (IP)
+    "http://localhost:4173",   # Local Vite preview
+    "http://localhost:7860",   # Local backend/scraper
+    "http://localhost:7861",   # Local online server
+    "http://localhost:8080",   # Local chat API
+    "http://localhost:4000"    # Local comment server
+]
+CORS(app, resources={r"/*": {"origins": allowed_domains}})
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
