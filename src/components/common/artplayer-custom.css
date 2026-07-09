@@ -58,3 +58,18 @@
   -ms-overflow-style: none !important;
   scrollbar-width: none !important;
 }
+
+/* Subtitle Customization Styles */
+.art-subtitle {
+  color: var(--sub-font-color, #ffffff) !important;
+  opacity: var(--sub-font-opacity, 1) !important;
+  font-size: var(--sub-font-size, 32px) !important;
+  font-family: var(--sub-font-family, 'Inter', sans-serif) !important;
+  text-shadow: var(--sub-char-edge, 2px 2px 4px rgba(0,0,0,1)) !important;
+  background-color: var(--sub-bg-color, transparent) !important;
+  padding: var(--sub-window-padding, 0) !important;
+}
+.art-subtitle p {
+  margin: 0 !important;
+  background-color: var(--sub-window-color, transparent) !important;
+}

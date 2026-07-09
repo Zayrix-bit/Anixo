@@ -1,14 +1,16 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Artplayer from 'artplayer';
 import Hls from 'hls.js';
 import './artplayer-custom.css';
 import artplayerPluginChromecast from 'artplayer-plugin-chromecast';
+import SubtitleSettingsMenu from './SubtitleSettingsMenu';
 
 const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, onReady, initialTime = 0, className, autoSkip = false, skipTimes, videoQuality = 'best', onQualityChange, availableQualities = [] }) => {
     const artRef = useRef(null);
     const artInstance = useRef(null);
     const autoSkipRef = useRef(autoSkip);
+    const [showSubSettings, setShowSubSettings] = useState(false);
 
     // Keep ref in sync when the prop changes
     useEffect(() => {
@@ -206,6 +208,18 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                         player.subtitle.show = true;
                         player.setting.update({ name: 'subtitle-select', tooltip: item.html });
                     }
+                    return item.html;
+                },
+            });
+
+            // Add Customization button
+            customSettings.push({
+                name: 'subtitle-custom',
+                width: 250,
+                html: 'Subtitle Settings',
+                tooltip: 'Customize',
+                onSelect: function (item) {
+                    setShowSubSettings(true);
                     return item.html;
                 },
             });
@@ -653,7 +667,18 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
         };
     }, [src, poster, type, initialTime, autoSkip, skipTimes, videoQuality]);
 
-    return <div ref={artRef} className={className} style={{ width: '100%', height: '100%' }}></div>;
+    return (
+        <div style={{ position: 'relative', width: '100%', height: '100%' }} className={className}>
+            <div ref={artRef} style={{ width: '100%', height: '100%' }}></div>
+            {showSubSettings && (
+                <SubtitleSettingsMenu
+                    onClose={() => setShowSubSettings(false)}
+                    onBack={() => setShowSubSettings(false)}
+                    containerRef={artRef}
+                />
+            )}
+        </div>
+    );
 };
 
 export default ArtPlayer;
