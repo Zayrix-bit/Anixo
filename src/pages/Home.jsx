@@ -25,7 +25,6 @@ import EstimatedSchedule from "../components/home/EstimatedSchedule";
 import { removeProgress } from "../services/progressService";
 import ProgressAnimeCard from "../components/common/ProgressAnimeCard";
 import LiveComments from "../components/LiveComments";
-import CacheIssueBanner from "../components/common/CacheIssueBanner";
 
 export default function Home() {
   const { t } = useTranslation();
@@ -168,7 +167,6 @@ export default function Home() {
     <div className="min-h-screen text-white overflow-x-hidden relative bg-transparent">
       <div className="relative z-10">
         <Navbar />
-        <CacheIssueBanner />
         <h1 className="sr-only">Watch Free Anime Online with Sub & Dub in HD - AniXo</h1>
       <Hero data={trendingData?.media} isLoading={loadingTrending} />
 

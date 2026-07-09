@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { MessageSquare, Heart, Info, Tv } from "lucide-react";
+import { MessageSquare, Heart, Info, Tv, AlertTriangle } from "lucide-react";
 import ContactModal from "../common/ContactModal";
 import CacheGuideModal from "../common/CacheGuideModal";
+import CacheIssueBanner from "../common/CacheIssueBanner";
 import { AdBanner728x90, AdBanner300x250 } from "../common/AdBanner";
 import OnlineUsers from "../common/OnlineUsers";
 
@@ -11,6 +12,7 @@ export default function Footer() {
   const location = useLocation();
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isCacheGuideOpen, setIsCacheGuideOpen] = useState(false);
+  const [isCacheIssueModalOpen, setIsCacheIssueModalOpen] = useState(false);
 
   const footerLinks = [
     {
@@ -37,12 +39,14 @@ export default function Footer() {
         { name: "DMCA", path: "/dmca", icon: Info },
         { name: "Contact Us", onClick: () => setIsContactModalOpen(true) },
         { name: "Clear Cache Guide", onClick: () => setIsCacheGuideOpen(true), icon: Info },
+        { name: "Fix 'Failed to fetch' Error", onClick: () => setIsCacheIssueModalOpen(true), icon: AlertTriangle },
       ],
     },
   ];
 
   return (
     <>
+    
     {/* Responsive Ad Banner above Footer - Hidden on Portal page */}
     {location.pathname !== "/" && (
     <div className="w-full bg-[#0b0d12] border-t border-white/5 pt-2 pb-4">
@@ -228,6 +232,12 @@ export default function Footer() {
       <CacheGuideModal
         isOpen={isCacheGuideOpen}
         onClose={() => setIsCacheGuideOpen(false)}
+      />
+
+      <CacheIssueBanner
+        isOpen={isCacheIssueModalOpen}
+        onClose={() => setIsCacheIssueModalOpen(false)}
+        onOpenCacheGuide={() => setIsCacheGuideOpen(true)}
       />
     </footer>
     </>
