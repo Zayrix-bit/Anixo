@@ -330,6 +330,7 @@ export default function VideoPlayerSection({
  webkitallowfullscreen="true"
  mozallowfullscreen="true"
  scrolling="no"
+ sandbox="allow-scripts allow-same-origin allow-presentation allow-forms"
  allow="autoplay; fullscreen *; encrypted-media; picture-in-picture; xr-spatial-tracking; clipboard-write"
  />
  )}
