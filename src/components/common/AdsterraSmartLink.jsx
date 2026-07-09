@@ -1,77 +1,35 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 
-const ADSTERRA_SMART_LINK = "https://dependedunmoved.com/kyy99erhbc?key=644614ebc48ade4ce12a485a5a3cea3a";
+import { ADSTERRA_SMART_LINK } from '../../hooks/useAdsterraSmartLink';
 
 export function AdsterraSmartLinkBanner() {
-  const containerRef = useRef(null);
-  const loadedRef = useRef(false);
-
-  useEffect(() => {
-    if (loadedRef.current || !containerRef.current) return;
-    loadedRef.current = true;
-
-    const container = containerRef.current;
-    container.innerHTML = '';
-
-    // Create Adsterra-style ad unit
-    const adContainer = document.createElement('div');
-    adContainer.style.width = '100%';
-    adContainer.style.display = 'flex';
-    adContainer.style.justifyContent = 'center';
-
-    // Create a direct link button with Adsterra branding
-    const linkButton = document.createElement('a');
-    linkButton.href = ADSTERRA_SMART_LINK;
-    linkButton.target = "_blank";
-    linkButton.rel = "noopener noreferrer sponsored";
-    linkButton.style.textDecoration = 'none';
-    linkButton.style.width = '100%';
-    linkButton.style.maxWidth = '800px';
-
-    const bannerContent = document.createElement('div');
-    bannerContent.className = "w-full bg-gradient-to-r from-discord-900/20 via-discord-800/30 to-discord-900/20 border border-discord-600/30 rounded-lg p-6 text-center cursor-pointer hover:border-discord-500/50 transition-all duration-300 hover:scale-[1.02]";
-    
-    const sponsoredLabel = document.createElement('div');
-    sponsoredLabel.className = "text-[10px] uppercase tracking-widest text-white/30 mb-2";
-    sponsoredLabel.textContent = "Sponsored";
-
-    const title = document.createElement('h3');
-    title.className = "text-xl font-bold text-white mb-2";
-    title.textContent = "🔥 Exclusive Offer - Limited Time Only! 🔥";
-    
-    const subtitle = document.createElement('p');
-    subtitle.className = "text-sm text-white/70 mb-3";
-    subtitle.textContent = "Click now to discover amazing deals and content!";
-
-    const ctaButton = document.createElement('div');
-    ctaButton.className = "inline-block bg-discord-600 hover:bg-discord-700 text-white font-bold py-2 px-6 rounded-full text-sm transition-all duration-300 active:scale-95";
-    ctaButton.textContent = "Explore Now";
-
-    bannerContent.appendChild(sponsoredLabel);
-    bannerContent.appendChild(title);
-    bannerContent.appendChild(subtitle);
-    bannerContent.appendChild(ctaButton);
-    linkButton.appendChild(bannerContent);
-    adContainer.appendChild(linkButton);
-    container.appendChild(adContainer);
-
-    return () => {
-      loadedRef.current = false;
-    };
-  }, []);
-
   return (
-    <div className="w-full flex justify-center py-6 overflow-hidden">
-      <div ref={containerRef} className="w-full max-w-[1400px]" />
+    <div className="w-full flex justify-center py-6 px-4 overflow-hidden">
+      <div className="w-full max-w-[800px]">
+        <a 
+          href={ADSTERRA_SMART_LINK}
+          target="_blank"
+          rel="noopener noreferrer sponsored"
+          className="block w-full bg-[#090a0f] border-2 border-white/5 hover:border-white/20 p-8 md:p-10 text-center cursor-pointer transition-all duration-300 group"
+        >
+          <div className="text-[10px] uppercase font-black tracking-[0.4em] text-white/10 mb-4 group-hover:text-red-500/50 transition-colors">
+            AD // REALITY CHECK
+          </div>
+          
+          <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tighter text-white mb-2">
+            You Get 0 Bitches.
+          </h3>
+          
+          <p className="text-sm md:text-base text-white/40 mb-6 font-medium max-w-md mx-auto">
+            Your posture is terrible, your sleep schedule is ruined, and your waifu isn't real. Click this link so we can at least profit off your pathetic existence.
+          </p>
+          
+          <div className="inline-block bg-white text-black hover:bg-gray-200 font-black uppercase tracking-widest py-3 px-8 rounded-sm text-xs transition-transform duration-300 active:scale-95 group-hover:-translate-y-1">
+            Accept Reality
+          </div>
+        </a>
+      </div>
     </div>
   );
 }
-
-// Hook to open smart link programmatically (e.g., on episode change)
-export function useAdsterraSmartLink() {
-  const openSmartLink = () => {
-    window.open(ADSTERRA_SMART_LINK, "_blank", "noopener,noreferrer");
-  };
-
-  return { openSmartLink };
-}
+

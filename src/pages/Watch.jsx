@@ -33,7 +33,8 @@ import ShareBanner from "../components/common/ShareBanner";
 import ReportModal from "../components/watch/ReportModal";
 import VideoPlayerSection from "../components/watch/VideoPlayerSection";
 import { AdBanner300x250 } from "../components/common/AdBanner";
-import { useAdsterraSmartLink, AdsterraSmartLinkBanner } from "../components/common/AdsterraSmartLink";
+import { AdsterraSmartLinkBanner } from "../components/common/AdsterraSmartLink";
+import { useAdsterraSmartLink } from "../hooks/useAdsterraSmartLink";
 
 
 export default function Watch() {
