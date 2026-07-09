@@ -10,9 +10,9 @@ export function AdsterraSmartLinkBanner() {
           href={ADSTERRA_SMART_LINK}
           target="_blank"
           rel="noopener noreferrer sponsored"
-          className="block w-full bg-[#090a0f] border-2 border-white/5 hover:border-white/20 p-8 md:p-10 text-center cursor-pointer transition-all duration-300 group"
+          className="block w-full border border-white/10 p-8 md:p-10 text-center cursor-pointer"
         >
-          <div className="text-[10px] uppercase font-black tracking-[0.4em] text-white/10 mb-4 group-hover:text-red-500/50 transition-colors">
+          <div className="text-[10px] uppercase font-bold tracking-[0.4em] text-white/20 mb-4">
             AD // REALITY CHECK
           </div>
           
@@ -20,11 +20,11 @@ export function AdsterraSmartLinkBanner() {
             You Get 0 Bitches.
           </h3>
           
-          <p className="text-sm md:text-base text-white/40 mb-6 font-medium max-w-md mx-auto">
+          <p className="text-sm md:text-base text-white/40 mb-8 font-medium max-w-md mx-auto">
             Your posture is terrible, your sleep schedule is ruined, and your waifu isn't real. Click this link so we can at least profit off your pathetic existence.
           </p>
           
-          <div className="inline-block bg-white text-black hover:bg-gray-200 font-black uppercase tracking-widest py-3 px-8 rounded-sm text-xs transition-transform duration-300 active:scale-95 group-hover:-translate-y-1">
+          <div className="inline-block bg-white text-black font-black uppercase tracking-widest py-3 px-8 text-xs">
             Accept Reality
           </div>
         </a>
