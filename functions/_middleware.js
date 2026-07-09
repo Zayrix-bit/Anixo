@@ -1,7 +1,7 @@
 // Cloudflare Pages Function: Proxies backend API routes to HuggingFace Space
 // This replaces Vercel's rewrites in vercel.json
 
-const BACKEND_URL = 'https://backend-core-backend-core.hf.space';
+// Backend URL is now pulled from Cloudflare Environment Variables (context.env.VITE_BACKEND_API)
 
 // Routes that should be proxied to the backend
 const PROXY_PATHS = ['/auth', '/watchlist', '/progress', '/settings', '/notifications', '/users', '/ai', '/community'];
@@ -39,8 +39,9 @@ export async function onRequest(context) {
     });
   }
 
-  // Build target URL
-  const targetUrl = `${BACKEND_URL}${url.pathname}${url.search}`;
+  // Build target URL using environment variable
+  const backendUrl = context.env.VITE_BACKEND_API;
+  const targetUrl = `${backendUrl}${url.pathname}${url.search}`;
 
   // Clone headers, remove host
   const headers = new Headers(context.request.headers);

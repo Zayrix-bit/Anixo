@@ -3,7 +3,7 @@ import { Play, Search, Tags, ArrowLeft, Star, Eye, ThumbsUp, X, Loader2, Chevron
 import { AdBanner728x90, AdBanner300x250, AdNativeBanner } from '../components/common/AdBanner';
 import { AdsterraSmartLinkBanner } from '../components/common/AdsterraSmartLink';
 
-const API_URL = 'https://allanime-hent.hf.space/api';
+const API_URL = import.meta.env.VITE_NSFW_API;
 
 const SkeletonCard = () => (
  <div className="group glass-panel border border-[#2a2a35] bg-[#1c1c24] overflow-hidden flex flex-col animate-pulse h-full">
