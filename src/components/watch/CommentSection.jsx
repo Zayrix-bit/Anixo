@@ -13,9 +13,33 @@ const gf = new GiphyFetch(import.meta.env.VITE_GIPHY_API_KEY);
 
 const GifPicker = ({ onGifClick, onClose }) => {
     const [searchTerm, setSearchTerm] = useState("");
-    const fetchGifs = (offset) => {
-        if (searchTerm) return gf.search(searchTerm, { offset, limit: 10 });
-        return gf.trending({ offset, limit: 10 });
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(searchTerm);
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [searchTerm]);
+
+    const fetchGifs = async (offset) => {
+        const cacheKey = `giphy_cache_${debouncedSearch || 'trending'}_${offset}`;
+        const cached = sessionStorage.getItem(cacheKey);
+        if (cached) {
+            try { 
+                return JSON.parse(cached); 
+            } catch (e) { 
+                console.error("Failed to parse cached gifs:", e);
+                sessionStorage.removeItem(cacheKey);
+            }
+        }
+
+        const res = debouncedSearch 
+            ? await gf.search(debouncedSearch, { offset, limit: 10 }) 
+            : await gf.trending({ offset, limit: 10 });
+        
+        sessionStorage.setItem(cacheKey, JSON.stringify(res));
+        return res;
     };
 
     return (
@@ -32,7 +56,7 @@ const GifPicker = ({ onGifClick, onClose }) => {
             </div>
             <div className="h-[250px] overflow-y-auto rounded-lg custom-scrollbar relative z-10">
                 <Grid 
-                    key={searchTerm}
+                    key={debouncedSearch}
                     width={230} 
                     columns={2} 
                     fetchGifs={fetchGifs} 
