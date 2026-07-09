@@ -405,7 +405,7 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                                     html: item.height ? `${item.height}p` : 'Auto',
                                     url: url,
                                     level: index,
-                                    default: index === 0,
+                                    default: false, // Fix: Don't set true here so it doesn't double-tick
                                 }));
 
                                 // Add Auto option
@@ -428,6 +428,19 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                                         return item.html;
                                     },
                                 });
+                            }
+                        });
+
+                        // Show current auto quality in tooltip
+                        hls.on(Hls.Events.LEVEL_SWITCHED, function (event, data) {
+                            if (art.hls.autoLevelEnabled) {
+                                const currentLevel = hls.levels[data.level];
+                                if (currentLevel && currentLevel.height) {
+                                    art.setting.update({
+                                        name: 'quality',
+                                        tooltip: `Auto (${currentLevel.height}p)`
+                                    });
+                                }
                             }
                         });
                     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
