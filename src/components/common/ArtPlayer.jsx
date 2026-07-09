@@ -541,13 +541,17 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
                 const isOP = skipTimes.op && currentTime >= skipTimes.op[0] && currentTime < skipTimes.op[1];
                 const isED = skipTimes.ed && currentTime >= skipTimes.ed[0] && currentTime < skipTimes.ed[1];
 
+                // Only show button for the first 12 seconds of the intro/outro so it doesn't block the screen permanently
+                const showOP = isOP && (currentTime <= skipTimes.op[0] + 12);
+                const showED = isED && (currentTime <= skipTimes.ed[0] + 12);
+
                 // Show/Hide Manual Skip Button
                 if (art.layers.skipButton) {
-                    art.layers.skipButton.style.display = (isOP || isED) ? 'block' : 'none';
-                    if (isOP || isED) {
+                    art.layers.skipButton.style.display = (showOP || showED) ? 'block' : 'none';
+                    if (showOP || showED) {
                         const textSpan = art.layers.skipButton.querySelector('.skip-text');
                         if (textSpan) {
-                            textSpan.textContent = isOP ? 'Skip Intro' : 'Skip Outro';
+                            textSpan.textContent = showOP ? 'Skip Intro' : 'Skip Outro';
                         }
                     }
                 }
