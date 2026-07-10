@@ -282,6 +282,15 @@
   }
 }
 
+/* Guarantee instant hide when the user manually taps, even in fullscreen mode */
+.plyr--video.plyr--hide-controls.force-hide-controls .plyr__controls {
+  animation: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(100%) !important;
+  transition: opacity 0.2s ease, transform 0.2s ease !important;
+}
+
 .plyr__controls button[data-plyr="play"] {
   margin-left: -6px !important;
 }
