@@ -199,14 +199,14 @@ export default function PublicProfile() {
  {/* Name & Meta */}
  <div className="flex-1 text-center mb-1 md:mb-3">
  <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black tracking-tight text-white mb-0.5 sm:mb-1 flex items-center flex-wrap gap-2">
- {profile.displayName || profile.profileId || profile.username}
+ {profile.displayName || profile.username}
  {profile.profileId === 'c34e7bbb' && (
  <span className="px-2 py-0.5 bg-rose-600 text-white text-[10px] md:text-[12px] font-black uppercase tracking-wider rounded border border-rose-500/50 leading-none mt-1">RANDI KA BACCHA</span>
  )}
  </h1>
  <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 sm:gap-3 text-white/50 text-[11px] sm:text-xs font-medium">
  <span className="flex items-center gap-1">
- <User size={12} className="sm:w-3.5 sm:h-3.5" /> @{profile.profileId || profile.username}
+ <User size={12} className="sm:w-3.5 sm:h-3.5" /> @{(profile.displayName && profile.displayName !== profile.username) ? profile.profileId : profile.username}
  </span>
  <span className="flex items-center gap-1">
  <Calendar size={12} className="sm:w-3.5 sm:h-3.5" /> {new Date(profile.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
