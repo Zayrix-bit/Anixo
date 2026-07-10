@@ -260,14 +260,7 @@
   align-items: center !important;
 }
 
-/* Extend Plyr's default 2s hide timeout to 4s using a 2s CSS delay, 
-   except when manually hidden by the user (.force-hide-controls) */
-.plyr--video.plyr--hide-controls:not(.force-hide-controls) .plyr__controls {
-  opacity: 1 !important;
-  pointer-events: auto !important;
-  transform: translateY(0) !important;
-  animation: plyrCustomDelayHide 0.3s ease 2s forwards !important;
-}
+/* Plyr's default 2s auto-hide is used as-is.\n   The force-hide-controls class below handles instant manual hide. */
 
 @keyframes plyrCustomDelayHide {
   0% {
