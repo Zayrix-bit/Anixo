@@ -719,7 +719,7 @@ export default function Watch() {
  <span className="w-1 h-6 bg-discord-600 rounded-full inline-block"></span>
  {t('watch.recommendations', 'You May Also Like')}
  </h3>
- <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-5">
+ <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
  {recommendations.slice((recPage - 1) * 12, recPage * 12).map((recAnime) => (
  <AnimeCard key={recAnime.id} anime={recAnime} />
  ))}

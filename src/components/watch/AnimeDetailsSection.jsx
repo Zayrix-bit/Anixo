@@ -68,50 +68,50 @@ export default function AnimeDetailsSection({
           </div>
 
           {/* Grid Info */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-8 text-[13px] mb-8">
+          <div className="flex flex-col sm:grid sm:grid-cols-2 gap-y-3 gap-x-6 text-[13px] mb-8">
             <div className="flex items-start gap-2">
-              <span className="text-white/60 font-medium min-w-[70px]">{t('details.country')}</span>
-              <span className="text-white/90">{resolvedInfo.country || 'Unknown'}</span>
+              <span className="text-white/60 font-medium min-w-[85px] shrink-0">{t('details.country')}</span>
+              <span className="text-white/90 break-words">{resolvedInfo.country || 'Unknown'}</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-white/60 font-medium min-w-[85px]">{t('details.premiered')}</span>
-              <span className="text-white/90 capitalize">{resolvedInfo.premiered || 'Unknown'}</span>
+              <span className="text-white/60 font-medium min-w-[85px] shrink-0">{t('details.premiered')}</span>
+              <span className="text-white/90 capitalize break-words">{resolvedInfo.premiered || 'Unknown'}</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-white/60 font-medium min-w-[70px]">{t('details.dateAired')}</span>
-              <span className="text-white/90">{resolvedInfo.aired || '?'}</span>
+              <span className="text-white/60 font-medium min-w-[85px] shrink-0">{t('details.dateAired')}</span>
+              <span className="text-white/90 break-words">{resolvedInfo.aired || '?'}</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-white/60 font-medium min-w-[70px]">{t('details.episodes')}</span>
-              <span className="text-white/90">{resolvedInfo.episodes || '?'}</span>
+              <span className="text-white/60 font-medium min-w-[85px] shrink-0">{t('details.episodes')}</span>
+              <span className="text-white/90 break-words">{resolvedInfo.episodes || '?'}</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-white/60 font-medium min-w-[85px]">{t('details.duration')}</span>
-              <span className="text-white/90">{resolvedInfo.duration || '?'}</span>
+              <span className="text-white/60 font-medium min-w-[85px] shrink-0">{t('details.duration')}</span>
+              <span className="text-white/90 break-words">{resolvedInfo.duration || '?'}</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-white/60 font-medium min-w-[70px]">{t('details.status')}</span>
-              <span className="text-white/90 capitalize">{resolvedInfo.status || '?'}</span>
+              <span className="text-white/60 font-medium min-w-[85px] shrink-0">{t('details.status')}</span>
+              <span className="text-white/90 capitalize break-words">{resolvedInfo.status || '?'}</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-white/60 font-medium min-w-[85px]">{t('details.malScore')}</span>
-              <span className="text-white/90">{resolvedInfo.mal_score || '?'}</span>
+              <span className="text-white/60 font-medium min-w-[85px] shrink-0">{t('details.malScore')}</span>
+              <span className="text-white/90 break-words">{resolvedInfo.mal_score || '?'}</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-white/60 font-medium min-w-[70px]">{t('details.links')}</span>
-              <div className="flex items-center gap-1">
+              <span className="text-white/60 font-medium min-w-[85px] shrink-0">{t('details.links')}</span>
+              <div className="flex items-center gap-1 flex-wrap">
                 {anime.idMal && <a href={`https://myanimelist.net/anime/${anime.idMal}`} target="_blank" rel="noreferrer" className="text-white font-bold hover:text-discord-500 transition-colors">{t('details.mal')}</a>}
                 {anime.idMal && <span className="text-white/90">,</span>}
                 {anime.id && <a href={`https://anilist.co/anime/${anime.id}`} target="_blank" rel="noreferrer" className="text-white font-bold hover:text-discord-500 transition-colors ml-1">AL</a>}
               </div>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-white/60 font-medium min-w-[85px]">{t('details.studios')}</span>
+              <span className="text-white/60 font-medium min-w-[85px] shrink-0">{t('details.studios')}</span>
               <span className="text-white/90 truncate">{resolvedInfo.studios || "N/A"}</span>
             </div>
             <div className="flex items-start gap-2 sm:col-span-2">
-              <span className="text-white/60 font-medium min-w-[70px]">{t('details.producers')}</span>
-              <span className="text-white/90 line-clamp-1">{resolvedInfo.producers || "N/A"}</span>
+              <span className="text-white/60 font-medium min-w-[85px] shrink-0">{t('details.producers')}</span>
+              <span className="text-white/90 break-words">{resolvedInfo.producers || "N/A"}</span>
             </div>
           </div>
 

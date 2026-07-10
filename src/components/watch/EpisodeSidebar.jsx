@@ -133,17 +133,20 @@ export default function EpisodeSidebar({
 
 
           {episodeLayout === "grid" && (
-            <div className="flex flex-wrap gap-2 lg:gap-2.5">
+            <div 
+              className="gap-2 lg:gap-2.5" 
+              style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(42px, 1fr))' }}
+            >
               {currentSlice.map(ep => (
                 <button
                   key={ep}
                   onClick={() => setActiveEpisode(ep)}
-                  className={`w-10 h-10 lg:w-11 lg:h-11 flex shrink-0 items-center justify-center text-[12px] font-bold transition-colors rounded-[4px] ${
+                  className={`aspect-square w-full flex items-center justify-center text-[12px] font-bold transition-colors rounded-[4px] ${
                     activeEpisode === ep
-                      ? "bg-discord-600 text-white"
+                      ? "bg-discord-600 text-white shadow-md shadow-discord-600/20"
                       : watchedEpisodes.includes(ep)
                         ? "bg-[#1a1a1a] text-white/30 hover:bg-[#2a2a2a] hover:text-white"
-                        : "bg-[#2a2a2a] text-white/90 hover:bg-white hover:text-black"
+                        : "bg-[#2a2a2a] text-white/90 hover:bg-white hover:text-black hover:shadow-lg"
                   }`}
                 >
                   {ep}
