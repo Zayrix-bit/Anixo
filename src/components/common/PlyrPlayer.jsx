@@ -119,11 +119,15 @@ const PlyrPlayer = ({
           let lastClickTime = 0;
           let clickTimeout = null;
           
-          // Prevent Plyr's native dblclick (which toggles fullscreen)
-          wrapper.addEventListener('dblclick', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          });
+          // Prevent Plyr's native dblclick (which toggles fullscreen) robustly
+          const container = plyrRef.current.elements.container;
+          if (container) {
+            container.addEventListener('dblclick', (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              e.stopImmediatePropagation();
+            }, true); // Use capture phase to intercept before Plyr
+          }
 
           wrapper.addEventListener('click', (e) => {
             const currentTime = new Date().getTime();
