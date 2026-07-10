@@ -19,10 +19,15 @@
 
 @media (max-width: 480px) {
   .custom-plyr-menu-wrapper {
-    bottom: 50px;
-    right: 10px;
-    width: 170px;
-    height: 190px !important;
+    bottom: 45px;
+    right: 8px;
+    width: 145px;
+    height: 135px !important;
+    max-height: calc(100% - 60px) !important;
+  }
+  .custom-plyr-list button {
+    font-size: 10px !important;
+    padding: 6px 10px;
   }
 }
 

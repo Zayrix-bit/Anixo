@@ -248,10 +248,14 @@
 /* The controls wrapper layout (Flex wrap for full width progress bar) */
 .plyr--video .plyr__controls {
   background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0) 100%) !important;
-  padding: 50px 20px 15px !important;
+  padding: 50px 4px 15px !important;
   transition: opacity 0.3s ease, background 0.3s ease !important;
   flex-wrap: wrap !important;
   align-items: center !important;
+}
+
+.plyr__controls button[data-plyr="play"] {
+  margin-left: -6px !important;
 }
 
 /* Large play button styling (Glassmorphism) */
@@ -398,10 +402,18 @@
 
 @media (max-width: 480px) {
   .sub-settings-modal {
-    bottom: 50px;
-    right: 10px;
-    width: 170px;
-    height: 190px !important;
+    bottom: 45px;
+    right: 8px;
+    width: 145px;
+    height: 135px !important;
+    max-height: calc(100% - 60px) !important;
+  }
+  .sub-settings-item, .sub-settings-option {
+    font-size: 10px !important;
+    padding: 6px 8px;
+  }
+  .sub-settings-val {
+    font-size: 8.5px !important;
   }
 }
 
@@ -698,8 +710,18 @@ button[data-plyr="fast-forward"]::after {
   /* Let Plyr handle the native wrap (Progress bar on top, controls on bottom) */
   
   .plyr {
-    --plyr-control-icon-size: 18px !important; /* Scale down from 24px desktop */
-    --plyr-control-spacing: 5px !important; /* Slightly tighter than desktop */
+    --plyr-control-icon-size: 20px !important; /* Slightly larger for easier tapping */
+    --plyr-control-spacing: 16px !important; /* Significantly increase gap between icons on mobile */
+  }
+
+  /* Push controls to the extreme corners on mobile */
+  .plyr--video .plyr__controls {
+    padding: 30px 4px 10px !important;
+  }
+
+  /* Force Play button to the absolute left edge */
+  .plyr__controls button[data-plyr="play"] {
+    margin-left: -6px !important;
   }
 
   .plyr__time {
