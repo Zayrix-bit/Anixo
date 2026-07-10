@@ -107,6 +107,9 @@ const PlyrPlayer = ({
         let lastControlsShownTime = 0;
         plyrRef.current.on('controlsshown', () => {
           lastControlsShownTime = Date.now();
+          if (plyrRef.current.elements.container) {
+            plyrRef.current.elements.container.classList.remove('force-hide-controls');
+          }
         });
 
         // Custom tap handling (Single tap to toggle controls, Double tap to seek)
@@ -144,6 +147,7 @@ const PlyrPlayer = ({
                   // event JUST showed them due to this tap. We should keep them shown.
                   // If they were already showing for a while, this tap is meant to hide them.
                   if (Date.now() - lastControlsShownTime > 500) {
+                    plyrRef.current.elements.container.classList.add('force-hide-controls');
                     plyrRef.current.toggleControls(false);
                   }
                 }
