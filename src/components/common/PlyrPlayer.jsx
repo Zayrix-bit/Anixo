@@ -147,6 +147,26 @@ const PlyrPlayer = ({
         setActiveSkip(currentSkipSegment);
       });
 
+      plyrRef.current.on('enterfullscreen', () => {
+        try {
+          if (window.screen && window.screen.orientation && window.screen.orientation.lock) {
+            window.screen.orientation.lock('landscape').catch((e) => console.log('Orientation lock error:', e));
+          }
+        } catch (error) {
+          console.log('Orientation API not supported', error);
+        }
+      });
+
+      plyrRef.current.on('exitfullscreen', () => {
+        try {
+          if (window.screen && window.screen.orientation && window.screen.orientation.unlock) {
+            window.screen.orientation.unlock();
+          }
+        } catch (error) {
+          console.log('Orientation unlock error', error);
+        }
+      });
+
       if (propsRef.current.onReady) propsRef.current.onReady();
     };
 
