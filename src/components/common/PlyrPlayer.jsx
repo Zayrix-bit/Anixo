@@ -30,6 +30,8 @@ const PlyrPlayer = ({
   const [plyrContainer, setPlyrContainer] = useState(null);
   const [plyrInstance, setPlyrInstance] = useState(null);
   const [hlsInstance, setHlsInstance] = useState(null);
+  const [duration, setDuration] = useState(0);
+  const [progressContainer, setProgressContainer] = useState(null);
 
   // Keep latest props in a ref so they don't trigger re-initialization
   const propsRef = useRef({ onEnded, onReady, onTimeUpdate, skipTimes, subtitles });
@@ -95,6 +97,12 @@ const PlyrPlayer = ({
             setShowCustomMenu(prev => !prev);
             setShowSubtitleSettings(false);
           });
+        }
+        
+        const progress = container.querySelector('.plyr__progress');
+        if (progress && !progress.dataset.markerBound) {
+          progress.dataset.markerBound = 'true';
+          setProgressContainer(progress);
         }
       };
 
@@ -196,6 +204,13 @@ const PlyrPlayer = ({
 
       plyrRef.current.on('ended', () => {
         if (propsRef.current.onEnded) propsRef.current.onEnded();
+      });
+      
+      plyrRef.current.on('loadedmetadata', () => {
+        setDuration(plyrRef.current.duration);
+      });
+      plyrRef.current.on('durationchange', () => {
+        setDuration(plyrRef.current.duration);
       });
       
       plyrRef.current.on('timeupdate', () => {
@@ -373,6 +388,24 @@ const PlyrPlayer = ({
           </svg>
         </div>,
         plyrContainer
+      )}
+      
+      {progressContainer && duration > 0 && skipTimes && createPortal(
+        <>
+          {skipTimes.op && (
+            <div className="skip-marker op-marker" style={{
+              left: `${(skipTimes.op[0] / duration) * 100}%`,
+              width: `${((skipTimes.op[1] - skipTimes.op[0]) / duration) * 100}%`
+            }} />
+          )}
+          {skipTimes.ed && (
+            <div className="skip-marker ed-marker" style={{
+              left: `${(skipTimes.ed[0] / duration) * 100}%`,
+              width: `${((skipTimes.ed[1] - skipTimes.ed[0]) / duration) * 100}%`
+            }} />
+          )}
+        </>,
+        progressContainer
       )}
     </div>
   );

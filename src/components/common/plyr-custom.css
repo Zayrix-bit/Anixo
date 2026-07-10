@@ -360,6 +360,8 @@
 .plyr--full-ui input[type=range] {
   height: 4px !important;
   transition: height 0.2s ease !important;
+  z-index: 20; /* Keep slider above markers */
+  position: relative;
 }
 
 .plyr__progress__container:hover input[type=range] {
@@ -374,6 +376,31 @@
 
 .plyr__progress__container:hover input[type=range]::-webkit-slider-thumb {
   transform: scale(1);
+}
+
+/* AniSkip Timeline Markers */
+.skip-marker {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 4px; /* Matches default progress bar height */
+  pointer-events: none;
+  z-index: 10;
+  border-radius: 2px;
+  opacity: 0.8;
+  transition: height 0.2s ease;
+}
+
+.plyr__progress__container:hover .skip-marker {
+  height: 6px; /* Matches hovered progress bar height */
+}
+
+.op-marker {
+  background-color: #26de81; /* Greenish/Mint for Intro */
+}
+
+.ed-marker {
+  background-color: #fc5c65; /* Red/Coral for Outro */
 }
 
 /* Time formatting (00:00 / 24:00) and Spacing */
