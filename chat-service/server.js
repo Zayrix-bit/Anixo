@@ -41,6 +41,10 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', service: 'chat-service' });
 });
 
+app.get('/', (req, res) => {
+  res.json({ status: 'ok', service: 'chat-service', message: 'Anigo Chat Service is running successfully!' });
+});
+
 // Database Connection
 const connectDB = async () => {
   try {

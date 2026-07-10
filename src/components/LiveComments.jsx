@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import { Clock } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -10,22 +10,25 @@ const LiveComments = () => {
   const [comments, setComments] = useState([]);
   const [animeTitles, setAnimeTitles] = useState({});
 
-  const fetchAnimeTitles = async (newComments) => {
-    newComments.forEach(async (comment) => {
-      if (!comment.animeId || animeTitles[comment.animeId]) return;
-      try {
-        const details = await getAnimeDetails(comment.animeId);
-        setAnimeTitles((prev) => ({
-          ...prev,
-          [comment.animeId]: details?.title?.english || details?.title?.romaji || details?.title?.native || `Anime ${comment.animeId}`
-        }));
-      } catch (err) {
-        // Silent fail
-      }
-    });
-  };
-
   useEffect(() => {
+    const fetchedAnimeIds = new Set();
+
+    const fetchAnimeTitles = (newComments) => {
+      newComments.forEach(async (comment) => {
+        if (!comment.animeId || fetchedAnimeIds.has(comment.animeId)) return;
+        fetchedAnimeIds.add(comment.animeId);
+        try {
+          const details = await getAnimeDetails(comment.animeId);
+          setAnimeTitles((prev) => ({
+            ...prev,
+            [comment.animeId]: details?.title?.english || details?.title?.romaji || details?.title?.native || `Anime ${comment.animeId}`
+          }));
+        } catch {
+          fetchedAnimeIds.delete(comment.animeId);
+        }
+      });
+    };
+
     const socket = io(SOCKET_URL);
 
     socket.on("global_new_comment", (comment) => {
@@ -43,7 +46,7 @@ const LiveComments = () => {
         const data = await res.json();
         setComments(data || []);
         fetchAnimeTitles(data || []);
-      } catch (err) {
+      } catch {
         // Silent fail
       }
     };

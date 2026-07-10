@@ -13,7 +13,6 @@ export default function Admin() {
   const location = useLocation();
   
   const [onlineStats, setOnlineStats] = useState({ total: 0, registered: 0, guests: 0, users: [] });
-  const [isConnected, setIsConnected] = useState(false);
 
   const navItems = [
     { id: "profile", label: "Profile", icon: User, path: "/profile" },
@@ -36,7 +35,6 @@ export default function Admin() {
     const socket = io(import.meta.env.VITE_ONLINE_SERVER_URL || 'http://localhost:7861');
     
     socket.on('connect', () => {
-      setIsConnected(true);
       socket.emit('identify-user', {
         isRegistered: true,
         isAdmin: true,
@@ -48,7 +46,6 @@ export default function Admin() {
     });
 
     socket.on('disconnect', () => {
-      setIsConnected(false);
     });
 
     socket.on('online-count', (stats) => {

@@ -10,6 +10,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Root endpoint to prevent "Cannot GET /" on Hugging Face Spaces
+app.get('/', (req, res) => {
+  res.json({ status: "ok", message: "Anigo Online Server is running successfully!" });
+});
+
 // Create HTTP server
 const server = http.createServer(app);
 
@@ -74,7 +79,7 @@ function getUniqueCounts() {
 }
 
 // Helper function to get counts for a specific user (ALWAYS REAL NOW!)
-function getCountsForUser(isAdmin) {
+function getCountsForUser() {
   const uniqueCounts = getUniqueCounts();
 
   return {
@@ -89,8 +94,7 @@ function getCountsForUser(isAdmin) {
 function broadcastCounts() {
   // Emit to each connected socket individually
   io.sockets.sockets.forEach((socket) => {
-    const isAdmin = onlineUsers.admins.has(socket.id);
-    socket.emit('online-count', getCountsForUser(isAdmin));
+    socket.emit('online-count', getCountsForUser());
   });
 }
 

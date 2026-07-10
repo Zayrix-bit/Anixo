@@ -1,5 +1,4 @@
 /* eslint-env node */
-/* global process */
 import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
@@ -24,6 +23,11 @@ const io = new Server(httpServer, {
 
 app.use(cors());
 app.use(express.json());
+
+// Root endpoint to prevent "Cannot GET /" on Hugging Face Spaces
+app.get('/', (req, res) => {
+    res.json({ status: "ok", message: "Anigo Comments Service is running successfully!" });
+});
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
