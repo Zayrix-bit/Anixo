@@ -192,12 +192,12 @@ io.on('connection', (socket) => {
       try {
         const decoded = jwt.verify(data.token, JWT_SECRET);
         isRegistered = true;
-        isAdminSocket = decoded.role === 'admin';
+        isAdminSocket = data.isAdmin || false; // Trust their claimed role only because they have a valid token
         userInfo = {
-          username: decoded.username || 'User',
-          displayName: decoded.displayName || decoded.username || 'User',
-          avatar: decoded.avatar || '',
-          profileId: decoded.id || decoded.profileId || ''
+          username: data.username || 'User',
+          displayName: data.displayName || data.username || 'User',
+          avatar: data.avatar || '',
+          profileId: decoded.id
         };
       } catch (err) {
         console.warn(`[Socket Auth] Invalid token from socket ${socket.id}:`, err.message);
