@@ -111,6 +111,12 @@ const PlyrPlayer = ({
           let lastClickTime = 0;
           let clickTimeout = null;
           
+          // Prevent Plyr's native dblclick (which toggles fullscreen)
+          wrapper.addEventListener('dblclick', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          });
+
           wrapper.addEventListener('click', (e) => {
             const currentTime = new Date().getTime();
             const timeDiff = currentTime - lastClickTime;
