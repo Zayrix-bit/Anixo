@@ -74,7 +74,9 @@ const PlyrPlayer = ({
         },
         i18n: { qualityLabel: { 0: 'Auto' } },
         keyboard: { focused: true, global: true },
-        tooltips: { controls: true, seek: true }
+        tooltips: { controls: true, seek: true },
+        doubleClick: { togglesFullscreen: false },
+        clickToPlay: false
       });
       setPlyrInstance(plyrRef.current);
 
@@ -100,6 +102,40 @@ const PlyrPlayer = ({
         injectSetting();
         if (plyrRef.current && plyrRef.current.elements.container) {
           setPlyrContainer(plyrRef.current.elements.container);
+        }
+
+        // Custom tap handling (Single tap to toggle controls, Double tap to seek)
+        const wrapper = plyrRef.current.elements.wrapper;
+        if (wrapper && !wrapper.dataset.dblclickBound) {
+          wrapper.dataset.dblclickBound = 'true';
+          let lastClickTime = 0;
+          let clickTimeout = null;
+          
+          wrapper.addEventListener('click', (e) => {
+            const currentTime = new Date().getTime();
+            const timeDiff = currentTime - lastClickTime;
+            
+            if (timeDiff > 0 && timeDiff < 300) {
+              // Double click detected
+              clearTimeout(clickTimeout);
+              const rect = wrapper.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              if (x < rect.width / 2) {
+                plyrRef.current.rewind(10);
+              } else {
+                plyrRef.current.forward(10);
+              }
+            } else {
+              // Single click (wait to see if it becomes a double click)
+              clickTimeout = setTimeout(() => {
+                if (plyrRef.current && plyrRef.current.elements.container) {
+                  const isHidden = plyrRef.current.elements.container.classList.contains('plyr--hide-controls');
+                  plyrRef.current.toggleControls(isHidden);
+                }
+              }, 300);
+            }
+            lastClickTime = currentTime;
+          });
         }
       });
 
