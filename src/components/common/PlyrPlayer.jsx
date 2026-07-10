@@ -263,20 +263,18 @@ const PlyrPlayer = ({
 
     if (isHls && Hls.isSupported()) {
       const hls = new Hls({
-        maxBufferLength: 60, // Aim to keep 60 seconds buffered
-        maxMaxBufferLength: 600, // Hard limit of 10 minutes (to avoid memory bloat)
-        maxBufferSize: 60 * 1024 * 1024, // Up to 60MB of RAM for buffer
-        enableWorker: true, // Use background thread for parsing (no lag)
+        maxBufferLength: 60, // Keep 60s buffered ahead
+        maxMaxBufferLength: 600, // Hard limit to avoid memory bloat
+        maxBufferSize: 60 * 1024 * 1024, // Max 60MB RAM usage
+        enableWorker: true,
         lowLatencyMode: false,
-        
-        // --- SLOW INTERNET OPTIMIZATIONS ---
-        capLevelToPlayerSize: true, // Prevent loading 1080p if screen is small (saves huge data on mobile)
-        startLevel: -1, // Always start in Auto mode to gauge user speed first
-        fragLoadingTimeOut: 20000, // Give slow internet 20 seconds to load a chunk instead of failing early
-        fragLoadingMaxRetry: 6, // Retry 6 times instead of default 4 before throwing error
-        fragLoadingRetryDelay: 1000, // Wait 1 second between retries
+        // Safe Slow Internet Optimizations
+        fragLoadingTimeOut: 20000, 
+        fragLoadingMaxRetry: 6, 
+        fragLoadingRetryDelay: 1000, 
         levelLoadingTimeOut: 20000,
         levelLoadingMaxRetry: 6,
+        // Removed capLevelToPlayerSize as it can break video if player size is temporarily 0 during render
       });
       hlsRef.current = hls;
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -292,13 +290,22 @@ const PlyrPlayer = ({
         initPlyr();
       });
 
+      let networkErrorCount = 0;
       hls.on(Hls.Events.ERROR, (event, data) => {
         if (data.fatal) {
           switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
-              hls.startLoad();
+              if (networkErrorCount < 5) {
+                networkErrorCount++;
+                console.warn(`HLS Network Error, retrying... (${networkErrorCount}/5)`);
+                hls.startLoad();
+              } else {
+                console.error("HLS Network Error limit reached.");
+                hls.destroy(); // Give up to prevent infinite freeze
+              }
               break;
             case Hls.ErrorTypes.MEDIA_ERROR:
+              console.warn("HLS Media Error, attempting recovery...");
               hls.recoverMediaError();
               break;
             default:
