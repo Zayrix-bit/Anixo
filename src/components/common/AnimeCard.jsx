@@ -90,10 +90,10 @@ export default function AnimeCard({ anime }) {
  )}
 
  {/* Poster Container */}
- <div className="relative w-full aspect-[2/3] overflow-hidden rounded-2xl bg-[#181818] border border-white/15 shadow-lg group-hover:shadow-2xl transition-[transform,shadow] duration-500 group-hover:-translate-y-1" style={{ transform: 'translateZ(0)' }}>
+ <div className="relative w-full aspect-[2/3] overflow-hidden rounded-2xl border border-white/15 shadow-lg group-hover:shadow-2xl transition-[transform,shadow] duration-500 group-hover:-translate-y-1" style={{ backgroundColor: anime.color || '#181818', transform: 'translateZ(0)' }}>
  {isVisible && !imgError ? (
  <img
- src={anime.coverImage?.extraLarge || anime.coverImage?.large}
+ src={anime.coverImage?.large || anime.coverImage?.extraLarge || anime.coverImage?.medium}
  alt={getTitle(anime.title)}
  loading="lazy"
  onError={() => setImgError(true)}
