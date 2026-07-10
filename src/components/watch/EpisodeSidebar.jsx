@@ -133,12 +133,12 @@ export default function EpisodeSidebar({
 
 
           {episodeLayout === "grid" && (
-            <div className="grid grid-cols-5 sm:grid-cols-6 lg:grid-cols-4 xl:grid-cols-5 gap-2">
+            <div className="flex flex-wrap gap-2 lg:gap-2.5">
               {currentSlice.map(ep => (
                 <button
                   key={ep}
                   onClick={() => setActiveEpisode(ep)}
-                  className={`h-9 lg:h-10 flex items-center justify-center text-[12px] font-bold transition-colors rounded-[3px] ${
+                  className={`w-10 h-10 lg:w-11 lg:h-11 flex shrink-0 items-center justify-center text-[12px] font-bold transition-colors rounded-[4px] ${
                     activeEpisode === ep
                       ? "bg-discord-600 text-white"
                       : watchedEpisodes.includes(ep)
