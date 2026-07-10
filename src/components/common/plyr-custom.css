@@ -379,29 +379,39 @@
 
 .sub-settings-modal {
   position: absolute;
-  bottom: 80px;
+  bottom: 55px;
   right: 15px;
-  background: #242424;
+  background: #1c1c1c;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
-  width: 260px;
-  max-height: 350px;
+  width: 210px;
+  max-width: calc(100% - 30px);
+  height: 210px !important;
   color: #fff;
   font-family: 'Inter', sans-serif;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   pointer-events: auto;
 }
 
+@media (max-width: 480px) {
+  .sub-settings-modal {
+    bottom: 50px;
+    right: 10px;
+    width: 170px;
+    height: 190px !important;
+  }
+}
+
 .sub-settings-header {
   display: flex;
   align-items: center;
-  padding: 10px 14px;
+  padding: 6px 10px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 11px;
   color: #fff;
 }
 
@@ -439,10 +449,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 16px;
+  padding: 6px 10px;
   cursor: pointer;
   transition: background 0.1s ease;
-  font-size: 0.9rem;
+  font-size: 11px;
   font-weight: 500;
   color: #f0f0f0;
 }
@@ -458,7 +468,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.8rem;
+  font-size: 9.5px;
 }
 
 .sub-settings-option.selected {
@@ -467,16 +477,19 @@
 }
 
 .sub-settings-reset {
-  margin: 12px 16px;
-  padding: 10px;
+  margin: 6px auto !important;
+  padding: 4px 12px !important;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
+  border-radius: 4px;
   color: #fff;
   cursor: pointer;
   text-align: center;
-  font-weight: 600;
+  font-size: 9px !important;
+  font-weight: 500 !important;
   transition: all 0.2s;
+  display: block;
+  width: fit-content;
 }
 
 .sub-settings-reset:hover {

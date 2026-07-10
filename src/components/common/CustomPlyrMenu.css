@@ -4,9 +4,7 @@
   right: 15px;
   width: 210px;
   max-width: calc(100% - 30px);
-  height: auto;
-  min-height: 180px;
-  max-height: 240px;
+  height: 210px !important;
   background: #1c1c1c;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
@@ -24,8 +22,7 @@
     bottom: 50px;
     right: 10px;
     width: 170px;
-    min-height: 120px;
-    max-height: calc(100% - 60px);
+    height: 190px !important;
   }
 }
 
@@ -72,7 +69,7 @@
 .custom-plyr-menu-content {
   flex: 1;
   overflow-y: auto;
-  padding: 8px 0;
+  padding: 2px 0;
 }
 
 /* Custom scrollbar hidden */
@@ -132,18 +129,23 @@
   background: #fff;
 }
 
+.advanced-subs-container {
+  display: flex;
+  justify-content: flex-end;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 2px;
+}
+
 .advanced-subs-btn {
-  width: 100%;
-  text-align: right !important;
   background: transparent;
   border: none;
   color: #ccc;
-  padding: 2px 12px 6px 8px !important;
+  padding: 0 8px 2px 8px !important;
   font-size: 9px !important;
   font-weight: 400;
   cursor: pointer;
   text-decoration: underline !important;
-  margin-bottom: 2px;
+  display: inline-block;
 }
 
 .advanced-subs-btn:hover {

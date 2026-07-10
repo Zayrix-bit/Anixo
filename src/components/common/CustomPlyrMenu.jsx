@@ -155,9 +155,11 @@ const CustomPlyrMenu = ({ plyr, hls, subtitles = [], onClose, onOpenAdvancedSubs
 
         {activeTab === 'captions' && (
           <div className="custom-plyr-list-wrapper">
-            <button className="advanced-subs-btn" onClick={onOpenAdvancedSubs}>
-              Settings
-            </button>
+            <div className="advanced-subs-container">
+              <button className="advanced-subs-btn" onClick={onOpenAdvancedSubs}>
+                Settings
+              </button>
+            </div>
             <ul className="custom-plyr-list">
               <li>
                 <button 
