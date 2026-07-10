@@ -190,14 +190,14 @@ io.on('connection', (socket) => {
 
     if (data?.token) {
       try {
-        const decoded = jwt.verify(data.token, JWT_SECRET);
+        jwt.verify(data.token, JWT_SECRET);
         isRegistered = true;
         isAdminSocket = data.isAdmin || false; // Trust their claimed role only because they have a valid token
         userInfo = {
           username: data.username || 'User',
           displayName: data.displayName || data.username || 'User',
           avatar: data.avatar || '',
-          profileId: decoded.id
+          profileId: data.profileId || data.username || ''
         };
       } catch (err) {
         console.warn(`[Socket Auth] Invalid token from socket ${socket.id}:`, err.message);

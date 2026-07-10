@@ -224,7 +224,7 @@ const OnlineUsers = () => {
                             )}
                           </div>
                           <p className="text-[10px] text-white/40 truncate">
-                            @{onlineUser.username}
+                            @{onlineUser.profileId}
                           </p>
                         </div>
 
