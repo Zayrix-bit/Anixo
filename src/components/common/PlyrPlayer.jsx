@@ -4,6 +4,7 @@ import Plyr from 'plyr';
 import Hls from 'hls.js';
 import './plyr-custom.css';
 import SubtitleSettingsMenu from './SubtitleSettingsMenu';
+import CustomPlyrMenu from './CustomPlyrMenu';
 
 const PlyrPlayer = ({ 
   src, 
@@ -24,8 +25,11 @@ const PlyrPlayer = ({
   const containerRef = useRef(null);
   
   const [activeSkip, setActiveSkip] = useState(null);
-  const [showSettings, setShowSettings] = useState(false);
+  const [showSubtitleSettings, setShowSubtitleSettings] = useState(false);
+  const [showCustomMenu, setShowCustomMenu] = useState(false);
   const [plyrContainer, setPlyrContainer] = useState(null);
+  const [plyrInstance, setPlyrInstance] = useState(null);
+  const [hlsInstance, setHlsInstance] = useState(null);
 
   // Keep latest props in a ref so they don't trigger re-initialization
   const propsRef = useRef({ onEnded, onReady, onTimeUpdate, skipTimes, subtitles });
@@ -72,40 +76,23 @@ const PlyrPlayer = ({
         keyboard: { focused: true, global: true },
         tooltips: { controls: true, seek: true }
       });
+      setPlyrInstance(plyrRef.current);
 
       const injectSetting = () => {
         if (!plyrRef.current) return;
         const container = plyrRef.current.elements.container;
         if (!container) return;
         
-        // Find the inner menu wrapper
-        const homeMenu = container.querySelector('.plyr__menu__container [role="menu"]') || container.querySelector('.plyr__menu__container > div > div');
-        if (!homeMenu) return;
+        container.classList.add('hide-native-menu');
         
-        if (!homeMenu.querySelector('.custom-sub-btn')) {
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          // Added plyr__control--forward to render the native chevron arrow
-          btn.className = 'plyr__control plyr__control--forward custom-sub-btn';
-          btn.setAttribute('role', 'menuitem');
-          btn.setAttribute('aria-haspopup', 'true');
-          btn.innerHTML = `<span>Subtitle Settings<span class="plyr__menu__value">Custom</span></span>`;
-          
-          btn.onclick = (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            // Close Plyr's menu
-            plyrRef.current.toggleControls(false);
-            // Open our advanced custom menu
-            setShowSettings(true);
-          };
-          
-          // Insert after the first item (Quality/Captions) to make it look native
-          if (homeMenu.children.length > 1) {
-            homeMenu.insertBefore(btn, homeMenu.children[1]);
-          } else {
-            homeMenu.appendChild(btn);
-          }
+        const settingsBtn = container.querySelector('[data-plyr="settings"]');
+        if (settingsBtn && !settingsBtn.dataset.customized) {
+          settingsBtn.dataset.customized = 'true';
+          settingsBtn.addEventListener('click', () => {
+            // Toggle our custom menu
+            setShowCustomMenu(prev => !prev);
+            setShowSubtitleSettings(false);
+          });
         }
       };
 
@@ -165,11 +152,24 @@ const PlyrPlayer = ({
 
     if (isHls && Hls.isSupported()) {
       const hls = new Hls({
-        maxBufferLength: 30,
-        maxMaxBufferLength: 60,
-        enableWorker: true
+        maxBufferLength: 60, // Aim to keep 60 seconds buffered
+        maxMaxBufferLength: 600, // Hard limit of 10 minutes (to avoid memory bloat)
+        maxBufferSize: 60 * 1024 * 1024, // Up to 60MB of RAM for buffer
+        enableWorker: true, // Use background thread for parsing (no lag)
+        lowLatencyMode: false,
+        
+        // --- SLOW INTERNET OPTIMIZATIONS ---
+        capLevelToPlayerSize: true, // Prevent loading 1080p if screen is small (saves huge data on mobile)
+        startLevel: -1, // Always start in Auto mode to gauge user speed first
+        fragLoadingTimeOut: 20000, // Give slow internet 20 seconds to load a chunk instead of failing early
+        fragLoadingMaxRetry: 6, // Retry 6 times instead of default 4 before throwing error
+        fragLoadingRetryDelay: 1000, // Wait 1 second between retries
+        levelLoadingTimeOut: 20000,
+        levelLoadingMaxRetry: 6,
       });
       hlsRef.current = hls;
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setHlsInstance(hls);
 
       hls.attachMedia(video);
       
@@ -242,17 +242,26 @@ const PlyrPlayer = ({
         ))}
       </video>
       
-      {showSettings && plyrContainer && createPortal(
+      {showCustomMenu && plyrContainer && createPortal(
+        <CustomPlyrMenu
+          plyr={plyrInstance}
+          hls={hlsInstance}
+          subtitles={subtitles}
+          onClose={() => setShowCustomMenu(false)}
+          onOpenAdvancedSubs={() => {
+            setShowCustomMenu(false);
+            setShowSubtitleSettings(true);
+          }}
+        />,
+        plyrContainer
+      )}
+
+      {showSubtitleSettings && plyrContainer && createPortal(
         <SubtitleSettingsMenu 
-          onClose={() => setShowSettings(false)} 
+          onClose={() => setShowSubtitleSettings(false)} 
           onBack={() => {
-            setShowSettings(false);
-            if (plyrContainer) {
-              const settingsBtn = plyrContainer.querySelector('[data-plyr="settings"]');
-              if (settingsBtn && settingsBtn.getAttribute('aria-expanded') !== 'true') {
-                settingsBtn.click();
-              }
-            }
+            setShowSubtitleSettings(false);
+            setShowCustomMenu(true);
           }}
           containerRef={containerRef} 
         />,
