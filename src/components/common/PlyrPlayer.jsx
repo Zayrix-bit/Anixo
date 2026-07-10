@@ -132,12 +132,29 @@ const PlyrPlayer = ({
             if (timeDiff > 0 && timeDiff < 300) {
               // Double click detected
               clearTimeout(clickTimeout);
+              
+              const showSeekEffect = (direction) => {
+                wrapper.querySelectorAll('.seek-effect').forEach(el => el.remove());
+                const effect = document.createElement('div');
+                effect.className = `seek-effect seek-effect-${direction}`;
+                const icon = direction === 'left' 
+                  ? '<svg viewBox="0 0 24 24" fill="white"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg>'
+                  : '<svg viewBox="0 0 24 24" fill="white"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>';
+                effect.innerHTML = `${icon}<span>10s</span>`;
+                wrapper.appendChild(effect);
+                setTimeout(() => {
+                  if (effect.parentNode === wrapper) wrapper.removeChild(effect);
+                }, 500);
+              };
+
               const rect = wrapper.getBoundingClientRect();
               const x = e.clientX - rect.left;
               if (x < rect.width / 2) {
                 plyrRef.current.rewind(10);
+                showSeekEffect('left');
               } else {
                 plyrRef.current.forward(10);
+                showSeekEffect('right');
               }
             } else {
               // Single click (wait to see if it becomes a double click)
