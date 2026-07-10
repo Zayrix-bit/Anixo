@@ -224,7 +224,9 @@ const OnlineUsers = () => {
                             )}
                           </div>
                           <p className="text-[10px] text-white/40 truncate">
-                            @{onlineUser.profileId}
+                            @{(onlineUser.displayName && onlineUser.displayName !== onlineUser.username) 
+                              ? onlineUser.profileId 
+                              : onlineUser.username}
                           </p>
                         </div>
 
