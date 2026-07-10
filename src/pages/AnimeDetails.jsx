@@ -36,7 +36,7 @@ export default function AnimeDetails() {
 
   const handleToggleWatchlist = async () => {
     if (!user) return alert("Please login to add to watchlist");
-    
+
     setIsWatchlistLoading(true);
     if (isBookmarked) {
       const res = await removeFromWatchlist(id);
@@ -55,11 +55,11 @@ export default function AnimeDetails() {
 
   const handleUpdateStatus = async (status) => {
     if (!user) return alert("Please login to manage your list");
-    
+
     setIsWatchlistLoading(true);
     const coverImg = anime.coverImage?.large || anime.coverImage?.extraLarge;
     const res = await addToWatchlist(String(id), getTitle(anime.title), coverImg, status);
-    
+
     if (res.success) {
       setWatchlist(res.watchlist);
       setSelectStatus(status);
@@ -67,6 +67,7 @@ export default function AnimeDetails() {
     }
     setIsWatchlistLoading(false);
   };
+
 
   const { data: anime, isLoading } = useQuery({
     queryKey: ["animeDetails", id],
@@ -162,7 +163,7 @@ export default function AnimeDetails() {
       {/* Content Area */}
       <div className="max-w-[1720px] mx-auto px-2 md:px-4 -mt-[100px] md:-mt-[150px] relative z-10 w-full">
         <div className="flex flex-col md:flex-row gap-6 md:gap-10">
-          
+
           {/* Left Column: Poster & Actions */}
           <div className="w-[180px] md:w-[240px] shrink-0 mx-auto md:mx-0">
             <div className="rounded-[4px] overflow-hidden shadow-2xl border border-white/15 bg-[#222]">
@@ -204,12 +205,12 @@ export default function AnimeDetails() {
                     ))}
                   </select>
                   {isBookmarked ? (
-                     <button
-                        onClick={() => setAddingAction(false)}
-                        className="w-full bg-white/[0.05] hover:bg-white/[0.1] text-white font-bold text-[13px] py-2 rounded transition-colors"
-                      >
-                        {t('details.close')}
-                      </button>
+                    <button
+                      onClick={() => setAddingAction(false)}
+                      className="w-full bg-white/[0.05] hover:bg-white/[0.1] text-white font-bold text-[13px] py-2 rounded transition-colors"
+                    >
+                      {t('details.close')}
+                    </button>
                   ) : (
                     <button
                       onClick={() => handleUpdateStatus(selectStatus)}
@@ -220,16 +221,15 @@ export default function AnimeDetails() {
                   )}
                 </div>
               )}
-              
+
               {/* Watchlist / Bookmark Button */}
               <button
                 onClick={handleToggleWatchlist}
                 disabled={isWatchlistLoading}
-                className={`w-full font-bold text-[13px] py-2.5 rounded transition-colors flex items-center justify-center gap-2 mt-2 ${
-                  isBookmarked 
-                    ? "bg-white/[0.05] text-white hover:bg-discord-600 border border-white/10" 
+                className={`w-full font-bold text-[13px] py-2.5 rounded transition-colors flex items-center justify-center gap-2 mt-2 ${isBookmarked
+                    ? "bg-white/[0.05] text-white hover:bg-discord-600 border border-white/10"
                     : "bg-transparent text-[#888] border border-[#888] hover:text-white hover:border-white"
-                }`}
+                  }`}
               >
                 {isWatchlistLoading ? (
                   <div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin"></div>
@@ -248,7 +248,7 @@ export default function AnimeDetails() {
             <h1 className="text-2xl md:text-4xl font-black text-white leading-tight mb-2">
               {getTitle(anime.title)}
             </h1>
-            
+
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-6">
               <span className="bg-discord-600 text-white text-[11px] font-black px-2 py-0.5 rounded-[3px] uppercase tracking-tight">
                 {anime.format || "TV"}
