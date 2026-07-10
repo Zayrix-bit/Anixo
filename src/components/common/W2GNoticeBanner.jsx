@@ -65,38 +65,21 @@ const W2GNoticeBanner = () => {
       <div className="w2g-banner">
         <div className="w2g-banner-inner">
           {/* Left: Text */}
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+          <div className="w2g-text-container">
             <div className="w2g-live-dot" />
             <div style={{ minWidth: 0 }}>
-              <p style={{
-                margin: 0,
-                fontSize: '13px',
-                color: 'rgba(255, 255, 255, 0.85)',
-                fontFamily: "'Inter', sans-serif",
-                fontWeight: 400,
-                lineHeight: 1.4,
-              }}>
+              <p className="w2g-text">
                 <strong style={{ color: '#fff', fontWeight: 700 }}>Watch2Gether</strong>{' '}
-                <span className="w2g-hide-mobile">is coming — </span>watch anime with friends, in sync.
+                is coming watch anime in sync.
               </p>
             </div>
           </div>
 
           {/* Separator */}
-          <div style={{
-            width: '1px',
-            height: '32px',
-            background: 'rgba(108, 92, 231, 0.3)',
-            flexShrink: 0,
-          }} />
+          <div className="w2g-separator" />
 
           {/* Right: Countdown */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            flexShrink: 0,
-          }}>
+          <div className="w2g-countdown-container">
             {[
               { value: timeLeft.d, label: 'days' },
               { value: timeLeft.h, label: 'hrs' },
@@ -139,6 +122,55 @@ const W2GNoticeBanner = () => {
           background: linear-gradient(135deg, rgba(20,16,40,0.95) 0%, rgba(15,12,30,0.98) 100%);
           position: relative;
           overflow: hidden;
+        }
+        .w2g-text-container {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          min-width: 0;
+        }
+        .w2g-text {
+          margin: 0;
+          font-size: 13px;
+          color: rgba(255, 255, 255, 0.85);
+          font-family: 'Inter', sans-serif;
+          font-weight: 400;
+          line-height: 1.4;
+        }
+        .w2g-separator {
+          width: 1px;
+          height: 32px;
+          background: rgba(108, 92, 231, 0.3);
+          flex-shrink: 0;
+        }
+        .w2g-countdown-container {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          flex-shrink: 0;
+        }
+        @media (max-width: 640px) {
+          .w2g-banner-inner {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 16px;
+          }
+          .w2g-separator {
+            display: none;
+          }
+          .w2g-countdown-container {
+            width: 100%;
+            justify-content: space-between;
+            padding-top: 4px;
+            border-top: 1px solid rgba(108, 92, 231, 0.15);
+          }
+          .w2g-dismiss {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+          }
         }
         .w2g-banner-inner::before {
           content: '';
