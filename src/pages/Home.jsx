@@ -30,7 +30,7 @@ export default function Home() {
   const { t } = useTranslation();
   const { globalProgress, setGlobalProgress, user } = useAuth();
   const [activeSeasonTab, setActiveSeasonTab] = useState("All");
-  const cardsPerPage = 18;
+  const cardsPerPage = 24; // Changed from 18 to 24 so it perfectly divides by 2, 3, 4, and 6 columns
 
   // Pagination States
   const [seasonPage, setSeasonPage] = useState(1);

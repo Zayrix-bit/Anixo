@@ -144,7 +144,7 @@ export default function AnimeRow({ title, data, isLoading, limit = 6, tabs = [],
           className={`${
             isScrollable 
             ? "flex flex-nowrap overflow-x-auto scrollbar-hide pb-4 gap-4" 
-            : "grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-3 md:gap-x-4 gap-y-7"
+            : "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-3 md:gap-x-4 gap-y-7"
           } min-h-[100px]`}
         >
           {isLoading ? (
