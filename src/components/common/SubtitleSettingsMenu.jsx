@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 const DEFAULT_SETTINGS = {
   fontColor: '#ffffff',
   fontOpacity: '1',
-  fontSize: '32px',
+  fontSize: '24px',
   fontFamily: "'Inter', sans-serif",
   charEdge: '0px 0px 4px rgba(0,0,0,1), 0px 0px 6px rgba(0,0,0,1), 1.5px 1.5px 3px rgba(0,0,0,1), -1.5px -1.5px 3px rgba(0,0,0,1), 1.5px -1.5px 3px rgba(0,0,0,1), -1.5px 1.5px 3px rgba(0,0,0,1)',
   bgColor: 'transparent',

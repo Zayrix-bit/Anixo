@@ -805,8 +805,14 @@ button[data-plyr="fast-forward"]::after {
 
   /* Shrink default subtitles to a readable mobile size while respecting user settings */
   .plyr__captions {
-    font-size: calc(var(--sub-font-size, 32px) * 0.55) !important;
-    bottom: 70px !important;
+    font-size: calc(var(--sub-font-size, 24px) * 0.6) !important;
+    bottom: 50px !important;
+    max-width: 90% !important;
+    left: 5% !important;
+    right: 5% !important;
+    padding: 0 4px !important;
+    pointer-events: none !important;
+    z-index: 5 !important; /* Below seek effects (z-index: 50) */
   }
 
   /* Shrink custom skip button */
