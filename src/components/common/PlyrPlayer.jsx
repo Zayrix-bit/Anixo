@@ -104,6 +104,11 @@ const PlyrPlayer = ({
           setPlyrContainer(plyrRef.current.elements.container);
         }
 
+        let lastControlsShownTime = 0;
+        plyrRef.current.on('controlsshown', () => {
+          lastControlsShownTime = Date.now();
+        });
+
         // Custom tap handling (Single tap to toggle controls, Double tap to seek)
         const wrapper = plyrRef.current.elements.wrapper;
         if (wrapper && !wrapper.dataset.dblclickBound) {
@@ -135,8 +140,12 @@ const PlyrPlayer = ({
               // Single click (wait to see if it becomes a double click)
               clickTimeout = setTimeout(() => {
                 if (plyrRef.current && plyrRef.current.elements.container) {
-                  const isHidden = plyrRef.current.elements.container.classList.contains('plyr--hide-controls');
-                  plyrRef.current.toggleControls(isHidden);
+                  // If controls were shown in the last 500ms, it means Plyr's native touch 
+                  // event JUST showed them due to this tap. We should keep them shown.
+                  // If they were already showing for a while, this tap is meant to hide them.
+                  if (Date.now() - lastControlsShownTime > 500) {
+                    plyrRef.current.toggleControls(false);
+                  }
                 }
               }, 300);
             }
