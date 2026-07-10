@@ -74,7 +74,7 @@ const PlyrPlayer = ({
         },
         i18n: { qualityLabel: { 0: 'Auto' } },
         keyboard: { focused: true, global: true },
-        tooltips: { controls: true, seek: true },
+        tooltips: { controls: false, seek: false },
         doubleClick: { togglesFullscreen: false },
         clickToPlay: false
       });
