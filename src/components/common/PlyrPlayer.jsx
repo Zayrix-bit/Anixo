@@ -54,7 +54,7 @@ const PlyrPlayer = ({
         controls: [
           'play-large', 'progress', 'play', 'mute', 'volume', 
           'current-time', 'duration', 'rewind', 'fast-forward', 
-          'settings', 'pip', 'airplay', 'fullscreen'
+          'settings', 'airplay', 'fullscreen'
         ],
         settings: ['captions', 'quality', 'speed'],
         quality: {
