@@ -418,13 +418,19 @@
 /* Subtitle (Captions) Styling (Advanced Dynamic CSS Variables) */
 .plyr__captions {
   font-family: var(--sub-font-family, 'Inter', sans-serif) !important;
-  font-size: var(--sub-font-size, 32px) !important;
+  font-size: var(--sub-font-size, 24px) !important;
   font-weight: 700 !important;
-  bottom: 100px !important;
+  bottom: 50px !important;
   transform: none !important;
   background-color: var(--sub-window-color, transparent) !important;
   padding: var(--sub-window-padding, 0) !important;
   border-radius: 8px !important;
+}
+
+/* In fullscreen, push subtitles higher above the bigger control bar */
+.plyr--fullscreen-active .plyr__captions,
+.plyr--fullscreen-fallback .plyr__captions {
+  bottom: 80px !important;
 }
 
 .plyr__captions .plyr__caption {
