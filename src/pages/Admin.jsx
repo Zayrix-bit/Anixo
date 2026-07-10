@@ -36,6 +36,7 @@ export default function Admin() {
     
     socket.on('connect', () => {
       socket.emit('identify-user', {
+        token: localStorage.getItem('token'),
         isRegistered: true,
         isAdmin: true,
         username: user.username || '',

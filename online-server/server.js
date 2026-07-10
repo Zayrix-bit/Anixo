@@ -2,6 +2,23 @@ import { Server } from 'socket.io';
 import http from 'http';
 import cors from 'cors';
 import express from 'express';
+import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import fs from 'fs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const envPath = path.join(__dirname, '../.env');
+
+if (fs.existsSync(envPath)) {
+  dotenv.config({ path: envPath });
+} else {
+  dotenv.config();
+}
+
+const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey123';
 
 const PORT = process.env.PORT || 7861;
 
@@ -20,6 +37,8 @@ const server = http.createServer(app);
 
 // Setup Socket.io
 const io = new Server(server, {
+  pingInterval: 10000, // Send ping every 10 seconds (default 25s)
+  pingTimeout: 5000,   // Close connection if no pong in 5 seconds (default 20s)
   cors: {
     origin: '*', // Allow all origins for development, restrict in production
     methods: ['GET', 'POST']
@@ -29,8 +48,8 @@ const io = new Server(server, {
 // Track online users - separate registered, guests, and admins
 const onlineUsers = {
   registered: new Map(), // socket.id -> { username, displayName, avatar }
-  guests: new Set(),
-  admins: new Map(), // socket.id -> { username, displayName, avatar }
+  guests: new Map(),     // socket.id -> IP address
+  admins: new Map(),     // socket.id -> { username, displayName, avatar }
 };
 
 // Helper function to get all registered users for admin
@@ -57,19 +76,29 @@ function getRegisteredUsers() {
 // Helper function to get unique counts
 function getUniqueCounts() {
   const uniqueRegisteredSet = new Set();
+  const uniqueGuestSet = new Set();
   
   // Add all admin usernames
   for (const [, userData] of onlineUsers.admins.entries()) {
-    uniqueRegisteredSet.add(userData.username);
+    if (userData.username) {
+      uniqueRegisteredSet.add(userData.username);
+    }
   }
   
   // Add all registered usernames
   for (const [, userData] of onlineUsers.registered.entries()) {
-    uniqueRegisteredSet.add(userData.username);
+    if (userData.username) {
+      uniqueRegisteredSet.add(userData.username);
+    }
+  }
+  
+  // Add all guest IPs
+  for (const [, guestIp] of onlineUsers.guests.entries()) {
+    uniqueGuestSet.add(guestIp);
   }
   
   const uniqueRegistered = uniqueRegisteredSet.size;
-  const guests = onlineUsers.guests.size;
+  const guests = uniqueGuestSet.size;
   
   return {
     uniqueRegistered,
@@ -92,9 +121,10 @@ function getCountsForUser() {
 
 // Broadcast counts to all users
 function broadcastCounts() {
-  // Emit to each connected socket individually
+  const counts = getCountsForUser();
+  // Emit to each connected socket individually (using pre-computed counts)
   io.sockets.sockets.forEach((socket) => {
-    socket.emit('online-count', getCountsForUser());
+    socket.emit('online-count', counts);
   });
 }
 
@@ -151,43 +181,55 @@ app.post('/update-user', (req, res) => {
 
 io.on('connection', (socket) => {
   console.log(`New user connected: ${socket.id}`);
-  let isAdminSocket = false; // Track if this socket is an admin
   
   // Listen for user identification
   socket.on('identify-user', (data) => {
-    // Handle both old format (boolean) and new format (object)
-    let isRegistered = typeof data === 'boolean' ? data : data?.isRegistered || false;
-    isAdminSocket = typeof data === 'object' ? data?.isAdmin || false : false;
-    const userInfo = typeof data === 'object' ? {
-      username: data?.username || 'User',
-      displayName: data?.displayName || 'User',
-      avatar: data?.avatar || '',
-      profileId: data?.profileId || ''
-    } : { username: 'User', displayName: 'User', avatar: '', profileId: '' };
+    let isRegistered = false;
+    let isAdminSocket = false;
+    let userInfo = { username: 'User', displayName: 'Guest', avatar: '', profileId: '' };
+
+    if (data?.token) {
+      try {
+        const decoded = jwt.verify(data.token, JWT_SECRET);
+        isRegistered = true;
+        isAdminSocket = decoded.role === 'admin';
+        userInfo = {
+          username: decoded.username || 'User',
+          displayName: decoded.displayName || decoded.username || 'User',
+          avatar: decoded.avatar || '',
+          profileId: decoded.id || decoded.profileId || ''
+        };
+      } catch (err) {
+        console.warn(`[Socket Auth] Invalid token from socket ${socket.id}:`, err.message);
+      }
+    }
     
     // Remove from previous status if exists
     onlineUsers.registered.delete(socket.id);
     onlineUsers.guests.delete(socket.id);
     onlineUsers.admins.delete(socket.id);
     
+    // Get client IP address
+    const clientIp = socket.handshake.headers['x-forwarded-for'] || socket.handshake.address || socket.id;
+
     // Add to appropriate set
     if (isAdminSocket) {
       onlineUsers.admins.set(socket.id, userInfo);
     } else if (isRegistered) {
       onlineUsers.registered.set(socket.id, userInfo);
     } else {
-      onlineUsers.guests.add(socket.id);
+      onlineUsers.guests.set(socket.id, clientIp);
     }
     
     // Send the correct stats immediately after identification
-    socket.emit('online-count', getCountsForUser(isAdminSocket));
+    socket.emit('online-count', getCountsForUser());
     
     // Broadcast updated counts to everyone
     broadcastCounts();
   });
   
   // Emit initial counts when user connects (default to non-admin)
-  socket.emit('online-count', getCountsForUser(false));
+  socket.emit('online-count', getCountsForUser());
   
   socket.on('disconnect', () => {
     console.log(`User disconnected: ${socket.id}`);

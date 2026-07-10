@@ -8,9 +8,11 @@
     "dev": "nodemon server.js"
   },
   "dependencies": {
-    "socket.io": "^4.8.3",
     "cors": "^2.8.5",
-    "express": "^4.21.2"
+    "dotenv": "^17.4.2",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.3",
+    "socket.io": "^4.8.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

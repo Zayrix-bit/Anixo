@@ -51,6 +51,7 @@ const OnlineUsers = () => {
       const isRegistered = !!user;
       const isAdmin = !!user && (user.role === 'admin');
       socket.emit('identify-user', {
+        token: localStorage.getItem('token'),
         isRegistered,
         isAdmin,
         username: user?.username || '',
