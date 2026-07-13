@@ -113,7 +113,16 @@ export default function Navbar() {
     { name: "LIVE CHAT", path: "/chat" },
     { name: "COMMUNITY", path: "/community" },
     { name: "HENTAI", path: "/nsfw" },
-    { name: "WATCH TOGETHER", path: "/watch2gether", icon: <Users size={18} /> },
+    { 
+      name: "WATCH TOGETHER", 
+      path: "/watch2gether", 
+      icon: (
+        <div className="relative flex items-center justify-center">
+          <Users size={18} />
+          <span className="absolute -top-2 -right-4 bg-discord-600 text-[6px] font-black uppercase text-white px-1 rounded-sm shadow-lg leading-tight">Beta</span>
+        </div>
+      ) 
+    },
   ];
 
   return (
