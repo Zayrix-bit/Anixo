@@ -127,6 +127,7 @@ export default function NavSidebar({ open, onClose, initialTab = "menu" }) {
  { label: "Home", path: "/home" },
  { label: "HENTAI (18+)", path: "/nsfw" },
  { label: "Live Chat", path: "/chat" },
+ { label: "Watch Together", path: "/watch2gether" },
  { label: "Community", path: "/community" },
  ].map((link) => (
  <Link

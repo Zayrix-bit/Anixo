@@ -858,3 +858,42 @@ button[data-plyr="fast-forward"]::after {
     height: 20px !important;
   }
 }
+
+/* ============================================
+   Watch Together Viewer Mode (non-host)
+   Only shows progress bar + current time
+   ============================================ */
+.plyr--w2g-viewer .plyr__control--overlaid {
+  display: none !important;
+}
+
+.plyr--w2g-viewer .plyr__control[data-plyr="play"],
+.plyr--w2g-viewer .plyr__control[data-plyr="mute"],
+.plyr--w2g-viewer .plyr__control[data-plyr="airplay"],
+.plyr--w2g-viewer .plyr__control[data-plyr="rewind"],
+.plyr--w2g-viewer .plyr__control[data-plyr="fast-forward"],
+.plyr--w2g-viewer .plyr__volume {
+  display: none !important;
+}
+
+/* Make progress bar read-only */
+.plyr--w2g-viewer .plyr__progress input[type="range"] {
+  pointer-events: none !important;
+}
+
+/* Block all click/touch on the video area to prevent play/pause */
+.plyr--w2g-viewer .plyr__video-wrapper {
+  pointer-events: none !important;
+}
+
+/* Keep controls bar visible but non-interactive except for viewing */
+.plyr--w2g-viewer .plyr__controls {
+  pointer-events: none !important;
+  opacity: 1 !important;
+}
+
+/* Allow settings and fullscreen buttons to remain interactive for non-host */
+.plyr--w2g-viewer .plyr__control[data-plyr="settings"],
+.plyr--w2g-viewer .plyr__control[data-plyr="fullscreen"] {
+  pointer-events: auto !important;
+}

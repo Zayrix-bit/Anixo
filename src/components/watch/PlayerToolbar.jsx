@@ -1,7 +1,7 @@
 import { useRef, useEffect } from "react";
 import {
  Moon, FastForward, PlayCircle, SkipForward, SkipBack,
- Heart, Flag, MessageSquare, Mic
+ Heart, Flag, MessageSquare, Mic, Users, Clock
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -17,7 +17,8 @@ export default function PlayerToolbar({
  isBookmarked, isWatchlistLoading,
  handleToggleBackendWatchlist, showWatchlistDropdown, setShowWatchlistDropdown,
  backendWatchlist, handleUpdateWatchlistStatus, id,
- handleReport, reportSuccess
+ handleReport, reportSuccess,
+ wtRoom, handleCreateWtRoom, handleScheduleWtRoom
 }) {
  const { t } = useTranslation();
  const watchlistRef = useRef(null);
@@ -48,6 +49,7 @@ export default function PlayerToolbar({
  <span className="text-[9px] sm:text-[12px] font-medium">{t('player.focus')}</span>
  </button>
 
+ <div className={`flex items-center gap-4 sm:gap-6 lg:gap-10 ${wtRoom && !wtRoom.isHost ? 'pointer-events-none opacity-40' : ''}`}>
  <button
  onClick={() => setAutoNext(!autoNext)}
  className="flex items-center gap-1 sm:gap-2 group transition-all"
@@ -64,8 +66,9 @@ export default function PlayerToolbar({
  <span className={`text-[9px] sm:text-[12px] font-medium ${autoPlay ? 'text-white' : 'text-white/70'}`}>{t('player.autoPlay')}</span>
  </button>
  </div>
+ </div>
 
- <div className="flex items-center gap-4 sm:gap-6 lg:gap-10">
+ <div className={`flex items-center gap-4 sm:gap-6 lg:gap-10 ${wtRoom && !wtRoom.isHost ? 'pointer-events-none opacity-40' : ''}`}>
  <button
  onClick={goPrevEpisode}
  className={`flex items-center gap-1 sm:gap-1.5 transition-all ${activeEpisode <= 1 ? 'opacity-30 pointer-events-none' : 'text-white/70 hover:text-white'}`}
@@ -143,13 +146,39 @@ export default function PlayerToolbar({
  <Flag size={14} className="sm:w-5 sm:h-5" />
  <span className="hidden sm:inline text-[12px] font-medium uppercase tracking-wider">{t('player.report')}</span>
  </button>
+
+ {/* Watch Together Button */}
+ {!wtRoom && handleCreateWtRoom && (
+  <div className="flex items-center gap-1 bg-discord-500/10 rounded-full border border-discord-500/20 shadow-[0_0_15px_rgba(108,92,231,0.15)] overflow-hidden">
+    <button
+    onClick={handleCreateWtRoom}
+    className="flex items-center gap-2 sm:gap-3 transition-all text-white/60 hover:text-discord-500 hover:bg-discord-500/20 px-3 py-1.5"
+    title="Start Watch Together Now"
+    >
+    <Users size={14} className="sm:w-4 sm:h-4" />
+    <span className="hidden sm:inline text-[12px] font-bold uppercase tracking-wider text-discord-500">Watch Together</span>
+    </button>
+    {handleScheduleWtRoom && (
+      <>
+        <div className="w-px h-5 bg-discord-500/30"></div>
+        <button
+          onClick={handleScheduleWtRoom}
+          className="px-3 py-1.5 text-white/60 hover:text-discord-500 hover:bg-discord-500/20 transition-all"
+          title="Schedule for Later"
+        >
+          <Clock size={14} className="sm:w-4 sm:h-4" />
+        </button>
+      </>
+    )}
+  </div>
+ )}
  </>
  )}
  </div>
  </section>
 
  {/* Server Selector Section */}
- {!isFocusMode && (
+ {!isFocusMode && !(wtRoom && !wtRoom.isHost) && (
  <section className="flex flex-col md:flex-row md:items-center justify-between py-4 lg:py-6 gap-4 lg:gap-6">
  <div className="text-center md:text-left">
  <p className="text-[13px] lg:text-[14px] font-bold text-white/80 tracking-wide">
@@ -184,16 +213,19 @@ export default function PlayerToolbar({
 
  <div className="flex flex-wrap md:flex-nowrap items-center justify-center gap-0.5 md:gap-1 sm:mr-auto sm:mr-20">
  {[1, 2, 3, 4, 5, 6].map((s) => (
- <button
- key={s}
- onClick={() => setActiveServer(s)}
- className={`px-1.5 sm:px-3 py-0.5 sm:py-1.5 text-[8.5px] sm:text-[10px] font-bold uppercase tracking-wider rounded-sm border transition-all flex-shrink-0 ${activeServer === s
- ? "bg-discord-600 border-discord-600 text-white "
- : "border-white/15 text-white/40 hover:text-white hover:border-white/15 bg-white/5"
- }`}
- >
- Server {s}
- </button>
+  <button
+  key={s}
+  onClick={() => setActiveServer(s)}
+  disabled={wtRoom && s !== 3}
+  className={`px-1.5 sm:px-3 py-0.5 sm:py-1.5 text-[8.5px] sm:text-[10px] font-bold uppercase tracking-wider rounded-sm border transition-all flex-shrink-0 ${activeServer === s
+  ? "bg-discord-600 border-discord-600 text-white "
+  : wtRoom && s !== 3
+  ? "border-white/10 text-white/20 cursor-not-allowed bg-black/20"
+  : "border-white/15 text-white/40 hover:text-white hover:border-white/15 bg-white/5"
+  }`}
+  >
+  Server {s}
+  </button>
  ))}
  </div>
  </div>

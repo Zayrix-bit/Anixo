@@ -10,13 +10,17 @@ export const getPublicProfile = async (req, res) => {
   try {
     const { profileId } = req.params;
 
-    // Find the user by profileId or username (for backward compatibility)
-    const user = await User.findOne({ 
-      $or: [
-        { profileId: profileId },
-        { username: profileId }
-      ]
-    }).select('-password -email -resetPasswordToken -resetPasswordExpire');
+    // Find the user by profileId, username, or _id
+    const orQuery = [
+      { profileId: profileId },
+      { username: profileId }
+    ];
+
+    if (mongoose.Types.ObjectId.isValid(profileId)) {
+      orQuery.push({ _id: profileId });
+    }
+
+    const user = await User.findOne({ $or: orQuery }).select('-password -email -resetPasswordToken -resetPasswordExpire');
 
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found' });

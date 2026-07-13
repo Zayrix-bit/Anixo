@@ -34,6 +34,12 @@ export default function VideoPlayerSection({
     iframeRef,
     activeSubServer = 0,
     skipTimes,
+    videoRef,
+    onPlay,
+    onPause,
+    onSeeked,
+    isWatch2GetherMode,
+    isW2GHost,
 }) {
     const { t } = useTranslation();
     const prevServerRef = useRef(activeServer);
@@ -98,7 +104,7 @@ export default function VideoPlayerSection({
                 isIframe = false;
             }
         }
-    } else if ((streamData?.sources && Array.isArray(streamData.sources) && streamData.sources.length > 0 && !streamData?.iframe_url) || (activeServer === 2 && streamData?.sources)) {
+    } else if ((streamData?.sources && Array.isArray(streamData.sources) && streamData.sources.length > 0 && (!streamData?.iframe_url || isWatch2GetherMode)) || (activeServer === 2 && streamData?.sources)) {
         videoSrc = streamData.sources[0].url;
         videoType = streamData.sources[0].type;
     } else {
@@ -298,6 +304,11 @@ export default function VideoPlayerSection({
                                                 if (nextEp) setActiveEpisode(nextEp.number);
                                             }
                                         }}
+                                        ref={videoRef}
+                                        onPlay={onPlay}
+                                        onPause={onPause}
+                                        onSeeked={onSeeked}
+                                        disableControls={isWatch2GetherMode && !isW2GHost}
                                     />
                                 ) : (
                                     <ArtPlayer
@@ -319,6 +330,11 @@ export default function VideoPlayerSection({
                                                 if (nextEp) setActiveEpisode(nextEp.number);
                                             }
                                         }}
+                                        ref={videoRef}
+                                        onPlay={onPlay}
+                                        onPause={onPause}
+                                        onSeeked={onSeeked}
+                                        disableControls={isWatch2GetherMode && !isW2GHost}
                                     />
                                 )
                             ) : (
@@ -340,6 +356,11 @@ export default function VideoPlayerSection({
                                             if (nextEp) setActiveEpisode(nextEp.number);
                                         }
                                     }}
+                                    ref={videoRef}
+                                    onPlay={onPlay}
+                                    onPause={onPause}
+                                    onSeeked={onSeeked}
+                                    disableControls={isWatch2GetherMode && !isW2GHost}
                                 />
                             )
                         ) : (

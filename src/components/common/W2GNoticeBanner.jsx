@@ -1,29 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
-
-const LAUNCH_DATE = new Date('2026-07-15T00:00:00+05:30').getTime();
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Users, X, ArrowRight } from 'lucide-react';
 
 const W2GNoticeBanner = () => {
   const [dismissed, setDismissed] = useState(() => {
     return sessionStorage.getItem('w2g_notice_dismissed') === 'true';
   });
-
-  const [timeLeft, setTimeLeft] = useState(() => getTimeLeft());
-
-  function getTimeLeft() {
-    const diff = Math.max(0, LAUNCH_DATE - Date.now());
-    return {
-      d: Math.floor(diff / (1000 * 60 * 60 * 24)),
-      h: Math.floor((diff / (1000 * 60 * 60)) % 24),
-      m: Math.floor((diff / (1000 * 60)) % 60),
-      s: Math.floor((diff / 1000) % 60),
-    };
-  }
-
-  useEffect(() => {
-    const id = setInterval(() => setTimeLeft(getTimeLeft()), 1000);
-    return () => clearInterval(id);
-  }, []);
 
   const handleDismiss = () => {
     setDismissed(true);
@@ -31,34 +13,6 @@ const W2GNoticeBanner = () => {
   };
 
   if (dismissed) return null;
-
-  const pad = (n) => String(n).padStart(2, '0');
-
-  const TimeBox = ({ value, label }) => (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      minWidth: '36px',
-    }}>
-      <span style={{
-        fontFamily: "'Inter', monospace",
-        fontSize: '18px',
-        fontWeight: 700,
-        color: '#fff',
-        lineHeight: 1,
-        fontVariantNumeric: 'tabular-nums',
-      }}>{pad(value)}</span>
-      <span style={{
-        fontSize: '8px',
-        color: 'rgba(255,255,255,0.35)',
-        textTransform: 'uppercase',
-        letterSpacing: '1px',
-        fontWeight: 600,
-        marginTop: '2px',
-      }}>{label}</span>
-    </div>
-  );
 
   return (
     <div className="max-w-[1720px] mx-auto px-2 md:px-4 mt-4">
@@ -68,9 +22,10 @@ const W2GNoticeBanner = () => {
           <div className="w2g-text-container">
             <div className="w2g-live-dot" />
             <div style={{ minWidth: 0 }}>
-              <p className="w2g-text">
-                <strong style={{ color: '#fff', fontWeight: 700 }}>Watch2Gether</strong>{' '}
-                is coming watch anime in sync.
+              <p className="w2g-text flex flex-wrap items-center gap-1.5">
+                <strong style={{ color: '#fff', fontWeight: 700 }}>Watch2Gether</strong>
+                <span className="text-[9px] bg-discord-500 text-white px-1.5 py-0.5 rounded-[4px] font-bold uppercase tracking-wider">Beta</span>
+                <span>is now live! Watch anime in sync with friends.</span>
               </p>
             </div>
           </div>
@@ -78,20 +33,15 @@ const W2GNoticeBanner = () => {
           {/* Separator */}
           <div className="w2g-separator" />
 
-          {/* Right: Countdown */}
-          <div className="w2g-countdown-container">
-            {[
-              { value: timeLeft.d, label: 'days' },
-              { value: timeLeft.h, label: 'hrs' },
-              { value: timeLeft.m, label: 'min' },
-              { value: timeLeft.s, label: 'sec' },
-            ].map((item, i) => (
-              <React.Fragment key={item.label}>
-                {i > 0 && <span style={{ color: 'rgba(108,92,231,0.5)', fontSize: '16px', fontWeight: 700, marginBottom: '8px' }}>:</span>}
-                <TimeBox value={item.value} label={item.label} />
-              </React.Fragment>
-            ))}
-          </div>
+          {/* Right: CTA */}
+          <Link
+            to="/watch2gether"
+            className="w2g-cta"
+          >
+            <Users size={14} />
+            <span>Browse Rooms</span>
+            <ArrowRight size={14} />
+          </Link>
 
           {/* Dismiss */}
           <button
@@ -144,11 +94,28 @@ const W2GNoticeBanner = () => {
           background: rgba(108, 92, 231, 0.3);
           flex-shrink: 0;
         }
-        .w2g-countdown-container {
+        .w2g-cta {
           display: flex;
           align-items: center;
-          gap: 6px;
+          gap: 8px;
+          padding: 8px 16px;
+          border-radius: 10px;
+          background: rgba(108, 92, 231, 0.15);
+          border: 1px solid rgba(108, 92, 231, 0.3);
+          color: #a78bfa;
+          font-size: 12px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          text-decoration: none;
+          white-space: nowrap;
           flex-shrink: 0;
+          transition: all 0.2s;
+        }
+        .w2g-cta:hover {
+          background: rgba(108, 92, 231, 0.25);
+          color: #c4b5fd;
+          border-color: rgba(108, 92, 231, 0.5);
         }
         @media (max-width: 640px) {
           .w2g-banner-inner {
@@ -160,11 +127,9 @@ const W2GNoticeBanner = () => {
           .w2g-separator {
             display: none;
           }
-          .w2g-countdown-container {
+          .w2g-cta {
             width: 100%;
-            justify-content: space-between;
-            padding-top: 4px;
-            border-top: 1px solid rgba(108, 92, 231, 0.15);
+            justify-content: center;
           }
           .w2g-dismiss {
             position: absolute;
@@ -185,9 +150,9 @@ const W2GNoticeBanner = () => {
           width: 8px;
           height: 8px;
           border-radius: 50%;
-          background: #6c5ce7;
+          background: #22c55e;
           flex-shrink: 0;
-          box-shadow: 0 0 8px rgba(108,92,231,0.6);
+          box-shadow: 0 0 8px rgba(34,197,94,0.6);
           animation: w2gPulse 2s ease-in-out infinite;
         }
         .w2g-dismiss {
@@ -204,8 +169,8 @@ const W2GNoticeBanner = () => {
         }
         .w2g-dismiss:hover { color: rgba(255,255,255,0.7); }
         @keyframes w2gPulse {
-          0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 8px rgba(108,92,231,0.6); }
-          50% { opacity: 0.5; transform: scale(0.85); box-shadow: 0 0 4px rgba(108,92,231,0.3); }
+          0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 8px rgba(34,197,94,0.6); }
+          50% { opacity: 0.5; transform: scale(0.85); box-shadow: 0 0 4px rgba(34,197,94,0.3); }
         }
         @keyframes w2gBorderShift {
           0%, 100% { background-position: 0% 50%; }

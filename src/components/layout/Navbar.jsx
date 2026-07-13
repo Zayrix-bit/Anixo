@@ -4,7 +4,7 @@ import { ALL_GENRES } from "../../constants/genres";
 import NavSidebar from "./NavSidebar";
 import { useLanguage } from "../../context/LanguageContext";
 import { searchAnime } from "../../services/api";
-import { MessageSquare, Mic, Clock, CheckCircle, CheckCircle2, SlidersHorizontal, X } from "lucide-react";
+import { MessageSquare, Mic, Clock, CheckCircle, CheckCircle2, SlidersHorizontal, X, Users } from "lucide-react";
 
 import { useAuth } from "../../hooks/useAuth";
 import LoginModal from "../auth/LoginModal";
@@ -110,10 +110,10 @@ export default function Navbar() {
   const links = [
     { name: "TYPES", path: "/browse", dropdown: "types" },
     { name: "GENRES", path: "/browse", dropdown: "genres" },
-    { name: "NEW RELEASES", path: "/browse?sort=START_DATE_DESC" },
     { name: "LIVE CHAT", path: "/chat" },
     { name: "COMMUNITY", path: "/community" },
     { name: "HENTAI", path: "/nsfw" },
+    { name: "WATCH TOGETHER", path: "/watch2gether", icon: <Users size={18} /> },
   ];
 
   return (
@@ -173,7 +173,13 @@ export default function Navbar() {
                             : "text-white/40 hover:text-white"
                       }`}
                   >
-                    {link.name}
+                    {link.icon ? (
+                      <span className="flex items-center justify-center w-full h-full text-white/70 group-hover:text-white group-hover:scale-110 transition-all">
+                        {link.icon}
+                      </span>
+                    ) : (
+                      link.name
+                    )}
                   </Link>
 
                   {/* Types Dropdown */}

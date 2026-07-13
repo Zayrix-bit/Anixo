@@ -10,7 +10,8 @@
     "dev": "vite",
     "dev:backend": "cd backend-core && npm run dev",
     "dev:online": "cd online-server && npm run dev",
-    "dev:all": "concurrently \"npm run dev\" \"npm run dev:backend\" \"npm run dev:online\"",
+    "dev:wt": "cd watch2gether-service && npm run start",
+    "dev:all": "concurrently \"npm run dev\" \"npm run dev:backend\" \"npm run dev:online\" \"npm run dev:wt\"",
     "build": "npx vite build",
     "lint": "eslint .",
     "preview": "vite preview"

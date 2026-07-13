@@ -5,7 +5,7 @@ import Hls from 'hls.js';
 import './artplayer-custom.css';
 import artplayerPluginChromecast from 'artplayer-plugin-chromecast';
 
-const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, onReady, initialTime = 0, className, autoSkip = false, skipTimes, videoQuality = 'best', onQualityChange, availableQualities = [] }) => {
+const ArtPlayer = React.forwardRef(({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, onReady, onPlay, onPause, onSeeked, initialTime = 0, className, autoSkip = false, skipTimes, videoQuality = 'best', onQualityChange, availableQualities = [] }, ref) => {
     const artRef = useRef(null);
     const artInstance = useRef(null);
     const autoSkipRef = useRef(autoSkip);
@@ -14,6 +14,14 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
     useEffect(() => {
         autoSkipRef.current = autoSkip;
     }, [autoSkip]);
+
+    React.useImperativeHandle(ref, () => ({
+        play: () => artInstance.current?.play(),
+        pause: () => artInstance.current?.pause(),
+        seek: (time) => { if (artInstance.current) artInstance.current.currentTime = time; },
+        getCurrentTime: () => artInstance.current?.currentTime || 0,
+        get paused() { return artInstance.current?.playing === false; }
+    }));
 
     useEffect(() => {
         if (!src) return;
@@ -505,6 +513,15 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
             if (audioCtx && audioCtx.state === 'suspended') {
                 audioCtx.resume();
             }
+            if (onPlay) onPlay();
+        });
+
+        art.on('pause', () => {
+            if (onPause) onPause();
+        });
+
+        art.on('seek', () => {
+            if (onSeeked) onSeeked(art.currentTime);
         });
 
         art.on('video:ended', () => {
@@ -654,6 +671,6 @@ const ArtPlayer = ({ src, type, poster, subtitles = [], onEnded, onTimeUpdate, o
     }, [src, poster, type, initialTime, autoSkip, skipTimes, videoQuality]);
 
     return <div ref={artRef} className={className} style={{ width: '100%', height: '100%' }}></div>;
-};
+});
 
 export default ArtPlayer;

@@ -19,9 +19,13 @@ import { usePlayerEvents } from "../hooks/usePlayerEvents";
 import { useStreamFetch } from "../hooks/useStreamFetch";
 import { useEpisodeList } from "../hooks/useEpisodeList";
 import { useAniSkip } from "../hooks/useAniSkip";
+import { io } from "socket.io-client";
+import { WT_SERVER } from "../services/api";
 
 // Extracted Watch sub-components
 import PlayerToolbar from "../components/watch/PlayerToolbar";
+import WatchTogetherSidebar from "../components/watch/WatchTogetherSidebar";
+import ScheduleRoomModal from "../components/watch/ScheduleRoomModal";
 import EpisodeSidebar from "../components/watch/EpisodeSidebar";
 import SeasonsSection from "../components/watch/SeasonsSection";
 import AnimeDetailsSection from "../components/watch/AnimeDetailsSection";
@@ -36,12 +40,15 @@ import { AdBanner300x250 } from "../components/common/AdBanner";
 import { AdsterraSmartLinkBanner } from "../components/common/AdsterraSmartLink";
 import { useAdsterraSmartLink } from "../hooks/useAdsterraSmartLink";
 
+const getScheduledTime = (minutes) => Date.now() + (minutes * 60000);
 
-export default function Watch() {
- const { id } = useParams();
+export default function Watch({ isWatch2GetherMode }) {
+ const { id: paramId } = useParams();
  const { t } = useTranslation();
  const location = useLocation();
  const navigate = useNavigate();
+ const [overrideId, setOverrideId] = useState(null);
+ const id = isWatch2GetherMode ? overrideId : paramId;
 
  // Scroll to comment if hash is present
  useEffect(() => {
@@ -113,7 +120,7 @@ export default function Watch() {
  // You can uncomment the line below to enable
  // openSmartLink();
  }
- }, [activeEpisode, navigate, location.pathname, openSmartLink]);
+ }, [activeEpisode, navigate, location.pathname, openSmartLink, location.search]);
 
  const [episodeLayout, setEpisodeLayout] = useState("grid"); // "grid" | "list"
  const [playerLang, setPlayerLang] = useState("sub");
@@ -121,7 +128,7 @@ export default function Watch() {
 
 
 
- const { user, setGlobalProgress, globalSettings, globalProgress } = useAuth();
+ const { user, loading: isAuthLoading, setGlobalProgress, globalSettings, globalProgress } = useAuth();
 
 
 
@@ -169,11 +176,20 @@ export default function Watch() {
  const [reportSuccess, setReportSuccess] = useState(false);
  const [showReportModal, setShowReportModal] = useState(false);
  const [showLoginModal, setShowLoginModal] = useState(false);
+ const [showScheduleModal, setShowScheduleModal] = useState(false);
  const [reportDetails, setReportDetails] = useState({
  issues: [],
  other: ""
  });
  const [userRating, setUserRating] = useState(() => getSafeStorage(`rating_${id}`, null));
+
+ // Watch Together State
+ const wtSocketRef = useRef(null);
+ const videoRef = useRef(null);
+ const [wtRoom, setWtRoom] = useState(null);
+ const [wtMessages, setWtMessages] = useState([]);
+ const [wtTypingUsers, setWtTypingUsers] = useState([]);
+ const wtRoomParam = isWatch2GetherMode ? new URLSearchParams(location.search).get("room") : null;
 
  // AniSkip integration (extracted to custom hook) — called after useQuery below
 
@@ -208,6 +224,233 @@ export default function Watch() {
  }, 0);
  }
  }, [globalSettings]);
+
+
+ // --- Watch Together Socket Setup ---
+ useEffect(() => {
+   if (!user) return; // Must be logged in
+   const socket = io(WT_SERVER, {
+     auth: { token: localStorage.getItem('token'), avatar: user.avatar }
+   });
+   wtSocketRef.current = socket;
+
+   socket.on('wt_room_update', (data) => {
+     setWtRoom(prev => prev ? { ...prev, members: data.members, hostId: data.hostId } : null);
+   });
+
+   socket.on('wt_host_transferred', () => {
+     setWtRoom(prev => prev ? { ...prev, isHost: true } : null);
+   });
+
+   socket.on('wt_room_ended', () => {
+     alert("The host has ended this Watch Together session.");
+     setWtRoom(null);
+     setWtMessages([]);
+     navigate(window.location.pathname);
+   });
+
+   socket.on('wt_sync_state', (newState) => {
+     setWtRoom(prev => prev ? { ...prev, state: newState } : null);
+     if (videoRef.current) {
+       // Non-host: always force-sync to host's exact time
+       const currentTime = videoRef.current.getCurrentTime() || 0;
+       if (Math.abs(currentTime - newState.time) > 0.5) {
+         videoRef.current.seek(newState.time);
+       }
+       if (newState.playing) {
+         videoRef.current.play();
+       } else {
+         videoRef.current.pause();
+       }
+     }
+   });
+
+   socket.on('wt_change_episode', (epNum) => {
+     setActiveEpisode(epNum);
+   });
+
+   socket.on('wt_new_message', (msg) => {
+     setWtMessages(prev => [...prev, msg]);
+   });
+
+   socket.on('wt_user_typing', (user) => {
+     setWtTypingUsers(prev => {
+       if (!prev.find(u => u.userId === user.userId)) {
+         return [...prev, user];
+       }
+       return prev;
+     });
+   });
+
+   socket.on('wt_user_stop_typing', (userId) => {
+     setWtTypingUsers(prev => prev.filter(u => u.userId !== userId));
+   });
+
+   // If joined via URL
+   if (wtRoomParam) {
+     socket.on('connect', () => {
+       socket.timeout(5000).emit('join_wt_room', wtRoomParam, (err, res) => {
+         if (err) {
+           alert("Failed to connect to the room. The server took too long to respond.");
+         } else if (res.error) {
+           alert(res.error);
+         } else {
+           if (res.animeId) setOverrideId(res.animeId);
+           setActiveServer(3);
+           setWtRoom({ roomId: wtRoomParam, hostId: res.hostId, members: res.members, state: res.state, isHost: res.isHost });
+           if (res.state.episode !== activeEpisode) {
+             setActiveEpisode(res.state.episode);
+           }
+         }
+       });
+     });
+   }
+
+   return () => {
+     socket.disconnect();
+   };
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, wtRoomParam]);
+
+  const lastEmittedEpisode = useRef(activeEpisode);
+  useEffect(() => {
+    if (wtRoom?.isHost && wtSocketRef.current?.connected && lastEmittedEpisode.current !== activeEpisode) {
+      wtSocketRef.current.emit('wt_change_episode', activeEpisode);
+      lastEmittedEpisode.current = activeEpisode;
+    }
+  }, [activeEpisode, wtRoom?.isHost]);
+
+  const handleCreateWtRoom = () => {
+    if (!user) return setShowLoginModal(true);
+    if (activeServer !== 3) {
+      alert("Watch Together only supports Server 3. Switching you to Server 3.");
+      setActiveServer(3);
+    }
+   
+   if (!wtSocketRef.current?.connected) {
+     return alert("Connecting to Watch Together Server... Please wait a moment and try again. If this persists, ensure watch2gether-service is running on port 8081.");
+   }
+
+   wtSocketRef.current?.timeout(5000).emit('create_wt_room', { 
+     animeId: id, 
+     episode: activeEpisode,
+     animeTitle: getTitle(anime.title),
+     animeCover: anime.coverImage?.extraLarge || anime.coverImage?.large
+   }, (err, res) => {
+     if (err) {
+       console.error("Socket emit timeout:", err);
+       return alert("Failed to connect to the Watch Together Server. Did you forget to start the watch2gether-service terminal?");
+     }
+     if (res.error) return alert(res.error);
+     navigate(`/watch2gether?room=${res.roomId}`);
+   });
+ };
+
+  const handleScheduleWtRoom = () => {
+    if (!user) return setShowLoginModal(true);
+    if (activeServer !== 3) {
+      alert("Watch Together only supports Server 3. Switching you to Server 3.");
+      setActiveServer(3);
+    }
+    
+    if (!wtSocketRef.current?.connected) {
+      return alert("Connecting to Watch Together Server... Please wait a moment and try again.");
+    }
+    
+    setShowScheduleModal(true);
+  };
+
+  const confirmScheduleWtRoom = (minutes) => {
+    const scheduledFor = getScheduledTime(minutes);
+
+    wtSocketRef.current?.timeout(5000).emit('create_wt_room', { 
+      animeId: id, 
+      episode: activeEpisode,
+      animeTitle: getTitle(anime.title),
+      animeCover: anime.coverImage?.extraLarge || anime.coverImage?.large,
+      scheduledFor
+    }, (err, res) => {
+      if (err) return alert("Failed to connect to the Watch Together Server.");
+      if (res.error) return alert(res.error);
+      alert(`Room scheduled for ${minutes} minutes from now! You can find it in the Scheduled tab.`);
+    });
+  };
+
+  const handleLeaveWtRoom = () => {
+    wtSocketRef.current?.emit('leave_wt_room');
+    setWtRoom(null);
+    setWtMessages([]);
+    navigate(window.location.pathname);
+  };
+
+  const handleEndWtRoom = () => {
+    if (!wtSocketRef.current?.connected) return;
+    if (window.confirm("Are you sure you want to end this room for everyone?")) {
+      wtSocketRef.current.emit('end_wt_room');
+      setWtRoom(null);
+      setWtMessages([]);
+      navigate(window.location.pathname);
+    }
+  };
+
+  const handleWtSyncNow = () => {
+   wtSocketRef.current?.emit('get_room_state', (res) => {
+     if (res.state && videoRef.current) {
+       videoRef.current.seek(res.state.time);
+       if (res.state.playing) videoRef.current.play();
+       else videoRef.current.pause();
+     }
+   });
+ };
+
+ const handleWtSendMessage = (text) => {
+   wtSocketRef.current.emit('wt_chat_message', text);
+ };
+
+ const handleWtTypingAction = (isTyping) => {
+   if (wtSocketRef.current) {
+     wtSocketRef.current.emit(isTyping ? 'wt_typing' : 'wt_stop_typing');
+   }
+ };
+
+ // VideoPlayer Callbacks for W2G Sync
+  const onPlay = () => {
+    if (wtRoom && wtRoom.isHost) {
+      wtSocketRef.current?.emit('wt_sync_state', { playing: true, time: videoRef.current?.getCurrentTime() || 0 });
+    }
+  };
+
+  const onPause = () => {
+    if (wtRoom && wtRoom.isHost) {
+      wtSocketRef.current?.emit('wt_sync_state', { playing: false, time: videoRef.current?.getCurrentTime() || 0 });
+    }
+  };
+
+  const onSeeked = () => {
+    if (wtRoom && wtRoom.isHost) {
+      wtSocketRef.current?.emit('wt_sync_state', { playing: wtRoom?.state?.playing || false, time: videoRef.current?.getCurrentTime() || 0 });
+    }
+  };
+
+  // Periodic host sync - broadcast current time every 3 seconds so members stay perfectly synced
+  useEffect(() => {
+    if (!wtRoom || !wtRoom.isHost) return;
+    const interval = setInterval(() => {
+      if (videoRef.current && wtSocketRef.current?.connected) {
+        const time = videoRef.current.getCurrentTime() || 0;
+        const playing = !videoRef.current.paused;
+        wtSocketRef.current.emit('wt_sync_state', { playing, time });
+      }
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [wtRoom]);
+
+  // Sync episode changes to W2G room
+  useEffect(() => {
+    if (wtRoom && wtRoom.isHost && wtSocketRef.current?.connected) {
+      wtSocketRef.current?.emit('wt_change_episode', activeEpisode);
+    }
+  }, [activeEpisode, wtRoom]);
 
 
  const { data: anime, isLoading } = useQuery({
@@ -506,6 +749,41 @@ export default function Watch() {
  }));
  };
 
+ if (isWatch2GetherMode && !user && !isAuthLoading) {
+ return (
+ <div className="min-h-screen bg-[#111] flex flex-col items-center justify-center text-white p-6">
+ <h1 className="text-2xl font-bold mb-4">Login Required</h1>
+ <p className="text-white/50 mb-6 text-center max-w-sm">
+   You must be logged in to join or create a Watch Together room.
+ </p>
+  <div className="flex gap-4 items-center">
+    <Link 
+      to="/" 
+      className="px-6 py-3 bg-white/10 hover:bg-white/20 font-bold uppercase tracking-widest rounded-xl transition-all"
+    >
+      Go Back Home
+    </Link>
+    <button 
+      onClick={() => setShowLoginModal(true)} 
+      className="px-6 py-3 bg-discord-600 hover:bg-discord-700 font-bold uppercase tracking-widest rounded-xl transition-all"
+    >
+      Log In to Join
+    </button>
+  </div>
+  {showLoginModal && <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />}
+  </div>
+ );
+ }
+
+ if (isWatch2GetherMode && !id) {
+ return (
+ <div className="min-h-screen bg-[#111] flex flex-col items-center justify-center text-white">
+ <div className="w-10 h-10 border-4 border-discord-600 border-t-transparent flex items-center justify-center rounded-full animate-spin mb-4"></div>
+ <p className="text-white/50 text-sm font-bold tracking-widest uppercase">Connecting to Room...</p>
+ </div>
+ );
+ }
+
  if (isLoading) {
  return (
  <div className="min-h-screen bg-[#111] flex items-center justify-center">
@@ -528,6 +806,8 @@ export default function Watch() {
  </div>
  );
  }
+
+
 
  return (
  <div className={`min-h-screen font-sans text-white relative bg-transparent overflow-x-hidden ${isFocusMode ? "overflow-hidden" : ""}`}>
@@ -552,29 +832,31 @@ export default function Watch() {
  {/* Breadcrumbs */}
  {!isFocusMode && (
  <div
- className="bg-[#121418] border-x border-t border-white/15 px-5 py-3 flex items-center justify-between"
+ className={`bg-[#121418] border-x border-t border-white/15 px-5 py-3 flex items-center justify-between ${wtRoom ? "pointer-events-none" : ""}`}
  style={{ clipPath: 'polygon(15px 0%, 100% 0%, 100% 100%, 0% 100%, 0% 15px)' }}
  >
  <nav className="flex items-center gap-2 text-[13px] font-medium text-white/60 overflow-x-auto whitespace-nowrap scrollbar-hide">
- <Link to="/home" className="hover:text-white transition-colors flex items-center gap-1.5">
+ <Link to="/home" className={`transition-colors flex items-center gap-1.5 ${wtRoom ? "text-white/60" : "hover:text-white"}`}>
  <HomeIcon size={14} className="mb-0.5" />
  Home
  </Link>
  <span className="text-white/10 font-light">/</span>
- <Link to={`/browse?format=${(anime.format || "TV").toUpperCase()}`} className="hover:text-white transition-colors uppercase cursor-pointer">{anime.format || "TV"}</Link>
+ <Link to={wtRoom ? "#" : `/browse?format=${(anime.format || "TV").toUpperCase()}`} className={`uppercase ${wtRoom ? "text-white/60" : "hover:text-white transition-colors cursor-pointer"}`}>{anime.format || "TV"}</Link>
  <span className="text-white/10 font-light">/</span>
  <span className="text-white/70 truncate max-w-[200px] md:max-w-none">{getTitle(anime.title)}</span>
  </nav>
  </div>
  )}
 
- {/* New Releasing Anime Notice */}
- <div className="mb-2 bg-[#1a1a1a] border border-[#ff0000]/30 rounded-sm px-4 py-2 flex items-center gap-2.5">
- <Info className="text-[#ff0000] flex-shrink-0" size={16} />
- <p className="text-white/80 text-[11px] sm:text-xs">
- <strong className="text-[#ff0000]">Notice:</strong> For newly releasing anime, please use <strong className="text-white">Server 1 or Server 3</strong> for the latest episodes and fastest updates.
- </p>
- </div>
+  {/* New Releasing Anime Notice */}
+  {!wtRoom && (
+    <div className="mb-2 bg-[#1a1a1a] border border-[#ff0000]/30 rounded-sm px-4 py-2 flex items-center gap-2.5">
+      <Info className="text-[#ff0000] flex-shrink-0" size={16} />
+      <p className="text-white/80 text-[11px] sm:text-xs">
+        <strong className="text-[#ff0000]">Notice:</strong> For newly releasing anime, please use <strong className="text-white">Server 1 or Server 3</strong> for the latest episodes and fastest updates.
+      </p>
+    </div>
+  )}
 
  {/* Video Player Container */}
  <section className={`relative w-full aspect-video bg-[#000] overflow-hidden border-x border-white/15 shadow-2xl transition-all duration-500 ${isFocusMode ? 'max-w-[90vw] max-h-[85vh] pointer-events-auto ring-1 ring-white/10 rounded-sm' : ''}`}>
@@ -598,11 +880,17 @@ export default function Watch() {
  setActiveEpisode={setActiveEpisode}
  iframeRef={iframeRef}
  skipTimes={skipTimes}
+ videoRef={videoRef}
+ onPlay={onPlay}
+ onPause={onPause}
+ onSeeked={onSeeked}
+ isWatch2GetherMode={!!wtRoom}
+ isW2GHost={!!wtRoom?.isHost}
  />
  </section>
 
  {/* Sub-Server Selector for Server 1 and 3 */}
- {(activeServer === 1 || activeServer === 3) && streamData?.all_streams && streamData.all_streams.length > 1 && (
+ {!(wtRoom && !wtRoom.isHost) && (activeServer === 1 || activeServer === 3) && streamData?.all_streams && streamData.all_streams.length > 1 && (
  <div className="bg-[#0a0a0a] border-b border-x border-white/15">
  <button
  onClick={() => setShowSubServers(prev => !prev)}
@@ -649,6 +937,9 @@ export default function Watch() {
  activeServer={activeServer} setActiveServer={setActiveServer}
  isBookmarked={isBookmarked} isWatchlistLoading={isWatchlistLoading}
  handleToggleBackendWatchlist={handleToggleBackendWatchlist}
+ wtRoom={wtRoom} 
+ handleCreateWtRoom={handleCreateWtRoom}
+ handleScheduleWtRoom={handleScheduleWtRoom}
  showWatchlistDropdown={showWatchlistDropdown} setShowWatchlistDropdown={setShowWatchlistDropdown}
  backendWatchlist={backendWatchlist} handleUpdateWatchlistStatus={handleUpdateWatchlistStatus}
  id={id} handleReport={handleReport} reportSuccess={reportSuccess} user={user}
@@ -662,24 +953,40 @@ export default function Watch() {
  )}
  </div>
 
- {/* RIGHT COLUMN: Episodes Sidebar */}
+ {/* RIGHT COLUMN: Episodes Sidebar & Watch Together */}
  {!isFocusMode && (
- <EpisodeSidebar
- filteredEpisodes={filteredEpisodes}
- episodeLayout={episodeLayout} setEpisodeLayout={setEpisodeLayout}
- episodePage={episodePage} setEpisodePage={setEpisodePage}
- EPISODES_PER_PAGE={EPISODES_PER_PAGE}
- activeEpisode={activeEpisode} setActiveEpisode={setActiveEpisode}
- watchedEpisodes={watchedEpisodes}
- isEpisodeSearchOpen={isEpisodeSearchOpen} setIsEpisodeSearchOpen={setIsEpisodeSearchOpen}
- episodeSearchQuery={episodeSearchQuery} setEpisodeSearchQuery={setEpisodeSearchQuery}
- malEpisodes={malEpisodes} anime={anime}
- />
+ <div className="lg:col-span-1 flex flex-col gap-6">
+   {wtRoom && (
+     <WatchTogetherSidebar
+       wtRoom={wtRoom}
+       wtMessages={wtMessages}
+       wtTypingUsers={wtTypingUsers}
+       onSendMessage={handleWtSendMessage}
+       onTypingAction={handleWtTypingAction}
+       onSyncNow={handleWtSyncNow}
+       onLeave={handleLeaveWtRoom}
+       onEndRoom={handleEndWtRoom}
+       userId={user?.id}
+     />
+   )}
+   <EpisodeSidebar
+     filteredEpisodes={filteredEpisodes}
+     episodeLayout={episodeLayout} setEpisodeLayout={setEpisodeLayout}
+     episodePage={episodePage} setEpisodePage={setEpisodePage}
+     EPISODES_PER_PAGE={EPISODES_PER_PAGE}
+     activeEpisode={activeEpisode} setActiveEpisode={setActiveEpisode}
+     watchedEpisodes={watchedEpisodes}
+     isEpisodeSearchOpen={isEpisodeSearchOpen} setIsEpisodeSearchOpen={setIsEpisodeSearchOpen}
+     episodeSearchQuery={episodeSearchQuery} setEpisodeSearchQuery={setEpisodeSearchQuery}
+     malEpisodes={malEpisodes} anime={anime}
+     wtRoom={wtRoom}
+   />
+ </div>
  )}
  </div>
 
  {/* Seasons */}
- {!isFocusMode && (
+ {!isFocusMode && !wtRoom && (
  <SeasonsSection stableSeasons={stableSeasons} getTitle={getTitle} />
  )}
 
@@ -693,7 +1000,7 @@ export default function Watch() {
  )}
 
  {/* Characters + Comments */}
- {!isFocusMode && (
+ {!isFocusMode && !wtRoom && (
  <section className="py-16 border-t border-white/15 space-y-20 animate-in fade-in duration-1000">
  <CharactersSection characters={anime.characters} />
  <CustomCommentSection
@@ -766,6 +1073,13 @@ export default function Watch() {
  onClose={() => setShowReportModal(false)}
  />
  )}
+
+ {/* Schedule Room Modal */}
+ <ScheduleRoomModal 
+   isOpen={showScheduleModal}
+   onClose={() => setShowScheduleModal(false)}
+   onSchedule={confirmScheduleWtRoom}
+ />
 
  {/* Login Modal */}
  <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />

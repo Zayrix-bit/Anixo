@@ -16,6 +16,12 @@ export const CHAT_SERVER = (typeof window !== "undefined" && (window.location.ho
   ? "http://localhost:8080"
   : (import.meta.env.VITE_CHAT_API || "");
 
+export const WT_SERVER = import.meta.env.VITE_WATCH2GETHER_API || import.meta.env.VITE_WT_API || (
+  (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"))
+    ? "http://localhost:8081"
+    : ""
+);
+
 
 // --- ADVANCED HYBRID CACHE MANAGER ---
 const CACHE_TTL = {

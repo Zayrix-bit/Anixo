@@ -35,6 +35,7 @@ const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const ChatRoom = lazy(() => import("./pages/ChatRoom"));
 const Community = lazy(() => import("./pages/Community"));
 const CommunityPostDetail = lazy(() => import("./pages/CommunityPostDetail"));
+const Watch2GetherLobby = lazy(() => import("./pages/Watch2GetherLobby"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 import { Loader } from "lucide-react";
@@ -118,6 +119,7 @@ function AppRoutes() {
             <Route path="/chat" element={<ChatRoom />} />
             <Route path="/community" element={<Community />} />
             <Route path="/community/post/:postId" element={<CommunityPostDetail />} />
+            <Route path="/watch2gether" element={<Watch2GetherLobby />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

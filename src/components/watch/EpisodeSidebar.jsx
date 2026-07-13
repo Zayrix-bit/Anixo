@@ -10,7 +10,7 @@ export default function EpisodeSidebar({
   activeEpisode, setActiveEpisode, watchedEpisodes,
   isEpisodeSearchOpen, setIsEpisodeSearchOpen,
   episodeSearchQuery, setEpisodeSearchQuery,
-  malEpisodes, anime
+  malEpisodes, anime, wtRoom
 }) {
   const { t } = useTranslation();
   const totalPages = Math.ceil(filteredEpisodes.length / EPISODES_PER_PAGE);
@@ -28,6 +28,8 @@ export default function EpisodeSidebar({
       || aniListEp?.title?.replace(/^Episode \d+\s*-\s*/i, '')
       || `Episode ${ep}`;
   };
+
+  const isW2GNonHost = wtRoom && !wtRoom.isHost;
 
 
 
@@ -116,9 +118,13 @@ export default function EpisodeSidebar({
                 <button
                   key={ep}
                   onClick={() => setActiveEpisode(ep)}
+                  disabled={isW2GNonHost}
+                  title={isW2GNonHost ? "Only the host can change episodes" : ""}
                   className={`w-full text-left flex flex-col gap-1 px-4 py-3 text-[12px] font-medium transition-all rounded-[2px] border ${activeEpisode === ep
                     ? "bg-discord-600/10 text-discord-500 border-discord-500 shadow-lg"
-                    : "bg-[#161616] text-white/70 border-white/15 hover:bg-[#202020] hover:text-white"
+                    : isW2GNonHost
+                      ? "bg-[#161616] text-white/30 border-white/5 cursor-not-allowed"
+                      : "bg-[#161616] text-white/70 border-white/15 hover:bg-[#202020] hover:text-white"
                     }`}
                 >
                   <div className="flex items-start gap-3 w-full">
@@ -141,12 +147,16 @@ export default function EpisodeSidebar({
                 <button
                   key={ep}
                   onClick={() => setActiveEpisode(ep)}
+                  disabled={isW2GNonHost}
+                  title={isW2GNonHost ? "Only the host can change episodes" : ""}
                   className={`aspect-square w-full flex items-center justify-center text-[12px] font-bold transition-colors rounded-[4px] ${
                     activeEpisode === ep
                       ? "bg-discord-600 text-white shadow-md shadow-discord-600/20"
-                      : watchedEpisodes.includes(ep)
-                        ? "bg-[#1a1a1a] text-white/30 hover:bg-[#2a2a2a] hover:text-white"
-                        : "bg-[#2a2a2a] text-white/90 hover:bg-white hover:text-black hover:shadow-lg"
+                      : isW2GNonHost
+                        ? "bg-[#1a1a1a] text-white/20 cursor-not-allowed"
+                        : watchedEpisodes.includes(ep)
+                          ? "bg-[#1a1a1a] text-white/30 hover:bg-[#2a2a2a] hover:text-white"
+                          : "bg-[#2a2a2a] text-white/90 hover:bg-white hover:text-black hover:shadow-lg"
                   }`}
                 >
                   {ep}

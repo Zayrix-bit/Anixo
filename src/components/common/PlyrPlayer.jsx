@@ -6,7 +6,7 @@ import './plyr-custom.css';
 import SubtitleSettingsMenu from './SubtitleSettingsMenu';
 import CustomPlyrMenu from './CustomPlyrMenu';
 
-const PlyrPlayer = ({ 
+const PlyrPlayer = React.forwardRef(({ 
   src, 
   type, 
   poster, 
@@ -14,10 +14,14 @@ const PlyrPlayer = ({
   onEnded, 
   onTimeUpdate, 
   onReady, 
+  onPlay,
+  onPause,
+  onSeeked,
   initialTime = 0, 
   className, 
-  skipTimes 
-}) => {
+  skipTimes,
+  disableControls = false
+}, ref) => {
   const videoRef = useRef(null);
   const plyrRef = useRef(null);
   const hlsRef = useRef(null);
@@ -34,10 +38,18 @@ const PlyrPlayer = ({
   const [progressContainer, setProgressContainer] = useState(null);
 
   // Keep latest props in a ref so they don't trigger re-initialization
-  const propsRef = useRef({ onEnded, onReady, onTimeUpdate, skipTimes, subtitles });
+  const propsRef = useRef({ onEnded, onReady, onTimeUpdate, onPlay, onPause, onSeeked, skipTimes, subtitles });
   useEffect(() => {
-    propsRef.current = { onEnded, onReady, onTimeUpdate, skipTimes, subtitles };
-  }, [onEnded, onReady, onTimeUpdate, skipTimes, subtitles]);
+    propsRef.current = { onEnded, onReady, onTimeUpdate, onPlay, onPause, onSeeked, skipTimes, subtitles };
+  }, [onEnded, onReady, onTimeUpdate, onPlay, onPause, onSeeked, skipTimes, subtitles]);
+
+  React.useImperativeHandle(ref, () => ({
+    play: () => plyrRef.current?.play(),
+    pause: () => plyrRef.current?.pause(),
+    seek: (time) => { if (plyrRef.current) plyrRef.current.currentTime = time; },
+    getCurrentTime: () => plyrRef.current?.currentTime || 0,
+    get paused() { return plyrRef.current?.paused ?? true; }
+  }));
 
   useEffect(() => {
     if (!src || !videoRef.current) return;
@@ -80,6 +92,13 @@ const PlyrPlayer = ({
         doubleClick: { togglesFullscreen: false },
         clickToPlay: false
       });
+
+      // If controls are disabled (non-host W2G), hide interactive elements via CSS
+      if (disableControls && plyrRef.current?.elements?.container) {
+        const container = plyrRef.current.elements.container;
+        container.classList.add('plyr--w2g-viewer');
+      }
+
       setPlyrInstance(plyrRef.current);
 
       const injectSetting = () => {
@@ -204,6 +223,18 @@ const PlyrPlayer = ({
 
       plyrRef.current.on('ended', () => {
         if (propsRef.current.onEnded) propsRef.current.onEnded();
+      });
+
+      plyrRef.current.on('play', () => {
+        if (propsRef.current.onPlay) propsRef.current.onPlay();
+      });
+
+      plyrRef.current.on('pause', () => {
+        if (propsRef.current.onPause) propsRef.current.onPause();
+      });
+
+      plyrRef.current.on('seeked', () => {
+        if (propsRef.current.onSeeked) propsRef.current.onSeeked(plyrRef.current.currentTime);
       });
       
       plyrRef.current.on('loadedmetadata', () => {
@@ -416,6 +447,6 @@ const PlyrPlayer = ({
       )}
     </div>
   );
-};
+});
 
 export default PlyrPlayer;
