@@ -38,50 +38,55 @@ export default function PlayerToolbar({
  <>
  {/* Action Toolbar */}
  <section
- className="relative w-full bg-[#121418] border-x border-b border-white/15 px-4 sm:px-6 lg:px-10 py-3 sm:py-4 flex items-center justify-between gap-4 sm:gap-8 select-none"
+  className="relative w-full bg-[#121418] border-x border-b border-white/15 px-3 sm:px-6 lg:px-10 py-3 sm:py-4 flex flex-wrap items-center justify-between gap-y-4 gap-x-2 sm:gap-8 select-none"
  >
- <div className="flex items-center gap-4 sm:gap-6 lg:gap-10">
+ <div className="flex flex-wrap items-center gap-3 sm:gap-6 lg:gap-10">
  <button
  onClick={() => setIsFocusMode(!isFocusMode)}
  className={`flex items-center gap-1 sm:gap-2 transition-all ${isFocusMode ? 'text-discord-500' : 'text-white/70 hover:text-white'}`}
+ title={t('player.focus')}
  >
- <Moon size={13} className="sm:w-4 sm:h-4" fill={isFocusMode ? "currentColor" : "none"} />
- <span className="text-[9px] sm:text-[12px] font-medium">{t('player.focus')}</span>
+ <Moon size={15} className="sm:w-4 sm:h-4" fill={isFocusMode ? "currentColor" : "none"} />
+ <span className="hidden sm:inline text-[12px] font-medium">{t('player.focus')}</span>
  </button>
 
  <div className={`flex items-center gap-4 sm:gap-6 lg:gap-10 ${wtRoom && !wtRoom.isHost ? 'pointer-events-none opacity-40' : ''}`}>
  <button
  onClick={() => setAutoNext(!autoNext)}
  className="flex items-center gap-1 sm:gap-2 group transition-all"
+ title={t('player.autoNext')}
  >
- <FastForward size={13} className={`sm:w-4 sm:h-4 transition-all ${autoNext ? 'text-discord-500' : 'text-white/60 group-hover:text-white'}`} />
- <span className={`text-[9px] sm:text-[12px] font-medium ${autoNext ? 'text-white' : 'text-white/70'}`}>{t('player.autoNext')}</span>
+ <FastForward size={15} className={`sm:w-4 sm:h-4 transition-all ${autoNext ? 'text-discord-500' : 'text-white/60 group-hover:text-white'}`} />
+ <span className={`hidden sm:inline text-[12px] font-medium ${autoNext ? 'text-white' : 'text-white/70'}`}>{t('player.autoNext')}</span>
  </button>
 
  <button
  onClick={() => setAutoPlay(!autoPlay)}
  className="flex items-center gap-1 sm:gap-2 group transition-all"
+ title={t('player.autoPlay')}
  >
- <PlayCircle size={13} className={`sm:w-4 sm:h-4 transition-all ${autoPlay ? 'text-discord-500' : 'text-white/60 group-hover:text-white'}`} />
- <span className={`text-[9px] sm:text-[12px] font-medium ${autoPlay ? 'text-white' : 'text-white/70'}`}>{t('player.autoPlay')}</span>
+ <PlayCircle size={15} className={`sm:w-4 sm:h-4 transition-all ${autoPlay ? 'text-discord-500' : 'text-white/60 group-hover:text-white'}`} />
+ <span className={`hidden sm:inline text-[12px] font-medium ${autoPlay ? 'text-white' : 'text-white/70'}`}>{t('player.autoPlay')}</span>
  </button>
  </div>
  </div>
 
- <div className={`flex items-center gap-4 sm:gap-6 lg:gap-10 ${wtRoom && !wtRoom.isHost ? 'pointer-events-none opacity-40' : ''}`}>
+ <div className={`flex items-center gap-3 sm:gap-6 lg:gap-8 ml-auto sm:ml-0 ${wtRoom && !wtRoom.isHost ? 'pointer-events-none opacity-40' : ''}`}>
  <button
  onClick={goPrevEpisode}
  className={`flex items-center gap-1 sm:gap-1.5 transition-all ${activeEpisode <= 1 ? 'opacity-30 pointer-events-none' : 'text-white/70 hover:text-white'}`}
+ title={t('player.prev')}
  >
- <SkipBack size={13} className="sm:w-4 sm:h-4" fill="currentColor" />
- <span className="text-[9px] sm:text-[12px] font-medium">{t('player.prev')}</span>
+ <SkipBack size={15} className="sm:w-4 sm:h-4" fill="currentColor" />
+ <span className="hidden sm:inline text-[12px] font-medium">{t('player.prev')}</span>
  </button>
  <button
  onClick={goNextEpisode}
  className={`flex items-center gap-1 sm:gap-1.5 transition-all ${activeEpisode >= episodesList.length ? 'opacity-30 pointer-events-none' : 'text-white/70 hover:text-white'}`}
+ title={t('player.next')}
  >
- <SkipForward size={13} className="sm:w-4 sm:h-4" fill="currentColor" />
- <span className="text-[9px] sm:text-[12px] font-medium">{t('player.next')}</span>
+ <SkipForward size={15} className="sm:w-4 sm:h-4" fill="currentColor" />
+ <span className="hidden sm:inline text-[12px] font-medium">{t('player.next')}</span>
  </button>
 
  {!isFocusMode && (
@@ -149,10 +154,10 @@ export default function PlayerToolbar({
 
  {/* Watch Together Button */}
  {!wtRoom && handleCreateWtRoom && (
-  <div className="flex items-center gap-1 bg-discord-500/10 rounded-full border border-discord-500/20 shadow-[0_0_15px_rgba(108,92,231,0.15)] overflow-hidden">
+  <div className="flex items-center bg-discord-500/10 rounded-full border border-discord-500/20 shadow-[0_0_15px_rgba(108,92,231,0.15)] overflow-hidden">
     <button
     onClick={handleCreateWtRoom}
-    className="flex items-center gap-2 sm:gap-3 transition-all text-white/60 hover:text-discord-500 hover:bg-discord-500/20 px-3 py-1.5"
+    className="flex items-center gap-1.5 sm:gap-3 transition-all text-white/60 hover:text-discord-500 hover:bg-discord-500/20 px-2.5 sm:px-3 py-1.5"
     title="Start Watch Together Now"
     >
     <Users size={14} className="sm:w-4 sm:h-4" />
@@ -163,7 +168,7 @@ export default function PlayerToolbar({
         <div className="w-px h-5 bg-discord-500/30"></div>
         <button
           onClick={handleScheduleWtRoom}
-          className="px-3 py-1.5 text-white/60 hover:text-discord-500 hover:bg-discord-500/20 transition-all"
+          className="px-2.5 sm:px-3 py-1.5 text-white/60 hover:text-discord-500 hover:bg-discord-500/20 transition-all"
           title="Schedule for Later"
         >
           <Clock size={14} className="sm:w-4 sm:h-4" />
