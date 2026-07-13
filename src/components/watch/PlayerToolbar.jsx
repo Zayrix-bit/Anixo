@@ -154,7 +154,7 @@ export default function PlayerToolbar({
 
  {/* Watch Together Button */}
  {!wtRoom && handleCreateWtRoom && (
-  <div className="flex items-center bg-discord-500/10 rounded-full border border-discord-500/20 shadow-[0_0_15px_rgba(108,92,231,0.15)] overflow-hidden">
+  <div className="flex items-center bg-discord-500/10 rounded-full border border-discord-500/20 overflow-hidden">
     <button
     onClick={handleCreateWtRoom}
     className="flex items-center gap-1.5 sm:gap-3 transition-all text-white/60 hover:text-discord-500 hover:bg-discord-500/20 px-2.5 sm:px-3 py-1.5"
