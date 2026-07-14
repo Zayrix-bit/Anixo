@@ -135,7 +135,7 @@ export default function Navbar() {
                 setSidebarTab("menu");
                 setShowSidebar(true);
               }}
-              className="lg:hidden text-white/80 hover:text-white transition-colors"
+              className="md:hidden text-white/80 hover:text-white transition-colors"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                 <path strokeLinecap="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -155,7 +155,7 @@ export default function Navbar() {
 
           {/* Navigation links */}
           {!isLandingPage && (
-            <div className="hidden lg:flex items-center gap-6 h-full">
+            <div className="flex max-md:hidden items-center gap-2 lg:gap-6 h-full shrink-0">
               {links.map((link) => (
                 <div
                   key={link.name}
@@ -172,7 +172,7 @@ export default function Navbar() {
                         setShowSidebar(true);
                       }
                     }}
-                    className={`text-[11px] font-bold tracking-[1px] transition-all duration-200 px-3 py-1 rounded-[4px] flex items-center uppercase ${
+                    className={`text-[9px] lg:text-[11px] font-bold tracking-[0.5px] lg:tracking-[1px] transition-all duration-200 px-1.5 lg:px-3 py-1 rounded-[4px] flex items-center uppercase whitespace-nowrap ${
                       link.name === "HENTAI"
                         ? "bg-gradient-to-r from-[#ff2a5f] to-[#ff7e40] bg-clip-text text-transparent hover:scale-110"
                         : activeDropdown === link.dropdown && link.dropdown
@@ -250,7 +250,7 @@ export default function Navbar() {
           {!isLandingPage && (
             <div className="flex items-center gap-4">
               {/* Desktop Search Bar */}
-              <div ref={searchContainerRef} className="hidden md:relative md:flex md:items-center">
+              <div ref={searchContainerRef} className="relative flex items-center max-md:hidden">
                 <form
                   onSubmit={handleSearchSubmit}
                   className="flex items-center bg-white/[0.03] border border-white/15 rounded-[6px] px-3 py-1.5 focus-within:border-discord-500/50 transition-all w-[240px] xl:w-[320px]"
@@ -426,7 +426,7 @@ export default function Navbar() {
               {/* Single Language Toggle */}
               <button
                 onClick={toggleLanguage}
-                className="hidden md:flex items-center justify-center bg-[#2a2a2a] border border-white/10 h-[26px] min-w-[34px] rounded-[4px] text-[10px] font-black text-white hover:bg-discord-600 transition-all duration-300 group overflow-hidden"
+                className="flex max-md:hidden items-center justify-center bg-[#2a2a2a] border border-white/10 h-[26px] min-w-[34px] rounded-[4px] text-[10px] font-black text-white hover:bg-discord-600 transition-all duration-300 group overflow-hidden"
                 title={`Switch to ${language === 'EN' ? 'Japanese' : 'English'}`}
               >
                 <span className="italic tracking-tighter transform group-hover:scale-110 transition-transform">
