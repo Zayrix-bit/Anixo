@@ -142,10 +142,14 @@ const checkAndReply = async () => {
             await createBotReply(bot, post._id, parentCommentId);
             repliesThisPost++;
             commentUsernames.push(bot.username);
-            // Delay between replies for natural conversation
-            await new Promise(r => setTimeout(r, 2500));
+            // Delay between replies for natural conversation and rate limits
+            await new Promise(r => setTimeout(r, 6000));
           } catch (err) {
-            console.error(`[AI Bots] ${bot.displayName} reply failed:`, err);
+            if (err.status === 429 || err.response?.status === 429) {
+              console.warn(`[AI Bots] Rate limit hit (429) for ${bot.displayName}. Skipping for now.`);
+            } else {
+              console.error(`[AI Bots] ${bot.displayName} reply failed:`, err.message || err);
+            }
           }
         }
       }
