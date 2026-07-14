@@ -635,6 +635,7 @@ export const anilistCallback = async (req, res) => {
       }
     });
 
+
     const { access_token } = tokenResponse.data;
 
     // 2. Get AniList user info
