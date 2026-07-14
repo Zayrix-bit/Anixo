@@ -1,14 +1,15 @@
 import AIBot from '../models/AIBot.js';
-import { 
-  initAllBots, 
-  createBotPost, 
+import {
+  initAllBots,
+  createBotPost,
   createBotReply,
-  generatePost, 
+  generatePost,
   getAllActiveBots,
   getRandomBot
 } from '../services/aiBotService.js';
 
 // Get all bot configs (public)
+
 export const getBotConfig = async (req, res) => {
   try {
     await initAllBots();
@@ -29,7 +30,7 @@ export const updateBotConfig = async (req, res) => {
 
     const { username } = req.params;
     const updates = req.body;
-    
+
     const bot = await AIBot.findOne({ username });
     if (!bot) {
       return res.status(404).json({ success: false, message: 'Bot not found' });
