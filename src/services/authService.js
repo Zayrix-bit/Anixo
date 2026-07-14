@@ -39,12 +39,7 @@ export const getAnilistAuthUrl = () => {
   const token = localStorage.getItem('token');
   const baseUrl = backendApi.defaults.baseURL || "";
   
-  // In production, we want /auth/anilist, NOT /api/auth/anilist
-  // because vercel.json routes /auth/* to the Node.js backend
-  const isLocal = typeof window !== "undefined" && window.location.hostname === "localhost";
-  const absoluteBaseUrl = baseUrl || (isLocal ? window.location.origin + '/api' : window.location.origin);
-  
-  return `${absoluteBaseUrl}/auth/anilist?token=${token}`;
+  return `${baseUrl}/auth/anilist?token=${token}`;
 };
 
 export const disconnectAnilist = async () => {
