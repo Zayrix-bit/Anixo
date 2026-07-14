@@ -25,6 +25,7 @@ const forceBotEngage = async () => {
       process.exit(1);
     }
 
+
     // 1. Add random likes to the post
     console.log('❤️  Adding random bot likes to the post...');
     await addRandomBotLikes(postId);
@@ -40,10 +41,10 @@ const forceBotEngage = async () => {
     for (let i = 0; i < shuffledBots.length; i++) {
       if (repliesAdded >= numReplies) break;
       const bot = shuffledBots[i];
-      
+
       // Don't reply if it's the bot's own post
       if (post.author?.username === bot.username) continue;
-      
+
       console.log(`   -> ${bot.displayName} is replying...`);
       try {
         await createBotReply(bot, post._id);
@@ -53,7 +54,7 @@ const forceBotEngage = async () => {
         console.error(`   -> Failed for ${bot.displayName}:`, err.message);
       }
     }
-    
+
     console.log(`✅ Added ${repliesAdded} instant replies!`);
     process.exit(0);
   } catch (error) {
