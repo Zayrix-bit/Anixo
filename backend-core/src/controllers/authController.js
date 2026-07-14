@@ -111,7 +111,7 @@ export const login = async (req, res) => {
 
     if (user && (await user.matchPassword(password))) {
       user.lastActive = Date.now();
-      
+
       // Generate profileId if it's missing
       if (!user.profileId) {
         let generatedId;
@@ -123,7 +123,7 @@ export const login = async (req, res) => {
         }
         user.profileId = generatedId;
       }
-      
+
       await user.save();
 
       res.json({
@@ -169,7 +169,7 @@ export const googleLogin = async (req, res) => {
       idToken: token,
       audience: clientId,
     });
-    
+
     const payload = ticket.getPayload();
     if (!payload || !payload.email) {
       return res.status(400).json({ success: false, message: 'Invalid Google token payload' });
@@ -181,11 +181,11 @@ export const googleLogin = async (req, res) => {
     if (!user) {
       const generatedPassword = crypto.randomBytes(16).toString('hex');
       const profileId = crypto.randomBytes(4).toString('hex');
-      
+
       const baseUsername = (name || email.split('@')[0]).replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
       let username = baseUsername;
       let counter = 1;
-      
+
       while (await User.findOne({ username })) {
         username = `${baseUsername}${counter}`;
         counter++;
@@ -201,11 +201,11 @@ export const googleLogin = async (req, res) => {
       });
     } else {
       user.lastActive = Date.now();
-      
+
       if (!user.avatar && picture) {
-         user.avatar = picture;
+        user.avatar = picture;
       }
-      
+
       if (!user.profileId) {
         let generatedId;
         let isUnique = false;
@@ -675,7 +675,7 @@ export const anilistCallback = async (req, res) => {
 
     // Get updated user data
     const updatedUser = await User.findById(userId);
-    
+
     if (oldUser && (newAvatar || updatedUser.displayName)) {
       try {
         await mongoose.connection.db.collection('realtimecomments').updateMany(
@@ -691,6 +691,7 @@ export const anilistCallback = async (req, res) => {
         console.error("Failed to sync comments avatar on AniList connect:", err);
       }
     }
+
 
     // Update user in online server (non-blocking)
     updateUserInOnlineServer({
