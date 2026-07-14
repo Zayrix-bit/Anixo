@@ -694,6 +694,7 @@ export const anilistCallback = async (req, res) => {
 
 
 
+
     // Update user in online server (non-blocking)
     updateUserInOnlineServer({
       username: updatedUser.username,
