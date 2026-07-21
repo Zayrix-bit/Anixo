@@ -73,51 +73,19 @@ export function useStreamFetch({
 
       try {
         let url = "";
-
-        // --- SERVER 1: NEW ANIKO 2 ---
         let hasSources = false;
+
+        // --- SERVER 1: ANIXO EMBED (iframe) ---
         if (activeServer === 1) {
           const langParam = playerLang.toLowerCase() === "dub" ? "dub" : "sub";
           const anilistId = anime?.id || (!isMal ? id : null);
-          const aniko2Base = import.meta.env.VITE_ANIKO2_API;
 
           if (anilistId) {
-            try {
-              const res = await fetch(`${aniko2Base}/api/watch/${anilistId}/${langParam}/${activeEpisode}`);
-              if (!res.ok) throw new Error("Failed to fetch Server 1");
-              const data = await res.json();
-
-              const audioKey = langParam === "sub" ? "ssub" : "sdub";
-              const providerData = data[audioKey];
-
-              if (providerData && providerData.streams && providerData.streams.length > 0) {
-                const hasHls = providerData.streams.some(s => s.type === "hls");
-
-
-                if (hasHls) {
-                  setStreamData({
-                    server_name: "SERVER 1 (New Aniko2)",
-                    lang: langParam,
-                    all_streams: providerData.streams,
-                    subtitles: providerData.subtitles || []
-                  });
-                  hasSources = true;
-                } else {
-                  url = providerData.streams[0].url;
-                  setStreamData({
-                    server_name: "SERVER 1 (New Aniko2)",
-                    lang: langParam,
-                    all_streams: providerData.streams,
-                    subtitles: providerData.subtitles || [],
-                  });
-                  hasSources = true;
-                }
-              } else {
-                setFetchError("No valid video source found on Server 1.");
-              }
-            } catch {
-              setFetchError("Error fetching from Server 1.");
-            }
+            url = `https://anixo.buzz/embed/ani/${anilistId}/${activeEpisode}/${langParam}`;
+            setStreamData({
+              server_name: "SERVER 1 (Anixo)",
+              lang: langParam,
+            });
           } else {
             setFetchError("AniList ID is required for Server 1. Try another server.");
           }
@@ -299,8 +267,8 @@ export function useStreamFetch({
             // Keep Vidnest, Tryembed, Anineko, Aniko URLs clean without Megaplay-specific parameters
             setStreamUrl(url);
           }
-        } else if ((activeServer === 1 || activeServer === 3) && hasSources) {
-          // If we have HLS sources set for Server 1 or 3, we don't need a URL
+        } else if (activeServer === 3 && hasSources) {
+          // If we have HLS sources set for Server 3, we don't need a URL
           setStreamUrl("");
         } else {
           setFetchError("Stream link not found for this server.");
