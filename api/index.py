@@ -818,7 +818,7 @@ def api_jikan_proxy():
     j_resp = None
     for attempt in range(3):
         try:
-            j_resp = requests.get(full_url, params=params, timeout=10)
+            j_resp = requests.get(full_url, params=params, timeout=10, allow_redirects=False)
             if j_resp.status_code == 200:
                 break
             if j_resp.status_code == 429:
